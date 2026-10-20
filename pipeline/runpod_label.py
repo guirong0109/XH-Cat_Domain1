@@ -52,6 +52,19 @@ def build_prompt(task_text):
     return PROMPT_TEMPLATE.format(task_text=task_text)
 
 
+def build_retry_prompt(task_text):
+    """Stricter prompt for the single retry, since greedy decoding repeats an identical prompt."""
+    return (
+        build_prompt(task_text)
+        + "\n\nReply with exactly one of: automatable, ai_assisted, human_led. No other words."
+    )
+
+
+def roles_to_label(all_codes, existing_exposure):
+    """Codes not yet in an existing exposure file, in original order (for resuming a crashed run)."""
+    return [code for code in all_codes if code not in existing_exposure]
+
+
 def parse_label(output):
     """Return the label that appears first in the model output, or None."""
     earliest = None
@@ -122,10 +135,13 @@ def read_json(path, hint):
 
 
 def write_json(path, data):
+    """Atomic write: a crash mid-write never leaves a half-written file."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as output_file:
+    temporary_path = path + ".tmp"
+    with open(temporary_path, "w", encoding="utf-8") as output_file:
         json.dump(data, output_file, ensure_ascii=False, indent=2)
         output_file.write("\n")
+    os.replace(temporary_path, path)
 
 
 def now_iso():
@@ -194,27 +210,38 @@ def main(argv=None):
     tokenizer = AutoTokenizer.from_pretrained(CHAT_MODEL)
     chat_model = AutoModelForCausalLM.from_pretrained(CHAT_MODEL, torch_dtype="auto", device_map="auto")
 
-    def generate_label(task_text):
-        messages = [{"role": "user", "content": build_prompt(task_text)}]
+    def generate_label(prompt, max_new_tokens):
+        messages = [{"role": "user", "content": prompt}]
         prompt_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         inputs = tokenizer(prompt_text, return_tensors="pt").to(chat_model.device)
-        output_ids = chat_model.generate(**inputs, max_new_tokens=8, do_sample=False)
+        output_ids = chat_model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
         new_ids = output_ids[0][inputs["input_ids"].shape[1]:]
         return parse_label(tokenizer.decode(new_ids, skip_special_tokens=True))
 
     def label_task(task_text):
-        # One retry on an unparseable answer; null is left for manual labelling.
-        return generate_label(task_text) or generate_label(task_text)
+        # One retry with a stricter prompt and more room; null is left for manual labelling.
+        try:
+            label = generate_label(build_prompt(task_text), max_new_tokens=8)
+            return label or generate_label(build_retry_prompt(task_text), max_new_tokens=16)
+        except Exception as error:  # keep the run alive; this task stays null
+            print(f"Labelling failed for task {task_text[:60]!r}: {error}", file=sys.stderr)
+            return None
 
     exposure = {}
+    if os.path.exists(exposure_path):
+        exposure = read_json(exposure_path, "")
+    pending_codes = set(roles_to_label([role["code"] for role in roles], exposure))
     for role in roles:
+        if role["code"] not in pending_codes:
+            print(f"Skipping {role['code']} (already labelled)")
+            continue
         tasks = [{"text": text, "label": label_task(text)} for text in role["tasks"]]
         exposure[role["code"]] = {
             "tasks": tasks,
             **aggregate([task["label"] for task in tasks if task["label"] is not None]),
         }
+        write_json(exposure_path, exposure)  # checkpoint after every role
         print(f"Labelled {role['code']} {role['title']}")
-    write_json(exposure_path, exposure)
 
     picker_labels = [entry["label"] for entry in skill_labels]
     picker_vectors = embed(picker_labels)

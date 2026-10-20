@@ -8,8 +8,10 @@ from runpod_label import (  # noqa: E402
     LABELS,
     aggregate,
     build_prompt,
+    build_retry_prompt,
     find_similar_pairs,
     parse_label,
+    roles_to_label,
     top_matches,
 )
 
@@ -49,6 +51,20 @@ class BuildPromptTests(unittest.TestCase):
         self.assertIn("end-to-end with little human input", prompt)
         self.assertIn("AI tools speed it up", prompt)
         self.assertIn("physical presence, judgement or human relationships", prompt)
+
+
+class RetryAndResumeTests(unittest.TestCase):
+    def test_retry_prompt_differs_and_has_task_and_labels(self):
+        retry = build_retry_prompt("Prepare reports.")
+        self.assertNotEqual(retry, build_prompt("Prepare reports."))
+        self.assertIn("Prepare reports.", retry)
+        for label in LABELS:
+            self.assertIn(label, retry)
+        self.assertIn("No other words", retry)
+
+    def test_roles_to_label_skips_existing_and_keeps_order(self):
+        self.assertEqual(roles_to_label(["a", "b", "c"], {"b": {}}), ["a", "c"])
+        self.assertEqual(roles_to_label(["a"], {}), ["a"])
 
 
 class TopMatchesTests(unittest.TestCase):
