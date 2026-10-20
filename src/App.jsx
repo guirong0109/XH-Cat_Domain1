@@ -3,6 +3,8 @@ import StepNav from './components/StepNav.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
 import Profile from './screens/Profile.jsx';
+import Radar from './screens/Radar.jsx';
+import Roles from './screens/Roles.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, resolveScreen } from './lib/navigation.js';
 
@@ -86,6 +88,7 @@ export default function App() {
   const [doneSkills, setDoneSkills] = useState([]);
   const [seenTips, setSeenTips] = useState([]);
   const [tipsOff, setTipsOff] = useState(false);
+  const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
 
   useEffect(() => {
     let cancelled = false;
@@ -167,6 +170,29 @@ export default function App() {
     });
   };
 
+  const refreshTrends = async () => {
+    setRefresh({ pending: true, status: null, message: '' });
+    try {
+      const response = await fetch('/api/refresh-trends', { method: 'POST' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const result = await response.json();
+      if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
+        setData((current) => ({ ...current, trends: result.trends }));
+      }
+      setRefresh({ pending: false, status: result.status, message: result.message });
+    } catch {
+      setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
+    }
+  };
+
+  const openPathway = (roleId) => {
+    if (roleId !== focusRoleId) setDoneSkills([]);
+    setFocusRoleId(roleId);
+    navigate('pathway');
+  };
+
+  const toggleExpanded = (roleId) => setExpandedRoleId((current) => (current === roleId ? null : roleId));
+
   const dismissTip = (tipScreen) => setSeenTips((current) => [...current, tipScreen]);
 
   if (loadFailed) return <StatusMessage role="alert">Could not load data. Please refresh the page.</StatusMessage>;
@@ -190,6 +216,37 @@ export default function App() {
         onLoadSample={(sampleId) => loadSample(sampleId)}
         onToggle={toggleProfileItem}
         onNext={() => navigate('radar')}
+      />
+    );
+  } else if (shownScreen === 'radar') {
+    content = (
+      <Radar
+        data={data}
+        ctx={ctx}
+        profile={profile}
+        scenario={scenario}
+        ranked={ranked}
+        focusRoleId={focusRoleId}
+        refresh={refresh}
+        onScenarioChange={setScenario}
+        onFocus={setFocusRoleId}
+        onRefresh={refreshTrends}
+        onSeeRoles={() => navigate('roles')}
+      />
+    );
+  } else if (shownScreen === 'roles') {
+    content = (
+      <Roles
+        data={data}
+        ctx={ctx}
+        profile={profile}
+        scenario={scenario}
+        ranked={ranked}
+        expandedRoleId={expandedRoleId}
+        onScenarioChange={setScenario}
+        onToggleSdg={(goal) => toggleProfileItem('sdgs', goal)}
+        onToggleExpanded={toggleExpanded}
+        onPathway={openPathway}
       />
     );
   } else {
