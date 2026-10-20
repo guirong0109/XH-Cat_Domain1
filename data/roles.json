@@ -1,0 +1,646 @@
+[
+  {
+    "id": "data-analyst",
+    "code": "2524-02",
+    "title": "Data Analyst",
+    "group": "professionals",
+    "description": "Data Analyst collects, organises and analyses data to generate insights that support organisational decision-making and performance management. They import, clean, validate and transform data from multiple sources, develop appropriate data models, and ensure the accuracy, consistency and reliability of data repositories. The role involves interpreting results, producing reports and visualisations, and communicating findings to stakeholders in line with business objectives.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Extract, clean, and integrate raw data from multiple sources.",
+        "label": "automatable"
+      },
+      {
+        "text": "Enrich data to build comprehensive datasets.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Perform data quality checks and validation.",
+        "label": "automatable"
+      },
+      {
+        "text": "Perform statistical and exploratory analysis to identify trends and patterns.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Develop reports and dashboards using business intelligence tools such as Power BI or Tableau.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Prepare documentation of data sources, analytical methods, and models to ensure transparency and reproducibility.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Present analytical findings to management and stakeholders.",
+        "label": "human_led"
+      },
+      {
+        "text": "Collaborate with teams to define data requirements and ensure data accuracy.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 25,
+    "assistedPct": 50,
+    "sdgs": [
+      8,
+      9
+    ],
+    "interest": "Working with data",
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Python programming",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Data visualisation",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Statistics",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2524-02",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "db-assistant",
+    "code": "3512-05",
+    "title": "Database Assistant",
+    "group": "technicians",
+    "description": "Database Assistant supports the management and maintenance of an organisation’s structured databases, ensuring data is accurate, accessible, and secure. They perform tasks such as data entry, cleaning, retrieval, and basic analysis, and assist with administrative duties related to record keeping. This role provides foundational support within data management or IT departments.",
+    "qualification": "Diploma or equivalent",
+    "tasks": [
+      {
+        "text": "Enter, update, and verify database records.",
+        "label": "automatable"
+      },
+      {
+        "text": "Maintain data integrity and ensure accuracy of records.",
+        "label": "automatable"
+      },
+      {
+        "text": "Generate reports and assist in data extraction for audits or management purposes.",
+        "label": "automatable"
+      },
+      {
+        "text": "Back up databases and monitor for errors or inconsistencies.",
+        "label": "automatable"
+      },
+      {
+        "text": "Assist database administrators with routine maintenance and simple system administration tasks.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Assist in maintaining data security and compliance with organisational standards.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 67,
+    "assistedPct": 17,
+    "sdgs": [
+      8
+    ],
+    "interest": "Working with data",
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Customer service",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/3512-05",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "bi-analyst",
+    "code": "2543-07",
+    "title": "Business Intelligence Analyst",
+    "group": "professionals",
+    "description": "Business Intelligence Analyst studies industry trends and organisational operations to identify opportunities for improvement, particularly in processes, supply chains, and sales. They gather, analyse, and visualise data to produce actionable insights that inform strategic planning, define key performance indicators, and guide decision-making. Their work includes assessing and optimising business processes, developing dashboards and reports, and ensuring data collection and operational systems are accurate, reliable, and aligned with organisational objectives.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Collect, analyse, and visualise data from multiple sources to support business decisions.",
+        "label": "automatable"
+      },
+      {
+        "text": "Develop and maintain interactive dashboards and reports using business intelligence (BI) and visualisation tools.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Identify trends, patterns, and insights to inform business strategy.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Translate complex data into clear, actionable recommendations for stakeholders.",
+        "label": "automatable"
+      },
+      {
+        "text": "Analyse business processes and workflows, and design improvements aligned with business goals.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with information technology (IT) and business teams to define requirements and support process integration.",
+        "label": "human_led"
+      },
+      {
+        "text": "Automate recurring data collection and reporting processes to improve efficiency and reliability.",
+        "label": "automatable"
+      },
+      {
+        "text": "Monitor key performance indicators (KPIs) and other performance metrics to evaluate process and workflow effectiveness.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Document processes, prepare visual diagrams, and provide support for process updates.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 33,
+    "assistedPct": 45,
+    "sdgs": [
+      8,
+      9
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Data visualisation",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Statistics",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2543-07",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "network-tech",
+    "code": "3513-01",
+    "title": "Computer Network Technician",
+    "group": "technicians",
+    "description": "Computer Network Technician is responsible for the installation, configuration, maintenance, and troubleshooting of an organisation’s network infrastructure. They ensure network security, monitor performance, optimise system capacity, and resolve connectivity issues to support continuous and efficient operations. The role involves working with hardware and software components, assisting IT teams, and implementing upgrades and security measures to maintain reliable and secure network services.",
+    "qualification": "Diploma or equivalent",
+    "tasks": [
+      {
+        "text": "Design, install, and maintain local area networks (LAN), wide area networks (WAN), and related systems, including documentation, inventory management, and system upgrades.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Monitor network performance, troubleshoot connectivity, hardware, and software issues, and implement optimisations.",
+        "label": "automatable"
+      },
+      {
+        "text": "Install, configure, and upgrade network hardware, software, and cabling.",
+        "label": "automatable"
+      },
+      {
+        "text": "Implement and maintain network security measures.",
+        "label": "human_led"
+      },
+      {
+        "text": "Provide technical support and guidance to users on network-related issues.",
+        "label": "human_led"
+      },
+      {
+        "text": "Collaborate with Information Technology (IT) teams and network architects on network deployments, migrations, and optimisations.",
+        "label": "ai_assisted"
+      }
+    ],
+    "automatablePct": 34,
+    "assistedPct": 33,
+    "sdgs": [
+      9
+    ],
+    "interest": "Building software",
+    "skills": [
+      {
+        "label": "Networking basics",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Network security",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Customer service",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/3513-01",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "digital-learning",
+    "code": "2423-09",
+    "title": "Digital Learning Specialist",
+    "group": "professionals",
+    "description": "Digital Learning Specialist designs, develops, and implements online learning programs, creating multimedia content and interactive modules to enhance learner engagement. They manage the technical setup, delivery, and monitoring of digital courses to ensure effective and impactful learning experiences.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Develop, curate, and maintain multimedia and interactive digital learning content using e-learning software and audio-visual elements to enhance learner engagement.",
+        "label": "automatable"
+      },
+      {
+        "text": "Design and implement digital learning programmes, including online courses, assessments, and e-learning modules.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with subject matter experts and instructional designers to ensure the accuracy, quality, and engagement of digital learning content.",
+        "label": "human_led"
+      },
+      {
+        "text": "Provide training and technical support to educators on digital tools, instructional technologies, and the effective use of educational technology.",
+        "label": "human_led"
+      },
+      {
+        "text": "Manage the technical setup, delivery, version control, content updates, and storage of digital learning materials and courses.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Monitor, evaluate, and improve the effectiveness and impact of digital learning programmes and courses.",
+        "label": "ai_assisted"
+      }
+    ],
+    "automatablePct": 17,
+    "assistedPct": 50,
+    "sdgs": [
+      4
+    ],
+    "interest": "Helping people",
+    "skills": [
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2423-09",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "cyber-analyst",
+    "code": "2531-04",
+    "title": "Cybersecurity Analyst",
+    "group": "professionals",
+    "description": "Cybersecurity Analyst roles involve protecting an organisation’s computer systems, networks, and data from cyber threats by identifying vulnerabilities, monitoring security systems, and responding to incidents. They develop, implement, and maintain IT governance, risk, and compliance policies and frameworks, conduct risk assessments and audits, and design measures to safeguard sensitive information while supporting disaster recovery and overall information security strategies.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Support the development and implementation of cybersecurity policies, procedures, and controls.",
+        "label": "human_led"
+      },
+      {
+        "text": "Monitor and analyse network traffic and Information Technology (IT) systems to detect, assess, and respond to security threats.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Identify, assess, and mitigate cybersecurity risks and vulnerabilities through vulnerability assessments and analysis.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Investigate cybersecurity incidents and breaches to determine causes and impacts.",
+        "label": "human_led"
+      },
+      {
+        "text": "Manage and utilise security tools and systems to support threat detection and prevention.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with IT teams to support secure system operations and cybersecurity initiatives.",
+        "label": "human_led"
+      },
+      {
+        "text": "Maintain and update security documentation, compliance records, and operational reports.",
+        "label": "automatable"
+      },
+      {
+        "text": "Analyse threat intelligence and stay informed on emerging cybersecurity threats, trends, and best practices.",
+        "label": "ai_assisted"
+      }
+    ],
+    "automatablePct": 13,
+    "assistedPct": 50,
+    "sdgs": [
+      9,
+      16
+    ],
+    "interest": "Building software",
+    "skills": [
+      {
+        "label": "Network security",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Networking basics",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Python programming",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2531-04",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "solar-tech",
+    "code": "3131-07",
+    "title": "Solar Cell Technician",
+    "group": "technicians",
+    "description": "Solar Cell Technician operates, monitors, and maintains solar energy systems, including assembling, installing, testing, and servicing solar photovoltaic (PV) cells and panels. They ensure systems perform efficiently by inspecting equipment, troubleshooting faults, and carrying out repairs or replacements, working in manufacturing settings or on-site installations for residential, commercial, or industrial projects to support the generation and maintenance of sustainable energy.",
+    "qualification": "Diploma or equivalent",
+    "tasks": [
+      {
+        "text": "Assemble and test solar cells, modules, and panels to ensure quality and optimal performance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Install solar photovoltaic (PV) systems safely and accurately at designated sites.",
+        "label": "human_led"
+      },
+      {
+        "text": "Troubleshoot electrical and mechanical issues in solar PV systems.",
+        "label": "human_led"
+      },
+      {
+        "text": "Perform routine maintenance and cleaning of solar panels to maintain system efficiency.",
+        "label": "human_led"
+      },
+      {
+        "text": "Ensure compliance with safety and environmental standards in all operations.",
+        "label": "human_led"
+      },
+      {
+        "text": "Maintain accurate records of installation and maintenance activities.",
+        "label": "human_led"
+      },
+      {
+        "text": "Assist engineers and project teams in system layout and performance verification.",
+        "label": "automatable"
+      },
+      {
+        "text": "Provide basic guidance to clients on solar system operation and maintenance.",
+        "label": "automatable"
+      }
+    ],
+    "automatablePct": 25,
+    "assistedPct": 13,
+    "sdgs": [
+      7,
+      13
+    ],
+    "interest": "Clean energy",
+    "skills": [
+      {
+        "label": "Solar PV basics",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Electrical wiring",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/3131-07",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "web-dev",
+    "code": "2513-01",
+    "title": "Website Developer",
+    "group": "professionals",
+    "description": "Website Developer designs, develops, and maintains a website or web application, combining both visual design and technical development skills. They are responsible for creating a functional, user-friendly, and visually appealing digital platform, working on front-end interfaces and back-end systems, integrating multimedia elements, ensuring cross-device compatibility, optimising performance, and collaborating with teams to implement features and resolve technical issues.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Write code for websites and web applications following best practices.",
+        "label": "automatable"
+      },
+      {
+        "text": "Design and develop responsive website layouts, user interfaces, and front-end components for cross-device compatibility.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Develop back-end services, databases, and application programming interface (API) integrations to support website and web application functionality.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Analyse project requirements and collaborate with designers, content teams, and other stakeholders to implement website features.",
+        "label": "automatable"
+      },
+      {
+        "text": "Build scalable and maintainable websites and web applications.",
+        "label": "automatable"
+      },
+      {
+        "text": "Conduct testing, debugging, and cross-platform optimisation to ensure website and web application performance and functionality.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Maintain websites and web applications through updates, security checks, and performance optimisation.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Integrate multimedia elements such as animations, images, audio, and video into websites and web applications.",
+        "label": "automatable"
+      },
+      {
+        "text": "Collaborate with technical teams on web hosting, security, and backup arrangements for websites and web applications.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 45,
+    "assistedPct": 44,
+    "sdgs": [
+      9
+    ],
+    "interest": "Building software",
+    "skills": [
+      {
+        "label": "Web development",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Python programming",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2513-01",
+      "fetchedAt": "2026-10-20"
+    },
+    "labelSource": "manual"
+  }
+]
