@@ -4,8 +4,8 @@ import RadarChart from '../components/RadarChart.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
 import { useTween } from '../lib/useTween.js';
+import { MIN_SKILLS } from '../lib/navigation.js';
 
-export const MIN_SKILLS = 3;
 
 const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
 

@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import StepNav from './components/StepNav.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
-import Profile, { MIN_SKILLS } from './screens/Profile.jsx';
+import Profile from './screens/Profile.jsx';
 import { rankRoles } from './lib/scoring.js';
+import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, resolveScreen } from './lib/navigation.js';
 
-const SCREENS = ['home', 'profile', 'radar', 'roles', 'pathway'];
-const SCREENS_NEEDING_SKILLS = ['radar', 'roles', 'pathway'];
 const INITIAL_SAMPLE_ID = 'aina';
 const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], sampleId: null };
 
@@ -14,6 +13,10 @@ const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], sampleId: null };
 function screenFromHash() {
   const name = window.location.hash.replace('#', '');
   return SCREENS.includes(name) ? name : 'home';
+}
+
+function urlForScreen(screen) {
+  return screen === 'home' ? window.location.pathname + window.location.search : `#${screen}`;
 }
 
 function profileFromSample(sample) {
@@ -123,11 +126,18 @@ export default function App() {
   const navigate = useCallback((next) => {
     setScreen(next);
     const hash = next === 'home' ? '' : `#${next}`;
-    if (window.location.hash !== hash) {
-      window.history.pushState(null, '', hash || window.location.pathname + window.location.search);
-    }
+    if (window.location.hash !== hash) window.history.pushState(null, '', urlForScreen(next));
     window.scrollTo(0, 0);
   }, []);
+
+  // Single guard for every route in (initial hash, hashchange, back, nav):
+  // a locked or unknown screen is replaced, and the URL is kept in sync.
+  const shownScreen = resolveScreen(screen, profile.skills.length);
+  useEffect(() => {
+    if (!data || shownScreen === screen) return;
+    setScreen(shownScreen);
+    window.history.replaceState(null, '', urlForScreen(shownScreen));
+  }, [data, screen, shownScreen]);
 
   const resetRoleViews = () => {
     setFocusRoleId(null);
@@ -165,11 +175,11 @@ export default function App() {
   const lockedScreens = profile.skills.length < MIN_SKILLS ? SCREENS_NEEDING_SKILLS : [];
 
   let content;
-  if (screen === 'home') {
+  if (shownScreen === 'home') {
     content = (
       <Home data={data} ctx={ctx} onTrySample={(sampleId) => loadSample(sampleId, 'profile')} onStartFresh={startFresh} />
     );
-  } else if (screen === 'profile') {
+  } else if (shownScreen === 'profile') {
     content = (
       <Profile
         data={data}
@@ -188,9 +198,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F6F7F9] text-[#0F172A]">
-      <Header screen={screen} onNavigate={navigate} lockedScreens={lockedScreens} />
+      <Header screen={shownScreen} onNavigate={navigate} lockedScreens={lockedScreens} />
       <TipBanner
-        screen={screen}
+        screen={shownScreen}
         seenTips={seenTips}
         tipsOff={tipsOff}
         onDismiss={dismissTip}
