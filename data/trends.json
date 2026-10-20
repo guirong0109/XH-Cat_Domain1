@@ -1,0 +1,52 @@
+{
+  "source": {
+    "dataset": "wages_occupation",
+    "url": "https://api.data.gov.my/opendosm?id=wages_occupation",
+    "fetchedAt": "2026-10-20T18:38:09.451Z",
+    "latestYear": 2025,
+    "baseYear": 2020
+  },
+  "groups": {
+    "managers": {
+      "growthPct": -2.2,
+      "demand": 45.7
+    },
+    "professionals": {
+      "growthPct": 12.8,
+      "demand": 75.6
+    },
+    "technicians": {
+      "growthPct": 9.8,
+      "demand": 69.6
+    },
+    "clerical": {
+      "growthPct": 15.3,
+      "demand": 80.7
+    },
+    "service_sales": {
+      "growthPct": 14.8,
+      "demand": 79.6
+    },
+    "agriculture": {
+      "growthPct": -31.7,
+      "demand": 0
+    },
+    "craft": {
+      "growthPct": 9.2,
+      "demand": 68.3
+    },
+    "operators": {
+      "growthPct": 4.1,
+      "demand": 58.3
+    },
+    "elementary": {
+      "growthPct": 3.4,
+      "demand": 56.8
+    }
+  },
+  "youth": {
+    "rate": 10.2,
+    "month": "2026-06",
+    "fetchedAt": "2026-10-20T18:38:09.451Z"
+  }
+}
