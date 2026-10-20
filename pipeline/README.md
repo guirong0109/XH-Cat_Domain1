@@ -18,6 +18,8 @@ Run all tests: `python3 -m unittest discover pipeline/tests`
 python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json
 ```
 
+If any code fails, the script prints `FAILED <code>: <reason>`, exits with 1 and leaves the existing snapshot unchanged. Add `--allow-partial` only if you really want to save a snapshot without the failed codes.
+
 ## 2. RunPod labelling job
 
 Needs `data/emasco/roles_raw.json` and `data/team/skill_labels.json`. Expected spend: under USD 5 (default rate assumes USD 0.69 per hour).

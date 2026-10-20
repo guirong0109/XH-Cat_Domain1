@@ -1,11 +1,14 @@
 """Fetch eMASCO occupation pages and save a JSON snapshot for the web app.
 
-Usage: python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json
+Usage: python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json [--allow-partial]
+
+If any code fails, the existing snapshot is kept unless --allow-partial is given.
 """
 import datetime
 import html.parser
 import http.cookiejar
 import json
+import os
 import sys
 import time
 import urllib.request
@@ -177,7 +180,19 @@ def build_snapshot(codes, opener):
     return {"fetchedAt": datetime.date.today().isoformat(), "roles": roles}, failures
 
 
+def write_json(path, data):
+    """Atomic write: a crash mid-write never leaves a half-written file."""
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    temporary_path = path + ".tmp"
+    with open(temporary_path, "w", encoding="utf-8") as output_file:
+        json.dump(data, output_file, ensure_ascii=False, indent=2)
+        output_file.write("\n")
+    os.replace(temporary_path, path)
+
+
 def main(argv):
+    allow_partial = "--allow-partial" in argv[1:]
+    argv = [argv[0]] + [argument for argument in argv[1:] if argument != "--allow-partial"]
     if len(argv) != 3:
         print(__doc__)
         return 2
@@ -189,11 +204,14 @@ def main(argv):
         HttpsUpgradeRedirectHandler(),
     )
     snapshot, failures = build_snapshot(codes, opener)
-    with open(argv[2], "w", encoding="utf-8") as output_file:
-        json.dump(snapshot, output_file, ensure_ascii=False, indent=2)
-        output_file.write("\n")
     for failure in failures:
         print(f"FAILED {failure}", file=sys.stderr)
+    if failures and not allow_partial:
+        print(f"{len(failures)} code(s) failed; {argv[2]} was not changed. "
+              "Fix the codes and run again, or pass --allow-partial to write the roles that worked.",
+              file=sys.stderr)
+        return 1
+    write_json(argv[2], snapshot)
     print(f"Wrote {len(snapshot['roles'])} roles to {argv[2]}")
     return 1 if failures else 0
 
