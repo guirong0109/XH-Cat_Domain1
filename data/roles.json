@@ -13,7 +13,7 @@
       },
       {
         "text": "Enrich data to build comprehensive datasets.",
-        "label": "ai_assisted"
+        "label": "automatable"
       },
       {
         "text": "Perform data quality checks and validation.",
@@ -40,8 +40,8 @@
         "label": "human_led"
       }
     ],
-    "automatablePct": 25,
-    "assistedPct": 50,
+    "automatablePct": 38,
+    "assistedPct": 37,
     "sdgs": [
       8,
       9
@@ -105,7 +105,7 @@
       },
       {
         "text": "Maintain data integrity and ensure accuracy of records.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Generate reports and assist in data extraction for audits or management purposes.",
@@ -121,11 +121,11 @@
       },
       {
         "text": "Assist in maintaining data security and compliance with organisational standards.",
-        "label": "human_led"
+        "label": "ai_assisted"
       }
     ],
-    "automatablePct": 67,
-    "assistedPct": 17,
+    "automatablePct": 50,
+    "assistedPct": 50,
     "sdgs": [
       8
     ],
@@ -172,7 +172,7 @@
     "tasks": [
       {
         "text": "Collect, analyse, and visualise data from multiple sources to support business decisions.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Develop and maintain interactive dashboards and reports using business intelligence (BI) and visualisation tools.",
@@ -184,11 +184,11 @@
       },
       {
         "text": "Translate complex data into clear, actionable recommendations for stakeholders.",
-        "label": "automatable"
+        "label": "human_led"
       },
       {
         "text": "Analyse business processes and workflows, and design improvements aligned with business goals.",
-        "label": "ai_assisted"
+        "label": "human_led"
       },
       {
         "text": "Collaborate with information technology (IT) and business teams to define requirements and support process integration.",
@@ -196,19 +196,19 @@
       },
       {
         "text": "Automate recurring data collection and reporting processes to improve efficiency and reliability.",
-        "label": "automatable"
-      },
-      {
-        "text": "Monitor key performance indicators (KPIs) and other performance metrics to evaluate process and workflow effectiveness.",
         "label": "ai_assisted"
       },
       {
+        "text": "Monitor key performance indicators (KPIs) and other performance metrics to evaluate process and workflow effectiveness.",
+        "label": "automatable"
+      },
+      {
         "text": "Document processes, prepare visual diagrams, and provide support for process updates.",
-        "label": "human_led"
+        "label": "ai_assisted"
       }
     ],
-    "automatablePct": 33,
-    "assistedPct": 45,
+    "automatablePct": 11,
+    "assistedPct": 56,
     "sdgs": [
       8,
       9
@@ -262,31 +262,31 @@
     "tasks": [
       {
         "text": "Design, install, and maintain local area networks (LAN), wide area networks (WAN), and related systems, including documentation, inventory management, and system upgrades.",
-        "label": "ai_assisted"
+        "label": "human_led"
       },
       {
         "text": "Monitor network performance, troubleshoot connectivity, hardware, and software issues, and implement optimisations.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Install, configure, and upgrade network hardware, software, and cabling.",
-        "label": "automatable"
+        "label": "human_led"
       },
       {
         "text": "Implement and maintain network security measures.",
-        "label": "human_led"
+        "label": "ai_assisted"
       },
       {
         "text": "Provide technical support and guidance to users on network-related issues.",
-        "label": "human_led"
+        "label": "ai_assisted"
       },
       {
         "text": "Collaborate with Information Technology (IT) teams and network architects on network deployments, migrations, and optimisations.",
-        "label": "ai_assisted"
+        "label": "human_led"
       }
     ],
-    "automatablePct": 34,
-    "assistedPct": 33,
+    "automatablePct": 0,
+    "assistedPct": 50,
     "sdgs": [
       9
     ],
@@ -333,7 +333,7 @@
     "tasks": [
       {
         "text": "Develop, curate, and maintain multimedia and interactive digital learning content using e-learning software and audio-visual elements to enhance learner engagement.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Design and implement digital learning programmes, including online courses, assessments, and e-learning modules.",
@@ -349,7 +349,7 @@
       },
       {
         "text": "Manage the technical setup, delivery, version control, content updates, and storage of digital learning materials and courses.",
-        "label": "ai_assisted"
+        "label": "automatable"
       },
       {
         "text": "Monitor, evaluate, and improve the effectiveness and impact of digital learning programmes and courses.",
@@ -404,7 +404,7 @@
     "tasks": [
       {
         "text": "Support the development and implementation of cybersecurity policies, procedures, and controls.",
-        "label": "human_led"
+        "label": "ai_assisted"
       },
       {
         "text": "Monitor and analyse network traffic and Information Technology (IT) systems to detect, assess, and respond to security threats.",
@@ -436,7 +436,7 @@
       }
     ],
     "automatablePct": 13,
-    "assistedPct": 50,
+    "assistedPct": 62,
     "sdgs": [
       9,
       16
@@ -484,7 +484,7 @@
     "tasks": [
       {
         "text": "Assemble and test solar cells, modules, and panels to ensure quality and optimal performance.",
-        "label": "ai_assisted"
+        "label": "human_led"
       },
       {
         "text": "Install solar photovoltaic (PV) systems safely and accurately at designated sites.",
@@ -504,19 +504,19 @@
       },
       {
         "text": "Maintain accurate records of installation and maintenance activities.",
-        "label": "human_led"
+        "label": "automatable"
       },
       {
         "text": "Assist engineers and project teams in system layout and performance verification.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Provide basic guidance to clients on solar system operation and maintenance.",
-        "label": "automatable"
+        "label": "ai_assisted"
       }
     ],
-    "automatablePct": 25,
-    "assistedPct": 13,
+    "automatablePct": 13,
+    "assistedPct": 25,
     "sdgs": [
       7,
       13
@@ -564,7 +564,7 @@
     "tasks": [
       {
         "text": "Write code for websites and web applications following best practices.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Design and develop responsive website layouts, user interfaces, and front-end components for cross-device compatibility.",
@@ -576,11 +576,11 @@
       },
       {
         "text": "Analyse project requirements and collaborate with designers, content teams, and other stakeholders to implement website features.",
-        "label": "automatable"
+        "label": "human_led"
       },
       {
         "text": "Build scalable and maintainable websites and web applications.",
-        "label": "automatable"
+        "label": "ai_assisted"
       },
       {
         "text": "Conduct testing, debugging, and cross-platform optimisation to ensure website and web application performance and functionality.",
@@ -588,7 +588,7 @@
       },
       {
         "text": "Maintain websites and web applications through updates, security checks, and performance optimisation.",
-        "label": "ai_assisted"
+        "label": "automatable"
       },
       {
         "text": "Integrate multimedia elements such as animations, images, audio, and video into websites and web applications.",
@@ -599,8 +599,8 @@
         "label": "human_led"
       }
     ],
-    "automatablePct": 45,
-    "assistedPct": 44,
+    "automatablePct": 22,
+    "assistedPct": 56,
     "sdgs": [
       9
     ],
