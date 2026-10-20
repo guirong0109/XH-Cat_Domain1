@@ -6,6 +6,7 @@ import {
   rankRoles,
   matchRange,
   buildPathway,
+  WEIGHTS,
 } from '../src/lib/scoring.js';
 
 const sk = (label, type = 'specific', moderate = 0.8, fast = 0.8) => ({ label, type, moderate, fast });
@@ -190,5 +191,11 @@ describe('buildPathway', () => {
   it('returns empty when all skills held', () => {
     const all = { skills: role.skills.map((s) => s.label), sdgs: [] };
     expect(buildPathway(role, all, c, 'fast', skillLabels)).toEqual([]);
+  });
+});
+
+describe('WEIGHTS', () => {
+  it('exports the match weights used by the score', () => {
+    expect(WEIGHTS).toEqual({ fit: 0.6, outlook: 0.4 });
   });
 });

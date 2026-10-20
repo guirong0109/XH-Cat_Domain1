@@ -5,9 +5,7 @@ import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
 import { useTween } from '../lib/useTween.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
-
-
-const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
+import { SCENARIO_NAME, formatDate } from '../lib/roleView.js';
 
 function Card({ children }) {
   return <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]">{children}</div>;
@@ -19,10 +17,6 @@ function interestOptions(data) {
     if (label && !seen.includes(label)) seen.push(label);
   }
   return seen;
-}
-
-function formatDate(isoDate) {
-  return new Date(isoDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 }
 
 export default function Profile({ data, ctx, profile, scenario, ranked, onLoadSample, onToggle, onNext }) {

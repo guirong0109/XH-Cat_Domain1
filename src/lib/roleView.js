@@ -1,7 +1,7 @@
 // Pure display helpers for the Radar and Roles screens: labels, number
 // formats, the job-market rows, the score breakdown text and card layout.
 
-import { SCENARIO_FACTOR, skillStatus } from './scoring.js';
+import { SCENARIO_FACTOR, WEIGHTS, skillStatus } from './scoring.js';
 
 export const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
 
@@ -174,10 +174,10 @@ export function scoreBreakdown(role, score, scenario, trends) {
     },
   ];
 
-  const capped = 0.6 * score.fit + 0.4 * score.outlook + score.bonus > 100 ? ' (capped at 100)' : '';
+  const capped = WEIGHTS.fit * score.fit + WEIGHTS.outlook * score.outlook + score.bonus > 100 ? ' (capped at 100)' : '';
   // One decimal keeps the written sum equal to the shown (rounded) match.
   const formula =
-    `0.6 × ${formatNumber(score.fit)} + 0.4 × ${formatNumber(score.outlook)} + ${score.bonus} = ` +
+    `${WEIGHTS.fit} × ${formatNumber(score.fit)} + ${WEIGHTS.outlook} × ${formatNumber(score.outlook)} + ${score.bonus} = ` +
     `${Math.round(score.match)}${capped} (${SCENARIO_NAME[scenario]} scenario)`;
   return { parts, formula };
 }

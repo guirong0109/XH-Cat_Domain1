@@ -3,18 +3,9 @@ import RadarChart from '../components/RadarChart.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
 import { rankRoles } from '../lib/scoring.js';
+import { formatMonth } from '../lib/roleView.js';
 
 const EXAMPLE_SAMPLE_ID = 'aina';
-
-function formatMonth(month) {
-  const [year, monthNumber] = month.split('-').map(Number);
-  if (!year || !monthNumber) return month;
-  return new Date(Date.UTC(year, monthNumber - 1, 1)).toLocaleString('en-GB', {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
-}
 
 function youthFact(trends) {
   const youth = trends && trends.youth;

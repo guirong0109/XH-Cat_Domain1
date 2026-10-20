@@ -1,4 +1,5 @@
 export const SCENARIO_FACTOR = { moderate: 0.6, fast: 1.0 };
+export const WEIGHTS = { fit: 0.6, outlook: 0.4 };
 
 const DEFAULT_DEMAND = 50;
 const DEFAULT_HOURS = 20;
@@ -25,7 +26,7 @@ export function scoreRole(role, profile, ctx, scenario) {
 
   const matchedGoals = (role.sdgs || []).filter((g) => profile.sdgs.includes(g));
   const bonus = Math.min(10, 5 * matchedGoals.length);
-  const match = Math.min(100, 0.6 * fit + 0.4 * outlook + bonus);
+  const match = Math.min(100, WEIGHTS.fit * fit + WEIGHTS.outlook * outlook + bonus);
 
   return { earned, fit, demand, demandMissing, outlook, bonus, matchedGoals, match };
 }
