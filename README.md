@@ -1,6 +1,6 @@
 # FutureReady MY
 
-FutureReady MY helps a Malaysian diploma or foundation student see how AI may change the jobs they are aiming for. In about two minutes the student goes from a skills profile to a Future Skills Radar, a ranked list of future roles, and a step-by-step reskilling pathway. Every role and skill is linked to the UN SDGs, and every number shows its source and date. It supports the student's decision. It does not make the decision.
+FutureReady MY helps a Malaysian diploma or foundation student see how AI may change the jobs they are aiming for. In about two minutes the student goes from a skills profile to a Future Skills Radar, a ranked list of future roles, and a step-by-step reskilling pathway. Every role is linked to the UN SDGs, and every number shows its source and date. It supports the student's decision. It does not make the decision.
 
 Built for the Aiversecity Future-Ready Workforce Domain (Domain 1), preliminary round.
 
@@ -16,7 +16,7 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 4. **Roles**: ranked role cards with a match score range, skill gaps, SDG tags and a "Why this score?" breakdown. Cards re-rank live.
 5. **Pathway**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.
 
-Demo tip: load **Mei Ling** or **Aina**, go to Roles, then switch SDG 7 on and off to see the SDG re-rank. Also flip Moderate AI and Fast AI.
+Demo tip: load **Mei Ling** and go to Roles. Switch SDG 7 on: Solar Cell Technician moves up from #8 to #7. Flip Moderate AI and Fast AI: ranks 5 and 6 swap (Website Developer and Computer Network Technician). Both effects are small and happen low in the list. With the current data the scenario flip changes only the scores, not the order, for Aina and Ravi.
 
 ## The six must-have features
 
@@ -26,13 +26,14 @@ Demo tip: load **Mei Ling** or **Aina**, go to Roles, then switch SDG 7 on and o
 | AI-trend signal layer | Live OpenDOSM employment trend per MASCO major group (Refresh button, dated) plus AI-exposure labels on eMASCO tasks. |
 | Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel. |
 | Personalised reskilling pathway | Gap skills ordered by future importance, hour estimates, official portal links, progress tick-boxes. |
-| SDG mapping | Every role and skill carries SDG tags with the target cited. Chosen SDGs add up to +10 points, shown in the breakdown. |
+| SDG mapping | Every role carries SDG tags with the target cited. The pathway shows SDG 4.4 for learning plus the role's goals. Chosen SDGs add up to +10 points, shown in the breakdown. |
 | Handling uncertainty | Two scenarios (Moderate AI, Fast AI), scores shown as a range, and every screen says results are estimates. |
 
 ## Current data state (honest status)
 
 - **8 roles are built** (from eMASCO). A teammate is adding 7 more to reach the planned 15.
-- **Task AI-exposure labels are currently sample labels** (`labelSource: "manual"` in `data/roles.json`). The RunPod labelling job has **not been run yet**, so no RunPod labels exist in this repo. The app shows a **"Sample" badge** next to these labels until the RunPod run replaces them.
+- **Task AI-exposure labels are currently placeholder sample labels for this demo (not yet reviewed)** (`labelSource: "manual"` in `data/roles.json`, from `data/team/manual_labels.json`). Each task was labelled from its own text, without a target percentage, but no team member has reviewed them. The RunPod labelling job has **not been run yet**, so no RunPod labels exist in this repo. The app shows a **"Sample" badge** next to these labels until the RunPod run or a human review replaces them.
+- **Fast AI does not yet change skill importance.** That needs the RunPod skill-task links (`data/runpod/skill_task_links.json`), which do not exist yet, so every skill has the same importance in both scenarios. Fast AI does change the outlook score (and so the match score and ranking).
 - OpenDOSM trends are real and can be refreshed live.
 
 ## Data sources
@@ -61,7 +62,7 @@ sdgBonus   = min(10, 5 * matched goals)
 match      = min(100, 0.6 * fit + 0.4 * outlook + sdgBonus)
 ```
 
-Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the linked task is `ai_assisted`, -0.2 if `automatable`; clamped to 0-1. The pathway orders gap skills by importance in the active scenario. The score range shown is the min and max of both scenarios.
+Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the linked task is `ai_assisted`, -0.2 if `automatable`; clamped to 0-1. Until `skill_task_links.json` exists, Fast AI importance equals Moderate AI importance. The pathway orders gap skills by importance in the active scenario. The score range shown is the min and max of both scenarios.
 
 ## AI disclosure
 
@@ -69,7 +70,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 - **sentence-transformers/all-MiniLM-L6-v2** compares existing skill statements to suggest which are similar.
 - The models **never create roles, courses or numbers**. Roles, tasks and skills come only from the eMASCO snapshot. A person checks the skill mappings.
 - All AI-made labels and scores are **estimates**, not predictions or advice.
-- **Current labels are samples** until the RunPod run is done (see "Current data state"). The app marks them with a "Sample" badge.
+- **Current labels are placeholder sample labels for this demo (not yet reviewed)** until the RunPod run or a human review is done (see "Current data state"). The app marks them with a "Sample" badge.
 
 ## Guardrails
 
@@ -77,7 +78,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 - Course links go only to the three official portals above.
 - Every number shows a source and a date.
 - No login, no database, no real personal data. Sample profiles only.
-- If OpenDOSM is slow (8 s timeout) or returns bad data, the last good `trends.json` is kept and a dated message is shown.
+- If OpenDOSM is slow (8 s timeout) or returns bad data, the last good `trends.json` is kept and a dated message is shown. A release with no occupation groups, or fewer groups than the saved file (for example a partial new year), counts as bad data.
 - If no trend file exists yet, the app says "Trend data not loaded yet" and asks for a Refresh.
 - The app is support for the student's decision, never the decision.
 
@@ -94,8 +95,8 @@ Open http://localhost:3000. For development run `npm run dev` (Vite) in one term
 ## Deploy on Replit
 
 1. In Replit, choose Import from GitHub and select this repository.
-2. Press **Run**. `.replit` runs `npm run build && npm start`.
-3. Press **Deploy**. The deployment builds with `npm run build` and starts with `npm start`. The server reads `PORT` from the environment and listens on all interfaces.
+2. Press **Run**. `.replit` uses the Node.js 22 module (the build needs Node 22.12 or newer, see `engines` in `package.json`) and runs `npm run build && NODE_ENV=production npm start` on port 3000 (external port 80).
+3. Press **Deploy**. The deployment (Cloud Run target) builds with `npm run build` and starts with `NODE_ENV=production npm start`. The server reads `PORT` from the environment and listens on all interfaces.
 
 ## Tests
 
