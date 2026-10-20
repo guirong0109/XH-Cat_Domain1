@@ -9,6 +9,8 @@ import json
 import os
 import sys
 
+from runpod_label import LABELS, aggregate
+
 DEFAULT_DATA_DIRECTORY = "data"
 
 BASE_IMPORTANCE = {"specific": 0.8, "basic": 0.6}
@@ -67,12 +69,46 @@ def without_notes(mapping):
     return {key: value for key, value in (mapping or {}).items() if not key.startswith("_")}
 
 
+def fill_null_labels(code, tasks, manual_entry):
+    """Fill null RunPod labels from the manual label of the same task text, or raise.
+
+    Returns (tasks, number of tasks filled from manual labels).
+    """
+    manual_by_text = {task["text"]: task["label"] for task in (manual_entry or {}).get("tasks", [])}
+    filled = []
+    fallbacks = 0
+    for task in tasks:
+        label = task["label"]
+        if label is None:
+            label = manual_by_text.get(task["text"])
+            if label is None:
+                raise ValueError(f"Role {code}: RunPod left task {task['text']!r} unlabelled and "
+                                 "team/manual_labels.json has no label for the same task text")
+            fallbacks += 1
+        filled.append({"text": task["text"], "label": label})
+    return filled, fallbacks
+
+
 def choose_exposure(code, runpod_exposure, manual_labels):
+    """(entry, labelSource) with percentages recomputed from the final task labels."""
     if code in runpod_exposure:
-        return runpod_exposure[code], "runpod"
-    if code in manual_labels:
-        return manual_labels[code], "manual"
-    raise ValueError(f"No exposure labels for role {code}: add it to runpod/exposure.json or team/manual_labels.json")
+        tasks, fallbacks = fill_null_labels(code, runpod_exposure[code]["tasks"], manual_labels.get(code))
+        label_source = "runpod"
+        if fallbacks:
+            # Part of the role rests on placeholder labels, so it keeps the Sample badge.
+            print(f"Warning: {code} has {fallbacks} task(s) labelled from manual_labels.json; "
+                  "labelSource set to manual", file=sys.stderr)
+            label_source = "manual"
+    elif code in manual_labels:
+        tasks, label_source = manual_labels[code]["tasks"], "manual"
+    else:
+        raise ValueError(f"No exposure labels for role {code}: add it to runpod/exposure.json or team/manual_labels.json")
+    for task in tasks:
+        if task["label"] not in LABELS:
+            raise ValueError(f"Role {code}: task {task['text']!r} has unknown label {task['label']!r}")
+    shares = aggregate([task["label"] for task in tasks])
+    entry = {"tasks": tasks, "automatablePct": shares["automatablePct"], "assistedPct": shares["assistedPct"]}
+    return entry, label_source
 
 
 def build_role(code, raw, team, exposure_entry, label_source, links, known_labels, known_goals):

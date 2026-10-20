@@ -1,3 +1,5 @@
+import contextlib
+import io
 import json
 import os
 import sys
@@ -63,7 +65,9 @@ class BuildTests(unittest.TestCase):
                 os.makedirs(os.path.dirname(path), exist_ok=True)
                 with open(path, "w", encoding="utf-8") as output_file:
                     json.dump(content, output_file)
-            return build(paths_for(directory))
+            self.stderr = io.StringIO()
+            with contextlib.redirect_stderr(self.stderr):
+                return build(paths_for(directory))
 
     def test_importance_rules(self):
         self.assertEqual(compute_importance("specific", "ai_assisted"), (0.8, 1.0))
@@ -86,6 +90,7 @@ class BuildTests(unittest.TestCase):
 
     def test_only_codes_in_role_skills_are_built(self):
         self.assertEqual([r["code"] for r in self.build_with()["roles"]], [CODE])
+        self.assertIn("9999-99 is in roles_raw.json but not role_skills.json", self.stderr.getvalue())
 
     def test_outputs_other_files(self):
         result = self.build_with()
@@ -96,14 +101,65 @@ class BuildTests(unittest.TestCase):
 
     def test_manual_labels_used_when_no_exposure(self):
         manual = {"_note": "placeholder", CODE: default_inputs()["runpod/exposure.json"][CODE]}
-        manual[CODE]["automatablePct"] = 40
+        manual[CODE]["automatablePct"] = 40  # stale stored value is ignored
 
         def change(inputs):
             inputs["team/manual_labels.json"] = manual
 
         role = self.build_with(change, remove=["runpod/exposure.json"])["roles"][0]
         self.assertEqual(role["labelSource"], "manual")
-        self.assertEqual(role["automatablePct"], 40)
+        self.assertEqual(role["automatablePct"], 50)
+
+    def test_percentages_are_recomputed_from_task_labels(self):
+        def change(inputs):
+            entry = inputs["runpod/exposure.json"][CODE]
+            entry["tasks"][1]["label"] = "ai_assisted"
+            entry.update(automatablePct=99, assistedPct=1, humanPct=0)
+
+        role = self.build_with(change)["roles"][0]
+        self.assertEqual((role["automatablePct"], role["assistedPct"]), (50, 50))
+
+    def test_null_runpod_label_falls_back_to_manual_label_for_same_task(self):
+        def change(inputs):
+            inputs["runpod/exposure.json"][CODE]["tasks"][1]["label"] = None
+            inputs["team/manual_labels.json"] = {"_note": "placeholder", CODE: {"tasks": [
+                {"text": "Clean data.", "label": "human_led"},
+                {"text": "Present findings.", "label": "ai_assisted"},
+            ]}}
+
+        role = self.build_with(change)["roles"][0]
+        self.assertEqual(role["tasks"], [{"text": "Clean data.", "label": "automatable"},
+                                         {"text": "Present findings.", "label": "ai_assisted"}])
+        self.assertEqual((role["automatablePct"], role["assistedPct"]), (50, 50))
+        # Part of the role now rests on placeholder labels, so it keeps the Sample badge.
+        self.assertEqual(role["labelSource"], "manual")
+        self.assertIn("1 task(s) labelled from manual_labels.json", self.stderr.getvalue())
+
+    def test_null_runpod_label_without_manual_fallback_raises(self):
+        def change(inputs):
+            inputs["runpod/exposure.json"][CODE]["tasks"][1]["label"] = None
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn(CODE, str(caught.exception))
+        self.assertIn("Present findings.", str(caught.exception))
+
+    def test_manual_entry_for_a_different_task_text_does_not_fill_a_null(self):
+        def change(inputs):
+            inputs["runpod/exposure.json"][CODE]["tasks"][1]["label"] = None
+            inputs["team/manual_labels.json"] = {CODE: {"tasks": [{"text": "Clean data.", "label": "human_led"}]}}
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn("Present findings.", str(caught.exception))
+
+    def test_unknown_task_label_raises(self):
+        def change(inputs):
+            inputs["runpod/exposure.json"][CODE]["tasks"][0]["label"] = "maybe"
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn("maybe", str(caught.exception))
 
     def test_no_exposure_anywhere_raises(self):
         with self.assertRaises(ValueError) as caught:

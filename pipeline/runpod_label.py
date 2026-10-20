@@ -25,6 +25,7 @@ SKILL_LABELS_PATH = "data/team/skill_labels.json"
 ROLE_SKILLS_PATH = "data/team/role_skills.json"
 OUTPUT_DIRECTORY = "data/runpod"
 
+MAX_CONSECUTIVE_FAILURES = 3
 SUGGESTIONS_PER_STATEMENT = 3
 SIMILAR_CANDIDATE_MIN_SCORE = 0.6
 DEFAULT_HOURLY_RATE = 0.69
@@ -46,6 +47,10 @@ LABEL_PATTERNS = (
     ("ai_assisted", re.compile(r"ai[\s_-]*assisted", re.IGNORECASE)),
     ("human_led", re.compile(r"human[\s_-]*led", re.IGNORECASE)),
 )
+
+
+class AbortRun(Exception):
+    """A systemic failure (GPU out of memory, repeated task failures): stop instead of storing nulls."""
 
 
 def build_prompt(task_text):
@@ -92,6 +97,53 @@ def aggregate(labels):
         "assistedPct": percentages[1],
         "humanPct": percentages[2],
     }
+
+
+def make_label_task(generate_label, oom_errors=()):
+    """label_task(text) -> label or None. One stricter retry; out-of-memory aborts the run."""
+    def label_task(task_text):
+        try:
+            label = generate_label(build_prompt(task_text), max_new_tokens=8)
+            return label or generate_label(build_retry_prompt(task_text), max_new_tokens=16)
+        except oom_errors as error:
+            raise AbortRun(f"GPU out of memory: {error}") from error
+        except Exception as error:  # a single bad task stays null
+            print(f"Labelling failed for task {task_text[:60]!r}: {error}", file=sys.stderr)
+            return None
+
+    return label_task
+
+
+def label_roles(roles, exposure, label_task, save, log=print, max_failures=MAX_CONSECUTIVE_FAILURES):
+    """Label every role not yet in exposure, saving after each role.
+
+    Raises AbortRun after saving the finished roles when label_task aborts or
+    max_failures tasks in a row come back null.
+    """
+    pending_codes = set(roles_to_label([role["code"] for role in roles], exposure))
+    failures_in_a_row = 0
+    try:
+        for role in roles:
+            if role["code"] not in pending_codes:
+                log(f"Skipping {role['code']} (already labelled)")
+                continue
+            tasks = []
+            for text in role["tasks"]:
+                label = label_task(text)
+                failures_in_a_row = 0 if label is not None else failures_in_a_row + 1
+                if failures_in_a_row >= max_failures:
+                    raise AbortRun(f"{failures_in_a_row} tasks in a row could not be labelled (last in {role['code']})")
+                tasks.append({"text": text, "label": label})
+            exposure[role["code"]] = {
+                "tasks": tasks,
+                **aggregate([task["label"] for task in tasks if task["label"] is not None]),
+            }
+            save(exposure)  # checkpoint after every role
+            log(f"Labelled {role['code']} {role['title']}")
+    except AbortRun:
+        save(exposure)  # finished roles only; the interrupted role is labelled again on resume
+        raise
+    return exposure
 
 
 def cosine_similarity(vector_a, vector_b):
@@ -218,30 +270,13 @@ def main(argv=None):
         new_ids = output_ids[0][inputs["input_ids"].shape[1]:]
         return parse_label(tokenizer.decode(new_ids, skip_special_tokens=True))
 
-    def label_task(task_text):
-        # One retry with a stricter prompt and more room; null is left for manual labelling.
-        try:
-            label = generate_label(build_prompt(task_text), max_new_tokens=8)
-            return label or generate_label(build_retry_prompt(task_text), max_new_tokens=16)
-        except Exception as error:  # keep the run alive; this task stays null
-            print(f"Labelling failed for task {task_text[:60]!r}: {error}", file=sys.stderr)
-            return None
-
-    exposure = {}
-    if os.path.exists(exposure_path):
-        exposure = read_json(exposure_path, "")
-    pending_codes = set(roles_to_label([role["code"] for role in roles], exposure))
-    for role in roles:
-        if role["code"] not in pending_codes:
-            print(f"Skipping {role['code']} (already labelled)")
-            continue
-        tasks = [{"text": text, "label": label_task(text)} for text in role["tasks"]]
-        exposure[role["code"]] = {
-            "tasks": tasks,
-            **aggregate([task["label"] for task in tasks if task["label"] is not None]),
-        }
-        write_json(exposure_path, exposure)  # checkpoint after every role
-        print(f"Labelled {role['code']} {role['title']}")
+    label_task = make_label_task(generate_label, oom_errors=(torch.cuda.OutOfMemoryError,))
+    exposure = read_json(exposure_path, "") if os.path.exists(exposure_path) else {}
+    try:
+        label_roles(roles, exposure, label_task, lambda data: write_json(exposure_path, data))
+    except AbortRun as error:
+        raise SystemExit(f"Aborted: {error}. Finished roles are saved in {exposure_path}; "
+                         "fix the cause and run again to resume.")
 
     picker_labels = [entry["label"] for entry in skill_labels]
     picker_vectors = embed(picker_labels)

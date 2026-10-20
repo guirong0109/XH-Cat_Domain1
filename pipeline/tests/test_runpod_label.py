@@ -1,3 +1,5 @@
+import contextlib
+import io
 import os
 import sys
 import unittest
@@ -6,7 +8,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from runpod_label import (  # noqa: E402
     LABELS,
+    AbortRun,
     aggregate,
+    label_roles,
+    make_label_task,
     build_prompt,
     build_retry_prompt,
     find_similar_pairs,
@@ -90,6 +95,83 @@ class FindSimilarPairsTests(unittest.TestCase):
         pairs = find_similar_pairs(["a", "b", "c"], vectors, min_score=0.6)
         self.assertEqual(len(pairs), 1)
         self.assertEqual(pairs[0][:2], ["a", "b"])
+
+
+class FakeOutOfMemory(Exception):
+    pass
+
+
+def quiet(*_args):
+    pass
+
+
+class LabelTaskTests(unittest.TestCase):
+    def test_retries_with_stricter_prompt_when_first_answer_unparseable(self):
+        answers = iter([None, "ai_assisted"])
+        label_task = make_label_task(lambda prompt, max_new_tokens: next(answers))
+        self.assertEqual(label_task("Prepare reports."), "ai_assisted")
+
+    def test_ordinary_error_leaves_task_null(self):
+        def broken(prompt, max_new_tokens):
+            raise RuntimeError("tokenizer hiccup")
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            self.assertIsNone(make_label_task(broken)("Prepare reports."))
+        self.assertIn("tokenizer hiccup", stderr.getvalue())
+
+    def test_out_of_memory_aborts_the_run(self):
+        def out_of_memory(prompt, max_new_tokens):
+            raise FakeOutOfMemory("CUDA out of memory")
+
+        label_task = make_label_task(out_of_memory, oom_errors=(FakeOutOfMemory,))
+        with self.assertRaises(AbortRun) as caught:
+            label_task("Prepare reports.")
+        self.assertIn("out of memory", str(caught.exception))
+
+
+class LabelRolesTests(unittest.TestCase):
+    roles = [
+        {"code": "1111-01", "title": "First", "tasks": ["a", "b"]},
+        {"code": "2222-02", "title": "Second", "tasks": ["c", "d", "e", "f"]},
+    ]
+
+    def test_labels_every_role_and_checkpoints_after_each(self):
+        saved = []
+        exposure = label_roles(self.roles, {}, lambda text: "human_led",
+                               lambda data: saved.append(sorted(data)), log=quiet)
+        self.assertEqual(saved, [["1111-01"], ["1111-01", "2222-02"]])
+        self.assertEqual(exposure["2222-02"]["humanPct"], 100)
+
+    def test_three_failures_in_a_row_abort_after_saving_finished_roles(self):
+        answers = {"a": "automatable", "b": "human_led", "c": None, "d": None, "e": None, "f": "human_led"}
+        saved = []
+        with self.assertRaises(AbortRun) as caught:
+            label_roles(self.roles, {}, answers.get, lambda data: saved.append(dict(data)), log=quiet)
+        self.assertIn("3 tasks in a row", str(caught.exception))
+        self.assertEqual(list(saved[-1]), ["1111-01"])
+
+    def test_failures_separated_by_a_success_do_not_abort(self):
+        answers = {"a": None, "b": None, "c": "human_led", "d": None, "e": None, "f": "automatable"}
+        exposure = label_roles(self.roles, {}, answers.get, lambda data: None, log=quiet)
+        self.assertEqual(exposure["2222-02"]["tasks"][1], {"text": "d", "label": None})
+
+    def test_abort_from_label_task_saves_checkpoint_and_propagates(self):
+        def label_task(text):
+            if text == "c":
+                raise AbortRun("GPU out of memory")
+            return "human_led"
+
+        saved = []
+        with self.assertRaises(AbortRun):
+            label_roles(self.roles, {}, label_task, lambda data: saved.append(dict(data)), log=quiet)
+        self.assertEqual(list(saved[-1]), ["1111-01"])
+
+    def test_skips_roles_already_in_the_checkpoint(self):
+        existing = {"1111-01": {"tasks": []}}
+        seen = []
+        label_roles(self.roles, existing, lambda text: seen.append(text) or "human_led", lambda data: None, log=quiet)
+        self.assertEqual(seen, ["c", "d", "e", "f"])
 
 
 if __name__ == "__main__":
