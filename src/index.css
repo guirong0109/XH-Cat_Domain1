@@ -2,8 +2,51 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-teal-brand: #0F766E;
+  --color-teal-brand-dark: #115E59;
+  --color-orange-brand: #C2410C;
+  --color-ground: #F6F7F9;
+  --color-ink: #0F172A;
 }
 
 body {
+  margin: 0;
   font-family: var(--font-sans);
+  background: var(--color-ground);
+  color: var(--color-ink);
+}
+
+a { color: #0F766E; }
+a:hover { color: #115E59; }
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #14B8A6;
+  outline-offset: 2px;
+}
+
+.fr-btn { transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+.fr-btn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
+.fr-chip { transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s; }
+.fr-chip:active { transform: scale(0.96); }
+.fr-card { transition: box-shadow 0.2s, transform 0.2s; }
+.fr-card:hover { box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); }
+.fr-screen { animation: fr-fade 0.35s ease; }
+.fr-tip { animation: fr-pop 0.3s ease; }
+
+@keyframes fr-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fr-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
