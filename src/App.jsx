@@ -5,6 +5,7 @@ import Home from './screens/Home.jsx';
 import Profile from './screens/Profile.jsx';
 import Radar from './screens/Radar.jsx';
 import Roles from './screens/Roles.jsx';
+import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, resolveScreen } from './lib/navigation.js';
 
@@ -46,24 +47,6 @@ function Header({ screen, onNavigate, lockedScreens }) {
         {screen !== 'home' && <StepNav screen={screen} onNavigate={onNavigate} lockedScreens={lockedScreens} />}
       </div>
     </header>
-  );
-}
-
-function ComingNext({ onBack }) {
-  return (
-    <main className="fr-screen mx-auto max-w-[1180px] px-4 pt-6 pb-16 sm:px-6">
-      <div className="flex flex-col items-start gap-3 rounded-2xl border border-slate-200 bg-white p-6">
-        <h1 className="m-0 text-2xl font-bold">Coming next</h1>
-        <p className="m-0 text-slate-600">This step is still being built.</p>
-        <button
-          type="button"
-          onClick={onBack}
-          className="fr-btn min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-5 font-semibold"
-        >
-          Back to profile
-        </button>
-      </div>
-    </main>
   );
 }
 
@@ -191,6 +174,9 @@ export default function App() {
     navigate('pathway');
   };
 
+  const toggleDone = (label) =>
+    setDoneSkills((current) => (current.includes(label) ? current.filter((item) => item !== label) : [...current, label]));
+
   const toggleExpanded = (roleId) => setExpandedRoleId((current) => (current === roleId ? null : roleId));
 
   const dismissTip = (tipScreen) => setSeenTips((current) => [...current, tipScreen]);
@@ -250,7 +236,19 @@ export default function App() {
       />
     );
   } else {
-    content = <ComingNext onBack={() => navigate('profile')} />;
+    content = (
+      <Pathway
+        data={data}
+        ctx={ctx}
+        profile={profile}
+        scenario={scenario}
+        ranked={ranked}
+        focusRoleId={focusRoleId}
+        doneSkills={doneSkills}
+        onToggleDone={toggleDone}
+        onBack={() => navigate('roles')}
+      />
+    );
   }
 
   return (

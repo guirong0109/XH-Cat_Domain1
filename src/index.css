@@ -53,3 +53,10 @@ a:focus-visible {
 
 /* Roles list: cards slide to their new rank. Reduced motion turns it off above. */
 .fr-role-card { transition: top 650ms cubic-bezier(.2, .8, .2, 1), box-shadow 0.2s; }
+
+/* Print: only the plan itself (no nav, tips or buttons). */
+@media print {
+  header, [role="note"], .fr-noprint { display: none !important; }
+  body, .min-h-screen { background: #fff !important; }
+  .fr-screen { animation: none; padding-top: 0; }
+}
