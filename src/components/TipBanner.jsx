@@ -1,6 +1,6 @@
 const TIPS = {
   profile: 'Pick the skills you have. The live radar on the right shows how you compare with your best-fit role.',
-  radar: 'Switch between Moderate and Fast AI to see how future needs change. Every number shows its source.',
+  radar: 'Switch between Moderate and Fast AI: the outlook score changes and roles can re-rank. Every number shows its source.',
   roles: 'Roles re-rank live. Open “Why this score?” to see the exact maths and sources.',
   pathway: 'Steps are ordered by future importance. Tick them off as you go.',
 };

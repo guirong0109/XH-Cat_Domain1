@@ -49,7 +49,8 @@ describe('pathwayView', () => {
 
   it('states where task labels came from', () => {
     expect(disclosureText('runpod')).toContain('were made by an open AI model run on RunPod');
-    expect(disclosureText('manual')).toContain('are sample labels made by the team for this demo');
+    expect(disclosureText('manual')).toContain('are placeholder sample labels for this demo (not yet reviewed)');
+    expect(disclosureText('manual')).not.toContain('made by the team');
     expect(disclosureText('manual')).toMatch(/OpenDOSM\. All results are estimates\.$/);
   });
 });

@@ -4,7 +4,7 @@ import RoleCard from '../components/RoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { matchRange } from '../lib/scoring.js';
-import { cardLayout } from '../lib/roleView.js';
+import { SCENARIO_NOTE, cardLayout } from '../lib/roleView.js';
 
 const LEGEND = [
   { label: 'You have it', look: 'bg-[#0F766E]' },
@@ -85,6 +85,7 @@ export default function Roles({
         <div>
           <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your best-fit future roles</h1>
           <p className="m-0 text-slate-600">Change your skills, goals or the scenario. The ranking updates live.</p>
+          <p className="m-0 mt-1 text-sm text-slate-600">Estimates. {SCENARIO_NOTE}</p>
         </div>
         <ScenarioToggle value={scenario} onChange={onScenarioChange} />
       </div>

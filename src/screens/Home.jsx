@@ -107,7 +107,7 @@ export default function Home({ data, ctx, onTrySample, onStartFresh }) {
         <FactCard
           value="600,000+"
           text="workers need reskilling within 3 to 5 years"
-          source="MOSTI, as cited in the Aiversecity brief"
+          source="MOSTI (as cited in the Aiversecity brief, 2026)"
         />
         <FactCard value={youth.value} text={youth.text} source="OpenDOSM, lfs_month_youth" />
       </div>

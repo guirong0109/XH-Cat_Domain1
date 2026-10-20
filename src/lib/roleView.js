@@ -89,8 +89,35 @@ export function exposureShares(role) {
   return { automatable, assisted, human: Math.max(0, 100 - automatable - assisted) };
 }
 
-export function labelledBy(labelSource) {
-  return labelSource === 'manual' ? 'the team (sample labels)' : 'an open AI model on RunPod';
+export function labelOrigin(labelSource) {
+  return labelSource === 'manual'
+    ? 'placeholder sample labels for this demo (not yet reviewed)'
+    : 'made by an open AI model on RunPod';
+}
+
+export function exposureSourceText(roles) {
+  const sources = [...new Set(roles.map((role) => role.labelSource))];
+  const origin =
+    sources.length === 1
+      ? labelOrigin(sources[0])
+      : `${labelOrigin('runpod')}; rows marked Sample are ${labelOrigin('manual')}`;
+  const dates = roles.map((role) => role.source?.fetchedAt).filter(Boolean).sort();
+  const fetched = dates.length ? ` Tasks fetched ${formatDate(dates[dates.length - 1])}.` : '';
+  return `Source: eMASCO task lists (MOHR). Task labels: ${origin}. Estimates.${fetched}`;
+}
+
+// The scenario factor only scales the automatable share in the outlook score.
+export const SCENARIO_NOTE = 'Moderate AI counts 60% of tasks labelled automatable; Fast AI counts all of them.';
+
+export const RANGE_NOTE = 'Range = Moderate AI to Fast AI: the lowest and highest match across the two scenarios.';
+
+export function radarSourceNote(role) {
+  const fetched = role.source?.fetchedAt ? `, fetched ${formatDate(role.source.fetchedAt)}` : '';
+  const varies = role.skills.some((skill) => skill.fast !== skill.moderate);
+  const scenarioPart = varies
+    ? 'Fast AI shifts importance for skills linked to automatable or AI-assisted tasks.'
+    : 'Fast AI does not change importance yet; it changes the outlook score.';
+  return `Estimate. Skills from eMASCO ${role.code}${fetched}; importance is a team estimate (specific 0.8, basic 0.6). ${scenarioPart}`;
 }
 
 // Missing skills ordered by importance in the scenario, most important first.
@@ -112,7 +139,7 @@ export function scoreBreakdown(role, score, scenario, trends) {
   const outlookDetail = score.demandMissing
     ? `Job demand ${DEFAULT_DEMAND_TEXT} (no OpenDOSM data for this group).`
     : `Job demand ${formatNumber(score.demand)} (${groupLabel(role.group)} ${formatGrowth(group.growthPct)}, ${source.baseYear}–${source.latestYear}).`;
-  const labels = role.labelSource === 'manual' ? 'sample' : 'RunPod';
+  const labels = role.labelSource === 'manual' ? 'placeholder samples (not yet reviewed)' : 'RunPod';
   const fetched = source?.fetchedAt ? `, fetched ${formatDate(source.fetchedAt)}` : '';
 
   const parts = [
@@ -132,7 +159,7 @@ export function scoreBreakdown(role, score, scenario, trends) {
       width: score.outlook,
       color: '#1D4ED8',
       detail: `${outlookDetail} Automatable tasks ${role.automatablePct}% × ${factor.toFixed(1)}.`,
-      source: `OpenDOSM wages_occupation${fetched}; task labels ${labels}`,
+      source: `OpenDOSM wages_occupation${fetched}; task labels: ${labels}`,
     },
     {
       key: 'bonus',

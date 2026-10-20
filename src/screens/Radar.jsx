@@ -5,12 +5,7 @@ import RadarChart from '../components/RadarChart.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
-import { SCENARIO_NAME, biggestGaps, formatDate, formatMonth } from '../lib/roleView.js';
-
-const SCENARIO_TEXT = {
-  moderate: 'Moderate AI: tasks are automated at about 60% of the estimated speed over 3–5 years.',
-  fast: 'Fast AI: tasks are automated at the full estimated speed over 3–5 years.',
-};
+import { SCENARIO_NAME, SCENARIO_NOTE, biggestGaps, formatDate, formatMonth, radarSourceNote } from '../lib/roleView.js';
 
 function YouthCard({ trends }) {
   const youth = trends?.youth;
@@ -95,7 +90,7 @@ export default function Radar({
       </div>
 
       <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-        Estimates, not predictions. {SCENARIO_TEXT[scenario]}
+        Estimates, not predictions. {SCENARIO_NOTE}
       </div>
 
       <section className="flex flex-wrap items-center gap-6 rounded-[20px] border border-slate-200 bg-white p-4 sm:p-6">
@@ -145,11 +140,7 @@ export default function Radar({
           ) : (
             <p className="m-0 text-sm text-slate-700">You already have every listed skill for this role.</p>
           )}
-          <SourceNote>
-            Estimate. Skills and importance from eMASCO {focus.code}
-            {focus.source?.fetchedAt ? `, fetched ${formatDate(focus.source.fetchedAt)}` : ''}; importance changes with
-            the scenario.
-          </SourceNote>
+          <SourceNote>{radarSourceNote(focus)}</SourceNote>
           <button
             type="button"
             onClick={onSeeRoles}

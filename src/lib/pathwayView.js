@@ -45,7 +45,7 @@ export function pathwaySdgs(role, profile, sdgInfo) {
 export function disclosureText(labelSource) {
   const who =
     labelSource === 'manual'
-      ? 'are sample labels made by the team for this demo'
+      ? 'are placeholder sample labels for this demo (not yet reviewed)'
       : 'were made by an open AI model run on RunPod';
   return `AI disclosure: task labels ${who}. Job data: eMASCO 2020 (MOHR) and OpenDOSM. All results are estimates.`;
 }

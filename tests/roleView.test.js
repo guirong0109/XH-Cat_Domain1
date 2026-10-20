@@ -12,7 +12,11 @@ import {
   growthBarWidth,
   jobMarketEmptyText,
   jobMarketRows,
-  labelledBy,
+  RANGE_NOTE,
+  SCENARIO_NOTE,
+  exposureSourceText,
+  labelOrigin,
+  radarSourceNote,
   scoreBreakdown,
   trendsSourceLine,
 } from '../src/lib/roleView.js';
@@ -102,9 +106,21 @@ describe('exposureShares', () => {
     expect(exposureShares({ automatablePct: 70, assistedPct: 40 })).toEqual({ automatable: 70, assisted: 30, human: 0 });
   });
 
-  it('names who labelled the tasks', () => {
-    expect(labelledBy('manual')).toBe('the team (sample labels)');
-    expect(labelledBy('runpod')).toBe('an open AI model on RunPod');
+  it('describes where the task labels came from', () => {
+    expect(labelOrigin('manual')).toBe('placeholder sample labels for this demo (not yet reviewed)');
+    expect(labelOrigin('runpod')).toBe('made by an open AI model on RunPod');
+  });
+
+  it('builds the exposure source line for sample, RunPod and mixed roles', () => {
+    const sample = { labelSource: 'manual', source: { fetchedAt: '2026-10-20' } };
+    const runpod = { labelSource: 'runpod', source: { fetchedAt: '2026-10-21' } };
+    expect(exposureSourceText([sample])).toBe(
+      'Source: eMASCO task lists (MOHR). Task labels: placeholder sample labels for this demo (not yet reviewed). Estimates. Tasks fetched 20 Oct 2026.',
+    );
+    expect(exposureSourceText([sample, runpod])).toBe(
+      'Source: eMASCO task lists (MOHR). Task labels: made by an open AI model on RunPod; rows marked Sample are placeholder sample labels for this demo (not yet reviewed). Estimates. Tasks fetched 21 Oct 2026.',
+    );
+    expect(exposureSourceText([sample]).toLowerCase()).not.toContain('team');
   });
 });
 
@@ -128,6 +144,27 @@ describe('biggestGaps', () => {
   });
 });
 
+describe('scenario and radar copy', () => {
+  it('describes the scenarios only as the factor on automatable tasks', () => {
+    expect(SCENARIO_NOTE).toBe('Moderate AI counts 60% of tasks labelled automatable; Fast AI counts all of them.');
+  });
+
+  it('explains the score range in visible text', () => {
+    expect(RANGE_NOTE).toMatch(/^Range = Moderate AI to Fast AI/);
+  });
+
+  it('names importance as a team estimate and says Fast AI does not change it without links', () => {
+    const dated = { ...role, source: { fetchedAt: '2026-10-20' } };
+    expect(radarSourceNote(dated)).toBe(
+      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Fast AI shifts importance for skills linked to automatable or AI-assisted tasks.',
+    );
+    const flat = { ...dated, skills: role.skills.map((skill) => ({ ...skill, fast: skill.moderate })) };
+    expect(radarSourceNote(flat)).toBe(
+      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Fast AI does not change importance yet; it changes the outlook score.',
+    );
+  });
+});
+
 describe('scoreBreakdown', () => {
   it('explains each part and the formula adds up to the shown match', () => {
     const profile = { skills: ['SQL and databases', 'Spreadsheets (Excel)'], sdgs: [9] };
@@ -137,7 +174,7 @@ describe('scoreBreakdown', () => {
     expect(parts[0].detail).toBe('1.5 of 4 skills (similar skills count half).');
     expect(parts[0].source).toBe('eMASCO 2524-02 skill list (MOHR, MASCO 2020)');
     expect(parts[1].detail).toBe('Job demand 75.6 (Professionals +12.8%, 2020–2025). Automatable tasks 25% × 0.6.');
-    expect(parts[1].source).toContain('task labels sample');
+    expect(parts[1].source).toContain('task labels: placeholder samples (not yet reviewed)');
     expect(parts[2].value).toBe('+5');
     expect(parts[2].detail).toBe('Matches your goal: SDG 9.');
     expect(formula).toBe(

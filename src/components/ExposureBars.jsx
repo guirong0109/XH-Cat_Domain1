@@ -1,22 +1,11 @@
 import SourceNote from './SourceNote.jsx';
-import { exposureShares, formatDate, labelledBy } from '../lib/roleView.js';
+import { exposureShares, exposureSourceText } from '../lib/roleView.js';
 
 const LEGEND = [
   { label: 'Automatable', color: 'bg-[#C2410C]' },
   { label: 'AI-assisted', color: 'bg-[#0F766E]' },
   { label: 'Human-led', color: 'bg-slate-300' },
 ];
-
-function sourceText(roles) {
-  const sources = [...new Set(roles.map((role) => role.labelSource))];
-  const who =
-    sources.length === 1
-      ? labelledBy(sources[0])
-      : `${labelledBy('runpod')}; rows marked Sample by ${labelledBy('manual')}`;
-  const dates = roles.map((role) => role.source?.fetchedAt).filter(Boolean).sort();
-  const fetched = dates.length ? ` Tasks fetched ${formatDate(dates[dates.length - 1])}.` : '';
-  return `Source: eMASCO task lists (MOHR), labelled by ${who}. Estimates.${fetched}`;
-}
 
 // Real share of each role's eMASCO tasks by AI-exposure label.
 export default function ExposureBars({ roles }) {
@@ -68,7 +57,7 @@ export default function ExposureBars({ roles }) {
           );
         })}
       </ul>
-      <SourceNote className="border-t border-slate-200 pt-2.5">{sourceText(roles)}</SourceNote>
+      <SourceNote className="border-t border-slate-200 pt-2.5">{exposureSourceText(roles)}</SourceNote>
     </section>
   );
 }

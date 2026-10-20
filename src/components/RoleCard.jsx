@@ -1,6 +1,6 @@
 import SdgTag from './SdgTag.jsx';
 import { skillStatus } from '../lib/scoring.js';
-import { groupLabel, scoreBreakdown } from '../lib/roleView.js';
+import { RANGE_NOTE, groupLabel, scoreBreakdown } from '../lib/roleView.js';
 import { useTween } from '../lib/useTween.js';
 
 const SKILL_LOOK = {
@@ -145,6 +145,9 @@ export default function RoleCard({
           <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2.5 text-[13px] text-slate-700 tabular-nums">
             {breakdown.formula}
           </div>
+          <p className="m-0 mt-2 text-[13px] text-slate-600">
+            {RANGE_NOTE} This card: {range.low}–{range.high}.
+          </p>
         </div>
       )}
     </article>
