@@ -1,5 +1,5 @@
 import SourceNote from './SourceNote.jsx';
-import { jobMarketRows, trendsSourceLine } from '../lib/roleView.js';
+import { jobMarketEmptyText, jobMarketRows, trendsSourceLine } from '../lib/roleView.js';
 
 // Diverging bars: growth in wage recipients per MASCO major group.
 export default function JobMarketChart({ trends }) {
@@ -17,7 +17,7 @@ export default function JobMarketChart({ trends }) {
       </div>
       {rows.length === 0 ? (
         <p role="status" className="m-0 rounded-lg bg-slate-50 px-3 py-4 text-sm text-slate-700">
-          Trend data not loaded yet — press Refresh.
+          {jobMarketEmptyText(source)}
         </p>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0">

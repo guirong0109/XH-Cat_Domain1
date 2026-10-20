@@ -10,6 +10,7 @@ import {
   formatMonth,
   groupLabel,
   growthBarWidth,
+  jobMarketEmptyText,
   jobMarketRows,
   labelledBy,
   scoreBreakdown,
@@ -82,6 +83,13 @@ describe('jobMarketRows', () => {
 
   it('returns no rows when trends are not loaded', () => {
     expect(jobMarketRows(undefined)).toEqual([]);
+  });
+
+  it('says "not loaded" only when there is no saved source', () => {
+    expect(jobMarketEmptyText(undefined)).toBe('Trend data not loaded yet — press Refresh.');
+    expect(jobMarketEmptyText(trends.source)).toBe(
+      'The saved OpenDOSM file (fetched 20 Oct 2026) has no occupation-group figures. Press Refresh to try again.',
+    );
   });
 });
 

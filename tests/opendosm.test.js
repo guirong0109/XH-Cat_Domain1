@@ -33,6 +33,23 @@ describe('computeGroupTrends', () => {
     expect(groups.newgroup).toBeUndefined()
     expect(groups.professionals).toBeDefined()
   })
+
+  it('takes latestYear from both-sex group rows only', () => {
+    const rows = [
+      ...wageRows,
+      { occupation: 'overall', date: '2026-01-01', sex: 'both', recipients: 1 },
+      { occupation: 'professionals', date: '2026-01-01', sex: 'male', recipients: 1 },
+    ]
+    const { latestYear, baseYear, groups } = computeGroupTrends(rows)
+    expect(latestYear).toBe(2025)
+    expect(baseYear).toBe(2020)
+    expect(groups.professionals.demand).toBe(75.6)
+  })
+
+  it('returns no groups and null years when no group rows exist', () => {
+    const rows = [{ occupation: 'overall', date: '2026-01-01', sex: 'both', recipients: 1 }]
+    expect(computeGroupTrends(rows)).toEqual({ latestYear: null, baseYear: null, groups: {} })
+  })
 })
 
 describe('validateRows', () => {

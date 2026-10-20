@@ -72,6 +72,12 @@ export function jobMarketRows(groups) {
     .sort((a, b) => b.growthPct - a.growthPct || a.label.localeCompare(b.label));
 }
 
+// Empty job-market chart: only say "not loaded" when no file was ever saved.
+export function jobMarketEmptyText(source) {
+  if (!source) return 'Trend data not loaded yet — press Refresh.';
+  return `The saved OpenDOSM file (fetched ${formatDate(source.fetchedAt)}) has no occupation-group figures. Press Refresh to try again.`;
+}
+
 export function trendsSourceLine(source) {
   return `Source: OpenDOSM ${source.dataset}, ${source.baseYear}–${source.latestYear}. Fetched ${formatDate(source.fetchedAt)}.`;
 }

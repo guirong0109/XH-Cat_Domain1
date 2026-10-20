@@ -25,7 +25,8 @@ export function createApp({ dataDir, fetchImpl = fetch }) {
       ])
       response.json({ roles, skills, sdg, samples, trends })
     } catch (error) {
-      response.status(500).json({ error: `Could not load data: ${error.message}` })
+      console.error('[data] load failed:', error.message)
+      response.status(500).json({ error: 'Could not load data.' })
     }
   })
 

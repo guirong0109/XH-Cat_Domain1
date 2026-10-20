@@ -21,7 +21,8 @@ function roundToOneDecimal(value) {
 
 export function computeGroupTrends(rows, years = 5) {
   const bothSexRows = rows.filter((row) => row.sex === 'both' && row.occupation !== 'overall')
-  const latestYear = Math.max(...rows.map((row) => Number(row.date.slice(0, 4))))
+  if (bothSexRows.length === 0) return { latestYear: null, baseYear: null, groups: {} }
+  const latestYear = Math.max(...bothSexRows.map((row) => Number(row.date.slice(0, 4))))
   const baseYear = latestYear - years
 
   const recipientsByGroup = {}

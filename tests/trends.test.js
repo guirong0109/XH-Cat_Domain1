@@ -43,7 +43,7 @@ describe('refreshTrends', () => {
     await refreshTrends({ filePath, fetchImpl: fakeFetch })
     const result = await refreshTrends({ filePath, fetchImpl: fakeFetch })
     expect(result.status).toBe('unchanged')
-    expect(result.message).toBe('Up to date: no newer release.')
+    expect(result.message).toBe('Up to date: no newer release. Latest data: 2025.')
     expect(result.trends.source.latestYear).toBe(2025)
   })
 
@@ -78,6 +78,74 @@ describe('refreshTrends', () => {
       Promise.resolve({ status: 200, json: async () => (url.includes('id=wages_occupation') ? wageRows : []) })
     const result = await refreshTrends({ filePath, fetchImpl })
     expect(result.status).toBe('failed')
+  })
+})
+
+describe('refreshTrends with a partial new-year release', () => {
+  function fetchWith(extraRows) {
+    return (url) =>
+      Promise.resolve({
+        status: 200,
+        json: async () => (url.includes('id=wages_occupation') ? [...wageRows, ...extraRows] : youthRows),
+      })
+  }
+
+  it('an overall-only 2026 row does not change the latest year', async () => {
+    await refreshTrends({ filePath, fetchImpl: fakeFetch })
+    const overall2026 = { occupation: 'overall', date: '2026-01-01', sex: 'both', recipients: 1 }
+    const result = await refreshTrends({ filePath, fetchImpl: fetchWith([overall2026]) })
+    expect(result.status).toBe('unchanged')
+    expect(result.message).toBe('Up to date: no newer release. Latest data: 2025.')
+    expect(Object.keys(result.trends.groups)).toHaveLength(9)
+  })
+
+  it('fewer groups than the saved file is a failure and keeps the old file', async () => {
+    await refreshTrends({ filePath, fetchImpl: fakeFetch })
+    const before = await readFile(filePath)
+    const partial = { occupation: 'professionals', date: '2026-01-01', sex: 'both', recipients: 1 }
+    const result = await refreshTrends({ filePath, fetchImpl: fetchWith([partial]) })
+    expect(result.status).toBe('failed')
+    expect(result.message.endsWith('Live refresh failed.')).toBe(true)
+    expect(console.error).toHaveBeenCalledWith('[trends] refresh failed:', expect.stringContaining('groups'))
+    expect(Object.keys(result.trends.groups)).toHaveLength(9)
+    expect(Buffer.compare(before, await readFile(filePath))).toBe(0)
+  })
+
+  it('zero groups is a failure even without a saved file', async () => {
+    const overallOnly = wageRows.filter((row) => row.occupation === 'overall')
+    const fetchImpl = (url) =>
+      Promise.resolve({ status: 200, json: async () => (url.includes('id=wages_occupation') ? overallOnly : youthRows) })
+    const result = await refreshTrends({ filePath, fetchImpl })
+    expect(result).toEqual({ status: 'failed', message: 'Live refresh failed. No saved data yet.', trends: null })
+    expect(await readTrends(filePath)).toBeNull()
+  })
+})
+
+describe('refreshTrends concurrency', () => {
+  it('concurrent calls share one in-flight refresh', async () => {
+    let calls = 0
+    const countingFetch = (url) => {
+      calls += 1
+      return fakeFetch(url)
+    }
+    const [first, second] = await Promise.all([
+      refreshTrends({ filePath, fetchImpl: countingFetch }),
+      refreshTrends({ filePath, fetchImpl: countingFetch }),
+    ])
+    expect(calls).toBe(2)
+    expect(first).toEqual(second)
+    expect(first.status).toBe('updated')
+  })
+
+  it('a later call after the first finishes fetches again', async () => {
+    let calls = 0
+    const countingFetch = (url) => {
+      calls += 1
+      return fakeFetch(url)
+    }
+    await refreshTrends({ filePath, fetchImpl: countingFetch })
+    await refreshTrends({ filePath, fetchImpl: countingFetch })
+    expect(calls).toBe(4)
   })
 })
 

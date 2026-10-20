@@ -39,7 +39,17 @@ async function readExistingSafely(filePath) {
   }
 }
 
-export async function refreshTrends({ filePath, fetchImpl = fetch, now = new Date() }) {
+const inFlight = new Map()
+
+export function refreshTrends({ filePath, fetchImpl = fetch, now = new Date() }) {
+  const pending = inFlight.get(filePath)
+  if (pending) return pending
+  const refresh = runRefresh({ filePath, fetchImpl, now }).finally(() => inFlight.delete(filePath))
+  inFlight.set(filePath, refresh)
+  return refresh
+}
+
+async function runRefresh({ filePath, fetchImpl, now }) {
   const existing = await readExistingSafely(filePath)
   try {
     const [wageRows, youthRows] = await Promise.all([
@@ -49,6 +59,13 @@ export async function refreshTrends({ filePath, fetchImpl = fetch, now = new Dat
     validateRows(wageRows)
     validateYouthRows(youthRows)
     const { latestYear, baseYear, groups } = computeGroupTrends(wageRows)
+    const groupCount = Object.keys(groups).length
+    const savedGroupCount = Object.keys(existing?.groups ?? {}).length
+    if (groupCount === 0 || groupCount < savedGroupCount) {
+      throw new Error(
+        `OpenDOSM response invalid: ${groupCount} occupation groups for ${latestYear} (saved file has ${savedGroupCount})`,
+      )
+    }
     const youth = computeYouth(youthRows)
     const fetchedAt = now.toISOString()
     const trends = {
@@ -59,7 +76,7 @@ export async function refreshTrends({ filePath, fetchImpl = fetch, now = new Dat
     await writeAtomically(filePath, `${JSON.stringify(trends, null, 2)}\n`)
     const unchanged = existing?.source?.latestYear === latestYear
     return unchanged
-      ? { status: 'unchanged', message: 'Up to date: no newer release.', trends }
+      ? { status: 'unchanged', message: `Up to date: no newer release. Latest data: ${latestYear}.`, trends }
       : { status: 'updated', message: `Updated: data to ${latestYear}.`, trends }
   } catch (error) {
     console.error('[trends] refresh failed:', error.message)

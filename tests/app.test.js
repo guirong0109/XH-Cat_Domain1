@@ -2,7 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApp } from '../server/app.js'
 
 const wageRows = JSON.parse(readFileSync(new URL('./fixtures/wages_occupation.json', import.meta.url), 'utf8'))
@@ -61,6 +61,17 @@ describe('api', () => {
     const response = await fetch(`${baseUrl}/api/data`)
     expect(response.status).toBe(200)
     expect((await response.json()).trends).toBeNull()
+  })
+
+  it('GET /api/data failure returns a generic message and logs details', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    await writeFile(path.join(directory, 'roles.json'), '{not json')
+    const baseUrl = await start()
+    const response = await fetch(`${baseUrl}/api/data`)
+    expect(response.status).toBe(500)
+    expect(await response.json()).toEqual({ error: 'Could not load data.' })
+    expect(console.error).toHaveBeenCalledWith('[data] load failed:', expect.any(String))
+    vi.restoreAllMocks()
   })
 
   it('POST /api/refresh-trends returns status and message', async () => {
