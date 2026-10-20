@@ -61,7 +61,8 @@ export async function refreshTrends({ filePath, fetchImpl = fetch, now = new Dat
     return unchanged
       ? { status: 'unchanged', message: 'Up to date: no newer release.', trends }
       : { status: 'updated', message: `Updated: data to ${latestYear}.`, trends }
-  } catch {
+  } catch (error) {
+    console.error('[trends] refresh failed:', error.message)
     const savedDate = existing?.source?.fetchedAt?.slice(0, 10)
     const message = existing
       ? `Showing data from ${savedDate}. Live refresh failed.`

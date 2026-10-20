@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { readTrends, refreshTrends } from '../server/trends.js'
 
 const wageRows = JSON.parse(readFileSync(new URL('./fixtures/wages_occupation.json', import.meta.url), 'utf8'))
@@ -17,11 +17,13 @@ let directory
 let filePath
 
 beforeEach(async () => {
+  vi.spyOn(console, 'error').mockImplementation(() => {})
   directory = await mkdtemp(path.join(tmpdir(), 'trends-'))
   filePath = path.join(directory, 'trends.json')
 })
 
 afterEach(async () => {
+  vi.restoreAllMocks()
   await rm(directory, { recursive: true, force: true })
 })
 
@@ -51,6 +53,7 @@ describe('refreshTrends', () => {
     const result = await refreshTrends({ filePath, fetchImpl: () => Promise.reject(new Error('offline')) })
     expect(result.status).toBe('failed')
     expect(result.message.startsWith('Showing data from ')).toBe(true)
+    expect(console.error).toHaveBeenCalledWith('[trends] refresh failed:', 'offline')
     expect(result.trends).not.toBeNull()
     expect(Buffer.compare(before, await readFile(filePath))).toBe(0)
   })
@@ -61,6 +64,7 @@ describe('refreshTrends', () => {
     const result = await refreshTrends({ filePath, fetchImpl: () => Promise.resolve({ status: 200, json: async () => [{}] }) })
     expect(result.status).toBe('failed')
     expect(result.message).toBe('Showing data from 2026-01-02. Live refresh failed.')
+    expect(console.error).toHaveBeenCalledWith('[trends] refresh failed:', expect.stringContaining('OpenDOSM response invalid'))
     expect(Buffer.compare(before, await readFile(filePath))).toBe(0)
   })
 
