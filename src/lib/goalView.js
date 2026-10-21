@@ -42,3 +42,11 @@ export function orderForGoal(ranked, profile, fields) {
   }
   return { entries: plain(), note: null };
 }
+
+// The top-scoring role, when goal order does not put it first. Else null.
+export function bestScoreNote(entries, ranked) {
+  const best = ranked?.[0];
+  if (!best || !entries?.length) return null;
+  if (entries[0].role.id === best.role.id) return null;
+  return { role: best.role, match: best.score.match };
+}

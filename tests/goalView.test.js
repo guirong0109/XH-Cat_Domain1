@@ -69,3 +69,24 @@ describe('goalView', () => {
     expect(fieldOptions(null, fields)).toEqual([]);
   });
 });
+
+import { bestScoreNote } from '../src/lib/goalView.js';
+describe('bestScoreNote', () => {
+  const sr = [
+    { role: { id: 'r1', interest: 'C' }, score: { match: 90.4 } },
+    { role: { id: 'r2', interest: 'A' }, score: { match: 80 } },
+  ];
+  it('is null when the best role is first', () => {
+    const o = orderForGoal(sr, { goal: 'move', targetSectors: ['C'] }, fields);
+    expect(bestScoreNote(o.entries, sr)).toBeNull();
+    expect(bestScoreNote([], [])).toBeNull();
+  });
+  it('returns the best role and match when goal order moves it down (upgrade)', () => {
+    const o = orderForGoal(sr, { who: 'student', field: 'm-it', goal: 'upgrade' }, fields);
+    expect(bestScoreNote(o.entries, sr)).toEqual({ role: sr[0].role, match: 90.4 });
+  });
+  it('works for move', () => {
+    const o = orderForGoal(sr, { goal: 'move', targetSectors: ['A'] }, fields);
+    expect(bestScoreNote(o.entries, sr).role.id).toBe('r1');
+  });
+});

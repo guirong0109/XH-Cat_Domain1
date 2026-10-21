@@ -62,6 +62,8 @@ export default function RoleCard({
   return (
     <article
       ref={cardRef}
+      id={`card-${role.id}`}
+      tabIndex={-1}
       role="listitem"
       aria-posinset={rank}
       aria-setsize={total}

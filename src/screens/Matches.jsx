@@ -9,7 +9,7 @@ import RoleCard from '../components/RoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
 import SourceNote from '../components/SourceNote.jsx';
-import { findField, orderForGoal } from '../lib/goalView.js';
+import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
 import { roleRadarValues } from '../lib/radar.js';
 import { matchRange } from '../lib/scoring.js';
 import {
@@ -146,6 +146,7 @@ export default function Matches({
   onStudy,
 }) {
   const { entries, note } = orderForGoal(ranked, profile, data.fields);
+  const best = bestScoreNote(entries, ranked);
   const { heights, refFor } = useCardHeights();
   const refs = useMemo(() => Object.fromEntries(data.roles.map((role) => [role.id, refFor(role.id)])), [data.roles, refFor]);
   const layout = cardLayout(
@@ -182,6 +183,29 @@ export default function Matches({
         <p role="status" className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
           {note}
         </p>
+      )}
+
+      {best && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border-2 border-[#0F766E] bg-white px-4 py-3 text-sm text-slate-800">
+          <p className="m-0 min-w-0 flex-[1_1_260px]">
+            Your highest score is <strong>{best.role.title}</strong> ({Math.round(best.match)}), but it is{' '}
+            {profile.goal === 'move' ? 'not in the sectors you picked' : 'not linked to your major or sector'}, so it is
+            lower in this list.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const card = document.getElementById(`card-${best.role.id}`);
+              if (!card) return;
+              const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+              card.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+              card.focus({ preventScroll: true });
+            }}
+            className="fr-btn min-h-11 cursor-pointer rounded-[10px] border border-[#0F766E] bg-white px-4 font-semibold text-[#0F766E]"
+          >
+            Show it
+          </button>
+        </div>
       )}
 
       <div
