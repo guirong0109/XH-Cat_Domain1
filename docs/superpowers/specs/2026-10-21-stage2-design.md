@@ -30,9 +30,10 @@ Out of scope: any change to the scoring formula, the factors (Moderate 0.6, Fast
 ## 3. Item 1 — ILO second opinion
 
 ### Data
-- **Source file:** the ILO 2023 scores by 4-digit ISCO-08 (Gmyrek, Berg & Bescond 2023, "Generative AI and Jobs: A global analysis of potential effects on job quantity and quality"), from the ILO research data portal or the World Bank reproducibility package. Downloading it needs the user's confirmation first (file name, source and size are stated when asking).
-- Saved unchanged as `data/ilo/` + the original file name, with a short `data/ilo/README.md` giving the source URL, download date and licence.
-- **Which columns we use** is decided only after reading the real file: the mean exposure score, and the exposure category **only if the file has one**. If it has no category column, the UI shows the score alone. We do not compute our own categories.
+- **Source (approved by the user on 2026-10-21):** ILO Working Paper 140 (May 2025), "Generative AI and Jobs: A Refined Global Index of Occupational Exposure", (c) ILO 2025, CC BY 4.0. It is the latest ILO index; ILO briefs from 2026 still cite it. Only official ILO pages are used: https://www.ilo.org/node/706766, the PDF on ilo.org and the "Read online" HTML on webapps.ilo.org. No GitHub or third-party copies.
+- **Table A1** ("ISCO-08 occupations by exposure gradient") lists all 427 ISCO-08 4-digit occupations with the ILO exposure category (Gradient 1–4, Minimal Exposure, Not Exposed), the mean task score and the SD.
+- The PDF and the HTML page are kept unchanged in `data/ilo/` (the user asked to keep the PDF in the repo). A stdlib script extracts Table A1 into `data/ilo/ilo_2025_scores.json` and checks it: 427 unique codes, and each category against the Table 5 rules.
+- The ILO built the index with AI-assisted scoring plus a worker survey and expert review; the README says so.
 
 ### Mapping
 - New team file `data/team/isco_map.json`: `{ "<MASCO code>": { "isco": "<4 digits>", "note": "<why>" } }` for all 15 roles.
@@ -41,14 +42,14 @@ Out of scope: any change to the scoring formula, the factors (Moderate 0.6, Fast
 ### Pipeline (`pipeline/build_data.py`, stdlib only)
 - Reads `data/team/isco_map.json` and the ILO file (both optional; missing → no `ilo` field, with a warning).
 - Adds to each role in `data/roles.json`:
-  `"ilo": { "isco": "2511", "iscoTitle": "...", "score": 0.47, "category": "..." | null, "source": "ILO 2023 ...", "url": "..." }`
+  `"ilo": { "isco": "2511", "iscoTitle": "Systems Analysts", "mean": 0.49, "sd": 0.05, "category": "Gradient 2", "source": "ILO WP140 (2025), Table A1", "url": "...", "fetchedAt": "..." }`
 - Fails loudly if the mapped ISCO code is not in the ILO file.
 - New unit tests in `pipeline/tests/`: mapping present, mapping missing, unknown ISCO code, file missing.
 
 ### UI
 - Pure helper in `src/lib/roleView.js`: `iloView(role)` → `{ badge, scoreText, iscoText, sourceText }` or `null` when the role has no `ilo`. Tested.
-- `RoleCard.jsx`: a small indigo badge in the title row (`ILO 2023: <category or score>`).
-- The "Why this score?" panel gets a second box, **"ILO second opinion (not in the score)"**, next to "Our task labels (used in the score)". Text as in the mockup: score, ISCO code and title, "our team's mapping, not an official table", "global index, not Malaysia-specific", source line.
+- `RoleCard.jsx`: a small indigo badge in the title row (`ILO 2025: <category>`).
+- The "Why this score?" panel gets a second box, **"ILO second opinion (not in the score)"**, next to "Our task labels (used in the score)". Text as in the mockup: category, mean and SD, ISCO code and title, "our team's mapping, not an official table", "global index, not Malaysia-specific", source line.
 - One line under both boxes: "Two views can disagree. Both are estimates. You decide."
 - Roles without `ilo`: no badge; the box says "No ILO match for this role."
 
