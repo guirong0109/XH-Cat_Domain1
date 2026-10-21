@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import Chip from '../components/Chip.jsx';
 import ExposureBars from '../components/ExposureBars.jsx';
 import JobMarketChart from '../components/JobMarketChart.jsx';
@@ -16,7 +16,6 @@ import {
   SCENARIO_NAME,
   SCENARIO_NOTE,
   biggestGaps,
-  cardLayout,
   formatDate,
   formatMonth,
   radarSourceNote,
@@ -40,50 +39,6 @@ function goalLine(profile, fields) {
     return `Your goal: move to a new role${sectors.length ? ` (${sectors.join(', ')})` : ''}.`;
   }
   return 'Your goal: not sure yet. Roles are in plain score order.';
-}
-
-// Measures each card so a card whose content needs more than the default
-// height still gets room (the default heights stay the minimum).
-function useCardHeights() {
-  const [heights, setHeights] = useState({});
-  const observer = useRef(null);
-  const nodes = useRef(new Map());
-
-  useEffect(() => {
-    if (typeof ResizeObserver === 'undefined') return undefined;
-    observer.current = new ResizeObserver((entries) => {
-      setHeights((current) => {
-        let next = current;
-        for (const entry of entries) {
-          const id = entry.target.dataset.roleId;
-          const height = Math.ceil(entry.target.getBoundingClientRect().height);
-          if (current[id] !== height) {
-            if (next === current) next = { ...current };
-            next[id] = height;
-          }
-        }
-        return next;
-      });
-    });
-    for (const node of nodes.current.values()) observer.current.observe(node);
-    return () => observer.current.disconnect();
-  }, []);
-
-  const refFor = useCallback(
-    (id) => (node) => {
-      const previous = nodes.current.get(id);
-      if (previous && observer.current) observer.current.unobserve(previous);
-      if (node) {
-        node.dataset.roleId = id;
-        nodes.current.set(id, node);
-        if (observer.current) observer.current.observe(node);
-      } else {
-        nodes.current.delete(id);
-      }
-    },
-    [],
-  );
-  return { heights, refFor };
 }
 
 function YouthCard({ trends }) {
@@ -147,17 +102,15 @@ export default function Matches({
 }) {
   const { entries, note } = orderForGoal(ranked, profile, data.fields);
   const best = bestScoreNote(entries, ranked);
-  const { heights, refFor } = useCardHeights();
-  const refs = useMemo(() => Object.fromEntries(data.roles.map((role) => [role.id, refFor(role.id)])), [data.roles, refFor]);
-  const layout = cardLayout(
-    entries.map((entry) => entry.role.id),
-    expandedRoleId,
-    heights,
-  );
-  const entryById = new Map(entries.map((entry) => [entry.role.id, entry]));
-  // Stable DOM order (by id) so cards slide to new positions instead of jumping.
-  const stableRoles = useMemo(() => [...data.roles].sort((a, b) => a.id.localeCompare(b.id)), [data.roles]);
   const listRef = useRef(null);
+  // Re-ordering moves card nodes; if that drops focus, put it back.
+  const focused = typeof document === 'undefined' ? null : document.activeElement;
+  const order = entries.map((entry) => entry.role.id).join(',');
+  useLayoutEffect(() => {
+    if (focused && focused.isConnected && document.activeElement !== focused && listRef.current?.contains(focused)) {
+      focused.focus({ preventScroll: true });
+    }
+  }, [order, focused]);
 
   // Radar: the focused role, else the first role in goal order.
   const topThree = entries.slice(0, 3);
@@ -212,12 +165,10 @@ export default function Matches({
         ref={listRef}
         role="list"
         aria-label="Matched roles, in your goal order"
-        style={{ '--stack-height': `${layout.total}px` }}
-        className="flex flex-col gap-3.5 sm:relative sm:block sm:h-[var(--stack-height)]"
+        className="flex flex-col gap-3.5"
       >
-        {stableRoles.map((role) => {
-          const position = layout.positions[role.id];
-          const entry = entryById.get(role.id);
+        {entries.map((entry, index) => {
+          const { role } = entry;
           return (
             <RoleCard
               key={role.id}
@@ -225,7 +176,7 @@ export default function Matches({
               score={entry.score}
               reason={entry.reason}
               range={matchRange(role, profile, ctx)}
-              rank={position.rank}
+              rank={index + 1}
               total={entries.length}
               expanded={expandedRoleId === role.id}
               onToggle={() => onToggleExpanded(role.id)}
@@ -235,9 +186,6 @@ export default function Matches({
               sdgInfo={data.sdg}
               scenario={scenario}
               trends={data.trends}
-              top={position.top}
-              minHeight={position.minHeight}
-              cardRef={refs[role.id]}
             />
           );
         })}

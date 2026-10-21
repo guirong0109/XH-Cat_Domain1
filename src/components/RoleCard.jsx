@@ -27,8 +27,7 @@ function fitRowText(row) {
   return row.status === 'have' ? `You have it (${levelName(row.level)})` : FIT_ROW_TEXT[row.status];
 }
 
-// One ranked role. Layout props (top, minHeight, cardRef) come from Matches,
-// which positions cards by rank while keeping a stable DOM order.
+// One ranked role. Matches renders cards in DOM in the displayed (goal) order.
 export default function RoleCard({
   role,
   score,
@@ -44,9 +43,6 @@ export default function RoleCard({
   sdgInfo,
   scenario,
   trends,
-  top = 0,
-  minHeight,
-  cardRef,
 }) {
   const shownMatch = useTween({ match: score.match }).match;
   const reasonText = whyReason(reason);
@@ -61,15 +57,13 @@ export default function RoleCard({
 
   return (
     <article
-      ref={cardRef}
       id={`card-${role.id}`}
       tabIndex={-1}
       role="listitem"
       aria-posinset={rank}
       aria-setsize={total}
       aria-labelledby={`title-${role.id}`}
-      style={{ order: rank, '--card-top': `${top}px`, '--card-min': `${minHeight}px` }}
-      className={`fr-card fr-role-card box-border rounded-2xl border bg-white p-4 sm:absolute sm:inset-x-0 sm:top-[var(--card-top)] sm:min-h-[var(--card-min)] sm:px-[22px] sm:py-5 ${
+      className={`fr-card fr-role-card box-border rounded-2xl border bg-white p-4 sm:px-[22px] sm:py-5 ${
         first ? 'border-teal-300' : 'border-slate-200'
       }`}
     >

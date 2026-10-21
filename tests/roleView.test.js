@@ -1,10 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  CARD_COLLAPSED,
-  CARD_EXPANDED,
-  CARD_GAP,
   biggestGaps,
-  cardLayout,
   exposureShares,
   fitSkillRows,
   formatDate,
@@ -200,26 +196,6 @@ describe('scoreBreakdown', () => {
     expect(parts[2].detail).toBe('No match with your chosen goals.');
     expect(formula).toContain('(Fast AI scenario)');
     expect(formula).not.toContain('NaN');
-  });
-});
-
-describe('cardLayout', () => {
-  it('stacks cards by rank with the expanded card taller', () => {
-    const { positions, total } = cardLayout(['b', 'a', 'c'], 'b');
-    expect(positions.b).toMatchObject({ top: 0, rank: 1, minHeight: CARD_EXPANDED });
-    expect(positions.a).toMatchObject({ top: CARD_EXPANDED + CARD_GAP, rank: 2, minHeight: CARD_COLLAPSED });
-    expect(positions.c.top).toBe(CARD_EXPANDED + CARD_COLLAPSED + 2 * CARD_GAP);
-    expect(total).toBe(CARD_EXPANDED + 2 * CARD_COLLAPSED + 2 * CARD_GAP);
-  });
-
-  it('uses a measured height when the content needs more room', () => {
-    const { positions, total } = cardLayout(['a', 'b'], null, { a: 250, b: 100 });
-    expect(positions.b.top).toBe(250 + CARD_GAP);
-    expect(total).toBe(250 + CARD_GAP + CARD_COLLAPSED);
-  });
-
-  it('handles an empty list', () => {
-    expect(cardLayout([], null)).toEqual({ positions: {}, total: 0 });
   });
 });
 

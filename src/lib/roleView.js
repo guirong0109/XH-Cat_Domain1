@@ -23,9 +23,6 @@ export function groupLabel(group) {
 
 // Card sizes for the animated Roles list (≥ 640 px). A card is never shorter
 // than these; if its content needs more room the measured height is used.
-export const CARD_COLLAPSED = 196;
-export const CARD_EXPANDED = CARD_COLLAPSED + 236;
-export const CARD_GAP = 14;
 
 // The diverging job-market bars reach the edge at ±35 %.
 export const GROWTH_SCALE = 35;
@@ -180,20 +177,6 @@ export function scoreBreakdown(role, score, scenario, trends) {
     `${WEIGHTS.fit} × ${formatNumber(score.fit)} + ${WEIGHTS.outlook} × ${formatNumber(score.outlook)} + ${score.bonus} = ` +
     `${Math.round(score.match)}${capped} (${SCENARIO_NAME[scenario]} scenario)`;
   return { parts, formula };
-}
-
-// Positions cards by rank. heights maps role id → measured height; missing
-// or smaller values fall back to the collapsed/expanded constants.
-export function cardLayout(rankedIds, expandedId, heights = {}) {
-  const positions = {};
-  let top = 0;
-  rankedIds.forEach((id, index) => {
-    const minimum = id === expandedId ? CARD_EXPANDED : CARD_COLLAPSED;
-    const height = Math.max(minimum, heights[id] || 0);
-    positions[id] = { top, rank: index + 1, minHeight: minimum };
-    top += height + CARD_GAP;
-  });
-  return { positions, total: Math.max(0, top - CARD_GAP) };
 }
 
 export const ILO_SCALE_TEXT =

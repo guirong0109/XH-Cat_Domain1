@@ -64,7 +64,7 @@ a:focus-visible {
 }
 
 /* Roles list: cards slide to their new rank. Reduced motion turns it off above. */
-.fr-role-card { transition: top 650ms cubic-bezier(.2, .8, .2, 1), box-shadow 0.2s; }
+.fr-role-card { transition: box-shadow 0.2s; }
 
 /* Print: only the plan itself (no nav, tips or buttons). */
 @media print {
