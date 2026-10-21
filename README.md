@@ -20,6 +20,8 @@ Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer N
 
 Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changing and which stay human-led (try Ravi: his Electrical wiring sits in "Stays human-led"). Open any role's "Why this score?" to compare our labels with the ILO view. The re-plan notice on Radar appears only after a Refresh brings new OpenDOSM data, and that data changes about once a year. So it will not show on every refresh.
 
+Demo tip: Radar → "AI research momentum" card. Press Refresh data to update both OpenDOSM and OpenAlex. It stays empty until the first OpenAlex snapshot is saved (see "Current data state").
+
 ## The six must-have features
 
 | Feature | How it is delivered |
@@ -37,6 +39,7 @@ Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changin
 - **Task AI-exposure labels are currently placeholder sample labels for this demo (not yet reviewed)** (`labelSource: "manual"` in `data/roles.json`, from `data/team/manual_labels.json`). Each task was labelled from its own text, without a target percentage, but no team member has reviewed them. The RunPod labelling job has **not been run yet**, so no RunPod labels exist in this repo. The app shows a **"Sample" badge** next to these labels until the RunPod run or a human review replaces them.
 - **Fast AI does not yet change skill importance.** That needs the RunPod skill-task links (`data/runpod/skill_task_links.json`), which do not exist yet, so every skill has the same importance in both scenarios. Fast AI does change the outlook score (and so the match score and ranking).
 - OpenDOSM trends are real and can be refreshed live.
+- AI research momentum: no snapshot yet (OpenAlex free daily limit reached on 21 Oct 2026); press Refresh data after the daily reset or once an API key is set. Until then the card says "AI research data not loaded yet. Press Refresh data." The refresh endpoints are `POST /api/refresh-trends` and `POST /api/refresh-research`.
 
 ## Data sources
 
@@ -44,6 +47,7 @@ Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changin
 | --- | --- | --- | --- |
 | OpenDOSM `wages_occupation` (`api.data.gov.my/opendosm?id=wages_occupation`) | Employed workers by MASCO major group, yearly; 5-year growth | Live refresh, cached in `data/trends.json` | Latest year shown in the app; refresh date shown |
 | OpenDOSM `lfs_month_youth` | Youth unemployment rate (context card) | Same refresh | Latest month shown in the app |
+| OpenAlex works search (CC0), keyword counts per skill from the search term in `data/team/skill_labels.json`, for 2024 and 2025 | Count of research papers matching each skill's search term, per year | Live refresh via `POST /api/refresh-research`, cached in `data/research.json` | First snapshot pending |
 | eMASCO (MOHR), MASCO 2020 | Role title, code, description, tasks, skills, qualification | One-time snapshot by `pipeline/scrape_emasco.py` | Snapshot dated 2026-10-21 |
 | ILO Working Paper 140 (May 2025), "Generative AI and Jobs: A Refined Global Index of Occupational Exposure", Table A1 (c) ILO 2025, CC BY 4.0 | Second opinion: exposure category, mean and SD for 427 ISCO-08 occupations, shown beside our labels | One-time import by `pipeline/import_ilo.py` into `data/ilo/`; MASCO to ISCO map in `data/team/isco_map.json` | Published May 2025; imported 2026-10-21 |
 | Hays Asia Salary Guide 2025 | Home-page fact | Cited text | 2025 |
@@ -74,6 +78,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 - The models **never create roles, courses or numbers**. Roles, tasks and skills come only from the eMASCO snapshot. A person checks the skill mappings.
 - **ILO exposure index (second opinion).** The ILO built this index with AI-assisted scoring, a worker survey and expert review. It is global, not Malaysia-specific, and dated 2025. We show it beside our labels only. It is **not used in the score**.
 - The MASCO to ISCO-08 mapping (`data/team/isco_map.json`) was drafted by Claude from eMASCO descriptions and ISCO titles. It is **not an official table** and is awaiting team review. Weak fits are flagged: 3131-07 to 3113, 3512-05 to 3512, 2269-01 to 2120, 2511-08 to 2511.
+- **AI research momentum:** keyword counts from OpenAlex; no AI model; search terms are a team draft in `data/team/skill_labels.json`.
 - All AI-made labels and scores are **estimates**, not predictions or advice.
 - **Current labels are placeholder sample labels for this demo (not yet reviewed)** until the RunPod run or a human review is done (see "Current data state"). The app marks them with a "Sample" badge.
 
@@ -95,6 +100,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 | Matching quality: a skill mapping could be wrong. | "Why this score?" shows the exact maths and sources. The team reviews the role-skill and MASCO-to-ISCO mappings. The ILO view lets students compare two views. |
 | AI inventing jobs, courses or numbers. | Roles, tasks and skills come only from the eMASCO snapshot. Course links go only to official portals. The model only labels existing tasks. The data build fails on any unknown skill, SDG or ISCO code. |
 | A source site changes or goes down (eMASCO, ILO). | Dated snapshots are kept in the repo (`data/emasco/`, `data/ilo/`). |
+| OpenAlex without an API key gives one shared free daily budget (USD 0.10) per IP address. One Refresh makes about 50 search calls, so only one or two refreshes fit in a day, and a shared host IP (e.g. Replit) may already be used up. | The last good `data/research.json` is kept and a dated message is shown. Plan: a free OpenAlex API key in an `OPENALEX_API_KEY` environment variable, never committed. |
 | RunPod budget. | One small job (about USD 5 of the USD 25 budget); hand-labelling as backup. |
 
 ## Fairness
@@ -140,6 +146,11 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 - ILO second opinion: each role's "Why this score?" shows the ILO view next to our labels. Not used in the score.
 - Re-plan notice on Radar after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
 - "Skills in demand" card on Radar: every skill grouped by how much AI is changing the jobs that use it (ILO 2025 exposure of those roles), with the job growth of their groups (OpenDOSM). With current data no skill is in a shrinking job group, and the card says so rather than labelling any skill as declining.
+
+- B, AI research momentum card on Radar: OpenAlex keyword counts per skill for 2024 and 2025 (`server/research.js`, `POST /api/refresh-research`, `data/research.json`). Keyword counts only, no AI model. The first real snapshot is pending (free daily limit).
+
+**Open**
+- arXiv as a second research source: see `docs/arxiv-investigation.md`.
 
 **Next (after the RunPod run)**
 - Skill-level AI trends from the RunPod skill-to-task links: each skill marked rising or falling under Fast AI, added to the "Skills in demand" card.
