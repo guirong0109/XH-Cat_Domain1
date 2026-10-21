@@ -179,7 +179,17 @@ export default function App() {
 
   const chooseField = (id) => changeProfile((current) => ({ ...current, field: id }));
 
-  const toggleSkill = (label) =>
+  // After a manual change the CV line no longer explains that skill's level.
+  const dropCvEvidence = (label) =>
+    setCv((current) => {
+      if (!current?.evidence[label]) return current;
+      const evidence = { ...current.evidence };
+      delete evidence[label];
+      return { ...current, evidence };
+    });
+
+  const toggleSkill = (label) => {
+    dropCvEvidence(label);
     changeProfile((current) => {
       const skills = toggleIn(current.skills, label);
       const levels = { ...current.levels };
@@ -189,6 +199,7 @@ export default function App() {
       const learn = current.learn.filter((item) => !skills.includes(item));
       return { ...current, skills, levels, learn };
     });
+  };
 
   // Found skills replace the picked ones; levels are our guesses.
   const applyCvSkills = (found, fileName) => {
@@ -201,8 +212,10 @@ export default function App() {
     setCv({ fileName, evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])) });
   };
 
-  const setLevel = (label, level) =>
+  const setLevel = (label, level) => {
+    dropCvEvidence(label);
     changeProfile((current) => ({ ...current, levels: { ...current.levels, [label]: level } }));
+  };
 
   // Leaving "move" keeps the target sectors; they are only used for "move".
   const chooseGoal = (goal) => changeProfile((current) => ({ ...current, goal }));

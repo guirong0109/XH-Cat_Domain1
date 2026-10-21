@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Chip from '../components/Chip.jsx';
 import LevelSwitch from '../components/LevelSwitch.jsx';
 import { CV_MESSAGES, checkCvFile, extractSkills } from '../lib/cvSkills.js';
@@ -22,6 +22,13 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   const [reading, setReading] = useState(false);
   const [cvError, setCvError] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const count = profile.skills.length;
 
   const goToPicker = () => {
@@ -30,6 +37,8 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   };
 
   const readCv = async (file) => {
+    // Reset so the same file can be chosen again.
+    if (fileRef.current) fileRef.current.value = '';
     if (!file || reading) return;
     setCvError(null);
     const bad = checkCvFile(file);
@@ -40,14 +49,14 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     setReading(true);
     try {
       const text = await readPdfText(file);
+      if (!mounted.current) return;
       const found = extractSkills(text, data.skills.labels);
       if (found.length === 0) setCvError('none-found');
       else onCvFound(found, file.name);
     } catch (error) {
-      setCvError(pdfErrorCode(error));
+      if (mounted.current) setCvError(pdfErrorCode(error));
     } finally {
-      setReading(false);
-      if (fileRef.current) fileRef.current.value = '';
+      if (mounted.current) setReading(false);
     }
   };
 
@@ -85,37 +94,37 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </button>
           </div>
         ) : (
-        <div className="flex flex-wrap gap-3">
-          <label
-            onDragOver={(event) => {
-              event.preventDefault();
-              setDragging(true);
-            }}
-            onDragLeave={() => setDragging(false)}
-            onDrop={onDrop}
-            className={`flex min-h-[52px] flex-[1_1_220px] cursor-pointer flex-col items-start justify-center rounded-xl border-2 border-dashed px-5 py-2 text-left focus-within:outline focus-within:outline-2 focus-within:outline-[#0F766E] ${
-              dragging ? 'border-[#0F766E] bg-teal-50' : 'border-slate-300 bg-slate-50'
-            }`}
-          >
-            <span className="text-base font-bold text-[#0F766E]">{reading ? 'Reading your CV…' : 'Upload my CV (PDF)'}</span>
-            <span className="text-xs text-slate-600">Choose a file or drop it here. Up to 5 MB.</span>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="application/pdf"
-              disabled={reading}
-              onChange={(event) => readCv(event.target.files?.[0])}
-              className="sr-only"
-            />
-          </label>
-          <button
-            type="button"
-            onClick={goToPicker}
-            className="fr-btn min-h-[52px] cursor-pointer rounded-xl border border-[#0F766E] bg-white px-5 text-base font-bold text-[#0F766E]"
-          >
-            I don't have a CV
-          </button>
-        </div>
+          <div className="flex flex-wrap gap-3">
+            <label
+              onDragOver={(event) => {
+                event.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={onDrop}
+              className={`flex min-h-[52px] flex-[1_1_220px] cursor-pointer flex-col items-start justify-center rounded-xl border-2 border-dashed px-5 py-2 text-left focus-within:outline focus-within:outline-2 focus-within:outline-[#0F766E] ${
+                dragging ? 'border-[#0F766E] bg-teal-50' : 'border-slate-300 bg-slate-50'
+              }`}
+            >
+              <span className="text-base font-bold text-[#0F766E]">{reading ? 'Reading your CV…' : 'Upload my CV (PDF)'}</span>
+              <span className="text-xs text-slate-600">Choose a file or drop it here. Up to 5 MB.</span>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="application/pdf"
+                disabled={reading}
+                onChange={(event) => readCv(event.target.files?.[0])}
+                className="sr-only"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={goToPicker}
+              className="fr-btn min-h-[52px] cursor-pointer rounded-xl border border-[#0F766E] bg-white px-5 text-base font-bold text-[#0F766E]"
+            >
+              I don't have a CV
+            </button>
+          </div>
         )}
         {reading && (
           <p role="status" className="m-0 text-sm text-slate-700">

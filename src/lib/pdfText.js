@@ -7,7 +7,14 @@ async function defaultLoader() {
 export async function readPdfText(file, loadPdfjs = defaultLoader) {
   const pdfjs = await loadPdfjs();
   const data = new Uint8Array(await file.arrayBuffer());
-  const doc = await pdfjs.getDocument({ data }).promise;
+  const task = pdfjs.getDocument({ data });
+  let doc;
+  try {
+    doc = await task.promise;
+  } catch (error) {
+    await task.destroy?.();
+    throw error;
+  }
   const lines = [];
   try {
     for (let n = 1; n <= doc.numPages; n += 1) {

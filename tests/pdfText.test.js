@@ -39,3 +39,19 @@ describe('pdfErrorCode', () => {
     expect(pdfErrorCode(undefined)).toBe('load-failed');
   });
 });
+
+describe('readPdfText failures', () => {
+  it('destroys the loading task when opening fails', async () => {
+    let destroyed = false;
+    const loader = async () => ({
+      getDocument: () => ({
+        promise: Promise.reject(Object.assign(new Error('pw'), { name: 'PasswordException' })),
+        destroy: async () => {
+          destroyed = true;
+        },
+      }),
+    });
+    await expect(readPdfText(file, loader)).rejects.toMatchObject({ name: 'PasswordException' });
+    expect(destroyed).toBe(true);
+  });
+});
