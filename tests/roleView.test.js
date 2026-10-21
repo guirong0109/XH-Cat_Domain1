@@ -6,6 +6,7 @@ import {
   biggestGaps,
   cardLayout,
   exposureShares,
+  fitSkillRows,
   formatDate,
   formatGrowth,
   formatMonth,
@@ -20,8 +21,11 @@ import {
   exposureSourceText,
   labelOrigin,
   radarSourceNote,
+  roleSources,
   scoreBreakdown,
+  skillChipText,
   trendsSourceLine,
+  whyReason,
 } from '../src/lib/roleView.js';
 import { scoreRole } from '../src/lib/scoring.js';
 
@@ -254,5 +258,90 @@ describe('iloView', () => {
     expect(view.sourceText).toContain('global');
     expect(view.sourceText).toContain('not Malaysia-specific');
     expect(view.sourceText).toContain(formatDate('2026-10-21'));
+  });
+});
+
+describe('roleSources', () => {
+  const role = {
+    code: '2524-02',
+    group: 'professionals',
+    source: { url: 'https://emasco.mohr.gov.my/masco/2524-02', fetchedAt: '2026-10-21' },
+    ilo: { isco: '2120', url: 'https://example.org/ilo' },
+  };
+  const trendData = {
+    source: { url: 'https://api.data.gov.my/opendosm?id=wages_occupation', baseYear: 2020, latestYear: 2025 },
+  };
+
+  it('lists eMASCO, OpenDOSM and ILO', () => {
+    expect(roleSources(role, trendData)).toEqual([
+      { label: 'eMASCO role page 2524-02 (snapshot 21 Oct 2026)', url: 'https://emasco.mohr.gov.my/masco/2524-02' },
+      { label: 'OpenDOSM job trend, Professionals (2020–2025)', url: 'https://api.data.gov.my/opendosm?id=wages_occupation' },
+      {
+        label: 'ILO 2025 AI exposure (WP140)',
+        url: 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html',
+      },
+    ]);
+  });
+
+  it('omits OpenDOSM when there are no trends', () => {
+    expect(roleSources(role, null).map((s) => s.label)).toEqual([
+      'eMASCO role page 2524-02 (snapshot 21 Oct 2026)',
+      'ILO 2025 AI exposure (WP140)',
+    ]);
+  });
+
+  it('omits ILO when the role has no ILO match', () => {
+    const labels = roleSources({ ...role, ilo: undefined }, trendData).map((s) => s.label);
+    expect(labels).toHaveLength(2);
+    expect(labels.some((l) => l.startsWith('ILO'))).toBe(false);
+  });
+});
+
+describe('skillChipText', () => {
+  const similar = { Python: ['R'] };
+  it('says "you have it" when held with no own level', () => {
+    expect(skillChipText('Python', { skills: ['Python'], levels: {} }, similar)).toEqual({
+      status: 'have',
+      level: null,
+      srText: 'you have it',
+    });
+  });
+  it('shows the level when the profile has one', () => {
+    expect(skillChipText('Python', { skills: ['Python'], levels: { Python: 'basic' } }, similar)).toEqual({
+      status: 'have',
+      level: 'basic',
+      srText: 'you have it, Basic level',
+    });
+  });
+  it('similar and gap', () => {
+    expect(skillChipText('Python', { skills: ['R'], levels: {} }, similar).srText).toBe('similar skill, half credit');
+    expect(skillChipText('Python', { skills: [], levels: {} }, similar)).toEqual({
+      status: 'gap',
+      level: null,
+      srText: 'gap to learn',
+    });
+  });
+});
+
+describe('fitSkillRows', () => {
+  it('gives each skill its status, level and credit', () => {
+    const role = { skills: ['A', 'B', 'C', 'D', 'E'].map((label) => ({ label })) };
+    const profile = { skills: ['A', 'B', 'C', 'X'], levels: { A: 'strong', B: 'good', C: 'basic' } };
+    const similar = { D: ['X'] };
+    expect(fitSkillRows(role, profile, similar)).toEqual([
+      { label: 'A', status: 'have', level: 'strong', credit: 1 },
+      { label: 'B', status: 'have', level: 'good', credit: 0.75 },
+      { label: 'C', status: 'have', level: 'basic', credit: 0.5 },
+      { label: 'D', status: 'similar', level: null, credit: 0.5 },
+      { label: 'E', status: 'gap', level: null, credit: 0 },
+    ]);
+  });
+});
+
+describe('whyReason', () => {
+  it('maps goal reasons to badge text', () => {
+    expect(whyReason('field')).toBe('Linked to your major or sector');
+    expect(whyReason('target')).toBe('In a sector you want');
+    expect(whyReason(null)).toBe(null);
   });
 });

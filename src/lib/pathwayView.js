@@ -11,8 +11,10 @@ export const PORTAL_LINKS = {
 };
 
 // tvet skills link to MyTVET, everything else to e-Latih; both add the claimable list.
-export function linksForPortal(portal) {
-  return [portal === 'tvet' ? PORTAL_LINKS.tvet : PORTAL_LINKS.elatih, PORTAL_LINKS.claimable];
+// Working people see the claimable list first (their employer can claim it).
+export function linksForPortal(portal, who) {
+  const own = portal === 'tvet' ? PORTAL_LINKS.tvet : PORTAL_LINKS.elatih;
+  return who === 'working' ? [PORTAL_LINKS.claimable, own] : [own, PORTAL_LINKS.claimable];
 }
 
 export function whyText(step) {

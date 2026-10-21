@@ -1,6 +1,18 @@
 import SdgTag from './SdgTag.jsx';
-import { skillLevel, skillStatus } from '../lib/scoring.js';
-import { ILO_NO_MATCH, RANGE_NOTE, exposureShares, groupLabel, iloView, labelOrigin, scoreBreakdown } from '../lib/roleView.js';
+import {
+  ILO_NO_MATCH,
+  RANGE_NOTE,
+  exposureShares,
+  fitSkillRows,
+  groupLabel,
+  iloView,
+  labelOrigin,
+  levelName,
+  roleSources,
+  scoreBreakdown,
+  skillChipText,
+  whyReason,
+} from '../lib/roleView.js';
 import { useTween } from '../lib/useTween.js';
 import { learnCount } from '../lib/potential.js';
 
@@ -9,9 +21,13 @@ const SKILL_LOOK = {
   similar: 'border-2 border-[#0F766E] bg-white text-[#0F766E]',
   gap: 'border-2 border-dashed border-[#C2410C] bg-white text-[#9A3412]',
 };
-const SKILL_STATUS_TEXT = { have: 'you have it', similar: 'similar skill, half credit', gap: 'gap to learn' };
+const FIT_ROW_TEXT = { similar: 'Similar skill', gap: 'Gap to learn' };
 
-// One ranked role. Layout props (top, minHeight, cardRef) come from Roles,
+function fitRowText(row) {
+  return row.status === 'have' ? `You have it (${levelName(row.level)})` : FIT_ROW_TEXT[row.status];
+}
+
+// One ranked role. Layout props (top, minHeight, cardRef) come from Matches,
 // which positions cards by rank while keeping a stable DOM order.
 export default function RoleCard({
   role,
@@ -21,7 +37,8 @@ export default function RoleCard({
   total,
   expanded,
   onToggle,
-  onPathway,
+  onStudy,
+  reason = null,
   profile,
   similar,
   sdgInfo,
@@ -32,9 +49,11 @@ export default function RoleCard({
   cardRef,
 }) {
   const shownMatch = useTween({ match: score.match }).match;
-  const interestMatch = profile.interests.includes(role.interest);
+  const reasonText = whyReason(reason);
+  const sources = roleSources(role, trends);
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
+  const fitRows = expanded ? fitSkillRows(role, profile, similar) : [];
   const ilo = iloView(role);
   const shares = exposureShares(role);
   const panelId = `why-${role.id}`;
@@ -69,10 +88,8 @@ export default function RoleCard({
             <span className="text-[13px] text-slate-600">
               MASCO {role.code} · {groupLabel(role.group)}
             </span>
-            {interestMatch && (
-              <span className="rounded-md bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-800">
-                Matches your interest
-              </span>
+            {reasonText && (
+              <span className="rounded-md bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-800">{reasonText}</span>
             )}
             {wanted > 0 && (
               <span className="rounded-md bg-orange-100 px-2 py-0.5 text-xs font-bold text-[#9A3412]">
@@ -88,16 +105,13 @@ export default function RoleCard({
           </div>
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
             {role.skills.map((skill) => {
-              const status = skillStatus(skill.label, profile.skills, similar);
-              const hasLevel = status === 'have' && Object.hasOwn(profile.levels || {}, skill.label);
-              const level = hasLevel ? skillLevel(skill.label, profile) : null;
-              const statusText = level
-                ? `you have it, ${level[0].toUpperCase()}${level.slice(1)} level`
-                : SKILL_STATUS_TEXT[status];
+              const chip = skillChipText(skill.label, profile, similar);
+              const statusText = chip.srText;
               return (
-                <li key={skill.label} className={`rounded-full px-2.5 py-0.5 text-[13px] ${SKILL_LOOK[status]}`}>
+                <li key={skill.label} className={`rounded-full px-2.5 py-0.5 text-[13px] ${SKILL_LOOK[chip.status]}`}>
                   {(profile.learn || []).includes(skill.label) && <span aria-hidden="true">★ </span>}
                   {skill.label}
+                  {chip.level && <span aria-hidden="true"> · {levelName(chip.level)}</span>}
                   <span className="sr-only">
                     {' '}
                     ({statusText}
@@ -111,6 +125,22 @@ export default function RoleCard({
             <div className="flex flex-wrap gap-1.5">
               {role.sdgs.map((goal) => (sdgInfo[goal] ? <SdgTag key={goal} info={sdgInfo[goal]} /> : null))}
             </div>
+          )}
+          {sources.length > 0 && (
+            <p className="m-0 flex flex-wrap items-center gap-x-3 text-[13px] text-slate-600">
+              <span>Sources:</span>
+              {sources.map((source) => (
+                <a
+                  key={source.url}
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center text-[#0F766E] underline"
+                >
+                  {source.label}
+                </a>
+              ))}
+            </p>
           )}
         </div>
         <div className="flex min-w-[min(100%,250px)] flex-[1_1_250px] flex-col gap-2">
@@ -126,7 +156,7 @@ export default function RoleCard({
           <div aria-hidden="true" className="h-2 overflow-hidden rounded bg-slate-100">
             <div className="h-full bg-[#0F766E]" style={{ width: `${Math.min(100, Math.max(0, shownMatch))}%` }} />
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               aria-expanded={expanded}
@@ -138,11 +168,11 @@ export default function RoleCard({
             </button>
             <button
               type="button"
-              onClick={onPathway}
-              aria-label={`Pathway to ${role.title}`}
-              className="fr-btn min-h-11 flex-1 cursor-pointer rounded-[10px] border-0 bg-[#0F766E] px-2 text-sm font-bold text-white hover:bg-[#115E59]"
+              onClick={onStudy}
+              aria-label={`Plan my study for ${role.title}`}
+              className="fr-btn min-h-11 flex-[1_1_100%] cursor-pointer rounded-[10px] border-0 bg-[#0F766E] px-2 text-sm font-bold text-white hover:bg-[#115E59]"
             >
-              Pathway
+              Plan my study for this role
             </button>
           </div>
         </div>
@@ -164,6 +194,22 @@ export default function RoleCard({
               </div>
             ))}
           </div>
+          <section className="mt-4 flex flex-col gap-1.5">
+            <h3 className="m-0 text-sm font-bold">Skill fit, skill by skill</h3>
+            <ul className="m-0 flex list-none flex-col gap-1 p-0 text-[13px] text-slate-700">
+              {fitRows.map((row) => (
+                <li key={row.label} className="flex flex-wrap justify-between gap-x-3 border-b border-slate-100 pb-1">
+                  <span>
+                    {row.label} <span className="text-slate-600">· {fitRowText(row)}</span>
+                  </span>
+                  <span className="tabular-nums">+{row.credit}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="m-0 text-xs text-slate-600">
+              Skill list: eMASCO {role.code} (MOHR). Levels are what you chose; skills with no level count as Strong.
+            </p>
+          </section>
           <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2.5 text-[13px] text-slate-700 tabular-nums">
             {breakdown.formula}
           </div>

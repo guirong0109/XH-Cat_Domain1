@@ -7,8 +7,8 @@ import Home from './screens/Home.jsx';
 import About from './screens/About.jsx';
 import Skills from './screens/Skills.jsx';
 import Goal from './screens/Goal.jsx';
-import Roles from './screens/Roles.jsx';
-import Pathway from './screens/Pathway.jsx';
+import Matches from './screens/Matches.jsx';
+import Study from './screens/Study.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { toggleLearn } from './lib/potential.js';
@@ -265,7 +265,7 @@ export default function App() {
     }
   };
 
-  const openPathway = (roleId) => {
+  const openStudy = (roleId) => {
     if (roleId !== focusRoleId) setDoneSkills([]);
     setFocusRoleId(roleId);
     navigate('study');
@@ -321,22 +321,28 @@ export default function App() {
     );
   } else if (shownScreen === 'matches') {
     content = (
-      <Roles
+      <Matches
         data={data}
         ctx={ctx}
         profile={profile}
         scenario={scenario}
         ranked={ranked}
         expandedRoleId={expandedRoleId}
+        focusRoleId={focusRoleId}
+        refresh={refresh}
+        researchRefresh={researchRefresh}
+        replan={replan}
+        onDismissReplan={() => setReplan(null)}
         onScenarioChange={changeScenario}
-        onToggleSdg={toggleSdg}
         onToggleExpanded={toggleExpanded}
-        onPathway={openPathway}
+        onFocus={setFocusRoleId}
+        onRefresh={refreshTrends}
+        onStudy={openStudy}
       />
     );
   } else {
     content = (
-      <Pathway
+      <Study
         data={data}
         ctx={ctx}
         profile={profile}

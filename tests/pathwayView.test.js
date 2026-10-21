@@ -92,3 +92,16 @@ describe('pathwayView', () => {
     expect(disclosureText('manual')).toMatch(/OpenDOSM\. All results are estimates\.$/);
   });
 });
+
+describe('linksForPortal by who', () => {
+  it('puts claimable first for working people', () => {
+    expect(linksForPortal('tvet', 'working').map((l) => l.url)).toEqual([PORTAL_LINKS.claimable.url, PORTAL_LINKS.tvet.url]);
+    expect(linksForPortal('elatih', 'working').map((l) => l.url)).toEqual([
+      PORTAL_LINKS.claimable.url,
+      PORTAL_LINKS.elatih.url,
+    ]);
+  });
+  it('keeps the skill portal first for students', () => {
+    expect(linksForPortal('tvet', 'student').map((l) => l.url)).toEqual([PORTAL_LINKS.tvet.url, PORTAL_LINKS.claimable.url]);
+  });
+});

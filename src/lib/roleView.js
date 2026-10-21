@@ -1,7 +1,7 @@
 // Pure display helpers for the Radar and Roles screens: labels, number
 // formats, the job-market rows, the score breakdown text and card layout.
 
-import { LEVEL_CREDIT, SCENARIO_FACTOR, WEIGHTS, skillStatus } from './scoring.js';
+import { LEVEL_CREDIT, SCENARIO_FACTOR, WEIGHTS, skillCredit, skillLevel, skillStatus } from './scoring.js';
 
 export const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
 
@@ -214,4 +214,60 @@ export function iloView(role) {
     scaleText: ILO_SCALE_TEXT,
     sourceText: `Source: ${ilo.source}, CC BY 4.0. The index is global, not Malaysia-specific.${fetched}`,
   };
+}
+
+export const ILO_WP140_URL = 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html';
+
+// The "Sources:" links on a role card: eMASCO page, OpenDOSM trend, ILO index.
+export function roleSources(role, trends) {
+  const sources = [];
+  if (role.source?.url) {
+    sources.push({
+      label: `eMASCO role page ${role.code} (snapshot ${formatDate(role.source.fetchedAt)})`,
+      url: role.source.url,
+    });
+  }
+  const trendSource = trends?.source;
+  if (trendSource?.url) {
+    sources.push({
+      label: `OpenDOSM job trend, ${groupLabel(role.group)} (${trendSource.baseYear}–${trendSource.latestYear})`,
+      url: trendSource.url,
+    });
+  }
+  if (role.ilo) sources.push({ label: 'ILO 2025 AI exposure (WP140)', url: ILO_WP140_URL });
+  return sources;
+}
+
+const SKILL_STATUS_TEXT = { have: 'you have it', similar: 'similar skill, half credit', gap: 'gap to learn' };
+
+export function levelName(level) {
+  return level[0].toUpperCase() + level.slice(1);
+}
+
+// Chip status for one role skill. level is set only when the student chose one.
+export function skillChipText(label, profile, similar) {
+  const status = skillStatus(label, profile.skills, similar);
+  const hasLevel = status === 'have' && Object.hasOwn(profile.levels || {}, label);
+  const level = hasLevel ? skillLevel(label, profile) : null;
+  const srText = level ? `you have it, ${levelName(level)} level` : SKILL_STATUS_TEXT[status];
+  return { status, level, srText };
+}
+
+// Per-skill rows for "Why this score?": the credit each skill adds to skill fit.
+export function fitSkillRows(role, profile, similar) {
+  return role.skills.map((skill) => {
+    const status = skillStatus(skill.label, profile.skills, similar);
+    return {
+      label: skill.label,
+      status,
+      level: status === 'have' ? skillLevel(skill.label, profile) : null,
+      credit: skillCredit(skill.label, profile, similar),
+    };
+  });
+}
+
+const REASON_TEXT = { field: 'Linked to your major or sector', target: 'In a sector you want' };
+
+export function whyReason(reason) {
+  return REASON_TEXT[reason] ?? null;
 }

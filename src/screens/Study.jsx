@@ -11,10 +11,13 @@ import {
 } from '../lib/pathwayView.js';
 import SdgTag from '../components/SdgTag.jsx';
 import { startingPoint } from '../lib/potential.js';
+import { orderForGoal } from '../lib/goalView.js';
 import SourceNote from '../components/SourceNote.jsx';
 
-export default function Pathway({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
-  const entry = ranked.find((item) => item.role.id === focusRoleId) || ranked[0];
+export default function Study({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
+  // No role picked yet: the top role in the student's goal order.
+  const entry =
+    ranked.find((item) => item.role.id === focusRoleId) || orderForGoal(ranked, profile, data.fields).entries[0];
   const role = entry.role;
   const steps = buildPathway(role, profile, ctx, scenario, data.skills.labels);
   const { done, total, percent } = progress(steps, doneSkills);
@@ -29,7 +32,7 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
             onClick={onBack}
             className="fr-noprint min-h-11 cursor-pointer border-0 bg-transparent p-0 text-sm text-[#0F766E] underline"
           >
-            Back to roles
+            Back to matches
           </button>
           <h1 className="m-0 mt-1.5 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your pathway to {role.title}</h1>
           <p className="m-0 text-slate-600">
@@ -100,7 +103,7 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
                   )}
                   <div className="text-sm text-slate-700">{whyText(step)}</div>
                   <div className="flex flex-wrap gap-2">
-                    {linksForPortal(step.portal).map((link) => (
+                    {linksForPortal(step.portal, profile.who).map((link) => (
                       <a
                         key={link.url}
                         href={link.url}
