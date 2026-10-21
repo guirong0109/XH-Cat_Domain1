@@ -65,7 +65,7 @@ function Band({ band, skills, rising }) {
               {rising.has(skill.label) && (
                 <>
                   {' '}
-                  <strong aria-hidden="true" className={skill.have ? 'text-indigo-200' : 'text-indigo-800'}>
+                  <strong aria-hidden="true" className={skill.have ? 'text-white' : 'text-indigo-800'}>
                     ↑ AI research
                   </strong>
                   <span className="sr-only"> (AI research rising)</span>
@@ -133,7 +133,7 @@ export default function SkillsDemand({ roles, trends, research, pickedSkills, le
 
       {rising.size > 0 && (
         <p className="m-0 text-xs text-slate-600">
-          ↑ = AI-related research on this skill grew 25% or more last year (OpenAlex).
+          ↑ = AI-related research on this skill grew 25% or more last year (OpenAlex{research?.source?.fetchedAt ? `, fetched ${formatDate(research.source.fetchedAt)}` : ''}).
         </p>
       )}
       <p className="m-0 text-[13px] text-slate-700">

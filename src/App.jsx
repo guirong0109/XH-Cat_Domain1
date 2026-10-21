@@ -183,38 +183,45 @@ export default function App() {
       post('/api/refresh-research'),
     ]);
 
-    if (researchOutcome.status === 'fulfilled') {
-      const researchResult = researchOutcome.value;
-      if ((researchResult.status === 'updated' || researchResult.status === 'failed') && researchResult.research) {
-        setData((current) => ({ ...current, research: researchResult.research }));
+    try {
+      if (researchOutcome.status === 'fulfilled') {
+        const researchResult = researchOutcome.value;
+        if ((researchResult.status === 'updated' || researchResult.status === 'failed') && researchResult.research) {
+          setData((current) => ({ ...current, research: researchResult.research }));
+        }
+        setResearchRefresh({ status: researchResult.status, message: researchResult.message });
+      } else {
+        setResearchRefresh({ status: 'failed', message: 'Live refresh failed. Please try again later.' });
       }
-      setResearchRefresh({ status: researchResult.status, message: researchResult.message });
-    } else {
-      setResearchRefresh({ status: 'failed', message: 'Live refresh failed. Please try again later.' });
-    }
 
-    if (trendsOutcome.status === 'rejected') {
-      setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
-      return;
-    }
-    const result = trendsOutcome.value;
-    if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
-      const inputsUnchanged =
-        latestInputs.current.profile === startedWith.profile && latestInputs.current.scenario === startedWith.scenario;
-      if (inputsUnchanged && shouldReplan(result.status, profile.skills.length)) {
-        const oldGroups = data.trends?.groups;
-        const idsFor = (trendGroups) =>
-          rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
-        setReplan({
-          changes: rankChanges(idsFor(oldGroups), idsFor(result.trends.groups)),
-          oldGroups,
-          newGroups: result.trends.groups,
-          year: result.trends.source?.latestYear,
-        });
+      if (trendsOutcome.status === 'rejected') {
+        setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
+        return;
       }
-      setData((current) => ({ ...current, trends: result.trends }));
+      const result = trendsOutcome.value;
+      if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
+        const inputsUnchanged =
+          latestInputs.current.profile === startedWith.profile && latestInputs.current.scenario === startedWith.scenario;
+        if (inputsUnchanged && shouldReplan(result.status, profile.skills.length)) {
+          const oldGroups = data.trends?.groups;
+          const idsFor = (trendGroups) =>
+            rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
+          setReplan({
+            changes: rankChanges(idsFor(oldGroups), idsFor(result.trends.groups)),
+            oldGroups,
+            newGroups: result.trends.groups,
+            year: result.trends.source?.latestYear,
+          });
+        }
+        setData((current) => ({ ...current, trends: result.trends }));
+      }
+      setRefresh({ pending: false, status: result.status, message: result.message });
+    } catch {
+      setResearchRefresh((current) =>
+        current.status ? current : { status: 'failed', message: 'Live refresh failed. Please try again later.' },
+      );
+      setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
     }
-    setRefresh({ pending: false, status: result.status, message: result.message });
   };
 
   const openPathway = (roleId) => {

@@ -100,7 +100,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 | Matching quality: a skill mapping could be wrong. | "Why this score?" shows the exact maths and sources. The team reviews the role-skill and MASCO-to-ISCO mappings. The ILO view lets students compare two views. |
 | AI inventing jobs, courses or numbers. | Roles, tasks and skills come only from the eMASCO snapshot. Course links go only to official portals. The model only labels existing tasks. The data build fails on any unknown skill, SDG or ISCO code. |
 | A source site changes or goes down (eMASCO, ILO). | Dated snapshots are kept in the repo (`data/emasco/`, `data/ilo/`). |
-| OpenAlex without an API key gives one shared free daily budget (USD 0.10) per IP address. One Refresh makes about 50 search calls, so only one or two refreshes fit in a day, and a shared host IP (e.g. Replit) may already be used up. | The last good `data/research.json` is kept and a dated message is shown. Plan: a free OpenAlex API key in an `OPENALEX_API_KEY` environment variable, never committed. |
+| OpenAlex without an API key gives one shared free daily budget (USD 0.10) per IP address. One Refresh makes about 50 search calls, so a few refreshes can use up the daily budget, and a shared host IP (e.g. Replit) may already be used up. | The last good `data/research.json` is kept and a dated message is shown. Plan: a free OpenAlex API key in an `OPENALEX_API_KEY` environment variable, never committed. |
 | RunPod budget. | One small job (about USD 5 of the USD 25 budget); hand-labelling as backup. |
 
 ## Fairness
@@ -146,7 +146,6 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 - ILO second opinion: each role's "Why this score?" shows the ILO view next to our labels. Not used in the score.
 - Re-plan notice on Radar after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
 - "Skills in demand" card on Radar: every skill grouped by how much AI is changing the jobs that use it (ILO 2025 exposure of those roles), with the job growth of their groups (OpenDOSM). With current data no skill is in a shrinking job group, and the card says so rather than labelling any skill as declining.
-
 - B, AI research momentum card on Radar: OpenAlex keyword counts per skill for 2024 and 2025 (`server/research.js`, `POST /api/refresh-research`, `data/research.json`). Keyword counts only, no AI model. The first real snapshot is pending (free daily limit).
 
 **Open**

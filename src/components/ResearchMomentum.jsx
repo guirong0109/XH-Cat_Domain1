@@ -29,7 +29,7 @@ function Row({ row }) {
 }
 
 // Radar card: how fast AI-related research is growing in each skill area (OpenAlex).
-export default function ResearchMomentum({ research }) {
+export default function ResearchMomentum({ research, refreshStatus }) {
   const { rows, tooFew, years } = researchRows(research);
   const fetchedAt = research?.source?.fetchedAt;
 
@@ -52,7 +52,12 @@ export default function ResearchMomentum({ research }) {
       </div>
 
       {!years ? (
-        <p className="m-0 text-sm text-slate-700">AI research data not loaded yet. Press Refresh data.</p>
+        <>
+          <p className="m-0 text-sm text-slate-700">AI research data not loaded yet. Press Refresh data.</p>
+          {refreshStatus === 'failed' && (
+            <p className="m-0 text-sm text-slate-700">The free OpenAlex daily limit may be used up. Try again tomorrow.</p>
+          )}
+        </>
       ) : (
         <>
           {rows.length > 0 && (

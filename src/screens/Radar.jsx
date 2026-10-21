@@ -35,6 +35,8 @@ function YouthCard({ trends }) {
   );
 }
 
+const RESEARCH_PREFIX = 'AI research (OpenAlex): ';
+
 export default function Radar({
   data,
   ctx,
@@ -103,7 +105,9 @@ export default function Radar({
                 : 'border-teal-200 bg-teal-50 text-teal-900'
             }`}
           >
-            {researchRefresh.message}
+            {researchRefresh.message.startsWith(RESEARCH_PREFIX)
+              ? researchRefresh.message
+              : `${RESEARCH_PREFIX}${researchRefresh.message}`}
           </div>
         )}
       </div>
@@ -185,7 +189,7 @@ export default function Radar({
         <JobMarketChart trends={data.trends} />
         <ExposureBars roles={exposureRoles} />
       </div>
-      <ResearchMomentum research={data.research} />
+      <ResearchMomentum research={data.research} refreshStatus={researchRefresh?.status} />
       <SkillsDemand roles={data.roles} trends={data.trends} research={data.research} pickedSkills={profile.skills} learnSkills={profile.learn} />
       <YouthCard trends={data.trends} />
     </main>
