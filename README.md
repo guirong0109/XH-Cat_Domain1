@@ -87,6 +87,22 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 - If no trend file exists yet, the app says "Trend data not loaded yet" and asks for a Refresh.
 - The app is support for the student's decision, never the decision.
 
+## Risks and fallbacks
+
+| Risk | Fallback |
+| --- | --- |
+| **Hardest: reliable, updatable trend data.** OpenDOSM updates yearly and only by major job group. The AI task labels are placeholder samples until the RunPod job is run. | A dated cache, with "Showing data from <date>. Live refresh failed." when a refresh fails. The ILO 2025 index gives an independent second opinion on AI exposure. If RunPod fails, the team labels the tasks by hand and the app says so. |
+| Matching quality: a skill mapping could be wrong. | "Why this score?" shows the exact maths and sources. The team reviews the role-skill and MASCO-to-ISCO mappings. The ILO view lets students compare two views. |
+| AI inventing jobs, courses or numbers. | Roles, tasks and skills come only from the eMASCO snapshot. Course links go only to official portals. The model only labels existing tasks. The data build fails on any unknown skill, SDG or ISCO code. |
+| A source site changes or goes down (eMASCO, ILO). | Dated snapshots are kept in the repo (`data/emasco/`, `data/ilo/`). |
+| RunPod budget. | One small job (about USD 5 of the USD 25 budget); hand-labelling as backup. |
+
+## Fairness
+
+- The app asks only for skills, interests and the SDGs a student cares about. It never asks for age, gender, ethnicity, religion, name or location.
+- The score uses only those choices and the role data, so two students who pick the same skills get the same results. A test (`tests/scoring.test.js`, "fairness") checks that extra personal fields change nothing.
+- Known limits: OpenDOSM figures are national totals for all sexes, and interests do not change the score.
+
 ## Run locally
 
 ```

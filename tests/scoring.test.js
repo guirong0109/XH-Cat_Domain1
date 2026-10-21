@@ -199,3 +199,16 @@ describe('WEIGHTS', () => {
     expect(WEIGHTS).toEqual({ fit: 0.6, outlook: 0.4 });
   });
 });
+
+describe('fairness', () => {
+  it('ignores personal attributes: same skills give the same scores and ranking', () => {
+    const base = { skills: ['a1', 'a2', 'b1', 'b2', 'b3'], interests: ['Working with data'], sdgs: [8] };
+    const withPersonal = { ...base, age: 41, gender: 'female', ethnicity: 'any', religion: 'any', location: 'Sabah' };
+    for (const scenario of ['moderate', 'fast']) {
+      const plain = rankRoles(roles, base, ctx, scenario);
+      const personal = rankRoles(roles, withPersonal, ctx, scenario);
+      expect(personal.map((r) => r.role.id)).toEqual(plain.map((r) => r.role.id));
+      expect(personal.map((r) => r.score)).toEqual(plain.map((r) => r.score));
+    }
+  });
+});
