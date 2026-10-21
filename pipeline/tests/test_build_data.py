@@ -30,9 +30,9 @@ def default_inputs():
         },
         "team/skill_labels.json": [
             {"label": "SQL and databases", "hours": 25, "portal": "elatih", "sdgs": [8],
-             "researchTerm": "SQL database"},
+             "researchTerm": "SQL database", "keywords": ["sql", "database"]},
             {"label": "Communication", "hours": 10, "portal": "elatih", "sdgs": [8],
-             "researchTerm": "communication skills"},
+             "researchTerm": "communication skills", "keywords": ["communication"]},
         ],
         "team/role_skills.json": {CODE: {
             "id": "data-analyst", "interest": "Working with data", "sdgs": [8],
@@ -147,6 +147,28 @@ class BuildTests(unittest.TestCase):
             inputs["team/skill_labels.json"][1]["researchTerm"] = "  "
         with self.assertRaisesRegex(ValueError, "Communication"):
             self.build_with(change)
+
+    def test_missing_keywords_raises(self):
+        def change(inputs):
+            del inputs["team/skill_labels.json"][1]["keywords"]
+        with self.assertRaisesRegex(ValueError, "Communication"):
+            self.build_with(change)
+
+    def test_uppercase_keyword_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = ["Communication"]
+        with self.assertRaisesRegex(ValueError, "Communication"):
+            self.build_with(change)
+
+    def test_keyword_shared_by_two_skills_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = ["sql"]
+        with self.assertRaisesRegex(ValueError, "sql"):
+            self.build_with(change)
+
+    def test_keywords_passed_through(self):
+        labels = self.build_with()["skills"]["labels"]
+        self.assertEqual(labels[0]["keywords"], ["sql", "database"])
 
     def test_skill_unknown_sdg_fails(self):
         def change(inputs):

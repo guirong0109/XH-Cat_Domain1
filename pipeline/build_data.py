@@ -179,6 +179,21 @@ def check_research_terms(skill_labels):
             raise ValueError(f"Skill {entry['label']!r} has no researchTerm")
 
 
+def check_keywords(skill_labels):
+    """Every skill needs lower-case CV keywords, and no keyword may belong to two skills."""
+    owner = {}
+    for entry in skill_labels:
+        words = entry.get("keywords")
+        if not isinstance(words, list) or not words:
+            raise ValueError(f"Skill {entry['label']!r} has no keywords")
+        for word in words:
+            if not isinstance(word, str) or not word.strip() or word != word.lower():
+                raise ValueError(f"Skill {entry['label']!r} has a keyword that is blank or not lower-case: {word!r}")
+            if word in owner and owner[word] != entry["label"]:
+                raise ValueError(f"Keyword {word!r} is used by both {owner[word]!r} and {entry['label']!r}")
+            owner[word] = entry["label"]
+
+
 EXPERIENCE_IDS = {"none", "parttime", "under2", "over2"}  # same ids as src/lib/potential.js
 MAX_LEARN = 3
 
@@ -257,6 +272,7 @@ def build(paths):
     all_links = without_notes(read_json(paths["skill_task_links"], required=False))
     check_skill_sdgs(skill_labels, sdg)
     check_research_terms(skill_labels)
+    check_keywords(skill_labels)
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)

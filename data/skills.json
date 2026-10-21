@@ -8,7 +8,10 @@
         4,
         9
       ],
-      "researchTerm": "Python programming"
+      "researchTerm": "Python programming",
+      "keywords": [
+        "python"
+      ]
     },
     {
       "label": "SQL and databases",
@@ -18,7 +21,14 @@
         4,
         9
       ],
-      "researchTerm": "SQL database"
+      "researchTerm": "SQL database",
+      "keywords": [
+        "sql",
+        "mysql",
+        "postgresql",
+        "database",
+        "databases"
+      ]
     },
     {
       "label": "Spreadsheets (Excel)",
@@ -28,7 +38,13 @@
         4,
         8
       ],
-      "researchTerm": "spreadsheet"
+      "researchTerm": "spreadsheet",
+      "keywords": [
+        "excel",
+        "spreadsheet",
+        "spreadsheets",
+        "google sheets"
+      ]
     },
     {
       "label": "Data visualisation",
@@ -38,7 +54,15 @@
         4,
         9
       ],
-      "researchTerm": "data visualization"
+      "researchTerm": "data visualization",
+      "keywords": [
+        "power bi",
+        "tableau",
+        "data visualisation",
+        "data visualization",
+        "dashboard",
+        "dashboards"
+      ]
     },
     {
       "label": "Statistics",
@@ -48,7 +72,13 @@
         4,
         9
       ],
-      "researchTerm": "statistical analysis"
+      "researchTerm": "statistical analysis",
+      "keywords": [
+        "statistics",
+        "statistical",
+        "regression",
+        "spss"
+      ]
     },
     {
       "label": "Using AI tools",
@@ -58,7 +88,14 @@
         4,
         9
       ],
-      "researchTerm": "AI literacy"
+      "researchTerm": "AI literacy",
+      "keywords": [
+        "chatgpt",
+        "generative ai",
+        "copilot",
+        "prompt engineering",
+        "ai tools"
+      ]
     },
     {
       "label": "Web development",
@@ -68,7 +105,15 @@
         4,
         9
       ],
-      "researchTerm": "web development"
+      "researchTerm": "web development",
+      "keywords": [
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "web development",
+        "web developer"
+      ]
     },
     {
       "label": "Networking basics",
@@ -78,7 +123,15 @@
         4,
         9
       ],
-      "researchTerm": "computer network"
+      "researchTerm": "computer network",
+      "keywords": [
+        "networking",
+        "tcp/ip",
+        "cisco",
+        "ccna",
+        "routers",
+        "switches"
+      ]
     },
     {
       "label": "Network security",
@@ -89,7 +142,15 @@
         9,
         16
       ],
-      "researchTerm": "network security"
+      "researchTerm": "network security",
+      "keywords": [
+        "network security",
+        "cybersecurity",
+        "cyber security",
+        "firewall",
+        "firewalls",
+        "penetration testing"
+      ]
     },
     {
       "label": "Electrical wiring",
@@ -99,7 +160,13 @@
         4,
         9
       ],
-      "researchTerm": "electrical wiring"
+      "researchTerm": "electrical wiring",
+      "keywords": [
+        "electrical wiring",
+        "wiring",
+        "electrician",
+        "electrical installation"
+      ]
     },
     {
       "label": "Solar PV basics",
@@ -110,7 +177,12 @@
         7,
         13
       ],
-      "researchTerm": "solar photovoltaic"
+      "researchTerm": "solar photovoltaic",
+      "keywords": [
+        "solar",
+        "photovoltaic",
+        "solar pv"
+      ]
     },
     {
       "label": "Graphic design",
@@ -120,7 +192,14 @@
         4,
         8
       ],
-      "researchTerm": "graphic design"
+      "researchTerm": "graphic design",
+      "keywords": [
+        "graphic design",
+        "photoshop",
+        "illustrator",
+        "canva",
+        "adobe"
+      ]
     },
     {
       "label": "Communication",
@@ -129,7 +208,13 @@
       "sdgs": [
         4
       ],
-      "researchTerm": "communication skills"
+      "researchTerm": "communication skills",
+      "keywords": [
+        "communication",
+        "presentation",
+        "presented",
+        "public speaking"
+      ]
     },
     {
       "label": "Teamwork",
@@ -138,7 +223,13 @@
       "sdgs": [
         4
       ],
-      "researchTerm": "teamwork"
+      "researchTerm": "teamwork",
+      "keywords": [
+        "teamwork",
+        "team player",
+        "collaboration",
+        "collaborated"
+      ]
     },
     {
       "label": "Problem solving",
@@ -147,7 +238,12 @@
       "sdgs": [
         4
       ],
-      "researchTerm": "problem solving"
+      "researchTerm": "problem solving",
+      "keywords": [
+        "problem solving",
+        "problem-solving",
+        "troubleshooting"
+      ]
     },
     {
       "label": "Customer service",
@@ -157,7 +253,12 @@
         4,
         8
       ],
-      "researchTerm": "customer service"
+      "researchTerm": "customer service",
+      "keywords": [
+        "customer service",
+        "customer support",
+        "customer care"
+      ]
     },
     {
       "label": "UX research and prototyping",
@@ -167,7 +268,16 @@
         4,
         9
       ],
-      "researchTerm": "user experience design"
+      "researchTerm": "user experience design",
+      "keywords": [
+        "ux",
+        "user experience",
+        "user research",
+        "prototyping",
+        "wireframe",
+        "wireframes",
+        "figma"
+      ]
     },
     {
       "label": "Content writing",
@@ -177,7 +287,14 @@
         4,
         8
       ],
-      "researchTerm": "content writing"
+      "researchTerm": "content writing",
+      "keywords": [
+        "content writing",
+        "copywriting",
+        "copywriter",
+        "blog",
+        "blogging"
+      ]
     },
     {
       "label": "SEO and web analytics",
@@ -187,7 +304,14 @@
         4,
         9
       ],
-      "researchTerm": "search engine optimization"
+      "researchTerm": "search engine optimization",
+      "keywords": [
+        "seo",
+        "google analytics",
+        "web analytics",
+        "search engine optimization",
+        "search engine optimisation"
+      ]
     },
     {
       "label": "Energy auditing",
@@ -198,7 +322,12 @@
         7,
         13
       ],
-      "researchTerm": "energy audit"
+      "researchTerm": "energy audit",
+      "keywords": [
+        "energy audit",
+        "energy auditing",
+        "energy efficiency"
+      ]
     },
     {
       "label": "Renewable energy system design",
@@ -209,7 +338,13 @@
         7,
         13
       ],
-      "researchTerm": "renewable energy system"
+      "researchTerm": "renewable energy system",
+      "keywords": [
+        "renewable energy",
+        "renewable",
+        "wind energy",
+        "hybrid energy"
+      ]
     },
     {
       "label": "Project coordination",
@@ -219,7 +354,13 @@
         4,
         8
       ],
-      "researchTerm": "project management"
+      "researchTerm": "project management",
+      "keywords": [
+        "project coordination",
+        "project coordinator",
+        "project management",
+        "coordinated projects"
+      ]
     },
     {
       "label": "Healthcare data and records",
@@ -229,7 +370,14 @@
         4,
         3
       ],
-      "researchTerm": "electronic health records"
+      "researchTerm": "electronic health records",
+      "keywords": [
+        "medical records",
+        "health records",
+        "healthcare data",
+        "clinical data",
+        "patient records"
+      ]
     },
     {
       "label": "Version control (Git)",
@@ -239,7 +387,12 @@
         4,
         9
       ],
-      "researchTerm": "version control"
+      "researchTerm": "version control",
+      "keywords": [
+        "git",
+        "github",
+        "gitlab"
+      ]
     },
     {
       "label": "Business process analysis",
@@ -249,7 +402,13 @@
         4,
         8
       ],
-      "researchTerm": "business process"
+      "researchTerm": "business process",
+      "keywords": [
+        "business process",
+        "business analysis",
+        "business analyst",
+        "process improvement"
+      ]
     }
   ],
   "similar": {
