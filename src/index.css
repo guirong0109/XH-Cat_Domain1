@@ -33,6 +33,18 @@ a:focus-visible {
 .fr-card:hover { box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); }
 .fr-screen { animation: fr-fade 0.35s ease; }
 .fr-tip { animation: fr-pop 0.3s ease; }
+.fr-drawer { animation: fr-slide 0.25s ease; }
+.fr-backdrop { animation: fr-fade-in 0.25s ease; }
+
+@keyframes fr-slide {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+
+@keyframes fr-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 @keyframes fr-fade {
   from { opacity: 0; transform: translateY(8px); }

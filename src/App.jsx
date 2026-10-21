@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import StepNav from './components/StepNav.jsx';
+import MobileBar from './components/MobileBar.jsx';
+import Sidebar from './components/Sidebar.jsx';
+import StepBar from './components/StepBar.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
 import Profile from './screens/Profile.jsx';
@@ -11,7 +13,7 @@ import { rankChanges, shouldReplan } from './lib/replan.js';
 import PreviewCv from './screens/PreviewCv.jsx';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
-import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, isPreview, resolveScreen } from './lib/navigation.js';
+import { SCREENS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
 const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], sampleId: null };
@@ -28,40 +30,6 @@ function urlForScreen(screen) {
 
 function profileFromSample(sample) {
   return { skills: [...sample.skills], interests: [...sample.interests], sdgs: [...sample.sdgs], sampleId: sample.id };
-}
-
-function Header({ screen, onNavigate, lockedScreens }) {
-  return (
-    <header className="sticky top-0 z-10 border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <button
-          type="button"
-          onClick={() => onNavigate('home')}
-          aria-label="FutureReady MY home"
-          className="flex cursor-pointer items-center gap-2.5 border-0 bg-transparent p-0 text-left"
-        >
-          <span className="flex size-9 items-center justify-center rounded-[10px] bg-[#0F766E] font-extrabold text-white">
-            FR
-          </span>
-          <span>
-            <span className="block text-lg font-bold">FutureReady MY</span>
-            <span className="block text-xs text-slate-600">AI supports your career decision. You decide.</span>
-          </span>
-        </button>
-        {isPreview(screen) ? (
-          <button
-            type="button"
-            onClick={() => onNavigate('home')}
-            className="min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-[#0F172A]"
-          >
-            Back to home
-          </button>
-        ) : (
-          screen !== 'home' && <StepNav screen={screen} onNavigate={onNavigate} lockedScreens={lockedScreens} />
-        )}
-      </div>
-    </header>
-  );
 }
 
 function StatusMessage({ children, role = 'status' }) {
@@ -87,6 +55,8 @@ export default function App() {
   const [tipsOff, setTipsOff] = useState(false);
   const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
   const [replan, setReplan] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -125,6 +95,7 @@ export default function App() {
   );
 
   const navigate = useCallback((next) => {
+    setMenuOpen(false);
     setScreen(next);
     const hash = next === 'home' ? '' : `#${next}`;
     if (window.location.hash !== hash) window.history.pushState(null, '', urlForScreen(next));
@@ -226,8 +197,6 @@ export default function App() {
   if (loadFailed) return <StatusMessage role="alert">Could not load data. Please refresh the page.</StatusMessage>;
   if (!data) return <StatusMessage>Loading data…</StatusMessage>;
 
-  const lockedScreens = profile.skills.length < MIN_SKILLS ? SCREENS_NEEDING_SKILLS : [];
-
   let content;
   if (shownScreen === 'home') {
     content = (
@@ -308,16 +277,30 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F6F7F9] text-[#0F172A]">
-      <Header screen={shownScreen} onNavigate={navigate} lockedScreens={lockedScreens} />
-      <TipBanner
-        screen={shownScreen}
-        seenTips={seenTips}
-        tipsOff={tipsOff}
-        onDismiss={dismissTip}
-        onHideAll={() => setTipsOff(true)}
-      />
-      {content}
+    <div className="min-h-screen bg-[#F6F7F9] text-[#0F172A] lg:flex">
+      <aside className="fr-noprint hidden border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:block lg:h-screen lg:w-[264px] lg:flex-none lg:overflow-y-auto">
+        <Sidebar data={data} profile={profile} screen={shownScreen} onNavigate={navigate} />
+      </aside>
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        <MobileBar
+          data={data}
+          profile={profile}
+          screen={shownScreen}
+          menuOpen={menuOpen}
+          onMenuOpen={() => setMenuOpen(true)}
+          onMenuClose={closeMenu}
+          onNavigate={navigate}
+        />
+        <TipBanner
+          screen={shownScreen}
+          seenTips={seenTips}
+          tipsOff={tipsOff}
+          onDismiss={dismissTip}
+          onHideAll={() => setTipsOff(true)}
+        />
+        <div className="flex-1">{content}</div>
+        <StepBar screen={shownScreen} skillCount={profile.skills.length} onNavigate={navigate} />
+      </div>
     </div>
   );
 }
