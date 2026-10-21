@@ -3,6 +3,7 @@ import Chip from '../components/Chip.jsx';
 import LevelSwitch from '../components/LevelSwitch.jsx';
 import { CV_MESSAGES, checkCvFile, cvBannerText, extractSkills } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
+import { focusAfterRemove } from '../lib/skillFocus.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
 
@@ -18,6 +19,20 @@ function Card({ children, ...rest }) {
 
 export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvClear }) {
   const pickerRef = useRef(null);
+  const headingRef = useRef(null);
+  const removeRefs = useRef(new Map());
+  const [focusNext, setFocusNext] = useState(undefined);
+  useEffect(() => {
+    if (focusNext === undefined) return;
+    const target = focusNext === null ? headingRef.current : removeRefs.current.get(focusNext);
+    (target || headingRef.current)?.focus();
+    setFocusNext(undefined);
+  }, [focusNext]);
+  const removeSkill = (label) => {
+    const next = focusAfterRemove(profile.skills, label);
+    onToggleSkill(label);
+    setFocusNext(next);
+  };
   const fileRef = useRef(null);
   const [reading, setReading] = useState(false);
   const [cvError, setCvError] = useState(null);
@@ -183,7 +198,11 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
                 />
                 <button
                   type="button"
-                  onClick={() => onToggleSkill(label)}
+                  onClick={() => removeSkill(label)}
+                  ref={(node) => {
+                    if (node) removeRefs.current.set(label, node);
+                    else removeRefs.current.delete(label);
+                  }}
                   aria-label={`Remove ${label}`}
                   className="min-h-11 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-3 text-[13px] text-slate-700 hover:border-[#C2410C] hover:text-[#C2410C]"
                 >
@@ -202,7 +221,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         className="flex scroll-mt-20 flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 outline-none sm:p-[22px]"
       >
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="skill-picker-heading" className="m-0 text-lg font-bold">
+          <h2 id="skill-picker-heading" ref={headingRef} tabIndex={-1} className="m-0 text-lg font-bold outline-none">
             Pick your skills
           </h2>
           <span className="text-[13px] text-slate-600">From eMASCO skill statements</span>
