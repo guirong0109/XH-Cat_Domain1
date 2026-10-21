@@ -11,6 +11,7 @@ import { rankChanges, shouldReplan } from './lib/replan.js';
 import PreviewBanner from './components/PreviewBanner.jsx';
 import PreviewCv from './screens/PreviewCv.jsx';
 import PreviewLang from './screens/PreviewLang.jsx';
+import PreviewUsers from './screens/PreviewUsers.jsx';
 import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, isPreview, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
@@ -235,6 +236,8 @@ export default function App() {
     content = <PreviewCv data={data} />;
   } else if (shownScreen === 'preview-lang') {
     content = <PreviewLang />;
+  } else if (shownScreen === 'preview-users') {
+    content = <PreviewUsers data={data} />;
   } else if (isPreview(shownScreen)) {
     // Placeholder until the preview screens land. Never looks like a working feature.
     content = (
