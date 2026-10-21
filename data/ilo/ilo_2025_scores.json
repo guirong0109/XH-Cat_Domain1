@@ -1,0 +1,2571 @@
+{
+  "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+  "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+  "pdf": "https://www.ilo.org/sites/default/files/2025-05/WP140_web.pdf",
+  "table": "Table A1",
+  "fetchedAt": "2026-10-21",
+  "occupations": {
+    "4132": {
+      "title": "Data Entry Clerks",
+      "mean": 0.7,
+      "sd": 0.03,
+      "category": "Gradient 4"
+    },
+    "4131": {
+      "title": "Typists and Word Processing Operators",
+      "mean": 0.65,
+      "sd": 0.05,
+      "category": "Gradient 4"
+    },
+    "4311": {
+      "title": "Accounting and Bookkeeping Clerks",
+      "mean": 0.64,
+      "sd": 0.07,
+      "category": "Gradient 4"
+    },
+    "4312": {
+      "title": "Statistical, Finance and Insurance Clerks",
+      "mean": 0.64,
+      "sd": 0.02,
+      "category": "Gradient 4"
+    },
+    "3311": {
+      "title": "Securities and Finance Dealers and Brokers",
+      "mean": 0.63,
+      "sd": 0.04,
+      "category": "Gradient 4"
+    },
+    "4419": {
+      "title": "Clerical Support Workers Not Elsewhere Classified",
+      "mean": 0.63,
+      "sd": 0.03,
+      "category": "Gradient 4"
+    },
+    "2413": {
+      "title": "Financial Analysts",
+      "mean": 0.62,
+      "sd": 0.06,
+      "category": "Gradient 4"
+    },
+    "4313": {
+      "title": "Payroll Clerks",
+      "mean": 0.61,
+      "sd": 0.08,
+      "category": "Gradient 4"
+    },
+    "5244": {
+      "title": "Contact Centre Salespersons",
+      "mean": 0.61,
+      "sd": 0.1,
+      "category": "Gradient 4"
+    },
+    "2513": {
+      "title": "Web and Multimedia Developers",
+      "mean": 0.6,
+      "sd": 0.08,
+      "category": "Gradient 4"
+    },
+    "3312": {
+      "title": "Credit and Loans Officers",
+      "mean": 0.6,
+      "sd": 0.04,
+      "category": "Gradient 4"
+    },
+    "4110": {
+      "title": "General Office Clerks",
+      "mean": 0.6,
+      "sd": 0.1,
+      "category": "Gradient 4"
+    },
+    "4416": {
+      "title": "Personnel Clerks",
+      "mean": 0.6,
+      "sd": 0.09,
+      "category": "Gradient 4"
+    },
+    "2643": {
+      "title": "Translators, Interpreters and Other Linguists",
+      "mean": 0.59,
+      "sd": 0.11,
+      "category": "Gradient 3"
+    },
+    "4120": {
+      "title": "Secretaries (general)",
+      "mean": 0.58,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "4211": {
+      "title": "Bank Tellers and Related Clerks",
+      "mean": 0.58,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "4222": {
+      "title": "Contact Centre Information Clerks",
+      "mean": 0.58,
+      "sd": 0.06,
+      "category": "Gradient 3"
+    },
+    "4414": {
+      "title": "Scribes and Related Workers",
+      "mean": 0.58,
+      "sd": 0.08,
+      "category": "Gradient 3"
+    },
+    "2412": {
+      "title": "Financial and Investment Advisers",
+      "mean": 0.57,
+      "sd": 0.11,
+      "category": "Gradient 3"
+    },
+    "2514": {
+      "title": "Applications Programmers",
+      "mean": 0.57,
+      "sd": 0.08,
+      "category": "Gradient 3"
+    },
+    "2521": {
+      "title": "Database Designers and Administrators",
+      "mean": 0.57,
+      "sd": 0.08,
+      "category": "Gradient 3"
+    },
+    "2522": {
+      "title": "Systems Aministrators",
+      "mean": 0.57,
+      "sd": 0.05,
+      "category": "Gradient 3"
+    },
+    "3314": {
+      "title": "Statistical, Mathematical and Related Associate Professionals",
+      "mean": 0.57,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "3331": {
+      "title": "Clearing and Forwarding Aents",
+      "mean": 0.57,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "4225": {
+      "title": "Inquiry Clerks",
+      "mean": 0.57,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "4226": {
+      "title": "Receptionists (general)",
+      "mean": 0.57,
+      "sd": 0.17,
+      "category": "Gradient 3"
+    },
+    "2120": {
+      "title": "Mathematicians, Actuaries and Statisticians",
+      "mean": 0.56,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "4221": {
+      "title": "Travel Consultants and Clerks",
+      "mean": 0.56,
+      "sd": 0.07,
+      "category": "Gradient 3"
+    },
+    "2431": {
+      "title": "Advertising and Marketing Professionals",
+      "mean": 0.55,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "2519": {
+      "title": "Software and Applications Developers and Analysts Not Elsewhere Classified",
+      "mean": 0.55,
+      "sd": 0.16,
+      "category": "Gradient 3"
+    },
+    "2622": {
+      "title": "Librarians and Related Information Professionals",
+      "mean": 0.55,
+      "sd": 0.04,
+      "category": "Gradient 3"
+    },
+    "2631": {
+      "title": "Economists",
+      "mean": 0.55,
+      "sd": 0.08,
+      "category": "Gradient 3"
+    },
+    "2641": {
+      "title": "Authors and Related Writers",
+      "mean": 0.55,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "3342": {
+      "title": "Legal Secretaries",
+      "mean": 0.55,
+      "sd": 0.13,
+      "category": "Gradient 3"
+    },
+    "4227": {
+      "title": "Survey and Market Research Interviewers",
+      "mean": 0.55,
+      "sd": 0.16,
+      "category": "Gradient 3"
+    },
+    "2112": {
+      "title": "Meteorologists",
+      "mean": 0.54,
+      "sd": 0.13,
+      "category": "Gradient 3"
+    },
+    "2642": {
+      "title": "Journalists",
+      "mean": 0.54,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "3343": {
+      "title": "Administrative and Executive Secretaries",
+      "mean": 0.54,
+      "sd": 0.14,
+      "category": "Gradient 3"
+    },
+    "4223": {
+      "title": "Telephone Switchboard Operators",
+      "mean": 0.54,
+      "sd": 0.15,
+      "category": "Gradient 3"
+    },
+    "2512": {
+      "title": "Software Developers",
+      "mean": 0.53,
+      "sd": 0.07,
+      "category": "Gradient 3"
+    },
+    "3321": {
+      "title": "Insurance Representatives",
+      "mean": 0.53,
+      "sd": 0.12,
+      "category": "Gradient 3"
+    },
+    "3344": {
+      "title": "Medical Secretaries",
+      "mean": 0.53,
+      "sd": 0.11,
+      "category": "Gradient 3"
+    },
+    "3514": {
+      "title": "Web Technicians",
+      "mean": 0.53,
+      "sd": 0.12,
+      "category": "Gradient 3"
+    },
+    "2523": {
+      "title": "Computer Network Professionals",
+      "mean": 0.52,
+      "sd": 0.06,
+      "category": "Gradient 3"
+    },
+    "3252": {
+      "title": "Medical Records and Health Information Technicians",
+      "mean": 0.52,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "2411": {
+      "title": "Accountants",
+      "mean": 0.51,
+      "sd": 0.08,
+      "category": "Gradient 3"
+    },
+    "2434": {
+      "title": "Information and Communications Technology Sales Professionals",
+      "mean": 0.51,
+      "sd": 0.09,
+      "category": "Gradient 3"
+    },
+    "4224": {
+      "title": "Hotel Receptionists",
+      "mean": 0.51,
+      "sd": 0.07,
+      "category": "Gradient 3"
+    },
+    "4413": {
+      "title": "Coding, Proofreading and Related Clerks",
+      "mean": 0.51,
+      "sd": 0.2,
+      "category": "Gradient 3"
+    },
+    "2433": {
+      "title": "Technical and Medical Sales Professionals (excluding ICT)",
+      "mean": 0.5,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "4323": {
+      "title": "Transport Clerks",
+      "mean": 0.5,
+      "sd": 0.1,
+      "category": "Gradient 3"
+    },
+    "2166": {
+      "title": "Graphic and Multimedia Designers",
+      "mean": 0.49,
+      "sd": 0.09,
+      "category": "Gradient 2"
+    },
+    "2511": {
+      "title": "Systems Analysts",
+      "mean": 0.49,
+      "sd": 0.05,
+      "category": "Gradient 2"
+    },
+    "2529": {
+      "title": "Database and Network Professionals Not Elsewhere Classified",
+      "mean": 0.49,
+      "sd": 0.06,
+      "category": "Gradient 2"
+    },
+    "3313": {
+      "title": "Accounting Associate Professionals",
+      "mean": 0.49,
+      "sd": 0.13,
+      "category": "Gradient 2"
+    },
+    "3322": {
+      "title": "Commercial Sales Representatives",
+      "mean": 0.49,
+      "sd": 0.08,
+      "category": "Gradient 2"
+    },
+    "3352": {
+      "title": "Government Tax and Excise Officials",
+      "mean": 0.49,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "2153": {
+      "title": "Telecommunications Engineers",
+      "mean": 0.48,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "2632": {
+      "title": "Sociologists, Anthropologists and Related Professionals",
+      "mean": 0.48,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "3332": {
+      "title": "Conference and Event Planners",
+      "mean": 0.48,
+      "sd": 0.14,
+      "category": "Gradient 2"
+    },
+    "4213": {
+      "title": "Pawnbrokers and Money-lenders",
+      "mean": 0.48,
+      "sd": 0.06,
+      "category": "Gradient 2"
+    },
+    "1346": {
+      "title": "Financial and Insurance Services Branch managers",
+      "mean": 0.47,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "2356": {
+      "title": "Information Technology Trainers",
+      "mean": 0.47,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "2621": {
+      "title": "Archivists and Curators",
+      "mean": 0.47,
+      "sd": 0.11,
+      "category": "Gradient 2"
+    },
+    "2633": {
+      "title": "Philosophers, Historians and Political Scientists",
+      "mean": 0.47,
+      "sd": 0.06,
+      "category": "Gradient 2"
+    },
+    "2656": {
+      "title": "Announcers on Radio, Television and Other Media",
+      "mean": 0.47,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "3512": {
+      "title": "Information and Communications Technology User Support Technicians",
+      "mean": 0.47,
+      "sd": 0.19,
+      "category": "Gradient 2"
+    },
+    "2421": {
+      "title": "Management and Organization Analysts",
+      "mean": 0.46,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "4411": {
+      "title": "Library Clerks",
+      "mean": 0.46,
+      "sd": 0.18,
+      "category": "Gradient 2"
+    },
+    "5243": {
+      "title": "Door-to-door Salespersons",
+      "mean": 0.46,
+      "sd": 0.18,
+      "category": "Gradient 2"
+    },
+    "2423": {
+      "title": "Personnel and Careers Professionals",
+      "mean": 0.45,
+      "sd": 0.07,
+      "category": "Gradient 2"
+    },
+    "3315": {
+      "title": "Valuers and Loss Assessors",
+      "mean": 0.45,
+      "sd": 0.19,
+      "category": "Gradient 2"
+    },
+    "3353": {
+      "title": "Government Social Benefits Officials",
+      "mean": 0.45,
+      "sd": 0.07,
+      "category": "Gradient 2"
+    },
+    "4212": {
+      "title": "Bookmakers, Croupiers and Related Gaming Workers",
+      "mean": 0.45,
+      "sd": 0.19,
+      "category": "Gradient 2"
+    },
+    "1330": {
+      "title": "Information and Communications Technology Service Managers",
+      "mean": 0.44,
+      "sd": 0.07,
+      "category": "Gradient 2"
+    },
+    "1420": {
+      "title": "Retail and Wholesale Trade Managers",
+      "mean": 0.44,
+      "sd": 0.15,
+      "category": "Gradient 2"
+    },
+    "2165": {
+      "title": "Cartographers and Surveyors",
+      "mean": 0.44,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "3324": {
+      "title": "Trade Brokers",
+      "mean": 0.44,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "3339": {
+      "title": "Business Services Agents Not Elsewhere Classified",
+      "mean": 0.44,
+      "sd": 0.12,
+      "category": "Gradient 2"
+    },
+    "4322": {
+      "title": "Production Clerks",
+      "mean": 0.44,
+      "sd": 0.06,
+      "category": "Gradient 2"
+    },
+    "2432": {
+      "title": "Public Relations Professionals",
+      "mean": 0.43,
+      "sd": 0.09,
+      "category": "Gradient 2"
+    },
+    "3341": {
+      "title": "Office Supervisors",
+      "mean": 0.43,
+      "sd": 0.11,
+      "category": "Gradient 2"
+    },
+    "3354": {
+      "title": "Government Licensing Officials",
+      "mean": 0.43,
+      "sd": 0.07,
+      "category": "Gradient 2"
+    },
+    "3511": {
+      "title": "Information and Communications Technology Operations Technicians",
+      "mean": 0.43,
+      "sd": 0.13,
+      "category": "Gradient 2"
+    },
+    "3513": {
+      "title": "Computer Network and Systems Technicians",
+      "mean": 0.43,
+      "sd": 0.08,
+      "category": "Gradient 2"
+    },
+    "4214": {
+      "title": "Debt Collectors and Related Workers",
+      "mean": 0.43,
+      "sd": 0.07,
+      "category": "Gradient 2"
+    },
+    "5221": {
+      "title": "Shopkeepers",
+      "mean": 0.43,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "1219": {
+      "title": "Business Services and Administration Managers Not Elsewhere Classified",
+      "mean": 0.42,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "2152": {
+      "title": "Electronics Engineers",
+      "mean": 0.42,
+      "sd": 0.13,
+      "category": "Gradient 2"
+    },
+    "4229": {
+      "title": "Client Information Workers Not Elsewhere Classified",
+      "mean": 0.42,
+      "sd": 0.13,
+      "category": "Gradient 2"
+    },
+    "5242": {
+      "title": "Sales Demonstrators",
+      "mean": 0.42,
+      "sd": 0.11,
+      "category": "Gradient 2"
+    },
+    "1221": {
+      "title": "Sales and Marketing Managers",
+      "mean": 0.41,
+      "sd": 0.09,
+      "category": "Gradient 2"
+    },
+    "2424": {
+      "title": "Training and Staff Development Professionals",
+      "mean": 0.41,
+      "sd": 0.09,
+      "category": "Gradient 2"
+    },
+    "4412": {
+      "title": "Mail Carriers and Sorting Clerks",
+      "mean": 0.41,
+      "sd": 0.15,
+      "category": "Gradient 2"
+    },
+    "2131": {
+      "title": "Biologists, Botanists, Zoologists and Related Professionals",
+      "mean": 0.4,
+      "sd": 0.1,
+      "category": "Gradient 2"
+    },
+    "2351": {
+      "title": "Education Methods Specialists",
+      "mean": 0.39,
+      "sd": 0.11,
+      "category": "Gradient 1"
+    },
+    "2634": {
+      "title": "Psychologists",
+      "mean": 0.39,
+      "sd": 0.14,
+      "category": "Gradient 1"
+    },
+    "3411": {
+      "title": "Legal and Related Associate Professionals",
+      "mean": 0.39,
+      "sd": 0.14,
+      "category": "Gradient 1"
+    },
+    "3431": {
+      "title": "Photographers",
+      "mean": 0.39,
+      "sd": 0.12,
+      "category": "Gradient 1"
+    },
+    "5230": {
+      "title": "Cashiers and Ticket Clerks",
+      "mean": 0.39,
+      "sd": 0.14,
+      "category": "Gradient 1"
+    },
+    "2111": {
+      "title": "Physicists and Astronomers",
+      "mean": 0.38,
+      "sd": 0.14,
+      "category": "Gradient 1"
+    },
+    "3141": {
+      "title": "Life Science Technicians (excluding Medical)",
+      "mean": 0.38,
+      "sd": 0.18,
+      "category": "Gradient 1"
+    },
+    "5223": {
+      "title": "Shop Sales Assistants",
+      "mean": 0.38,
+      "sd": 0.16,
+      "category": "Gradient 1"
+    },
+    "7321": {
+      "title": "Pre-press Technicians",
+      "mean": 0.38,
+      "sd": 0.22,
+      "category": "Gradient 1"
+    },
+    "9623": {
+      "title": "Meter Readers and Vending-machine Collectors",
+      "mean": 0.38,
+      "sd": 0.21,
+      "category": "Gradient 1"
+    },
+    "1411": {
+      "title": "Hotel Managers",
+      "mean": 0.37,
+      "sd": 0.13,
+      "category": "Gradient 1"
+    },
+    "3433": {
+      "title": "Gallery, Museum and Library Technicians",
+      "mean": 0.37,
+      "sd": 0.2,
+      "category": "Gradient 1"
+    },
+    "4415": {
+      "title": "Filing and Copying Clerks",
+      "mean": 0.37,
+      "sd": 0.17,
+      "category": "Gradient 1"
+    },
+    "9621": {
+      "title": "Messengers, Package Deliverers and Luggage Porters",
+      "mean": 0.37,
+      "sd": 0.19,
+      "category": "Gradient 1"
+    },
+    "3256": {
+      "title": "Medical Assistants",
+      "mean": 0.35,
+      "sd": 0.23,
+      "category": "Gradient 1"
+    },
+    "5211": {
+      "title": "Stall and Market Salespersons",
+      "mean": 0.35,
+      "sd": 0.17,
+      "category": "Gradient 1"
+    },
+    "8322": {
+      "title": "Car, Taxi and Van Drivers",
+      "mean": 0.28,
+      "sd": 0.23,
+      "category": "Gradient 1"
+    },
+    "3522": {
+      "title": "Telecommunications Engineering Technicians",
+      "mean": 0.45,
+      "sd": 0.04,
+      "category": "Minimal Exposure"
+    },
+    "2422": {
+      "title": "Policy Administration Professionals",
+      "mean": 0.42,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "2164": {
+      "title": "Town and Traffic Planners",
+      "mean": 0.41,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "2265": {
+      "title": "Dieticians and Nutritionists",
+      "mean": 0.41,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "1223": {
+      "title": "Research and Development Managers",
+      "mean": 0.4,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "1222": {
+      "title": "Advertising and Public Relations Managers",
+      "mean": 0.39,
+      "sd": 0.05,
+      "category": "Minimal Exposure"
+    },
+    "2113": {
+      "title": "Chemists",
+      "mean": 0.39,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "3323": {
+      "title": "Buyers",
+      "mean": 0.39,
+      "sd": 0.08,
+      "category": "Minimal Exposure"
+    },
+    "3333": {
+      "title": "Employment agents and contractors",
+      "mean": 0.39,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "1112": {
+      "title": "Senior Government Officials",
+      "mean": 0.38,
+      "sd": 0.08,
+      "category": "Minimal Exposure"
+    },
+    "1120": {
+      "title": "Managing Directors and Chief Executives",
+      "mean": 0.38,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "1321": {
+      "title": "Manufacturing Managers",
+      "mean": 0.38,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "1324": {
+      "title": "Supply, Distribution and Related Managers",
+      "mean": 0.38,
+      "sd": 0.05,
+      "category": "Minimal Exposure"
+    },
+    "1349": {
+      "title": "Professional Services Managers Not Elsewhere Classified",
+      "mean": 0.38,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "2133": {
+      "title": "Environmental Protection Professionals",
+      "mean": 0.38,
+      "sd": 0.04,
+      "category": "Minimal Exposure"
+    },
+    "2143": {
+      "title": "Environmental Engineers",
+      "mean": 0.38,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "3114": {
+      "title": "Electronics Engineering Technicians",
+      "mean": 0.38,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "1114": {
+      "title": "Senior Officials of Special-interest Organizations",
+      "mean": 0.37,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "1211": {
+      "title": "Finance Managers",
+      "mean": 0.37,
+      "sd": 0.04,
+      "category": "Minimal Exposure"
+    },
+    "1344": {
+      "title": "Social Welfare Managers",
+      "mean": 0.37,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "2141": {
+      "title": "Industrial and Production Engineers",
+      "mean": 0.37,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "2161": {
+      "title": "Building Architects",
+      "mean": 0.37,
+      "sd": 0.08,
+      "category": "Minimal Exposure"
+    },
+    "2162": {
+      "title": "Landscape Architects",
+      "mean": 0.37,
+      "sd": 0.08,
+      "category": "Minimal Exposure"
+    },
+    "2310": {
+      "title": "University and Higher Education Teachers",
+      "mean": 0.37,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "2619": {
+      "title": "Legal Professionals Not Elsewhere Classified",
+      "mean": 0.37,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "2654": {
+      "title": "Film, Stage and Related Directors and Producers",
+      "mean": 0.37,
+      "sd": 0.07,
+      "category": "Minimal Exposure"
+    },
+    "3422": {
+      "title": "Sports Coaches, Instructors and Officials",
+      "mean": 0.37,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "3432": {
+      "title": "Interior Designers and Decorators",
+      "mean": 0.37,
+      "sd": 0.08,
+      "category": "Minimal Exposure"
+    },
+    "4321": {
+      "title": "Stock Clerks",
+      "mean": 0.37,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "1212": {
+      "title": "Human Resource Managers",
+      "mean": 0.36,
+      "sd": 0.05,
+      "category": "Minimal Exposure"
+    },
+    "1342": {
+      "title": "Health Service Managers",
+      "mean": 0.36,
+      "sd": 0.05,
+      "category": "Minimal Exposure"
+    },
+    "1345": {
+      "title": "Education Managers",
+      "mean": 0.36,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "1412": {
+      "title": "Restaurant Managers",
+      "mean": 0.36,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "2114": {
+      "title": "Geologists and geophysicists",
+      "mean": 0.36,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "2611": {
+      "title": "Lawyers",
+      "mean": 0.36,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "3359": {
+      "title": "Government Regulatory AssociatePprofessionals Not Elsewhere Classified",
+      "mean": 0.36,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "5222": {
+      "title": "Shop Supervisors",
+      "mean": 0.36,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "1322": {
+      "title": "Mining Managers",
+      "mean": 0.35,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "2145": {
+      "title": "Chemical Engineers",
+      "mean": 0.35,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "2163": {
+      "title": "Product and Garment Designers",
+      "mean": 0.35,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "2320": {
+      "title": "Vocational Education Teachers",
+      "mean": 0.35,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "2354": {
+      "title": "Other Music Teachers",
+      "mean": 0.35,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "2355": {
+      "title": "Other Arts Teachers",
+      "mean": 0.35,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "3118": {
+      "title": "Draughtspersons",
+      "mean": 0.35,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "3122": {
+      "title": "Manufacturing Supervisors",
+      "mean": 0.35,
+      "sd": 0.13,
+      "category": "Minimal Exposure"
+    },
+    "3334": {
+      "title": "Real Estate Agents and Property Managers",
+      "mean": 0.35,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "3521": {
+      "title": "Broadcasting and Audio-visual Technicians",
+      "mean": 0.35,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "1323": {
+      "title": "Construction Managers",
+      "mean": 0.34,
+      "sd": 0.06,
+      "category": "Minimal Exposure"
+    },
+    "1343": {
+      "title": "Aged Care Service Managers",
+      "mean": 0.34,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "2353": {
+      "title": "Other Language Teachers",
+      "mean": 0.34,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "3155": {
+      "title": "Air Traffic Safety Electronics Technicians",
+      "mean": 0.34,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "2262": {
+      "title": "Pharmacists",
+      "mean": 0.33,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "2359": {
+      "title": "Teaching Professionals Not Elsewhere Classified",
+      "mean": 0.33,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "3412": {
+      "title": "Social Work Associate Professionals",
+      "mean": 0.33,
+      "sd": 0.13,
+      "category": "Minimal Exposure"
+    },
+    "1431": {
+      "title": "Sports, Recreation and Cultural Centre Managers",
+      "mean": 0.32,
+      "sd": 0.1,
+      "category": "Minimal Exposure"
+    },
+    "2230": {
+      "title": "Traditional and Complementary Medicine Professionals",
+      "mean": 0.32,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "3351": {
+      "title": "Customs and Border Inspectors",
+      "mean": 0.32,
+      "sd": 0.14,
+      "category": "Minimal Exposure"
+    },
+    "5113": {
+      "title": "Travel Guides",
+      "mean": 0.32,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "8219": {
+      "title": "Assemblers Not Elsewhere Classified",
+      "mean": 0.32,
+      "sd": 0.17,
+      "category": "Minimal Exposure"
+    },
+    "2655": {
+      "title": "Actors",
+      "mean": 0.31,
+      "sd": 0.15,
+      "category": "Minimal Exposure"
+    },
+    "3135": {
+      "title": "Metal Production Process Controllers",
+      "mean": 0.31,
+      "sd": 0.13,
+      "category": "Minimal Exposure"
+    },
+    "3154": {
+      "title": "Air Traffic Controllers",
+      "mean": 0.31,
+      "sd": 0.09,
+      "category": "Minimal Exposure"
+    },
+    "3212": {
+      "title": "Medical and Pathology Laboratory Technicians",
+      "mean": 0.31,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "7515": {
+      "title": "Food and Beverage Tasters and Graders",
+      "mean": 0.31,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "7543": {
+      "title": "Product Graders and Testers (except Foods and Beverages)",
+      "mean": 0.31,
+      "sd": 0.11,
+      "category": "Minimal Exposure"
+    },
+    "1341": {
+      "title": "Child Care Service Managers",
+      "mean": 0.3,
+      "sd": 0.15,
+      "category": "Minimal Exposure"
+    },
+    "2222": {
+      "title": "Midwifery Professionals",
+      "mean": 0.3,
+      "sd": 0.15,
+      "category": "Minimal Exposure"
+    },
+    "3213": {
+      "title": "Pharmaceutical Technicians and Assistants",
+      "mean": 0.3,
+      "sd": 0.12,
+      "category": "Minimal Exposure"
+    },
+    "3259": {
+      "title": "Health Associate Professionals Not Elsewhere Classified",
+      "mean": 0.3,
+      "sd": 0.15,
+      "category": "Minimal Exposure"
+    },
+    "5161": {
+      "title": "Astrologers, Fortune-tellers and Related Workers",
+      "mean": 0.3,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "9629": {
+      "title": "Elementary Workers Not Elsewhere Classified",
+      "mean": 0.29,
+      "sd": 0.14,
+      "category": "Minimal Exposure"
+    },
+    "2264": {
+      "title": "Physiotherapists",
+      "mean": 0.28,
+      "sd": 0.14,
+      "category": "Minimal Exposure"
+    },
+    "5131": {
+      "title": "Waiters",
+      "mean": 0.28,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "8171": {
+      "title": "Pulp and Papermaking Plant Operators",
+      "mean": 0.28,
+      "sd": 0.14,
+      "category": "Minimal Exposure"
+    },
+    "8212": {
+      "title": "Electrical and Electronic Equipment Assemblers",
+      "mean": 0.28,
+      "sd": 0.19,
+      "category": "Minimal Exposure"
+    },
+    "1311": {
+      "title": "Agricultural and Forestry Production Managers",
+      "mean": 0.27,
+      "sd": 0.13,
+      "category": "Minimal Exposure"
+    },
+    "5153": {
+      "title": "Building Caretakers",
+      "mean": 0.27,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "8211": {
+      "title": "Mechanical Machinery Assemblers",
+      "mean": 0.27,
+      "sd": 0.17,
+      "category": "Minimal Exposure"
+    },
+    "5112": {
+      "title": "Transport Conductors",
+      "mean": 0.25,
+      "sd": 0.17,
+      "category": "Minimal Exposure"
+    },
+    "5322": {
+      "title": "Home-based Personal Care Workers",
+      "mean": 0.25,
+      "sd": 0.18,
+      "category": "Minimal Exposure"
+    },
+    "8321": {
+      "title": "Motorcycle Drivers",
+      "mean": 0.25,
+      "sd": 0.17,
+      "category": "Minimal Exposure"
+    },
+    "5245": {
+      "title": "Service Station Attendants",
+      "mean": 0.24,
+      "sd": 0.16,
+      "category": "Minimal Exposure"
+    },
+    "8332": {
+      "title": "Heavy Truck and Lorry Drivers",
+      "mean": 0.24,
+      "sd": 0.22,
+      "category": "Minimal Exposure"
+    },
+    "3221": {
+      "title": "Nursing Associate Professionals",
+      "mean": 0.22,
+      "sd": 0.21,
+      "category": "Minimal Exposure"
+    },
+    "1213": {
+      "title": "Policy and Planning Managers",
+      "mean": 0.36,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "2144": {
+      "title": "Mechanical Engineers",
+      "mean": 0.32,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3116": {
+      "title": "Chemical Engineering Technicians",
+      "mean": 0.32,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "1111": {
+      "title": "Legislators",
+      "mean": 0.31,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "2151": {
+      "title": "Electrical Engineers",
+      "mean": 0.31,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "2612": {
+      "title": "Judges",
+      "mean": 0.31,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "2142": {
+      "title": "Civil Engineers",
+      "mean": 0.3,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "2149": {
+      "title": "Engineering Professionals Not Elsewhere Classified",
+      "mean": 0.3,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "2330": {
+      "title": "Secondary Education Teachers",
+      "mean": 0.3,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "2132": {
+      "title": "Farming, Forestry and Fisheries Advisers",
+      "mean": 0.29,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2146": {
+      "title": "Mining Engineers, Metallurgists and Related Professionals",
+      "mean": 0.29,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "2211": {
+      "title": "Generalist Medical Practitioners",
+      "mean": 0.29,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "3121": {
+      "title": "Mining Supervisors",
+      "mean": 0.29,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "3133": {
+      "title": "Chemical Processing Plant Controllers",
+      "mean": 0.29,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "3134": {
+      "title": "Petroleum and Natural Gas Refining Plant Operators",
+      "mean": 0.29,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "3152": {
+      "title": "Ships' Deck Officers and Pilots",
+      "mean": 0.29,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "2263": {
+      "title": "Environmental and Occupational Health and Hygiene Professionals",
+      "mean": 0.28,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "2352": {
+      "title": "Special Needs Teachers",
+      "mean": 0.28,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2635": {
+      "title": "Social Work and Counselling Professionals",
+      "mean": 0.28,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2652": {
+      "title": "Musicians, Singers and Composers",
+      "mean": 0.28,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "3112": {
+      "title": "Civil Engineering Technicians",
+      "mean": 0.28,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3117": {
+      "title": "Mining and metallurgical technicians",
+      "mean": 0.28,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "3123": {
+      "title": "Construction Supervisors",
+      "mean": 0.28,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "3131": {
+      "title": "Power Production Plant Operators",
+      "mean": 0.28,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "2212": {
+      "title": "Specialist Medical Practitioners",
+      "mean": 0.27,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "3113": {
+      "title": "Electrical Engineering Technicians",
+      "mean": 0.27,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "3132": {
+      "title": "Incinerator and Water Treatment Plant Operators",
+      "mean": 0.27,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "3153": {
+      "title": "Aircraft Pilots and Related Associate Professionals",
+      "mean": 0.27,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8132": {
+      "title": "Photographic Products Machine Operators",
+      "mean": 0.27,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "2341": {
+      "title": "Primary School Teachers",
+      "mean": 0.26,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "3111": {
+      "title": "Chemical and Physical Science Technicians",
+      "mean": 0.26,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "3115": {
+      "title": "Mechanical Engineering Technicians",
+      "mean": 0.26,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "3119": {
+      "title": "Physical and Engineering Science Technicians Not Elsewhere Classified",
+      "mean": 0.26,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "3142": {
+      "title": "Agricultural Technicians",
+      "mean": 0.26,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "5132": {
+      "title": "Bartenders",
+      "mean": 0.26,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "8121": {
+      "title": "Metal Processing Plant Operators",
+      "mean": 0.26,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2221": {
+      "title": "Nursing Professionals",
+      "mean": 0.25,
+      "sd": 0.13,
+      "category": "Not Exposed"
+    },
+    "3423": {
+      "title": "Fitness and Recreation Instructors and Programme Leaders",
+      "mean": 0.25,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3434": {
+      "title": "Chefs",
+      "mean": 0.25,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "5241": {
+      "title": "Fashion and Other Models",
+      "mean": 0.25,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "7322": {
+      "title": "Printers",
+      "mean": 0.25,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "7421": {
+      "title": "Electronics Mechanics and Servicers",
+      "mean": 0.25,
+      "sd": 0.13,
+      "category": "Not Exposed"
+    },
+    "2266": {
+      "title": "Audiologists and Speech Therapists",
+      "mean": 0.24,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "2267": {
+      "title": "Optometrists and Ophthalmic Opticians",
+      "mean": 0.24,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3254": {
+      "title": "Dispensing Opticians",
+      "mean": 0.24,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3257": {
+      "title": "Environmental and Occupational Health Inspectors and Associates",
+      "mean": 0.24,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "5246": {
+      "title": "Food Service Counter Attendants",
+      "mean": 0.24,
+      "sd": 0.13,
+      "category": "Not Exposed"
+    },
+    "5312": {
+      "title": "Teachers' Aides",
+      "mean": 0.24,
+      "sd": 0.14,
+      "category": "Not Exposed"
+    },
+    "7422": {
+      "title": "Information and Communications Technology Installers and Servicers",
+      "mean": 0.24,
+      "sd": 0.14,
+      "category": "Not Exposed"
+    },
+    "8131": {
+      "title": "Chemical Products Plant and Machine Operators",
+      "mean": 0.24,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "1113": {
+      "title": "Traditional Chiefs and Heads of Villages",
+      "mean": 0.23,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2240": {
+      "title": "Paramedical Practitioners",
+      "mean": 0.23,
+      "sd": 0.13,
+      "category": "Not Exposed"
+    },
+    "3151": {
+      "title": "Ships' Engineers",
+      "mean": 0.23,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "3355": {
+      "title": "Police Inspectors and Detectives",
+      "mean": 0.23,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "3421": {
+      "title": "Athletes and Sports Players",
+      "mean": 0.23,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "8114": {
+      "title": "Cement, Stone and Other Mineral Products Machine Operators",
+      "mean": 0.23,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "1312": {
+      "title": "Aquaculture and Fisheries Production Managers",
+      "mean": 0.22,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "3211": {
+      "title": "Medical Imaging and Therapeutic Equipment Technicians",
+      "mean": 0.22,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "3253": {
+      "title": "Community Health Workers",
+      "mean": 0.22,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "3258": {
+      "title": "Ambulance Workers",
+      "mean": 0.22,
+      "sd": 0.17,
+      "category": "Not Exposed"
+    },
+    "5111": {
+      "title": "Travel Attendants and Travel Stewards",
+      "mean": 0.22,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "5151": {
+      "title": "Cleaning and Housekeeping Supervisors in Offices, Hotels and Other Establishments",
+      "mean": 0.22,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "5162": {
+      "title": "Companions and Valets",
+      "mean": 0.22,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "5212": {
+      "title": "Street Food Salespersons",
+      "mean": 0.22,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "6123": {
+      "title": "Apiarists and Sericulturists",
+      "mean": 0.22,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "6221": {
+      "title": "Aquaculture Workers",
+      "mean": 0.22,
+      "sd": 0.15,
+      "category": "Not Exposed"
+    },
+    "7323": {
+      "title": "Print Finishing and Binding Workers",
+      "mean": 0.22,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "7513": {
+      "title": "Dairy Products Makers",
+      "mean": 0.22,
+      "sd": 0.17,
+      "category": "Not Exposed"
+    },
+    "7521": {
+      "title": "Wood Treaters",
+      "mean": 0.22,
+      "sd": 0.15,
+      "category": "Not Exposed"
+    },
+    "7523": {
+      "title": "Woodworking Machine Tool Setters and Operators",
+      "mean": 0.22,
+      "sd": 0.16,
+      "category": "Not Exposed"
+    },
+    "8183": {
+      "title": "Packing, Bottling and Labelling Machine Operators",
+      "mean": 0.22,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "2342": {
+      "title": "Early Childhood Educators",
+      "mean": 0.21,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "2651": {
+      "title": "Visual Artists",
+      "mean": 0.21,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "3143": {
+      "title": "Forestry Technicians",
+      "mean": 0.21,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "5169": {
+      "title": "Personal Services Workers Not Elsewhere Classified",
+      "mean": 0.21,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "7127": {
+      "title": "Air Conditioning and Refrigeration Mechanics",
+      "mean": 0.21,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "7213": {
+      "title": "Sheet Metal Workers",
+      "mean": 0.21,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "7311": {
+      "title": "Precision-instrument Makers and Repairers",
+      "mean": 0.21,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "8112": {
+      "title": "Mineral and Stone Processing Plant Operators",
+      "mean": 0.21,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "8154": {
+      "title": "Bleaching, Dyeing and Fabric Cleaning Machine Operators",
+      "mean": 0.21,
+      "sd": 0.15,
+      "category": "Not Exposed"
+    },
+    "9331": {
+      "title": "Hand and Pedal Vehicle Drivers",
+      "mean": 0.21,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "2269": {
+      "title": "Health Professionals Not Elsewhere Classified",
+      "mean": 0.2,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "3222": {
+      "title": "Midwifery Associate Professionals",
+      "mean": 0.2,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "5152": {
+      "title": "Domestic Housekeepers",
+      "mean": 0.2,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "5165": {
+      "title": "Driving Instructors",
+      "mean": 0.2,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "5414": {
+      "title": "Security Guards",
+      "mean": 0.2,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "5419": {
+      "title": "Protective Services Workers Not Elsewhere Classified",
+      "mean": 0.2,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "6129": {
+      "title": "Animal Producers Not Elsewhere Classified",
+      "mean": 0.2,
+      "sd": 0.14,
+      "category": "Not Exposed"
+    },
+    "7222": {
+      "title": "Toolmakers and Related Workers",
+      "mean": 0.2,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "8122": {
+      "title": "Metal Finishing, Plating and Coating Machine Operators",
+      "mean": 0.2,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "8182": {
+      "title": "Steam Engine and Boiler Operators",
+      "mean": 0.2,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "8311": {
+      "title": "Locomotive Engine Drivers",
+      "mean": 0.2,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "8344": {
+      "title": "Lifting Truck Operators",
+      "mean": 0.2,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "9321": {
+      "title": "Hand Packers",
+      "mean": 0.2,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "9334": {
+      "title": "Shelf Fillers",
+      "mean": 0.2,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "9520": {
+      "title": "Street Vendors (excluding Food)",
+      "mean": 0.2,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "2653": {
+      "title": "Dancers and Choreographers",
+      "mean": 0.19,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "3230": {
+      "title": "Traditional and Complementary Medicine Associate Professionals",
+      "mean": 0.19,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "5311": {
+      "title": "Child Care Workers",
+      "mean": 0.19,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "6122": {
+      "title": "Poultry Producers",
+      "mean": 0.19,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "6130": {
+      "title": "Mixed Crop and Animal Producers",
+      "mean": 0.19,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "7232": {
+      "title": "Aircraft Engine Mechanics and Repairers",
+      "mean": 0.19,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "7315": {
+      "title": "Glass Makers, Cutters, Grinders and Finishers",
+      "mean": 0.19,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "7411": {
+      "title": "Building and Related Electricians",
+      "mean": 0.19,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "8113": {
+      "title": "Well Drillers and Borers and Related Workers",
+      "mean": 0.19,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "3214": {
+      "title": "Medical and Dental Prosthetic Technicians",
+      "mean": 0.18,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "5120": {
+      "title": "Cooks",
+      "mean": 0.18,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "5142": {
+      "title": "Beauticians and Related Workers",
+      "mean": 0.18,
+      "sd": 0.19,
+      "category": "Not Exposed"
+    },
+    "5411": {
+      "title": "Fire Fighters",
+      "mean": 0.18,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "6111": {
+      "title": "Field Crop and Vegetable Growers",
+      "mean": 0.18,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "6113": {
+      "title": "Gardeners, Horticultural and Nursery Growers",
+      "mean": 0.18,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "6223": {
+      "title": "Deep-sea Fishery Workers",
+      "mean": 0.18,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "7126": {
+      "title": "Plumbers and Pipe Fitters",
+      "mean": 0.18,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "7223": {
+      "title": "Metal Working Machine Tool Setters and Operators",
+      "mean": 0.18,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7231": {
+      "title": "Motor Vehicle Mechanics and Repairers",
+      "mean": 0.18,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7313": {
+      "title": "Jewellery and Precious Metal Workers",
+      "mean": 0.18,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7314": {
+      "title": "Potters and Related Workers",
+      "mean": 0.18,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "7316": {
+      "title": "Sign Writers, Decorative Painters, Engravers and Etchers",
+      "mean": 0.18,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "7534": {
+      "title": "Upholsterers and Related Workers",
+      "mean": 0.18,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "8141": {
+      "title": "Rubber Products Machine Operators",
+      "mean": 0.18,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8143": {
+      "title": "Paper Products Machine Operators",
+      "mean": 0.18,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "8331": {
+      "title": "Bus and Tram Drivers",
+      "mean": 0.18,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "8343": {
+      "title": "Crane, hoist and related plant operators",
+      "mean": 0.18,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9411": {
+      "title": "Fast Food Preparers",
+      "mean": 0.18,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "9510": {
+      "title": "Street and Related Service Workers",
+      "mean": 0.18,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "9612": {
+      "title": "Refuse Sorters",
+      "mean": 0.18,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "2636": {
+      "title": "Religious Professionals",
+      "mean": 0.17,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "3255": {
+      "title": "Physiotherapy Technicians and Assistants",
+      "mean": 0.17,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "5141": {
+      "title": "Hairdressers",
+      "mean": 0.17,
+      "sd": 0.18,
+      "category": "Not Exposed"
+    },
+    "5163": {
+      "title": "Undertakers and Embalmers",
+      "mean": 0.17,
+      "sd": 0.17,
+      "category": "Not Exposed"
+    },
+    "6112": {
+      "title": "Tree and Shrub Crop Growers",
+      "mean": 0.17,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "6114": {
+      "title": "Mixed Crop Growers",
+      "mean": 0.17,
+      "sd": 0.12,
+      "category": "Not Exposed"
+    },
+    "6121": {
+      "title": "Livestock and Dairy Producers",
+      "mean": 0.17,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "6222": {
+      "title": "Inland and Coastal Waters Fishery Workers",
+      "mean": 0.17,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "7221": {
+      "title": "Blacksmiths, Hammersmiths and Forging Press Workers",
+      "mean": 0.17,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7224": {
+      "title": "Metal Polishers, Wheel Grinders and Tool Sharpeners",
+      "mean": 0.17,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7233": {
+      "title": "Agricultural and Industrial Machinery Mechanics and Repairers",
+      "mean": 0.17,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7412": {
+      "title": "Electrical Mechanics and Fitters",
+      "mean": 0.17,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7512": {
+      "title": "Bakers, Pastry-cooks and Confectionery Makers",
+      "mean": 0.17,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "7532": {
+      "title": "Garment and Related Patternmakers and Cutters",
+      "mean": 0.17,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7536": {
+      "title": "Shoemakers and Related Workers",
+      "mean": 0.17,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "8111": {
+      "title": "Miners and Quarriers",
+      "mean": 0.17,
+      "sd": 0.11,
+      "category": "Not Exposed"
+    },
+    "8142": {
+      "title": "Plastic Products Machine Operators",
+      "mean": 0.17,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8181": {
+      "title": "Glass and Ceramics Plant Operators",
+      "mean": 0.17,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "8312": {
+      "title": "Railway Brake, Signal and Switch Operators",
+      "mean": 0.17,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "3251": {
+      "title": "Dental Assistants and Therapists",
+      "mean": 0.16,
+      "sd": 0.1,
+      "category": "Not Exposed"
+    },
+    "7522": {
+      "title": "Cabinet-makers and Related Workers",
+      "mean": 0.16,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "7541": {
+      "title": "Underwater Divers",
+      "mean": 0.16,
+      "sd": 0.09,
+      "category": "Not Exposed"
+    },
+    "8152": {
+      "title": "Weaving and Knitting Machine Operators",
+      "mean": 0.16,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "8156": {
+      "title": "Shoemaking and Related Machine Operators",
+      "mean": 0.16,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "8157": {
+      "title": "Laundry Machine Operators",
+      "mean": 0.16,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "8159": {
+      "title": "Textile, Fur and Leather Products Machine Operators Not Elsewhere Classified",
+      "mean": 0.16,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "2261": {
+      "title": "Dentists",
+      "mean": 0.15,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "5329": {
+      "title": "Personal Care Workers in Health Services Not Elsewhere Classified",
+      "mean": 0.15,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7413": {
+      "title": "Electrical Line Installers and Repairers",
+      "mean": 0.15,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "7514": {
+      "title": "Fruit, Vegetable and Related Preservers",
+      "mean": 0.15,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7531": {
+      "title": "Tailors, Dressmakers, Furriers and Hatters",
+      "mean": 0.15,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8151": {
+      "title": "Fibre Preparing, Spinning and Winding Machine Operators",
+      "mean": 0.15,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "8153": {
+      "title": "Sewing Machine Operators",
+      "mean": 0.15,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "8155": {
+      "title": "Fur and Leather Preparing Machine Operators",
+      "mean": 0.15,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "8160": {
+      "title": "Food and Related Products Machine Operators",
+      "mean": 0.15,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "2250": {
+      "title": "Veterinarians",
+      "mean": 0.14,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "3240": {
+      "title": "Veterinary Technicians and Assistants",
+      "mean": 0.14,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "5164": {
+      "title": "Pet Groomers and Animal Care Workers",
+      "mean": 0.14,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "5321": {
+      "title": "Health Care Assistants",
+      "mean": 0.14,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "5412": {
+      "title": "Police Officers",
+      "mean": 0.14,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "5413": {
+      "title": "Prison Guards",
+      "mean": 0.14,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7111": {
+      "title": "House Builders",
+      "mean": 0.14,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "7125": {
+      "title": "Glaziers",
+      "mean": 0.14,
+      "sd": 0.0,
+      "category": "Not Exposed"
+    },
+    "7312": {
+      "title": "Musical Instrument Makers and Tuners",
+      "mean": 0.14,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7317": {
+      "title": "Handicraft Workers in Wood, Basketry and Related Materials",
+      "mean": 0.14,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "7516": {
+      "title": "Tobacco Preparers and Tobacco Products Makers",
+      "mean": 0.14,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "7549": {
+      "title": "Craft and Related Workers not Elsewhere Classified",
+      "mean": 0.14,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "8172": {
+      "title": "Wood Processing Plant Operators",
+      "mean": 0.14,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8350": {
+      "title": "Ships' Deck Crews and Related Workers",
+      "mean": 0.14,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9111": {
+      "title": "Domestic Cleaners and Helpers",
+      "mean": 0.14,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "9121": {
+      "title": "Hand Launderers and Pressers",
+      "mean": 0.14,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9333": {
+      "title": "Freight Handlers",
+      "mean": 0.14,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "2659": {
+      "title": "Creative and Performing Artists Not Elsewhere Classified",
+      "mean": 0.13,
+      "sd": 0.06,
+      "category": "Not Exposed"
+    },
+    "6310": {
+      "title": "Subsistence Crop Farmers",
+      "mean": 0.13,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "6320": {
+      "title": "Subsistence Livestock Farmers",
+      "mean": 0.13,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7115": {
+      "title": "Carpenters and Joiners",
+      "mean": 0.13,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7121": {
+      "title": "Roofers",
+      "mean": 0.13,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "7124": {
+      "title": "Insulation Workers",
+      "mean": 0.13,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7131": {
+      "title": "Painters and Related Workers",
+      "mean": 0.13,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "7211": {
+      "title": "Metal Moulders and Coremakers",
+      "mean": 0.13,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "7212": {
+      "title": "Welders and Flame Cutters",
+      "mean": 0.13,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7215": {
+      "title": "Riggers and Cable Splicers",
+      "mean": 0.13,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7234": {
+      "title": "Bicycle and Related Repairers",
+      "mean": 0.13,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7318": {
+      "title": "Handicraft Workers in Textile, Leather and Related Materials",
+      "mean": 0.13,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7511": {
+      "title": "Butchers, Fishmongers and Related Food Preparers",
+      "mean": 0.13,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7544": {
+      "title": "Fumigators and Other Pest and Weed Controllers",
+      "mean": 0.13,
+      "sd": 0.04,
+      "category": "Not Exposed"
+    },
+    "8342": {
+      "title": "Earthmoving and Related Plant Operators",
+      "mean": 0.13,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9332": {
+      "title": "Drivers of Animal-drawn Vehicles and Machinery",
+      "mean": 0.13,
+      "sd": 0.08,
+      "category": "Not Exposed"
+    },
+    "9412": {
+      "title": "Kitchen Helpers",
+      "mean": 0.13,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "3413": {
+      "title": "Religious Associate Professionals",
+      "mean": 0.12,
+      "sd": 0.07,
+      "category": "Not Exposed"
+    },
+    "6210": {
+      "title": "Forestry and Related Workers",
+      "mean": 0.12,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "6330": {
+      "title": "Subsistence Mixed Crop and Livestock Farmers",
+      "mean": 0.12,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "6340": {
+      "title": "Subsistence Fishers, Hunters, Trappers and Gatherers",
+      "mean": 0.12,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "7132": {
+      "title": "Spray Painters and Varnishers",
+      "mean": 0.12,
+      "sd": 0.0,
+      "category": "Not Exposed"
+    },
+    "7533": {
+      "title": "Sewing, Embroidery and Related Workers",
+      "mean": 0.12,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7542": {
+      "title": "Shotfirers and Blasters",
+      "mean": 0.12,
+      "sd": 0.05,
+      "category": "Not Exposed"
+    },
+    "8341": {
+      "title": "Mobile Farm and Forestry Plant Operators",
+      "mean": 0.12,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9112": {
+      "title": "Cleaners and Helpers in Offices, Hotels and Other Establishments",
+      "mean": 0.12,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9212": {
+      "title": "Livestock Farm Labourers",
+      "mean": 0.12,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9214": {
+      "title": "Garden and Horticultural Labourers",
+      "mean": 0.12,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9329": {
+      "title": "Manufacturing Labourers Not Elsewhere Classified",
+      "mean": 0.12,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7113": {
+      "title": "Stonemasons, Stone Cutters, Splitters and Carvers",
+      "mean": 0.11,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7123": {
+      "title": "Plasterers",
+      "mean": 0.11,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "7214": {
+      "title": "Structural Metal Preparers and Erectors",
+      "mean": 0.11,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "7535": {
+      "title": "Pelt Dressers, Tanners and Fellmongers",
+      "mean": 0.11,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9123": {
+      "title": "Window Cleaners",
+      "mean": 0.11,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9213": {
+      "title": "Mixed Crop and Livestock Farm Labourers",
+      "mean": 0.11,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9216": {
+      "title": "Fishery and Aquaculture Labourers",
+      "mean": 0.11,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9311": {
+      "title": "Mining and Quarrying Labourers",
+      "mean": 0.11,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9622": {
+      "title": "Odd Job Persons",
+      "mean": 0.11,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7114": {
+      "title": "Concrete Placers, Concrete Finishers and Related Workers",
+      "mean": 0.1,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7122": {
+      "title": "Floor Layers and Tile Setters",
+      "mean": 0.1,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9129": {
+      "title": "Other Cleaning Workers",
+      "mean": 0.1,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "6224": {
+      "title": "Hunters and Trappers",
+      "mean": 0.09,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "7112": {
+      "title": "Bricklayers and Related Workers",
+      "mean": 0.09,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "7119": {
+      "title": "Building Frame and Related Trades Workers Not Elsewhere Classified",
+      "mean": 0.09,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "7133": {
+      "title": "Building Structure Cleaners",
+      "mean": 0.09,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "9122": {
+      "title": "Vehicle Cleaners",
+      "mean": 0.09,
+      "sd": 0.01,
+      "category": "Not Exposed"
+    },
+    "9211": {
+      "title": "Crop Farm Labourers",
+      "mean": 0.09,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9215": {
+      "title": "Forestry Labourers",
+      "mean": 0.09,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9312": {
+      "title": "Civil Engineering Labourers",
+      "mean": 0.09,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9313": {
+      "title": "Building Construction Labourers",
+      "mean": 0.09,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9611": {
+      "title": "Garbage and Recycling Collectors",
+      "mean": 0.09,
+      "sd": 0.02,
+      "category": "Not Exposed"
+    },
+    "9613": {
+      "title": "Sweepers and Related Labourers",
+      "mean": 0.09,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    },
+    "9624": {
+      "title": "Water and Firewood Collectors",
+      "mean": 0.09,
+      "sd": 0.03,
+      "category": "Not Exposed"
+    }
+  }
+}
