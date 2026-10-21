@@ -1,0 +1,222 @@
+{
+  "2524-02": {
+    "id": "data-analyst",
+    "interest": "Working with data",
+    "sdgs": [
+      8,
+      9
+    ],
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific"
+      },
+      {
+        "label": "Python programming",
+        "type": "specific"
+      },
+      {
+        "label": "Data visualisation",
+        "type": "specific"
+      },
+      {
+        "label": "Statistics",
+        "type": "specific"
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      }
+    ]
+  },
+  "3512-05": {
+    "id": "db-assistant",
+    "interest": "Working with data",
+    "sdgs": [
+      8
+    ],
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific"
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "specific"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      },
+      {
+        "label": "Customer service",
+        "type": "basic"
+      }
+    ]
+  },
+  "2543-07": {
+    "id": "bi-analyst",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      9
+    ],
+    "skills": [
+      {
+        "label": "SQL and databases",
+        "type": "specific"
+      },
+      {
+        "label": "Data visualisation",
+        "type": "specific"
+      },
+      {
+        "label": "Statistics",
+        "type": "specific"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "specific"
+      }
+    ]
+  },
+  "3513-01": {
+    "id": "network-tech",
+    "interest": "Building software",
+    "sdgs": [
+      9
+    ],
+    "skills": [
+      {
+        "label": "Networking basics",
+        "type": "specific"
+      },
+      {
+        "label": "Network security",
+        "type": "specific"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Customer service",
+        "type": "basic"
+      }
+    ]
+  },
+  "2423-09": {
+    "id": "digital-learning",
+    "interest": "Helping people",
+    "sdgs": [
+      4
+    ],
+    "skills": [
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific"
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      }
+    ]
+  },
+  "2531-04": {
+    "id": "cyber-analyst",
+    "interest": "Building software",
+    "sdgs": [
+      9,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Network security",
+        "type": "specific"
+      },
+      {
+        "label": "Networking basics",
+        "type": "specific"
+      },
+      {
+        "label": "Python programming",
+        "type": "specific"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      }
+    ]
+  },
+  "3131-07": {
+    "id": "solar-tech",
+    "interest": "Clean energy",
+    "sdgs": [
+      7,
+      13
+    ],
+    "skills": [
+      {
+        "label": "Solar PV basics",
+        "type": "specific"
+      },
+      {
+        "label": "Electrical wiring",
+        "type": "specific"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      }
+    ]
+  },
+  "2513-01": {
+    "id": "web-dev",
+    "interest": "Building software",
+    "sdgs": [
+      9
+    ],
+    "skills": [
+      {
+        "label": "Web development",
+        "type": "specific"
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific"
+      },
+      {
+        "label": "Using AI tools",
+        "type": "specific"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Python programming",
+        "type": "specific"
+      }
+    ]
+  }
+}

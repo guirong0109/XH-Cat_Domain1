@@ -1,0 +1,38 @@
+{
+  "4": {
+    "label": "SDG 4 Quality Education",
+    "short": "SDG 4",
+    "color": "#C5192D",
+    "target": "Target 4.4: skills for decent jobs through lifelong learning."
+  },
+  "7": {
+    "label": "SDG 7 Clean Energy",
+    "short": "SDG 7",
+    "color": "#FCC30B",
+    "target": "Target 7.2: more renewable energy in the energy mix."
+  },
+  "8": {
+    "label": "SDG 8 Decent Work",
+    "short": "SDG 8",
+    "color": "#A21942",
+    "target": "Target 8.2: higher productivity through technology and innovation."
+  },
+  "9": {
+    "label": "SDG 9 Industry and Innovation",
+    "short": "SDG 9",
+    "color": "#FD6925",
+    "target": "Target 9.5: stronger local technology capability."
+  },
+  "13": {
+    "label": "SDG 13 Climate Action",
+    "short": "SDG 13",
+    "color": "#3F7E44",
+    "target": "Target 13.3: building capacity for climate action."
+  },
+  "16": {
+    "label": "SDG 16 Strong Institutions",
+    "short": "SDG 16",
+    "color": "#00689D",
+    "target": "Target 16.6: effective, trusted institutions with secure systems."
+  }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "aina",
+    "label": "Aina · Diploma IT",
+    "skills": [
+      "Python programming",
+      "SQL and databases",
+      "Spreadsheets (Excel)",
+      "Communication"
+    ],
+    "interests": [
+      "Working with data"
+    ],
+    "sdgs": [
+      4,
+      9
+    ]
+  },
+  {
+    "id": "ravi",
+    "label": "Ravi · Diploma E&E",
+    "skills": [
+      "Electrical wiring",
+      "Problem solving",
+      "Teamwork",
+      "Networking basics"
+    ],
+    "interests": [
+      "Clean energy"
+    ],
+    "sdgs": [
+      7,
+      13
+    ]
+  },
+  {
+    "id": "mei",
+    "label": "Mei Ling · Diploma Business",
+    "skills": [
+      "Spreadsheets (Excel)",
+      "Communication",
+      "Customer service",
+      "Graphic design"
+    ],
+    "interests": [
+      "Business",
+      "Design and media"
+    ],
+    "sdgs": [
+      8,
+      4
+    ]
+  }
+]

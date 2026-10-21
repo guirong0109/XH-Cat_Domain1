@@ -1,0 +1,273 @@
+{
+  "fetchedAt": "2026-10-20",
+  "roles": [
+    {
+      "code": "2524-02",
+      "title": "Data Analyst",
+      "description": "Data Analyst collects, organises and analyses data to generate insights that support organisational decision-making and performance management. They import, clean, validate and transform data from multiple sources, develop appropriate data models, and ensure the accuracy, consistency and reliability of data repositories. The role involves interpreting results, producing reports and visualisations, and communicating findings to stakeholders in line with business objectives.",
+      "tasks": [
+        "Extract, clean, and integrate raw data from multiple sources.",
+        "Enrich data to build comprehensive datasets.",
+        "Perform data quality checks and validation.",
+        "Perform statistical and exploratory analysis to identify trends and patterns.",
+        "Develop reports and dashboards using business intelligence tools such as Power BI or Tableau.",
+        "Prepare documentation of data sources, analytical methods, and models to ensure transparency and reproducibility.",
+        "Present analytical findings to management and stakeholders.",
+        "Collaborate with teams to define data requirements and ensure data accuracy."
+      ],
+      "basic_skills": [
+        "Ability to work collaboratively in cross-functional teams.",
+        "Critical thinking and problem-solving ability to interpret and evaluate information.",
+        "Effective verbal and written communication skills to present insights clearly.",
+        "Strong analytical thinking and attention to detail when analysing data.",
+        "Time management skills to organise tasks and meet deadlines."
+      ],
+      "specific_skills": [
+        "Advanced Microsoft Excel skills.",
+        "Data visualization using tools.",
+        "Proficiency in data analysis and data management techniques.",
+        "Proficiency in data cleaning and data preparation methods.",
+        "Proficiency in Python or R programming for statistical analysis.",
+        "Proficiency in SQL for data querying."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2524-02"
+    },
+    {
+      "code": "3512-05",
+      "title": "Database Assistant",
+      "description": "Database Assistant supports the management and maintenance of an organisation’s structured databases, ensuring data is accurate, accessible, and secure. They perform tasks such as data entry, cleaning, retrieval, and basic analysis, and assist with administrative duties related to record keeping. This role provides foundational support within data management or IT departments.",
+      "tasks": [
+        "Enter, update, and verify database records.",
+        "Maintain data integrity and ensure accuracy of records.",
+        "Generate reports and assist in data extraction for audits or management purposes.",
+        "Back up databases and monitor for errors or inconsistencies.",
+        "Assist database administrators with routine maintenance and simple system administration tasks.",
+        "Assist in maintaining data security and compliance with organisational standards."
+      ],
+      "basic_skills": [
+        "Ability to learn actively and think critically.",
+        "Accurate and efficient typing skills.",
+        "Basic computer literacy.",
+        "Strong attention to detail.",
+        "Time management and organisational ability."
+      ],
+      "specific_skills": [
+        "Ability to assist in ensuring data security, confidentiality, and compliance with protection standards.",
+        "Ability to perform basic troubleshooting of database and related software issues.",
+        "Ability to support network-related tasks for database connectivity.",
+        "Competency in general computer operations and IT support.",
+        "Knowledge in managing and maintaining database systems.",
+        "Proficiency in preparing and visualising data using tools.",
+        "Proficiency in writing and optimising SQL queries for data retrieval and manipulation."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3512-05"
+    },
+    {
+      "code": "2543-07",
+      "title": "Business Intelligence Analyst",
+      "description": "Business Intelligence Analyst studies industry trends and organisational operations to identify opportunities for improvement, particularly in processes, supply chains, and sales. They gather, analyse, and visualise data to produce actionable insights that inform strategic planning, define key performance indicators, and guide decision-making. Their work includes assessing and optimising business processes, developing dashboards and reports, and ensuring data collection and operational systems are accurate, reliable, and aligned with organisational objectives.",
+      "tasks": [
+        "Collect, analyse, and visualise data from multiple sources to support business decisions.",
+        "Develop and maintain interactive dashboards and reports using business intelligence (BI) and visualisation tools.",
+        "Identify trends, patterns, and insights to inform business strategy.",
+        "Translate complex data into clear, actionable recommendations for stakeholders.",
+        "Analyse business processes and workflows, and design improvements aligned with business goals.",
+        "Collaborate with information technology (IT) and business teams to define requirements and support process integration.",
+        "Automate recurring data collection and reporting processes to improve efficiency and reliability.",
+        "Monitor key performance indicators (KPIs) and other performance metrics to evaluate process and workflow effectiveness.",
+        "Document processes, prepare visual diagrams, and provide support for process updates."
+      ],
+      "basic_skills": [
+        "Adaptability and willingness to learn new tools and respond to changing business needs.",
+        "Attention to detail and accuracy in data handling.",
+        "Critical thinking and decision-making skills to evaluate and improve business processes.",
+        "Effective communication and interpersonal skills for collaboration with stakeholders.",
+        "Strong analytical and problem-solving skills to interpret and act on data."
+      ],
+      "specific_skills": [
+        "Knowledge in data models, databases, data warehouses, and Extract, Transform, Load (ETL) processes.",
+        "Knowledge in process improvement methodologies and root cause analysis.",
+        "Proficiency in business intelligence tools such for analysis and reporting.",
+        "Proficiency in business process mapping, documentation, and optimisation using tools.",
+        "Proficiency in data analysis using Python, R, or statistical tools to support decision-making.",
+        "Proficiency in data visualisation techniques for presenting insights clearly.",
+        "Proficiency in Structured Query Language (SQL) for data extraction and management.",
+        "Proficiency in using enterprise resource planning (ERP) systems to support operational and analytical tasks."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2543-07"
+    },
+    {
+      "code": "3513-01",
+      "title": "Computer Network Technician",
+      "description": "Computer Network Technician is responsible for the installation, configuration, maintenance, and troubleshooting of an organisation’s network infrastructure. They ensure network security, monitor performance, optimise system capacity, and resolve connectivity issues to support continuous and efficient operations. The role involves working with hardware and software components, assisting IT teams, and implementing upgrades and security measures to maintain reliable and secure network services.",
+      "tasks": [
+        "Design, install, and maintain local area networks (LAN), wide area networks (WAN), and related systems, including documentation, inventory management, and system upgrades.",
+        "Monitor network performance, troubleshoot connectivity, hardware, and software issues, and implement optimisations.",
+        "Install, configure, and upgrade network hardware, software, and cabling.",
+        "Implement and maintain network security measures.",
+        "Provide technical support and guidance to users on network-related issues.",
+        "Collaborate with Information Technology (IT) teams and network architects on network deployments, migrations, and optimisations."
+      ],
+      "basic_skills": [
+        "Ability to work independently and collaboratively within a team while following technical instructions and procedures.",
+        "Attention to detail to ensure accuracy and quality in network support and maintenance tasks.",
+        "Effective verbal and written communication skills to interact with colleagues, supervisors, and users.",
+        "Good time management and organisational skills to handle multiple tasks and responsibilities.",
+        "Strong analytical and problem-solving skills to diagnose and resolve computer network issues."
+      ],
+      "specific_skills": [
+        "Ability to identify and assess network vulnerabilities and maintain secure environments.",
+        "Experience with network hardware including routers, switches, firewalls, and wireless access points.",
+        "Knowledge in cloud networking platforms.",
+        "Knowledge in network administration, optimisation, and cybersecurity principles, including intrusion detection and penetration testing.",
+        "Knowledge of operating systems.",
+        "Proficiency in network monitoring and diagnostic tools.",
+        "Proficiency in networking protocols."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3513-01"
+    },
+    {
+      "code": "2423-09",
+      "title": "Digital Learning Specialist",
+      "description": "Digital Learning Specialist designs, develops, and implements online learning programs, creating multimedia content and interactive modules to enhance learner engagement. They manage the technical setup, delivery, and monitoring of digital courses to ensure effective and impactful learning experiences.",
+      "tasks": [
+        "Develop, curate, and maintain multimedia and interactive digital learning content using e-learning software and audio-visual elements to enhance learner engagement.",
+        "Design and implement digital learning programmes, including online courses, assessments, and e-learning modules.",
+        "Collaborate with subject matter experts and instructional designers to ensure the accuracy, quality, and engagement of digital learning content.",
+        "Provide training and technical support to educators on digital tools, instructional technologies, and the effective use of educational technology.",
+        "Manage the technical setup, delivery, version control, content updates, and storage of digital learning materials and courses.",
+        "Monitor, evaluate, and improve the effectiveness and impact of digital learning programmes and courses."
+      ],
+      "basic_skills": [
+        "Active listening to identify learner needs and project requirements.",
+        "Adabtable to emerging new tools and technologies in digital learning environments.",
+        "High attention to detail to ensure accuracy in content and design.",
+        "Proficiency in widely used languages for content development and instruction.",
+        "Strong communication and collaboration skills for effective teamwork with subject matter expert. ."
+      ],
+      "specific_skills": [
+        "Ability to analyse learning data to improve digital content and evaluate learner outcomes.",
+        "Knowledge in gamification strategies to enhance learner engagement in digital learning environments.",
+        "Knowledge in instructional design principles for developing effective digital learning pathways.",
+        "Proficiency in creating multimedia learning materials, including motion graphics.",
+        "Proficiency in e-learning content development."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2423-09"
+    },
+    {
+      "code": "2531-04",
+      "title": "Cybersecurity Analyst",
+      "description": "Cybersecurity Analyst roles involve protecting an organisation’s computer systems, networks, and data from cyber threats by identifying vulnerabilities, monitoring security systems, and responding to incidents. They develop, implement, and maintain IT governance, risk, and compliance policies and frameworks, conduct risk assessments and audits, and design measures to safeguard sensitive information while supporting disaster recovery and overall information security strategies.",
+      "tasks": [
+        "Support the development and implementation of cybersecurity policies, procedures, and controls.",
+        "Monitor and analyse network traffic and Information Technology (IT) systems to detect, assess, and respond to security threats.",
+        "Identify, assess, and mitigate cybersecurity risks and vulnerabilities through vulnerability assessments and analysis.",
+        "Investigate cybersecurity incidents and breaches to determine causes and impacts.",
+        "Manage and utilise security tools and systems to support threat detection and prevention.",
+        "Collaborate with IT teams to support secure system operations and cybersecurity initiatives.",
+        "Maintain and update security documentation, compliance records, and operational reports.",
+        "Analyse threat intelligence and stay informed on emerging cybersecurity threats, trends, and best practices."
+      ],
+      "basic_skills": [
+        "Ability to manage work independently and collaboratively with good time management and self-discipline.",
+        "Attention to detail to identify vulnerabilities, anomalies, and potential threats.",
+        "Critical thinking to evaluate security risks and support sound decision-making.",
+        "Effective verbal and written communication to report findings and collaborate with teams.",
+        "Strong analytical thinking and problem-solving to assess and resolve cybersecurity issues."
+      ],
+      "specific_skills": [
+        "Competency in cybersecurity risk assessment, analysis, and evaluation of control effectiveness.",
+        "Competency in malware analysis and intrusion detection techniques.",
+        "Knowledge in cloud security concepts and platforms.",
+        "Knowledge in cybersecurity principles, practices, and technologies, including encryption, authentication, and access control.",
+        "Knowledge in networking concepts, operating systems, and web technologies.",
+        "Proficiency in cybersecurity tools, firewalls, web proxies, antivirus, and endpoint protection platforms.",
+        "Proficiency in scripting languages for automation and security analysis."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2531-04"
+    },
+    {
+      "code": "3131-07",
+      "title": "Solar Cell Technician",
+      "description": "Solar Cell Technician operates, monitors, and maintains solar energy systems, including assembling, installing, testing, and servicing solar photovoltaic (PV) cells and panels. They ensure systems perform efficiently by inspecting equipment, troubleshooting faults, and carrying out repairs or replacements, working in manufacturing settings or on-site installations for residential, commercial, or industrial projects to support the generation and maintenance of sustainable energy.",
+      "tasks": [
+        "Assemble and test solar cells, modules, and panels to ensure quality and optimal performance.",
+        "Install solar photovoltaic (PV) systems safely and accurately at designated sites.",
+        "Troubleshoot electrical and mechanical issues in solar PV systems.",
+        "Perform routine maintenance and cleaning of solar panels to maintain system efficiency.",
+        "Ensure compliance with safety and environmental standards in all operations.",
+        "Maintain accurate records of installation and maintenance activities.",
+        "Assist engineers and project teams in system layout and performance verification.",
+        "Provide basic guidance to clients on solar system operation and maintenance."
+      ],
+      "basic_skills": [
+        "Attention to detail for precise solar cell assembly and installation.",
+        "Basic computer literacy for reporting and logging technical work.",
+        "Good communication skills to interact with team members and clients.",
+        "Physical fitness and ability to work safely in outdoor environments.",
+        "Problem-solving skills to identify and resolve system faults."
+      ],
+      "specific_skills": [
+        "Ability to read and interpret technical diagrams and wiring schematics.",
+        "Ability to troubleshoot and repair solar photovoltaic (PV) system faults.",
+        "Competency in applying work safety practices and risk assessment in solar installation activities.",
+        "Competency in solar panel assembly, electrical wiring, installation, and fault diagnosis.",
+        "Knowledge in electrical safety standards and codes for solar installations.",
+        "Knowledge in photovoltaic (PV) technology and electrical principles.",
+        "Proficiency in using electrical testing instruments such as multimeters and insulation testers."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3131-07"
+    },
+    {
+      "code": "2513-01",
+      "title": "Website Developer",
+      "description": "Website Developer designs, develops, and maintains a website or web application, combining both visual design and technical development skills. They are responsible for creating a functional, user-friendly, and visually appealing digital platform, working on front-end interfaces and back-end systems, integrating multimedia elements, ensuring cross-device compatibility, optimising performance, and collaborating with teams to implement features and resolve technical issues.",
+      "tasks": [
+        "Write code for websites and web applications following best practices.",
+        "Design and develop responsive website layouts, user interfaces, and front-end components for cross-device compatibility.",
+        "Develop back-end services, databases, and application programming interface (API) integrations to support website and web application functionality.",
+        "Analyse project requirements and collaborate with designers, content teams, and other stakeholders to implement website features.",
+        "Build scalable and maintainable websites and web applications.",
+        "Conduct testing, debugging, and cross-platform optimisation to ensure website and web application performance and functionality.",
+        "Maintain websites and web applications through updates, security checks, and performance optimisation.",
+        "Integrate multimedia elements such as animations, images, audio, and video into websites and web applications.",
+        "Collaborate with technical teams on web hosting, security, and backup arrangements for websites and web applications."
+      ],
+      "basic_skills": [
+        "Effective communication and collaboration skills.",
+        "Knowledge of responsive design, browser compatibility, and content management systems.",
+        "Proficiency in HTML, CSS, and JavaScript for website development.",
+        "Strong problem-solving and critical thinking abilities.",
+        "Understanding of front-end frameworks, back-end languages, and databases."
+      ],
+      "specific_skills": [
+        "Ability to troubleshoot, debug, and optimise web applications.",
+        "Competency in application programming interface (API) integration and Representational State Transfer (REST) service development for web applications.",
+        "Competency in continuous integration and continuous delivery (CI/CD), containerisation, and scalable web deployment practices.",
+        "Proficiency in back-end web development.",
+        "Proficiency in cloud-based web deployment using platforms.",
+        "Proficiency in database management and query development.",
+        "Proficiency in front-end development frameworks.",
+        "Proficiency in user interface design and web layout tools.",
+        "Proficiency in version control and collaboration tools."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2513-01"
+    }
+  ]
+}
