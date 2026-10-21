@@ -87,3 +87,12 @@ export function mergeCvSkills(profile, found) {
   }
   return { skills, levels, mode: 'merged' };
 }
+
+// The message shown after a CV is read.
+export function cvBannerText(mode, count) {
+  if (mode === 'merged') {
+    if (count === 0) return 'Your CV matched skills you already picked. We kept your picks. Please check each level.';
+    return `We added ${count} new ${count === 1 ? 'skill' : 'skills'} from your CV and kept your picks. Please check each one.`;
+  }
+  return `We filled in the ${count} skills we found. Please check each one.`;
+}

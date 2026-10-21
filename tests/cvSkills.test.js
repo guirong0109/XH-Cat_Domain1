@@ -140,3 +140,17 @@ describe('mergeCvSkills', () => {
     expect(r.levels).toEqual({ X: 'basic', A: 'good', B: 'basic' })
   })
 })
+
+import { cvBannerText } from '../src/lib/cvSkills.js'
+describe('cvBannerText', () => {
+  it('replaced', () => {
+    expect(cvBannerText('replaced', 4)).toBe('We filled in the 4 skills we found. Please check each one.')
+  })
+  it('merged N', () => {
+    expect(cvBannerText('merged', 2)).toBe('We added 2 new skills from your CV and kept your picks. Please check each one.')
+    expect(cvBannerText('merged', 1)).toBe('We added 1 new skill from your CV and kept your picks. Please check each one.')
+  })
+  it('merged 0', () => {
+    expect(cvBannerText('merged', 0)).toBe('Your CV matched skills you already picked. We kept your picks. Please check each level.')
+  })
+})

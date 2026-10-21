@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Chip from '../components/Chip.jsx';
 import LevelSwitch from '../components/LevelSwitch.jsx';
-import { CV_MESSAGES, checkCvFile, extractSkills } from '../lib/cvSkills.js';
+import { CV_MESSAGES, checkCvFile, cvBannerText, extractSkills } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
@@ -93,9 +93,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           <div className="flex flex-wrap items-center gap-3">
             <p className="m-0 min-w-0 flex-[1_1_200px] text-[15px]">
               Read <strong className="break-all">{cv.fileName}</strong>.{' '}
-              {cv.mode === 'merged'
-                ? `We added ${cv.count} new skills from your CV and kept your picks. Please check each one.`
-                : `We filled in the ${cv.count} skills we found. Please check each one.`}
+              {cvBannerText(cv.mode, cv.count)}
             </p>
             <button
               type="button"
