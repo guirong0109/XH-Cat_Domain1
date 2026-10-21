@@ -3,7 +3,7 @@
 Usage: python3 pipeline/build_data.py [data_directory]
 
 Reads  data/emasco/roles_raw.json, data/team/*.json, data/runpod/*.json (when present).
-Writes data/roles.json, data/skills.json, data/sdg.json, data/samples.json.
+Writes data/roles.json, data/skills.json, data/sdg.json, data/samples.json, data/fields.json.
 """
 import json
 import os
@@ -37,6 +37,7 @@ def paths_for(data_directory):
         "samples_source": join("team", "samples.json"),
         "manual_labels": join("team", "manual_labels.json"),
         "isco_map": join("team", "isco_map.json"),
+        "fields": join("team", "fields.json"),
         "ilo": join("ilo", "ilo_2025_scores.json"),
         "exposure": join("runpod", "exposure.json"),
         "skill_task_links": join("runpod", "skill_task_links.json"),
@@ -44,6 +45,7 @@ def paths_for(data_directory):
         "skills_out": join("skills.json"),
         "sdg_out": join("sdg.json"),
         "samples_out": join("samples.json"),
+        "fields_out": join("fields.json"),
     }
 
 
@@ -196,8 +198,54 @@ def check_sample_potential(sample, known_labels):
             raise ValueError(f"Sample {sample['id']} already has {label!r}, so it cannot be a skill to learn")
 
 
+WHO_OPTIONS = {"student": "majors", "working": "sectors"}
+LEVEL_OPTIONS = {"basic", "good", "strong"}
+GOAL_OPTIONS = {"upgrade", "move", "unsure"}
+
+
+def check_fields(fields, known_groups):
+    """Field ids are unique across majors and sectors; every group is a known role group."""
+    seen = set()
+    for list_name in ("majors", "sectors"):
+        for entry in fields[list_name]:
+            if entry["id"] in seen:
+                raise ValueError(f"Field id {entry['id']!r} is used more than once")
+            seen.add(entry["id"])
+            for group in entry["groups"]:
+                if group not in known_groups:
+                    raise ValueError(f"Field {entry['id']!r} uses unknown role group {group!r}")
+
+
+def check_sample_profile(sample, fields, known_groups):
+    """A sample's who, field, skill levels, goal and target groups must be consistent."""
+    sample_id = sample["id"]
+    who = sample.get("who")
+    if who not in WHO_OPTIONS:
+        raise ValueError(f"Sample {sample_id} has unknown who {who!r}")
+    allowed_ids = {entry["id"] for entry in fields[WHO_OPTIONS[who]]}
+    if sample.get("field") not in allowed_ids:
+        raise ValueError(f"Sample {sample_id} has field {sample.get('field')!r}, "
+                         f"which is not in {WHO_OPTIONS[who]}")
+    for label, level in sample.get("levels", {}).items():
+        if label not in sample["skills"]:
+            raise ValueError(f"Sample {sample_id} has a level for {label!r}, which it does not hold")
+        if level not in LEVEL_OPTIONS:
+            raise ValueError(f"Sample {sample_id} has unknown level {level!r} for {label!r}")
+    goal = sample.get("goal")
+    if goal not in GOAL_OPTIONS:
+        raise ValueError(f"Sample {sample_id} has unknown goal {goal!r}")
+    targets = sample.get("targetSectors", [])
+    for group in targets:
+        if group not in known_groups:
+            raise ValueError(f"Sample {sample_id} has unknown target group {group!r}")
+    if goal == "move" and not targets:
+        raise ValueError(f"Sample {sample_id} wants to move but has no target groups")
+    if goal != "move" and targets:
+        raise ValueError(f"Sample {sample_id} has target groups but its goal is not move")
+
+
 def build(paths):
-    """Return {"roles", "skills", "sdg", "samples"} ready to be written as JSON."""
+    """Return {"roles", "skills", "sdg", "samples", "fields"} ready to be written as JSON."""
     snapshot = read_json(paths["roles_raw"])
     raw_by_code = {role["code"]: role for role in snapshot["roles"]}
     skill_labels = read_json(paths["skill_labels"])
@@ -230,18 +278,25 @@ def build(paths):
                                 all_links.get(code, {}), known_labels, sdg,
                                 ilo_for_role(code, isco_map, ilo_file)))
 
+    groups = list(dict.fromkeys(role["interest"] for role in roles))
+    known_groups = set(groups)
+    fields = without_notes(read_json(paths["fields"]))
+    check_fields(fields, known_groups)
+
     samples = read_json(paths["samples_source"])
     for sample in samples:
         for label in sample["skills"]:
             if label not in known_labels:
                 raise ValueError(f"Sample {sample['id']} uses unknown skill label {label!r}")
         check_sample_potential(sample, known_labels)
+        check_sample_profile(sample, fields, known_groups)
 
     return {
         "roles": roles,
         "skills": {"labels": skill_labels, "similar": read_json(paths["similar"])},
         "sdg": sdg,
         "samples": samples,
+        "fields": {"majors": fields["majors"], "sectors": fields["sectors"], "groups": groups},
     }
 
 
@@ -252,7 +307,7 @@ def main(argv=None):
         result = build(paths)
     except ValueError as error:
         raise SystemExit(f"Error: {error}")
-    for name in ("roles", "skills", "sdg", "samples"):
+    for name in ("roles", "skills", "sdg", "samples", "fields"):
         write_json(paths[name + "_out"], result[name])
         print(f"Wrote {paths[name + '_out']}")
     print(f"{len(result['roles'])} roles built")

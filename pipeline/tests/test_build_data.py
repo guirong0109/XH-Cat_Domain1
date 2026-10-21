@@ -44,7 +44,16 @@ def default_inputs():
                                 "color": "#A21942", "target": "Target 8.2"}},
         "team/samples.json": [{"id": "aina", "label": "Aina", "skills": ["SQL and databases"],
                                "interests": ["Working with data"], "sdgs": [8],
-                               "experience": "parttime", "learn": ["Communication"]}],
+                               "experience": "parttime", "learn": ["Communication"],
+                               "who": "student", "field": "m-it",
+                               "levels": {"SQL and databases": "good"},
+                               "goal": "upgrade", "targetSectors": []}],
+        "team/fields.json": {
+            "_note": "draft",
+            "majors": [{"id": "m-it", "label": "IT", "groups": ["Working with data"]},
+                       {"id": "m-other", "label": "Other", "groups": []}],
+            "sectors": [{"id": "s-data", "label": "Data", "groups": ["Working with data"]}],
+        },
         "runpod/exposure.json": {CODE: {
             "tasks": [{"text": "Clean data.", "label": "automatable"},
                       {"text": "Present findings.", "label": "human_led"}],
@@ -298,6 +307,64 @@ class BuildTests(unittest.TestCase):
         with self.assertRaises(ValueError) as caught:
             self.build_with(change)
         self.assertIn("Juggling", str(caught.exception))
+
+    def test_fields_output_lists_groups(self):
+        fields = self.build_with()["fields"]
+        self.assertEqual(fields["groups"], ["Working with data"])
+        self.assertEqual([m["id"] for m in fields["majors"]], ["m-it", "m-other"])
+        self.assertEqual(fields["sectors"][0]["groups"], ["Working with data"])
+        self.assertNotIn("_note", fields)
+
+    def test_duplicate_field_id_raises(self):
+        def change(inputs):
+            inputs["team/fields.json"]["sectors"][0]["id"] = "m-it"
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn("m-it", str(caught.exception))
+
+    def test_unknown_field_group_raises(self):
+        def change(inputs):
+            inputs["team/fields.json"]["majors"][0]["groups"] = ["Juggling"]
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn("m-it", str(caught.exception))
+
+    def sample_error(self, **changes):
+        def change(inputs):
+            inputs["team/samples.json"][0].update(changes)
+
+        with self.assertRaises(ValueError) as caught:
+            self.build_with(change)
+        self.assertIn("aina", str(caught.exception))
+
+    def test_sample_unknown_who_raises(self):
+        self.sample_error(who="retired")
+
+    def test_sample_field_from_wrong_list_raises(self):
+        self.sample_error(field="s-data")
+
+    def test_sample_level_for_unheld_skill_raises(self):
+        self.sample_error(levels={"Communication": "good"})
+
+    def test_sample_bad_level_raises(self):
+        self.sample_error(levels={"SQL and databases": "expert"})
+
+    def test_sample_move_without_targets_raises(self):
+        self.sample_error(goal="move", targetSectors=[])
+
+    def test_sample_unknown_target_raises(self):
+        self.sample_error(goal="move", targetSectors=["Juggling"])
+
+    def test_sample_targets_without_move_raises(self):
+        self.sample_error(goal="upgrade", targetSectors=["Working with data"])
+
+    def test_working_sample_uses_sector_id(self):
+        def change(inputs):
+            inputs["team/samples.json"][0].update(who="working", field="s-data")
+
+        self.assertEqual(self.build_with(change)["samples"][0]["field"], "s-data")
 
 
 if __name__ == "__main__":

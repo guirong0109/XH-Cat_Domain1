@@ -11,6 +11,15 @@ async function readJson(filePath) {
   return JSON.parse(await readFile(filePath, 'utf8'))
 }
 
+async function readOptionalJson(filePath) {
+  try {
+    return await readJson(filePath)
+  } catch (error) {
+    if (error.code === 'ENOENT') return null
+    throw error
+  }
+}
+
 export function createApp({ dataDir, fetchImpl = fetch }) {
   const app = express()
   const trendsPath = path.join(dataDir, 'trends.json')
@@ -18,15 +27,16 @@ export function createApp({ dataDir, fetchImpl = fetch }) {
 
   app.get('/api/data', async (request, response) => {
     try {
-      const [roles, skills, sdg, samples, trends, research] = await Promise.all([
+      const [roles, skills, sdg, samples, trends, research, fields] = await Promise.all([
         readJson(path.join(dataDir, 'roles.json')),
         readJson(path.join(dataDir, 'skills.json')),
         readJson(path.join(dataDir, 'sdg.json')),
         readJson(path.join(dataDir, 'samples.json')),
         readTrends(trendsPath),
         readResearch(researchPath),
+        readOptionalJson(path.join(dataDir, 'fields.json')),
       ])
-      response.json({ roles, skills, sdg, samples, trends, research })
+      response.json({ roles, skills, sdg, samples, trends, research, fields })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })

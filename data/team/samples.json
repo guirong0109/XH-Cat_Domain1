@@ -19,7 +19,17 @@
     "learn": [
       "Using AI tools",
       "Data visualisation"
-    ]
+    ],
+    "who": "student",
+    "field": "m-it",
+    "levels": {
+      "Python programming": "good",
+      "SQL and databases": "strong",
+      "Spreadsheets (Excel)": "good",
+      "Communication": "good"
+    },
+    "goal": "upgrade",
+    "targetSectors": []
   },
   {
     "id": "ravi",
@@ -40,7 +50,17 @@
     "experience": "none",
     "learn": [
       "Solar PV basics"
-    ]
+    ],
+    "who": "student",
+    "field": "m-ee",
+    "levels": {
+      "Electrical wiring": "strong",
+      "Problem solving": "good",
+      "Teamwork": "good",
+      "Networking basics": "basic"
+    },
+    "goal": "upgrade",
+    "targetSectors": []
   },
   {
     "id": "mei",
@@ -62,6 +82,18 @@
     "experience": "parttime",
     "learn": [
       "Data visualisation"
+    ],
+    "who": "student",
+    "field": "m-business",
+    "levels": {
+      "Spreadsheets (Excel)": "strong",
+      "Communication": "strong",
+      "Customer service": "good",
+      "Graphic design": "basic"
+    },
+    "goal": "move",
+    "targetSectors": [
+      "Working with data"
     ]
   }
 ]

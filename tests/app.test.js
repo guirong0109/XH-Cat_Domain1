@@ -57,6 +57,7 @@ describe('api', () => {
       samples: datasets['samples.json'],
       trends: { groups: {} },
       research: null,
+      fields: null,
     })
   })
 
@@ -65,6 +66,15 @@ describe('api', () => {
     const response = await fetch(`${baseUrl}/api/data`)
     expect(response.status).toBe(200)
     expect((await response.json()).trends).toBeNull()
+  })
+
+  it('GET /api/data includes fields when fields.json exists', async () => {
+    const fields = { majors: [{ id: 'm-it', label: 'IT', groups: [] }], sectors: [], groups: [] }
+    await writeFile(path.join(directory, 'fields.json'), JSON.stringify(fields))
+    const baseUrl = await start()
+    const body = await (await fetch(`${baseUrl}/api/data`)).json()
+    expect(body.fields).toEqual(fields)
+    expect(Array.isArray(body.fields.majors)).toBe(true)
   })
 
   it('GET /api/data without research file returns research null', async () => {

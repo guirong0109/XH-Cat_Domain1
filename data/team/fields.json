@@ -1,0 +1,119 @@
+{
+  "_note": "Team draft by Claude, awaiting teammate review. Links a major or work sector to the role groups (role_skills.json interest).",
+  "majors": [
+    {
+      "id": "m-it",
+      "label": "IT and computing",
+      "groups": [
+        "Building software",
+        "Working with data"
+      ]
+    },
+    {
+      "id": "m-data",
+      "label": "Data science and statistics",
+      "groups": [
+        "Working with data",
+        "Business"
+      ]
+    },
+    {
+      "id": "m-business",
+      "label": "Business and accounting",
+      "groups": [
+        "Business",
+        "Working with data"
+      ]
+    },
+    {
+      "id": "m-ee",
+      "label": "Electrical and electronic engineering",
+      "groups": [
+        "Clean energy",
+        "Building software"
+      ]
+    },
+    {
+      "id": "m-design",
+      "label": "Design and media",
+      "groups": [
+        "Design and media"
+      ]
+    },
+    {
+      "id": "m-education",
+      "label": "Education",
+      "groups": [
+        "Helping people"
+      ]
+    },
+    {
+      "id": "m-health",
+      "label": "Health sciences",
+      "groups": [
+        "Working with data"
+      ]
+    },
+    {
+      "id": "m-other",
+      "label": "Other",
+      "groups": []
+    }
+  ],
+  "sectors": [
+    {
+      "id": "s-it",
+      "label": "IT and software",
+      "groups": [
+        "Building software"
+      ]
+    },
+    {
+      "id": "s-data",
+      "label": "Data and analytics",
+      "groups": [
+        "Working with data"
+      ]
+    },
+    {
+      "id": "s-business",
+      "label": "Business and finance",
+      "groups": [
+        "Business"
+      ]
+    },
+    {
+      "id": "s-energy",
+      "label": "Energy and utilities",
+      "groups": [
+        "Clean energy"
+      ]
+    },
+    {
+      "id": "s-media",
+      "label": "Design, media and marketing",
+      "groups": [
+        "Design and media"
+      ]
+    },
+    {
+      "id": "s-education",
+      "label": "Education and training",
+      "groups": [
+        "Helping people"
+      ]
+    },
+    {
+      "id": "s-health",
+      "label": "Healthcare",
+      "groups": [
+        "Working with data"
+      ]
+    },
+    {
+      "id": "s-other",
+      "label": "Other",
+      "groups": []
+    }
+  ]
+}
