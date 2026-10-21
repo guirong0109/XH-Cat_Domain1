@@ -9,6 +9,8 @@ import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import PreviewBanner from './components/PreviewBanner.jsx';
+import PreviewCv from './screens/PreviewCv.jsx';
+import PreviewLang from './screens/PreviewLang.jsx';
 import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, isPreview, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
@@ -229,6 +231,10 @@ export default function App() {
         onNavigate={navigate}
       />
     );
+  } else if (shownScreen === 'preview-cv') {
+    content = <PreviewCv data={data} />;
+  } else if (shownScreen === 'preview-lang') {
+    content = <PreviewLang />;
   } else if (isPreview(shownScreen)) {
     // Placeholder until the preview screens land. Never looks like a working feature.
     content = (
