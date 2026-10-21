@@ -9,13 +9,16 @@ const wageRows = JSON.parse(readFileSync(new URL('./fixtures/wages_occupation.js
 const youthRows = JSON.parse(readFileSync(new URL('./fixtures/lfs_month_youth.json', import.meta.url), 'utf8'))
 
 function fakeFetch(url) {
+  if (url.startsWith('https://api.openalex.org/')) {
+    return Promise.resolve({ ok: true, status: 200, json: async () => ({ meta: { count: 50 } }) })
+  }
   const fixture = url.includes('id=wages_occupation') ? wageRows : youthRows
   return Promise.resolve({ status: 200, json: async () => fixture })
 }
 
 const datasets = {
   'roles.json': [{ id: 'data-analyst' }],
-  'skills.json': { labels: [], similar: {} },
+  'skills.json': { labels: [{ label: 'Spreadsheets (Excel)', researchTerm: 'spreadsheet' }], similar: {} },
   'sdg.json': { 4: { label: 'SDG 4' } },
   'samples.json': [{ id: 'aina' }],
 }
@@ -53,6 +56,7 @@ describe('api', () => {
       sdg: datasets['sdg.json'],
       samples: datasets['samples.json'],
       trends: { groups: {} },
+      research: null,
     })
   })
 
@@ -61,6 +65,12 @@ describe('api', () => {
     const response = await fetch(`${baseUrl}/api/data`)
     expect(response.status).toBe(200)
     expect((await response.json()).trends).toBeNull()
+  })
+
+  it('GET /api/data without research file returns research null', async () => {
+    const baseUrl = await start()
+    const response = await fetch(`${baseUrl}/api/data`)
+    expect((await response.json()).research).toBeNull()
   })
 
   it('GET /api/data failure returns a generic message and logs details', async () => {
@@ -82,5 +92,15 @@ describe('api', () => {
     expect(body.status).toBe('updated')
     expect(body.message).toBe('Updated: data to 2025.')
     expect(body.trends.source.latestYear).toBe(2025)
+  })
+
+  it('POST /api/refresh-research returns status and research', async () => {
+    const baseUrl = await start()
+    const response = await fetch(`${baseUrl}/api/refresh-research`, { method: 'POST' })
+    expect(response.status).toBe(200)
+    const body = await response.json()
+    expect(body.status).toBe('updated')
+    expect(body.research.skills['Spreadsheets (Excel)'].term).toBe('spreadsheet')
+    expect(Object.values(body.research.skills['Spreadsheets (Excel)'].counts)).toEqual([50, 50])
   })
 })
