@@ -1,6 +1,6 @@
 # FutureReady MY
 
-FutureReady MY helps a Malaysian diploma or foundation student see how AI may change the jobs they are aiming for. In about two minutes the student goes from a skills profile to a Future Skills Radar, a ranked list of future roles, and a step-by-step reskilling pathway. Every role is linked to the UN SDGs, and every number shows its source and date. It supports the student's decision. It does not make the decision.
+FutureReady MY helps a Malaysian diploma or foundation student see how AI may change the jobs they are aiming for. In five simple steps the student goes from a skills profile and a goal to ranked future roles and a step-by-step study plan. Every role is linked to the UN SDGs, and every number shows its source and date. It supports the student's decision. It does not make the decision.
 
 Built for the Aiversecity Future-Ready Workforce Domain (Domain 1), preliminary round.
 
@@ -8,27 +8,29 @@ Built for the Aiversecity Future-Ready Workforce Domain (Domain 1), preliminary 
 
 Diploma and foundation students in Malaysia who are choosing a degree path or a first job and have no clear view of how AI will change those jobs. Stage 2 adds graduates, career switchers, working adults, career-centre counsellors and HR teams.
 
-## Demo flow (5 screens)
+## How it works (5 steps)
 
-1. **Home**: headline, three cited facts, "Try as Aina" or "Start my own profile".
-2. **Profile**: pick skills, interests and SDGs (or load a sample student). A live radar compares you with your best-fit role.
-3. **Future Skills Radar**: you vs the future need, biggest gaps, OpenDOSM job-market trend, AI-exposure bars, scenario toggle and a Refresh data button.
-4. **Roles**: ranked role cards with a match score range, skill gaps, SDG tags and a "Why this score?" breakdown. Cards re-rank live.
-5. **Pathway**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.
+1. **About you**: say whether you are a student or already working, then pick your major or sector. Or load a sample student (Aina, Ravi, Mei Ling).
+2. **Your skills**: tick your skills and set a level for each (Basic, Good, Strong). You can also read a PDF CV: it is read in your browser only, and is never sent or saved. It only suggests skills for you to confirm.
+3. **Your goal**: upgrade in your field, move to a new field, or not sure yet. Pick target sectors, SDGs you care about and up to 3 skills to learn.
+4. **Matches**: roles ranked for you, each with a score range, sources and a "Why this score?" breakdown. It also shows the Future Skills Radar, the OpenDOSM trend, AI-exposure bars, the Moderate/Fast AI toggle and a Refresh data button.
+5. **What to study**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.
 
-Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer Network Technician overtakes Energy Audit Technician for #2 (a small margin, under 1 point). Then switch SDG 16 on: Cybersecurity Analyst moves up from #4 to #2. For **Mei Ling**, SDG 3 moves Healthcare Analyst from #6 to #4.
+Level credits: Strong counts 1, Good 0.75 and Basic 0.5 of a skill (see the scoring formula).
 
-Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changing and which stay human-led (try Ravi: his Electrical wiring sits in "Stays human-led"). Open any role's "Why this score?" to compare our labels with the ILO view. The re-plan notice on Radar appears only after a Refresh brings new OpenDOSM data, and that data changes about once a year. So it will not show on every refresh.
+Demo tip: load **Ravi** and open Matches. Flip Moderate AI to Fast AI: Computer Network Technician overtakes Energy Audit Technician for #2 (a small margin, under 1 point). Then switch SDG 16 on: Cybersecurity Analyst moves up. For **Mei Ling**, SDG 3 moves Healthcare Analyst up.
 
-Demo tip: Radar → "AI research momentum" card. Press Refresh data to update both OpenDOSM and OpenAlex. It stays empty until the first OpenAlex snapshot is saved (see "Current data state").
+Demo tip: "Skills in demand" and "AI research momentum" sit on the Matches screen. Press Refresh data to update OpenDOSM and OpenAlex. The research card stays empty until the first OpenAlex snapshot is saved (see "Current data state"). The re-plan notice appears only after a Refresh brings new OpenDOSM data, which changes about once a year.
+
+**Drafts awaiting team review** (labelled as drafts, none changes the score): the majors and sectors map (`data/team/fields.json`), the CV keywords (`data/team/skill_labels.json`), and the sample students' who, field, levels and goal (`data/team/samples.json`).
 
 ## The six must-have features
 
 | Feature | How it is delivered |
 | --- | --- |
-| Skills profile intake | Current skills (chips from a fixed list), potential (work experience so far and up to 3 skills to learn), interests, SDGs, and 3 sample students. Experience and skills to learn shape badges, tags and advice text but never the score. CV upload is Stage 2. |
+| Skills profile intake | Who you are, major or sector, skills with levels, an optional PDF CV read in your browser only (never sent or saved), a goal, SDGs, up to 3 skills to learn, and 3 sample students. Skills to learn shape badges, tags and advice text but never the score. |
 | AI-trend signal layer | Live OpenDOSM employment trend per MASCO major group (Refresh button, dated) plus AI-exposure labels on eMASCO tasks. |
-| Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel. |
+| Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel (Matches screen). |
 | Personalised reskilling pathway | Gap skills ordered by future importance, hour estimates, official portal links, progress tick-boxes. |
 | SDG mapping | Every role and every skill carries SDG tags with the target cited. Each pathway step shows the SDGs its skill builds, and the SDG panel counts how many steps build each goal. Skill tags are a team mapping (draft, in `data/team/skill_labels.json`) and do not change the score. Chosen SDGs that match the role add up to +10 points, shown in the breakdown. |
 | Handling uncertainty | Two scenarios (Moderate AI, Fast AI), scores shown as a range, and every screen says results are estimates. |
@@ -107,9 +109,9 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 
 ## Fairness
 
-- The app asks only for skills, interests and the SDGs a student cares about. It never asks for age, gender, ethnicity, religion, name or location.
+- The app asks only for skills, levels, a goal and the SDGs a student cares about. It never asks for age, gender, ethnicity, religion, name or location.
 - The score uses only those choices and the role data, so two students who pick the same skills get the same results. A test (`tests/scoring.test.js`, "fairness") checks that extra personal fields change nothing.
-- Known limits: OpenDOSM figures are national totals for all sexes, and interests do not change the score.
+- Known limits: OpenDOSM figures are national totals for all sexes.
 
 ## Run locally
 
@@ -127,11 +129,15 @@ Open http://localhost:3000. For development run `npm run dev` (Vite) in one term
 2. Press **Run**. `.replit` uses the Node.js 22 module (the build needs Node 22.12 or newer, see `engines` in `package.json`) and runs `npm run build && NODE_ENV=production npm start` on port 3000 (external port 80).
 3. Press **Deploy**. The deployment (Cloud Run target) builds with `npm run build` and starts with `NODE_ENV=production npm start`. The server reads `PORT` from the environment and listens on all interfaces.
 
+## Tech
+
+React 19, Vite, Tailwind, Express 5, Vitest. `pdfjs-dist` reads PDF CVs in the browser (no server upload). The Python pipeline uses the standard library only.
+
 ## Tests
 
 ```
 npm test
-python3 -m unittest discover pipeline/tests
+python -m unittest discover pipeline/tests
 ```
 
 ## Data pipeline
@@ -146,9 +152,9 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 
 **Built**
 - ILO second opinion: each role's "Why this score?" shows the ILO view next to our labels. Not used in the score.
-- Re-plan notice on Radar after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
-- "Skills in demand" card on Radar: every skill grouped by how much AI is changing the jobs that use it (ILO 2025 exposure of those roles), with the job growth of their groups (OpenDOSM). With current data no skill is in a shrinking job group, and the card says so rather than labelling any skill as declining.
-- B, AI research momentum card on Radar: OpenAlex keyword counts per skill for 2024 and 2025 (`server/research.js`, `POST /api/refresh-research`, `data/research.json`). Keyword counts only, no AI model. The first real snapshot is pending (free daily limit).
+- Re-plan notice on Matches after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
+- "Skills in demand" card on Matches: every skill grouped by how much AI is changing the jobs that use it (ILO 2025 exposure of those roles), with the job growth of their groups (OpenDOSM). With current data no skill is in a shrinking job group, and the card says so rather than labelling any skill as declining.
+- B, AI research momentum card on Matches: OpenAlex keyword counts per skill for 2024 and 2025 (`server/research.js`, `POST /api/refresh-research`, `data/research.json`). Keyword counts only, no AI model. The first real snapshot is pending (free daily limit).
 
 **Open**
 - arXiv as a second research source: see `docs/arxiv-investigation.md`.
@@ -157,7 +163,6 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 - Skill-level AI trends from the RunPod skill-to-task links: each skill marked rising or falling under Fast AI, added to the "Skills in demand" card.
 
 **Preview only** (not working; shown with an orange banner)
-- CV upload (`#preview-cv`).
 - Bahasa Malaysia and Chinese UI (`#preview-lang`). The translations are drafts.
 - Other users, with an example HR skills grid (`#preview-users`).
 

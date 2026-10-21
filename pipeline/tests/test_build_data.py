@@ -43,8 +43,7 @@ def default_inputs():
         "team/sdg.json": {"8": {"label": "SDG 8 Decent Work", "short": "SDG 8",
                                 "color": "#A21942", "target": "Target 8.2"}},
         "team/samples.json": [{"id": "aina", "label": "Aina", "skills": ["SQL and databases"],
-                               "interests": ["Working with data"], "sdgs": [8],
-                               "experience": "parttime", "learn": ["Communication"],
+                               "sdgs": [8], "learn": ["Communication"],
                                "who": "student", "field": "m-it",
                                "levels": {"SQL and databases": "good"},
                                "goal": "upgrade", "targetSectors": []}],
@@ -202,7 +201,6 @@ class BuildTests(unittest.TestCase):
 
     def test_sample_potential_passed_through(self):
         sample = self.build_with()["samples"][0]
-        self.assertEqual(sample["experience"], "parttime")
         self.assertEqual(sample["learn"], ["Communication"])
 
     def test_sample_learn_must_be_known_and_new(self):
@@ -220,12 +218,6 @@ class BuildTests(unittest.TestCase):
             inputs["team/samples.json"][0]["learn"] = ["Communication"] * 4
         with self.assertRaisesRegex(ValueError, "at most 3"):
             self.build_with(too_many)
-
-    def test_sample_experience_must_be_known(self):
-        def change(inputs):
-            inputs["team/samples.json"][0]["experience"] = "ten years"
-        with self.assertRaisesRegex(ValueError, "ten years"):
-            self.build_with(change)
 
     def test_build_merges_role(self):
         role = self.build_with()["roles"][0]

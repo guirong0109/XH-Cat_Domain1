@@ -32,6 +32,9 @@ For the detailed log see `HANDOVER.md` (§00 is the current snapshot). For rules
 | Docs | HANDOVER, CLAUDE.md, README, specs and plans, arXiv investigation note. |
 | Sharing | Temporary public link through a Cloudflare quick tunnel. |
 
+### Session 3 (2026-10-21): simple-steps redesign (P-A to P-H) is done
+The journey is now five simple steps: About you, Your skills, Your goal, Matches, What to study. It adds a goal-based ordering, levels per skill, a PDF CV reader (browser only, nothing sent or saved) and clean-up of the old Profile, Radar, Roles, Pathway and CV preview screens. Drafts awaiting team review: `data/team/fields.json`, CV keywords in `data/team/skill_labels.json`, sample who/field/levels/goal.
+
 ---
 
 ## 2. Functions already implemented

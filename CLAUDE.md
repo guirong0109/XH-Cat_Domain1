@@ -35,8 +35,8 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - `server/research.js`: OpenAlex AI-research counts per skill (5 at a time, 8 s timeout, all-or-nothing, atomic, single in-flight) → `data/research.json`.
 - `server/app.js`: `GET /api/data`, `POST /api/refresh-trends`, `POST /api/refresh-research`, and serving `dist/`.
 - `src/lib/scoring.js`: **all** scoring maths, pure and tested. The UI must not re-implement it; import `WEIGHTS` and `SCENARIO_FACTOR`.
-- Pure UI helpers, each with tests: `roleView.js` (incl. ILO view), `pathwayView.js` (incl. skill SDGs), `radar.js`, `navigation.js` (incl. preview routes), `journey.js` (left panel steps), `replan.js`, `skillTrends.js` (Skills in demand), `potential.js` (experience, skills to learn), `research.js` (research momentum), `previewView.js` (HR grid), `useTween.js`.
-- `src/screens/`: Home, Profile, Radar, Roles, Pathway, and the Stage 2 previews PreviewCv, PreviewLang, PreviewUsers (orange "not working yet" banner).
+- Pure UI helpers, each with tests: `roleView.js` (incl. ILO view), `pathwayView.js` (incl. skill SDGs), `goalView.js` (goal order and reasons), `cvSkills.js` (CV keyword matching), `pdfText.js` and `pdfLoader.js` (read a PDF CV in the browser), `radar.js`, `navigation.js` (incl. preview routes), `journey.js` (left panel steps), `replan.js`, `skillTrends.js` (Skills in demand), `potential.js` (starting point, skills to learn), `research.js` (research momentum), `previewView.js` (HR grid), `useTween.js`.
+- `src/screens/`: Home, About, Skills, Goal, Matches, Study, and the Stage 2 previews PreviewLang, PreviewUsers (orange "not working yet" banner).
 - `src/components/`: presentational parts, incl. `Sidebar`, `MobileBar`, `StepBar` (navigation), `SkillsDemand`, `ResearchMomentum`, `ReplanNotice`, `Stage2Section`, `PreviewBanner`.
 - `pipeline/`:
   - `scrape_emasco.py`: one-time snapshot of eMASCO role pages.
@@ -60,7 +60,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
   - Python pipeline: stdlib only.
 - Express 5: no `'*'` routes (path-to-regexp v8).
 - UI: touch targets ≥ 44px, honour `prefers-reduced-motion`, works at 360px width, colours teal `#0F766E` and orange `#C2410C`, font Plus Jakarta Sans.
-- Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, experience, skills to learn) must say so.
+- Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours, majors and sectors map `fields.json`, CV keywords) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, skills to learn) must say so.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 

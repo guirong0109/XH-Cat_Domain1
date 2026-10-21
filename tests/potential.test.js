@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  EXPERIENCE_OPTIONS,
   MAX_LEARN,
-  experienceLabel,
   learnChoice,
   learnCount,
   startingPoint,
@@ -11,19 +9,7 @@ import {
 
 const role = { skills: [{ label: 'SQL' }, { label: 'Data visualisation' }, { label: 'Statistics' }] };
 
-describe('experience', () => {
-  it('has four fixed options with labels', () => {
-    expect(EXPERIENCE_OPTIONS.map((option) => option.label)).toEqual([
-      'No work experience yet',
-      'Internship or part-time',
-      'Under 2 years full-time',
-      '2+ years full-time',
-    ]);
-    expect(experienceLabel('parttime')).toBe('Internship or part-time');
-    expect(experienceLabel(null)).toBe('');
-    expect(experienceLabel('nope')).toBe('');
-  });
-
+describe('starting point', () => {
   it('gives a starting-point line only when who is set', () => {
     expect(startingPoint(null)).toBeNull();
     expect(startingPoint('student')).toMatch(/^Your starting point: student\. /);

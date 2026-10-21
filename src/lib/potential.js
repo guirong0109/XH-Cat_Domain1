@@ -1,18 +1,7 @@
-// The student's "potential": work experience so far and up to 3 skills they want
-// to learn. Neither changes any score; they shape wording, badges and tags.
-
-export const EXPERIENCE_OPTIONS = [
-  { id: 'none', label: 'No work experience yet' },
-  { id: 'parttime', label: 'Internship or part-time' },
-  { id: 'under2', label: 'Under 2 years full-time' },
-  { id: 'over2', label: '2+ years full-time' },
-];
+// The student's "potential": up to 3 skills they want to learn and their starting point.
+// Neither changes any score; they shape wording, badges and tags.
 
 export const MAX_LEARN = 3;
-
-export function experienceLabel(id) {
-  return EXPERIENCE_OPTIONS.find((option) => option.id === id)?.label || '';
-}
 
 export function startingPoint(who) {
   if (who === 'student') {

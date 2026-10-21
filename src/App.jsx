@@ -17,7 +17,6 @@ import PreviewUsers from './screens/PreviewUsers.jsx';
 import { OLD_ROUTES, SCREENS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
-// interests and experience stay until the old Roles/Pathway screens are replaced.
 const EMPTY_PROFILE = {
   who: null,
   field: null,
@@ -27,8 +26,6 @@ const EMPTY_PROFILE = {
   targetSectors: [],
   sdgs: [],
   learn: [],
-  interests: [],
-  experience: null,
   sampleId: null,
 };
 
@@ -53,8 +50,6 @@ function profileFromSample(sample) {
     targetSectors: [...(sample.targetSectors ?? [])],
     sdgs: [...sample.sdgs],
     learn: [...(sample.learn ?? [])],
-    interests: [...(sample.interests ?? [])],
-    experience: sample.experience ?? null,
     sampleId: sample.id,
   };
 }
