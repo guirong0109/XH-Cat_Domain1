@@ -218,5 +218,215 @@
         "type": "specific"
       }
     ]
+  },
+  "2543-03": {
+    "id": "ux-designer",
+    "interest": "Design and media",
+    "sdgs": [
+      9
+    ],
+    "skills": [
+      {
+        "label": "UX research and prototyping",
+        "type": "specific"
+      },
+      {
+        "label": "Web development",
+        "type": "specific"
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      }
+    ]
+  },
+  "2541-09": {
+    "id": "content-creator",
+    "interest": "Design and media",
+    "sdgs": [
+      8
+    ],
+    "skills": [
+      {
+        "label": "Content writing",
+        "type": "specific"
+      },
+      {
+        "label": "SEO and web analytics",
+        "type": "specific"
+      },
+      {
+        "label": "Graphic design",
+        "type": "specific"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      }
+    ]
+  },
+  "3313-04": {
+    "id": "energy-auditor",
+    "interest": "Clean energy",
+    "sdgs": [
+      7,
+      13
+    ],
+    "skills": [
+      {
+        "label": "Energy auditing",
+        "type": "specific"
+      },
+      {
+        "label": "Electrical wiring",
+        "type": "specific"
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      }
+    ]
+  },
+  "2141-13": {
+    "id": "renewable-engineer",
+    "interest": "Clean energy",
+    "sdgs": [
+      7,
+      13
+    ],
+    "skills": [
+      {
+        "label": "Renewable energy system design",
+        "type": "specific"
+      },
+      {
+        "label": "Solar PV basics",
+        "type": "specific"
+      },
+      {
+        "label": "Project coordination",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      }
+    ]
+  },
+  "2269-01": {
+    "id": "healthcare-analyst",
+    "interest": "Working with data",
+    "sdgs": [
+      3
+    ],
+    "skills": [
+      {
+        "label": "Healthcare data and records",
+        "type": "specific"
+      },
+      {
+        "label": "Statistics",
+        "type": "specific"
+      },
+      {
+        "label": "Spreadsheets (Excel)",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      }
+    ]
+  },
+  "3514-01": {
+    "id": "web-tech",
+    "interest": "Building software",
+    "sdgs": [
+      9
+    ],
+    "skills": [
+      {
+        "label": "Web development",
+        "type": "specific"
+      },
+      {
+        "label": "SQL and databases",
+        "type": "specific"
+      },
+      {
+        "label": "Version control (Git)",
+        "type": "specific"
+      },
+      {
+        "label": "SEO and web analytics",
+        "type": "specific"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      }
+    ]
+  },
+  "2511-08": {
+    "id": "digital-transformation",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      9
+    ],
+    "skills": [
+      {
+        "label": "Business process analysis",
+        "type": "specific"
+      },
+      {
+        "label": "Project coordination",
+        "type": "specific"
+      },
+      {
+        "label": "Data visualisation",
+        "type": "specific"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      }
+    ]
   }
 }

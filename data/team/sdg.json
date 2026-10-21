@@ -1,4 +1,10 @@
 {
+  "3": {
+    "label": "SDG 3 Good Health",
+    "short": "SDG 3",
+    "color": "#4C9F38",
+    "target": "Target 3.8: quality health services for everyone."
+  },
   "4": {
     "label": "SDG 4 Quality Education",
     "short": "SDG 4",

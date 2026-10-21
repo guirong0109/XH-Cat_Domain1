@@ -4,6 +4,19 @@ Last updated: 2026-10-21. Written for a new session that has no earlier context.
 
 ---
 
+## 0. Update 2026-10-21 (second session)
+
+- **P1 done:** the app runs on the user's Windows PC (`npm install`, `npm run build`, `npm start` → http://localhost:3000). Node 24.16, Python 3.14.
+- **P2 skipped** for now by the user.
+- **P3 done (drafts):** 7 roles added (2543-03, 2541-09, 3313-04, 2141-13, 2269-01, 3514-01, 2511-08), so 15 in total. The skill lists, SDG tags, 9 new skill labels with estimated hours, and SDG 3 were drafted by Claude from the eMASCO text. **The teammate should review them.** Placeholder task labels were added for the new roles too.
+- **P4 flagged:** the user will run RunPod later. Until then all labels show the "Sample" badge.
+- **P5:** after P3, the Moderate/Fast flip swaps Ravi's #2/#3 and several lower pairs, so no formula change was made. The README demo tip was rewritten (Ravi + Fast AI, Ravi + SDG 16).
+- **Branch:** PR #1 was merged into `main` and the remote work branch was deleted. The work branch was re-created from `main` locally.
+- **Windows scrape tip:** Python failed eMASCO's certificate check (missing Sectigo root). Run the scraper with `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"`.
+- The rest of this file (§1–§6) is from the first session; where it conflicts with this section, this section wins.
+
+---
+
 ## 1. The task and the ultimate goal
 
 **Event:** Aiversecity Future-Ready Workforce Domain (Domain 1), a Malaysian university hackathon for foundation, diploma and undergraduate students.
@@ -37,7 +50,7 @@ All work is on branch **`claude/hackathon-mvp-phase-1-dwl3nm`**. It is pushed to
 | OpenDOSM trend fetch, validation, 8 s timeout | Done | `server/opendosm.js` |
 | Trend store: atomic write, single in-flight refresh, keeps old data on a bad release | Done | `server/trends.js`, `data/trends.json` (data to 2025, fetched 2026-10-20) |
 | Express API: `GET /api/data`, `POST /api/refresh-trends`, serves `dist/` | Done | `server/app.js`, `server/index.js` |
-| eMASCO scraper (MASCO 2020 role pages) | Done, 8 roles scraped | `pipeline/scrape_emasco.py`, `data/emasco/roles_raw.json`, `data/team/role_codes.json` |
+| eMASCO scraper (MASCO 2020 role pages) | Done, 15 roles scraped (snapshot 2026-10-21) | `pipeline/scrape_emasco.py`, `data/emasco/roles_raw.json`, `data/team/role_codes.json` |
 | RunPod job (task AI-exposure labels and skill similarity) | Code done; **the user has not run it yet** | `pipeline/runpod_label.py`, `pipeline/requirements-runpod.txt`, `pipeline/README.md` |
 | Data builder | Done | `pipeline/build_data.py` → `data/roles.json`, `data/skills.json`, `data/sdg.json`, `data/samples.json` |
 | Team input files (seeded from the mockup; the teammate should review them) | Seeded | `data/team/*.json` |
@@ -80,7 +93,7 @@ match    = min(100, 0.6 × fit + 0.4 × outlook + sdgBonus)
 
 ### P2. Replit deployment is not confirmed working.
 - The user said the deployment is "at the end stage". Nobody has checked the live URL.
-- **Next step:** ask for the `*.replit.app` URL. Check that `/api/data` returns JSON with 8 roles and that the Home screen loads.
+- **Next step:** ask for the `*.replit.app` URL. Check that `/api/data` returns JSON with 15 roles and that the Home screen loads.
 - **Likely failure points:**
   - Node version: needs ≥ 22.12, and `.replit` pins `nodejs-22`.
   - Port: the server reads `process.env.PORT`; `.replit` maps 3000 to 80.
@@ -95,7 +108,7 @@ match    = min(100, 0.6 × fit + 0.4 × outlook + sdgBonus)
   4. Run `python3 pipeline/build_data.py`, then `npm test`.
 
 ### P4. The AI-exposure labels are placeholders.
-- All 8 roles have `labelSource: "manual"`, and the UI shows a "Sample" badge. The labels in `data/team/manual_labels.json` were written by Claude from the task text only (the `_note` key says so). They are not reviewed.
+- All 15 roles have `labelSource: "manual"`, and the UI shows a "Sample" badge. The labels in `data/team/manual_labels.json` were written by Claude from the task text only (the `_note` key says so). They are not reviewed.
 - **Next step:** either the **user runs the RunPod job** (steps in `pipeline/README.md`, about USD 5 on a 24 GB GPU, model `Qwen/Qwen2.5-7B-Instruct` and `sentence-transformers/all-MiniLM-L6-v2`), or the teammate reviews every label. Then run `python3 pipeline/build_data.py`.
 - The RunPod job also produces `data/runpod/skill_task_links.json` (run `--links-only` after `role_skills.json` is final). Without it, **Fast AI does not change skill importance**; it only changes the outlook score.
 

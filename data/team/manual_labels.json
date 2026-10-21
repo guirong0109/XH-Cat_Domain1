@@ -295,5 +295,241 @@
     "automatablePct": 22,
     "assistedPct": 56,
     "humanPct": 22
+  },
+  "2543-03": {
+    "tasks": [
+      {
+        "text": "Conduct user research and usability testing to understand user needs, behaviours, business requirements, and evaluate design effectiveness.",
+        "label": "human_led"
+      },
+      {
+        "text": "Create wireframes, user flows, mock-ups, and interactive prototypes for web and mobile applications.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Design user-centred interfaces based on research insights, usability findings, and stakeholder feedback.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Develop personas and customer journey maps to inform and guide design decisions.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with developers, product managers, and stakeholders to ensure accurate implementation and alignment with project goals.",
+        "label": "human_led"
+      },
+      {
+        "text": "Maintain user interface and user experience (UI/UX) design specifications, documentation, and ensure consistency with branding and accessibility standards across digital platforms.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Present design concepts and solutions to stakeholders and incorporate feedback into design improvements.",
+        "label": "human_led"
+      },
+      {
+        "text": "Keep up to date with user experience (UX) tools, trends, and best practices to support continuous improvement.",
+        "label": "human_led"
+      }
+    ]
+  },
+  "2541-09": {
+    "tasks": [
+      {
+        "text": "Develop original content for digital platforms including websites, blogs, and social media.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Conduct research to ensure content accuracy, relevance, and alignment with brand strategies.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with marketing, design, and other teams to conceptualise and refine content.",
+        "label": "human_led"
+      },
+      {
+        "text": "Plan and organise content workflows to ensure consistent and high-quality output.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Edit, proofread, and optimise content for clarity, consistency, and search engine visibility (SEO).",
+        "label": "automatable"
+      },
+      {
+        "text": "Use digital content creation and optimisation tools to produce and refine content.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Monitor content performance and adjust strategies based on analytics and trends.",
+        "label": "automatable"
+      },
+      {
+        "text": "Stay updated with digital media trends to produce timely and relevant content.",
+        "label": "human_led"
+      }
+    ]
+  },
+  "3313-04": {
+    "tasks": [
+      {
+        "text": "Conduct on-site energy audits, including testing and diagnosing Heating, Ventilation, and Air Conditioning (HVAC), lighting, and electrical systems using specialised equipment.",
+        "label": "human_led"
+      },
+      {
+        "text": "Measure, collect, and compile energy consumption data from meters, utility bills, and operational systems.",
+        "label": "automatable"
+      },
+      {
+        "text": "Analyse energy consumption data to identify inefficiencies and recommend energy efficiency improvements in line with regulations.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Prepare detailed energy audit reports with actionable recommendations.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Monitor energy usage after interventions and collaborate with engineers, architects, and building managers to verify effectiveness of energy-saving measures.",
+        "label": "human_led"
+      },
+      {
+        "text": "Ensure compliance with relevant energy policies, building codes, and sustainability standards.",
+        "label": "ai_assisted"
+      }
+    ]
+  },
+  "2141-13": {
+    "tasks": [
+      {
+        "text": "Conduct site assessments and feasibility studies for renewable energy projects.",
+        "label": "human_led"
+      },
+      {
+        "text": "Develop and implement technical improvements and technological upgrades to enhance renewable energy generation efficiency and system performance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Design, test, and implement renewable energy systems and components.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with multidisciplinary teams to optimise renewable energy generation and system integration.",
+        "label": "human_led"
+      },
+      {
+        "text": "Prepare technical specifications, material and equipment lists, and cost analyses for renewable energy projects.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Monitor the performance of renewable energy systems, troubleshoot issues, and optimise operation.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Develop design, technical, and operational standards for renewable energy systems with management and relevant personnel.",
+        "label": "human_led"
+      },
+      {
+        "text": "Prepare technical documentation, system reports, and project findings for renewable energy projects.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Ensure renewable energy projects comply with regulatory, safety, and environmental standards.",
+        "label": "ai_assisted"
+      }
+    ]
+  },
+  "2269-01": {
+    "tasks": [
+      {
+        "text": "Collect, manage, and maintain medical and health-related data from patient records, administrative databases, and other healthcare information sources.",
+        "label": "automatable"
+      },
+      {
+        "text": "Analyse and interpret healthcare data to identify patterns, trends, anomalies, and performance issues for decision-making.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Prepare reports on healthcare quality, service performance, costs, and operational outcomes.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with clinical, administrative, and information technology teams to improve reporting processes, system use, and operational efficiency.",
+        "label": "human_led"
+      },
+      {
+        "text": "Support the implementation, use, and improvement of healthcare information systems, including electronic medical records.",
+        "label": "human_led"
+      }
+    ]
+  },
+  "3514-01": {
+    "tasks": [
+      {
+        "text": "Monitor and troubleshoot website and server performance, and resolve basic website issues.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Design, develop, maintain, and scale website layouts and user interfaces.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Integrate data from back-end services and databases to support website functionality.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Implement and monitor security updates and best practices for web systems.",
+        "label": "automatable"
+      },
+      {
+        "text": "Optimise website speed, scalability, and overall performance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Install, configure, and maintain web server hardware and software.",
+        "label": "human_led"
+      },
+      {
+        "text": "Collaborate with designers, content creators, and clients to implement updates and requirements.",
+        "label": "human_led"
+      },
+      {
+        "text": "Develop and maintain documentation, policies, and operational procedures.",
+        "label": "ai_assisted"
+      }
+    ]
+  },
+  "2511-08": {
+    "tasks": [
+      {
+        "text": "Facilitate business requirement discussions and analyse business needs to support digital transformation initiatives.",
+        "label": "human_led"
+      },
+      {
+        "text": "Conduct research and evaluate organisational information technology (IT) needs, existing systems, and user challenges to inform transformation planning.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Analyse existing business processes to identify inefficiencies and opportunities for digital and operational improvement.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Develop and implement plans to enhance information systems and transform digital workflows in line with business objectives.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Prepare clear project, implementation, and reporting documentation for digital transformation initiatives.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Coordinate the implementation of digital solutions across functions and monitor progress to ensure project objectives are achieved.",
+        "label": "human_led"
+      },
+      {
+        "text": "Engage and communicate with stakeholders to ensure alignment, transparency, and effective decision-making throughout transformation projects.",
+        "label": "human_led"
+      },
+      {
+        "text": "Assess project risks and develop mitigation strategies to support the effective delivery of transformation programmes.",
+        "label": "ai_assisted"
+      }
+    ]
   }
 }

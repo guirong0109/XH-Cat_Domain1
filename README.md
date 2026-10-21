@@ -16,7 +16,7 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 4. **Roles**: ranked role cards with a match score range, skill gaps, SDG tags and a "Why this score?" breakdown. Cards re-rank live.
 5. **Pathway**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.
 
-Demo tip: load **Mei Ling** and go to Roles. Switch SDG 7 on: Solar Cell Technician moves up from #8 to #7. Flip Moderate AI and Fast AI: ranks 5 and 6 swap (Website Developer and Computer Network Technician). Both effects are small and happen low in the list. With the current data the scenario flip changes only the scores, not the order, for Aina and Ravi.
+Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer Network Technician overtakes Energy Audit Technician for #2 (a small margin, under 1 point). Then switch SDG 16 on: Cybersecurity Analyst moves up from #4 to #2. For **Mei Ling**, SDG 3 moves Healthcare Analyst from #6 to #4.
 
 ## The six must-have features
 
@@ -31,7 +31,7 @@ Demo tip: load **Mei Ling** and go to Roles. Switch SDG 7 on: Solar Cell Technic
 
 ## Current data state (honest status)
 
-- **8 roles are built** (from eMASCO). A teammate is adding 7 more to reach the planned 15.
+- **15 roles are built** (from eMASCO). For the 7 roles added on 2026-10-21, the skill lists, SDG tags and course-hour estimates are drafts that the team has not yet reviewed.
 - **Task AI-exposure labels are currently placeholder sample labels for this demo (not yet reviewed)** (`labelSource: "manual"` in `data/roles.json`, from `data/team/manual_labels.json`). Each task was labelled from its own text, without a target percentage, but no team member has reviewed them. The RunPod labelling job has **not been run yet**, so no RunPod labels exist in this repo. The app shows a **"Sample" badge** next to these labels until the RunPod run or a human review replaces them.
 - **Fast AI does not yet change skill importance.** That needs the RunPod skill-task links (`data/runpod/skill_task_links.json`), which do not exist yet, so every skill has the same importance in both scenarios. Fast AI does change the outlook score (and so the match score and ranking).
 - OpenDOSM trends are real and can be refreshed live.
@@ -42,7 +42,7 @@ Demo tip: load **Mei Ling** and go to Roles. Switch SDG 7 on: Solar Cell Technic
 | --- | --- | --- | --- |
 | OpenDOSM `wages_occupation` (`api.data.gov.my/opendosm?id=wages_occupation`) | Employed workers by MASCO major group, yearly; 5-year growth | Live refresh, cached in `data/trends.json` | Latest year shown in the app; refresh date shown |
 | OpenDOSM `lfs_month_youth` | Youth unemployment rate (context card) | Same refresh | Latest month shown in the app |
-| eMASCO (MOHR), MASCO 2020 | Role title, code, description, tasks, skills, qualification | One-time snapshot by `pipeline/scrape_emasco.py` | Snapshot dated 2026-10-20 |
+| eMASCO (MOHR), MASCO 2020 | Role title, code, description, tasks, skills, qualification | One-time snapshot by `pipeline/scrape_emasco.py` | Snapshot dated 2026-10-21 |
 | Hays Asia Salary Guide 2025 | Home-page fact | Cited text | 2025 |
 | MOSTI, as cited in the Aiversecity brief | Home-page fact | Cited text | As cited in the brief |
 | UN SDG targets | SDG labels and target text | `data/sdg.json` | Static |

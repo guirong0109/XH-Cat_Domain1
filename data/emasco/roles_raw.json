@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-20",
+  "fetchedAt": "2026-10-21",
   "roles": [
     {
       "code": "2524-02",
@@ -268,6 +268,238 @@
       "qualification": "Bachelor’s degree or equivalent",
       "group": "professionals",
       "url": "https://emasco.mohr.gov.my/masco/2513-01"
+    },
+    {
+      "code": "2543-03",
+      "title": "UX Designer (User Experience)",
+      "description": "UX Designer (User Experience) researches and analyses how a user interacts with a product, system, or service to create an intuitive and accessible digital experience. They design and improve interfaces for websites, mobile apps, and other platforms through wireframes, prototypes, and usability testing, ensuring designs meet user needs and support effective interaction. The role integrates user insights with visual and interaction design to deliver a seamless, engaging, and functional experience.",
+      "tasks": [
+        "Conduct user research and usability testing to understand user needs, behaviours, business requirements, and evaluate design effectiveness.",
+        "Create wireframes, user flows, mock-ups, and interactive prototypes for web and mobile applications.",
+        "Design user-centred interfaces based on research insights, usability findings, and stakeholder feedback.",
+        "Develop personas and customer journey maps to inform and guide design decisions.",
+        "Collaborate with developers, product managers, and stakeholders to ensure accurate implementation and alignment with project goals.",
+        "Maintain user interface and user experience (UI/UX) design specifications, documentation, and ensure consistency with branding and accessibility standards across digital platforms.",
+        "Present design concepts and solutions to stakeholders and incorporate feedback into design improvements.",
+        "Keep up to date with user experience (UX) tools, trends, and best practices to support continuous improvement."
+      ],
+      "basic_skills": [
+        "A user-centric mindset with creativity and attention to detail.",
+        "Active listening, speaking, and reading comprehension to understand and present ideas clearly.",
+        "Adaptability and teamwork to collaborate in dynamic environments.",
+        "Problem-solving and analytical thinking to address usability and design challenges.",
+        "Strong communication and interpersonal skills to work effectively with users and teams."
+      ],
+      "specific_skills": [
+        "Familiarity with agile methodologies in design and development processes.",
+        "Knowledge in graphic design fundamentals for consistent UI aesthetics.",
+        "Knowledge in HTML, CSS, and basic JavaScript for interface implementation.",
+        "Knowledge of user-centred design principles, accessibility standards, and responsive web design.",
+        "Proficiency in design tools.",
+        "Proficiency in wireframing, prototyping, and user research for digital products."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2543-03"
+    },
+    {
+      "code": "2541-09",
+      "title": "Digital Content Writer/Creator",
+      "description": "Digital Content Writer/Creator produces and manages content across digital platforms to support an organisation’s strategic goals, policies, and marketing objectives. They research topics, understand target audiences, and craft engaging content for websites, blogs, social media, and advertisements, ensuring consistency with brand messaging and enhancing audience engagement.",
+      "tasks": [
+        "Develop original content for digital platforms including websites, blogs, and social media.",
+        "Conduct research to ensure content accuracy, relevance, and alignment with brand strategies.",
+        "Collaborate with marketing, design, and other teams to conceptualise and refine content.",
+        "Plan and organise content workflows to ensure consistent and high-quality output.",
+        "Edit, proofread, and optimise content for clarity, consistency, and search engine visibility (SEO).",
+        "Use digital content creation and optimisation tools to produce and refine content.",
+        "Monitor content performance and adjust strategies based on analytics and trends.",
+        "Stay updated with digital media trends to produce timely and relevant content."
+      ],
+      "basic_skills": [
+        "Ability to conduct research and synthesise information effectively.",
+        "Critical thinking and analytical skills.",
+        "Proficiency in widely used languages with strong reading comprehension.",
+        "Strong writing and editing skills with attention to detail.",
+        "Understanding of SEO principles and ability to meet deadlines."
+      ],
+      "specific_skills": [
+        "Ability to adapt writing style to suit different audiences and digital platforms.",
+        "Ability to edit videos for multimedia content.",
+        "Competency in content management systems for publishing and updating digital content.",
+        "Competency in using animation tools to enhance digital storytelling.",
+        "Expertise in creative storytelling techniques for digital media.",
+        "Knowledge in HTML and web publishing practices for digital content implementation.",
+        "Proficiency in Adobe Photoshop for creating and editing visual content.",
+        "Proficiency in search engine optimisation (SEO) tools and analytics platforms to track and improve content performance."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2541-09"
+    },
+    {
+      "code": "3313-04",
+      "title": "Energy Audit Technician",
+      "description": "Energy Audit Technician conducts inspections and assessments of energy use in industrial, commercial and residential facilities to evaluate energy performance and identify inefficiencies. They collect and analyse energy consumption data, assess building systems and airflow, and recommend practical measures to improve energy efficiency, reduce costs and enhance compliance with relevant energy regulations and standards. Their work supports organisations in implementing energy-saving initiatives and promoting sustainable operations.",
+      "tasks": [
+        "Conduct on-site energy audits, including testing and diagnosing Heating, Ventilation, and Air Conditioning (HVAC), lighting, and electrical systems using specialised equipment.",
+        "Measure, collect, and compile energy consumption data from meters, utility bills, and operational systems.",
+        "Analyse energy consumption data to identify inefficiencies and recommend energy efficiency improvements in line with regulations.",
+        "Prepare detailed energy audit reports with actionable recommendations.",
+        "Monitor energy usage after interventions and collaborate with engineers, architects, and building managers to verify effectiveness of energy-saving measures.",
+        "Ensure compliance with relevant energy policies, building codes, and sustainability standards."
+      ],
+      "basic_skills": [
+        "Ability to work independently and collaboratively in a team.",
+        "Attention to detail and accuracy in measurements.",
+        "Basic numeracy and data interpretation skills.",
+        "Effective written and verbal communication skills.",
+        "Strong analytical and critical thinking skills."
+      ],
+      "specific_skills": [
+        "Ability to prepare energy audit reports and provide recommendations in compliance with regulations.",
+        "Competency in analysing energy consumption data to identify inefficiencies and potential savings.",
+        "Competency in inspecting and assessing mechanical and electrical systems.",
+        "Knowledge in building energy codes and sustainability practices.",
+        "Knowledge in energy standards and protocols.",
+        "Proficiency in energy management software for monitoring and analysing energy performance.",
+        "Proficiency in operating diagnostic tools, including thermal imaging cameras and data loggers."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3313-04"
+    },
+    {
+      "code": "2141-13",
+      "title": "Renewable Energy Engineer",
+      "description": "Renewable Energy Engineer researches, designs, and implements systems to generate energy from renewable sources such as solar, wind, hydro, and biomass. They focus on optimising energy production, improving system efficiency, and minimising environmental impact while ensuring compliance with safety and environmental standards. Their work supports sustainable energy initiatives and contributes to reducing carbon emissions.",
+      "tasks": [
+        "Conduct site assessments and feasibility studies for renewable energy projects.",
+        "Develop and implement technical improvements and technological upgrades to enhance renewable energy generation efficiency and system performance.",
+        "Design, test, and implement renewable energy systems and components.",
+        "Collaborate with multidisciplinary teams to optimise renewable energy generation and system integration.",
+        "Prepare technical specifications, material and equipment lists, and cost analyses for renewable energy projects.",
+        "Monitor the performance of renewable energy systems, troubleshoot issues, and optimise operation.",
+        "Develop design, technical, and operational standards for renewable energy systems with management and relevant personnel.",
+        "Prepare technical documentation, system reports, and project findings for renewable energy projects.",
+        "Ensure renewable energy projects comply with regulatory, safety, and environmental standards."
+      ],
+      "basic_skills": [
+        "Ability to interpret technical data and perform detailed assessments.",
+        "Critical thinking and active listening.",
+        "Effective communication and teamwork abilities.",
+        "Project management expertise with knowledge of sustainability principles.",
+        "Strong analytical and problem-solving skills."
+      ],
+      "specific_skills": [
+        "Ability to design and integrate energy storage systems and grid connection solutions for renewable energy installations.",
+        "Competency in technical analysis and systems assessment for renewable energy project planning and performance improvement.",
+        "Competency in workplace safety and health practices for renewable energy engineering activities.",
+        "Knowledge in environmental impact assessment requirements and regulatory compliance for renewable energy projects.",
+        "Knowledge in mechanical and automation principles applied to renewable energy systems.",
+        "Knowledge in renewable energy system design and evaluation for solar photovoltaic, wind, biomass, and hydroelectric technologies.",
+        "Proficiency in engineering design and simulation software for system modelling and optimisation."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2141-13"
+    },
+    {
+      "code": "2269-01",
+      "title": "Healthcare Analyst",
+      "description": "Healthcare Analyst collects, analyses, and interprets medical and health-related data to support decision-making in a hospital or healthcare facility. They monitor performance metrics, prepare reports, and develop record-keeping processes, collaborating with clinical, administrative, and IT teams to improve patient outcomes, optimise workflows, and ensure compliance with healthcare regulations.",
+      "tasks": [
+        "Collect, manage, and maintain medical and health-related data from patient records, administrative databases, and other healthcare information sources.",
+        "Analyse and interpret healthcare data to identify patterns, trends, anomalies, and performance issues for decision-making.",
+        "Prepare reports on healthcare quality, service performance, costs, and operational outcomes.",
+        "Collaborate with clinical, administrative, and information technology teams to improve reporting processes, system use, and operational efficiency.",
+        "Support the implementation, use, and improvement of healthcare information systems, including electronic medical records."
+      ],
+      "basic_skills": [
+        "Ability to communicate complex information clearly to non-technical audiences.",
+        "Interpersonal skills to collaborate effectively across departments.",
+        "Organisational skills to manage multiple data sources and tasks efficiently.",
+        "Proficiency in Microsoft Excel for data analysis and manipulation.",
+        "Strong analytical and problem-solving skills."
+      ],
+      "specific_skills": [
+        "Ability to analyse patient care, healthcare quality, and operational performance data for reporting and improvement purposes.",
+        "Ability to generate data-driven insights to support healthcare decision-making, workflow improvement, and service performance evaluation.",
+        "Competency in data quality assurance, data integrity control, and accurate healthcare record management.",
+        "Knowledge in medical terminology and healthcare regulations relevant to data analysis, reporting, and compliance.",
+        "Proficiency in managing and analysing healthcare data using Electronic Medical Records (EMRs) and related healthcare information systems.",
+        "Proficiency in statistical analysis."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2269-01"
+    },
+    {
+      "code": "3514-01",
+      "title": "Web Technician",
+      "description": "Web Technician is responsible for maintaining, monitoring, and supporting the optimal performance of websites and web server systems. They manage the development, maintenance, and optimisation of web applications, ensure functionality, troubleshoot technical issues, implement updates, and work with design and content teams to enhance the user experience. Their role ensures websites operate efficiently and meet organisational requirements.",
+      "tasks": [
+        "Monitor and troubleshoot website and server performance, and resolve basic website issues.",
+        "Design, develop, maintain, and scale website layouts and user interfaces.",
+        "Integrate data from back-end services and databases to support website functionality.",
+        "Implement and monitor security updates and best practices for web systems.",
+        "Optimise website speed, scalability, and overall performance.",
+        "Install, configure, and maintain web server hardware and software.",
+        "Collaborate with designers, content creators, and clients to implement updates and requirements.",
+        "Develop and maintain documentation, policies, and operational procedures."
+      ],
+      "basic_skills": [
+        "Ability to troubleshoot and resolve web-related technical issues using analytical and problem-solving skills.",
+        "Basic understanding of web development frameworks.",
+        "Effective communication and teamwork skills.",
+        "Proficiency in front-end web development technologies for website development and maintenance.",
+        "Understanding of web hosting and domain management."
+      ],
+      "specific_skills": [
+        "Ability to implement responsive and adaptive web design for multiple devices.",
+        "Ability to manage website content, updates, and overall functionality.",
+        "Knowledge in applying Search Engine Optimization (SEO) principles and web analytics tools to improve website performance.",
+        "Proficiency in designing and maintaining website layouts and visual elements.",
+        "Proficiency in developing and maintaining websites using frameworks and server-side languages.",
+        "Proficiency in managing and optimising databases for web applications.",
+        "Proficiency in using version control systems for code management."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3514-01"
+    },
+    {
+      "code": "2511-08",
+      "title": "Digital Transformation Executive/Officer",
+      "description": "Digital Transformation Executive/Officer leads and coordinates organisational initiatives that drive digital and operational change aligned with business objectives. The role involves facilitating business requirement discussions, planning and managing cross-functional projects, developing budgets and operating plans, and monitoring progress through structured reporting. They ensure that transformation programmes are effectively implemented and deliver measurable improvements to organisational performance.",
+      "tasks": [
+        "Facilitate business requirement discussions and analyse business needs to support digital transformation initiatives.",
+        "Conduct research and evaluate organisational information technology (IT) needs, existing systems, and user challenges to inform transformation planning.",
+        "Analyse existing business processes to identify inefficiencies and opportunities for digital and operational improvement.",
+        "Develop and implement plans to enhance information systems and transform digital workflows in line with business objectives.",
+        "Prepare clear project, implementation, and reporting documentation for digital transformation initiatives.",
+        "Coordinate the implementation of digital solutions across functions and monitor progress to ensure project objectives are achieved.",
+        "Engage and communicate with stakeholders to ensure alignment, transparency, and effective decision-making throughout transformation projects.",
+        "Assess project risks and develop mitigation strategies to support the effective delivery of transformation programmes."
+      ],
+      "basic_skills": [
+        "Active listening to understand needs and respond appropriately.",
+        "Critical thinking to evaluate information and make sound decisions.",
+        "Effective communication to share ideas clearly and engage stakeholders.",
+        "Organisational and coordination skills to manage multiple tasks and teams.",
+        "Problem-solving mindset to handle complex challenges."
+      ],
+      "specific_skills": [
+        "Ability to apply data analytics and structured reporting to monitor progress and support decision-making.",
+        "Competency in business process analysis and optimisation to support digital and operational improvement.",
+        "Competency in systems analysis and solution planning for digital transformation projects.",
+        "Familiarity with cloud-based digital solutions to support scalable transformation initiatives.",
+        "Familiarity with customer relationship management (CRM) and enterprise resource planning (ERP) systems to support transformation initiatives.",
+        "Knowledge in digital solution implementation and cross-functional project coordination."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2511-08"
     }
   ]
 }

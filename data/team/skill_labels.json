@@ -78,5 +78,50 @@
     "label": "Customer service",
     "hours": 8,
     "portal": "elatih"
+  },
+  {
+    "label": "UX research and prototyping",
+    "hours": 30,
+    "portal": "elatih"
+  },
+  {
+    "label": "Content writing",
+    "hours": 20,
+    "portal": "elatih"
+  },
+  {
+    "label": "SEO and web analytics",
+    "hours": 15,
+    "portal": "elatih"
+  },
+  {
+    "label": "Energy auditing",
+    "hours": 35,
+    "portal": "tvet"
+  },
+  {
+    "label": "Renewable energy system design",
+    "hours": 40,
+    "portal": "tvet"
+  },
+  {
+    "label": "Project coordination",
+    "hours": 20,
+    "portal": "elatih"
+  },
+  {
+    "label": "Healthcare data and records",
+    "hours": 25,
+    "portal": "elatih"
+  },
+  {
+    "label": "Version control (Git)",
+    "hours": 10,
+    "portal": "elatih"
+  },
+  {
+    "label": "Business process analysis",
+    "hours": 25,
+    "portal": "elatih"
   }
 ]
