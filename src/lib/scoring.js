@@ -11,10 +11,22 @@ export function skillStatus(label, pickedSkills, similar) {
   return related.some((s) => pickedSkills.includes(s)) ? 'similar' : 'gap';
 }
 
+export const LEVEL_CREDIT = { basic: 0.5, good: 0.75, strong: 1 };
+
+export function skillLevel(label, profile) {
+  const level = profile.levels?.[label];
+  return typeof level === 'string' && Object.hasOwn(LEVEL_CREDIT, level) ? level : 'strong';
+}
+
+export function skillCredit(label, profile, similar) {
+  const status = skillStatus(label, profile.skills, similar);
+  if (status === 'have') return LEVEL_CREDIT[skillLevel(label, profile)];
+  return status === 'similar' ? 0.5 : 0;
+}
+
 export function scoreRole(role, profile, ctx, scenario) {
-  const credit = { have: 1, similar: 0.5, gap: 0 };
   const earned = role.skills.reduce(
-    (sum, s) => sum + credit[skillStatus(s.label, profile.skills, ctx.similar)],
+    (sum, s) => sum + skillCredit(s.label, profile, ctx.similar),
     0,
   );
   const fit = role.skills.length ? (earned / role.skills.length) * 100 : 0;
@@ -47,14 +59,17 @@ export function buildPathway(role, profile, ctx, scenario, skillLabels) {
   const byLabel = new Map((skillLabels || []).map((l) => [l.label, l]));
   return role.skills
     .map((s) => {
-      const status = skillStatus(s.label, profile.skills, ctx.similar);
-      if (status === 'have') return null;
+      let status = skillStatus(s.label, profile.skills, ctx.similar);
+      if (status === 'have') {
+        if (skillLevel(s.label, profile) !== 'basic') return null;
+        status = 'levelup';
+      }
       const info = byLabel.get(s.label);
       const baseHours = info ? info.hours : DEFAULT_HOURS;
       return {
         label: s.label,
         status,
-        hours: status === 'similar' ? Math.round(baseHours / 2) : baseHours,
+        hours: status !== 'gap' ? Math.round(baseHours / 2) : baseHours,
         importance: s[scenario],
         rising: s.fast > s.moderate,
         portal: info ? info.portal : DEFAULT_PORTAL,

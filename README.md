@@ -61,13 +61,15 @@ Course links go only to official portals: [HRD Corp e-Latih](https://elatih.hrdc
 All maths is in `src/lib/scoring.js` (pure functions, unit-tested) and runs in the browser.
 
 ```
-fit        = sum(credit) / number of role skills * 100      (have = 1, similar = 0.5, gap = 0)
+fit        = sum(credit) / number of role skills * 100      (have: Strong 1, Good 0.75, Basic 0.5; similar = 0.5; gap = 0)
 demand     = clamp(50 + 2 * growthPct, 0, 100)              (growth over 5 years, OpenDOSM)
 outlook    = 0.5 * demand + 0.5 * (100 - automatablePct * factor)
 factor     = 0.6 (Moderate AI) | 1.0 (Fast AI)
 sdgBonus   = min(10, 5 * matched goals)
 match      = min(100, 0.6 * fit + 0.4 * outlook + sdgBonus)
 ```
+
+A skill with no level set counts as Strong. Basic skills you have appear in the pathway as shorter "Level up" steps.
 
 Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the linked task is `ai_assisted`, -0.2 if `automatable`; clamped to 0-1. Until `skill_task_links.json` exists, Fast AI importance equals Moderate AI importance. The pathway orders gap skills by importance in the active scenario. The score range shown is the min and max of both scenarios.
 

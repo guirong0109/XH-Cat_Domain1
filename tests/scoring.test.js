@@ -7,6 +7,9 @@ import {
   matchRange,
   buildPathway,
   WEIGHTS,
+  LEVEL_CREDIT,
+  skillLevel,
+  skillCredit,
 } from '../src/lib/scoring.js';
 
 const sk = (label, type = 'specific', moderate = 0.8, fast = 0.8) => ({ label, type, moderate, fast });
@@ -150,6 +153,40 @@ describe('matchRange', () => {
   });
 });
 
+describe('level credit', () => {
+  it('exports the level credits', () => {
+    expect(LEVEL_CREDIT).toEqual({ basic: 0.5, good: 0.75, strong: 1 });
+  });
+  it("no levels keeps today's scores", () => {
+    const p = { skills: ['a1', 'a2'], sdgs: [] };
+    expect(scoreRole(roleA, p, ctx, 'moderate').earned).toBe(2);
+    expect(scoreRole(roleA, { ...p, levels: {} }, ctx, 'moderate').fit).toBe(50);
+  });
+  it('counts each level', () => {
+    const p = { skills: ['a1', 'a2', 'a3'], levels: { a1: 'basic', a2: 'good', a3: 'strong' }, sdgs: [] };
+    const s = scoreRole(roleA, p, ctx, 'moderate');
+    expect(s.earned).toBe(2.25);
+    expect(s.fit).toBeCloseTo(56.25);
+  });
+  it('unknown level counts as strong', () => {
+    for (const level of ['expert', '', null, undefined]) {
+      const p = { skills: ['a1'], levels: { a1: level }, sdgs: [] };
+      expect(skillLevel('a1', p)).toBe('strong');
+      expect(skillCredit('a1', p, {})).toBe(1);
+    }
+  });
+  it('level for an unpicked skill is ignored', () => {
+    const p = { skills: [], levels: { a1: 'basic' }, sdgs: [] };
+    expect(skillCredit('a1', p, {})).toBe(0);
+    expect(skillCredit('a1', p, { a1: ['x'] })).toBe(0);
+    expect(skillCredit('a1', { ...p, skills: ['x'] }, { a1: ['x'] })).toBe(0.5);
+  });
+  it('basic equals a similar skill', () => {
+    const p = { skills: ['a1', 'x'], levels: { a1: 'basic' }, sdgs: [] };
+    expect(skillCredit('a1', p, { a2: ['x'] })).toBe(skillCredit('a2', p, { a2: ['x'] }));
+  });
+});
+
 describe('buildPathway', () => {
   const role = {
     ...roleA,
@@ -191,6 +228,23 @@ describe('buildPathway', () => {
   it('returns empty when all skills held', () => {
     const all = { skills: role.skills.map((s) => s.label), sdgs: [] };
     expect(buildPathway(role, all, c, 'fast', skillLabels)).toEqual([]);
+  });
+
+  it('basic skill becomes a levelup step with half hours', () => {
+    const labels = [...skillLabels, { label: 'Have it', hours: 15, portal: 'elatih' }];
+    const p = { skills: ['Have it', 'Other'], levels: { 'Have it': 'basic' }, sdgs: [] };
+    const step = buildPathway(role, p, c, 'moderate', labels).find((s) => s.label === 'Have it');
+    expect(step).toEqual({ label: 'Have it', status: 'levelup', hours: 8, importance: 0.8, rising: false, portal: 'elatih' });
+  });
+  it('good and strong skills are not steps', () => {
+    for (const level of ['good', 'strong']) {
+      const p = { skills: ['Have it', 'Other'], levels: { 'Have it': level }, sdgs: [] };
+      expect(buildPathway(role, p, c, 'moderate', skillLabels).some((s) => s.label === 'Have it')).toBe(false);
+    }
+  });
+  it('levelup step keeps label for progress', () => {
+    const p = { skills: role.skills.map((s) => s.label), levels: { 'Gap low': 'basic' }, sdgs: [] };
+    expect(buildPathway(role, p, c, 'moderate', skillLabels).map((s) => s.label)).toEqual(['Gap low']);
   });
 });
 
