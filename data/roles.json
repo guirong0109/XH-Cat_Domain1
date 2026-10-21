@@ -89,7 +89,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2524-02",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2120",
+      "iscoTitle": "Mathematicians, Actuaries and Statisticians",
+      "mean": 0.56,
+      "sd": 0.09,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "db-assistant",
@@ -160,7 +170,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3512-05",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3512",
+      "iscoTitle": "Information and Communications Technology User Support Technicians",
+      "mean": 0.47,
+      "sd": 0.19,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "bi-analyst",
@@ -250,7 +270,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2543-07",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2421",
+      "iscoTitle": "Management and Organization Analysts",
+      "mean": 0.46,
+      "sd": 0.1,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "network-tech",
@@ -321,7 +351,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3513-01",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3513",
+      "iscoTitle": "Computer Network and Systems Technicians",
+      "mean": 0.43,
+      "sd": 0.08,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "digital-learning",
@@ -392,7 +432,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2423-09",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2351",
+      "iscoTitle": "Education Methods Specialists",
+      "mean": 0.39,
+      "sd": 0.11,
+      "category": "Gradient 1",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "cyber-analyst",
@@ -472,7 +522,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2531-04",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2529",
+      "iscoTitle": "Database and Network Professionals Not Elsewhere Classified",
+      "mean": 0.49,
+      "sd": 0.06,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "solar-tech",
@@ -552,7 +612,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3131-07",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3113",
+      "iscoTitle": "Electrical Engineering Technicians",
+      "mean": 0.27,
+      "sd": 0.05,
+      "category": "Not Exposed",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "web-dev",
@@ -641,7 +711,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2513-01",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2513",
+      "iscoTitle": "Web and Multimedia Developers",
+      "mean": 0.6,
+      "sd": 0.08,
+      "category": "Gradient 4",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "ux-designer",
@@ -732,7 +812,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2543-03",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2166",
+      "iscoTitle": "Graphic and Multimedia Designers",
+      "mean": 0.49,
+      "sd": 0.09,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "content-creator",
@@ -811,7 +901,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2541-09",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2641",
+      "iscoTitle": "Authors and Related Writers",
+      "mean": 0.55,
+      "sd": 0.09,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "energy-auditor",
@@ -889,7 +989,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3313-04",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3119",
+      "iscoTitle": "Physical and Engineering Science Technicians Not Elsewhere Classified",
+      "mean": 0.26,
+      "sd": 0.05,
+      "category": "Not Exposed",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "renewable-engineer",
@@ -979,7 +1089,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2141-13",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2149",
+      "iscoTitle": "Engineering Professionals Not Elsewhere Classified",
+      "mean": 0.3,
+      "sd": 0.08,
+      "category": "Not Exposed",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "healthcare-analyst",
@@ -1052,7 +1172,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2269-01",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2120",
+      "iscoTitle": "Mathematicians, Actuaries and Statisticians",
+      "mean": 0.56,
+      "sd": 0.09,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "web-tech",
@@ -1143,7 +1273,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3514-01",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3514",
+      "iscoTitle": "Web Technicians",
+      "mean": 0.53,
+      "sd": 0.12,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "digital-transformation",
@@ -1229,6 +1369,16 @@
       "url": "https://emasco.mohr.gov.my/masco/2511-08",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2511",
+      "iscoTitle": "Systems Analysts",
+      "mean": 0.49,
+      "sd": 0.05,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   }
 ]

@@ -36,6 +36,8 @@ def paths_for(data_directory):
         "sdg_source": join("team", "sdg.json"),
         "samples_source": join("team", "samples.json"),
         "manual_labels": join("team", "manual_labels.json"),
+        "isco_map": join("team", "isco_map.json"),
+        "ilo": join("ilo", "ilo_2025_scores.json"),
         "exposure": join("runpod", "exposure.json"),
         "skill_task_links": join("runpod", "skill_task_links.json"),
         "roles_out": join("roles.json"),
@@ -111,7 +113,7 @@ def choose_exposure(code, runpod_exposure, manual_labels):
     return entry, label_source
 
 
-def build_role(code, raw, team, exposure_entry, label_source, links, known_labels, known_goals):
+def build_role(code, raw, team, exposure_entry, label_source, links, known_labels, known_goals, ilo=None):
     for goal in team["sdgs"]:
         if str(goal) not in known_goals:
             raise ValueError(f"Role {code} uses unknown SDG {goal}")
@@ -121,7 +123,7 @@ def build_role(code, raw, team, exposure_entry, label_source, links, known_label
             raise ValueError(f"Role {code} uses unknown skill label {skill['label']!r}")
         moderate, fast = compute_importance(skill["type"], links.get(skill["label"]))
         skills.append({"label": skill["label"], "type": skill["type"], "moderate": moderate, "fast": fast})
-    return {
+    role = {
         "id": team["id"],
         "code": code,
         "title": raw["title"],
@@ -137,6 +139,23 @@ def build_role(code, raw, team, exposure_entry, label_source, links, known_label
         "source": {"url": raw["url"], "fetchedAt": raw["fetchedAt"]},
         "labelSource": label_source,
     }
+    if ilo is not None:
+        role["ilo"] = ilo
+    return role
+
+
+def ilo_for_role(code, isco_map, ilo_file):
+    """The role's ILO second-opinion dict, or None when unmapped or the ILO file is absent."""
+    if ilo_file is None or code not in isco_map:
+        return None
+    isco = isco_map[code]["isco"]
+    occupation = ilo_file["occupations"].get(isco)
+    if occupation is None:
+        raise ValueError(f"Role {code}: isco_map.json maps to ISCO {isco!r}, "
+                         "which is not in ilo/ilo_2025_scores.json")
+    return {"isco": isco, "iscoTitle": occupation["title"], "mean": occupation["mean"],
+            "sd": occupation["sd"], "category": occupation["category"],
+            "source": ilo_file["source"], "url": ilo_file["url"], "fetchedAt": ilo_file["fetchedAt"]}
 
 
 def build(paths):
@@ -151,6 +170,12 @@ def build(paths):
     manual_labels = without_notes(read_json(paths["manual_labels"], required=False))
     all_links = without_notes(read_json(paths["skill_task_links"], required=False))
 
+    isco_map = without_notes(read_json(paths["isco_map"], required=False))
+    ilo_file = read_json(paths["ilo"], required=False)
+    if ilo_file is None:
+        print("Warning: ilo/ilo_2025_scores.json not found; roles get no ILO second opinion",
+              file=sys.stderr)
+
     for code in raw_by_code:
         if code not in role_skills:
             print(f"Warning: {code} is in roles_raw.json but not role_skills.json; skipped", file=sys.stderr)
@@ -162,7 +187,8 @@ def build(paths):
         entry, label_source = choose_exposure(code, runpod_exposure, manual_labels)
         raw = {**raw_by_code[code], "fetchedAt": snapshot["fetchedAt"]}
         roles.append(build_role(code, raw, team, entry, label_source,
-                                all_links.get(code, {}), known_labels, sdg))
+                                all_links.get(code, {}), known_labels, sdg,
+                                ilo_for_role(code, isco_map, ilo_file)))
 
     samples = read_json(paths["samples_source"])
     for sample in samples:

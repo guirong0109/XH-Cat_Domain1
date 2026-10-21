@@ -49,6 +49,13 @@ def default_inputs():
         }},
         "runpod/skill_task_links.json": {CODE: {"SQL and databases": "ai_assisted",
                                                 "Communication": "automatable"}},
+        "team/isco_map.json": {"_note": "draft", CODE: {"isco": "2511", "note": "closest unit"}},
+        "ilo/ilo_2025_scores.json": {
+            "source": "ILO Working Paper 140 (2025), Table A1", "url": "https://example.org/ilo",
+            "pdf": "https://example.org/ilo.pdf", "table": "Table A1", "fetchedAt": "2026-10-21",
+            "occupations": {"2511": {"title": "Systems Analysts", "mean": 0.51, "sd": 0.12,
+                                     "category": "Gradient 2"}},
+        },
     }
 
 
@@ -68,6 +75,34 @@ class BuildTests(unittest.TestCase):
             self.stderr = io.StringIO()
             with contextlib.redirect_stderr(self.stderr):
                 return build(paths_for(directory))
+
+    def test_ilo_merged(self):
+        role = self.build_with()["roles"][0]
+        self.assertEqual(role["ilo"]["isco"], "2511")
+        self.assertEqual(role["ilo"]["iscoTitle"], "Systems Analysts")
+        self.assertEqual((role["ilo"]["mean"], role["ilo"]["sd"]), (0.51, 0.12))
+        self.assertEqual(role["ilo"]["category"], "Gradient 2")
+        self.assertTrue(role["ilo"]["source"])
+        self.assertEqual(role["ilo"]["fetchedAt"], "2026-10-21")
+        self.assertEqual(role["ilo"]["url"], "https://example.org/ilo")
+
+    def test_ilo_absent_when_unmapped(self):
+        def change(inputs):
+            inputs["team/isco_map.json"] = {"_note": "draft"}
+
+        self.assertNotIn("ilo", self.build_with(change)["roles"][0])
+
+    def test_ilo_absent_when_file_missing(self):
+        role = self.build_with(remove=["team/isco_map.json", "ilo/ilo_2025_scores.json"])["roles"][0]
+        self.assertNotIn("ilo", role)
+        self.assertIn("ILO", self.stderr.getvalue())
+
+    def test_ilo_unknown_code_fails(self):
+        def change(inputs):
+            inputs["team/isco_map.json"][CODE]["isco"] = "0000"
+
+        with self.assertRaisesRegex(ValueError, "0000"):
+            self.build_with(change)
 
     def test_importance_rules(self):
         self.assertEqual(compute_importance("specific", "ai_assisted"), (0.8, 1.0))

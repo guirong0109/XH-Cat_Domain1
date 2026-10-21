@@ -1,0 +1,63 @@
+{
+  "_note": "Team mapping from MASCO 2020 to ISCO-08 unit groups, drafted from role descriptions and ISCO titles; not an official correspondence table. To be reviewed by the team.",
+  "2524-02": {
+    "isco": "2120",
+    "note": "Analyses and models data to support decisions; closest ISCO-08 unit is statisticians."
+  },
+  "3512-05": {
+    "isco": "3512",
+    "note": "Supports database upkeep and retrieval at technician level; closest to ICT user support technicians (weak fit)."
+  },
+  "2543-07": {
+    "isco": "2421",
+    "note": "Studies operations, processes and supply chains for improvement; fits management and organization analysts."
+  },
+  "3513-01": {
+    "isco": "3513",
+    "note": "Installs and troubleshoots network infrastructure; direct fit with computer network and systems technicians."
+  },
+  "2423-09": {
+    "isco": "2351",
+    "note": "Designs online learning programmes and modules; closest to education methods (instructional design) specialists."
+  },
+  "2531-04": {
+    "isco": "2529",
+    "note": "Protects systems and networks from threats; ISCO-08 puts IT security specialists in database and network professionals NEC."
+  },
+  "3131-07": {
+    "isco": "3113",
+    "note": "Assembles, tests and services solar PV equipment; closest to electrical engineering technicians (weak fit)."
+  },
+  "2513-01": {
+    "isco": "2513",
+    "note": "Designs and builds websites and web applications; direct fit with web and multimedia developers."
+  },
+  "2543-03": {
+    "isco": "2166",
+    "note": "Designs user interfaces and digital experiences; closest to graphic and multimedia designers."
+  },
+  "2541-09": {
+    "isco": "2641",
+    "note": "Researches and writes content for digital platforms; closest to authors and related writers."
+  },
+  "3313-04": {
+    "isco": "3119",
+    "note": "Inspects and assesses building energy use as a technician; closest to physical and engineering science technicians NEC (not ISCO 3313, which is accounting)."
+  },
+  "2141-13": {
+    "isco": "2149",
+    "note": "Designs renewable energy systems; closest to engineering professionals NEC."
+  },
+  "2269-01": {
+    "isco": "2120",
+    "note": "Collects and analyses health data and reports; closest to statisticians (alternative: 2421)."
+  },
+  "3514-01": {
+    "isco": "3514",
+    "note": "Maintains and supports websites and web servers; direct fit with web technicians."
+  },
+  "2511-08": {
+    "isco": "2511",
+    "note": "Coordinates digital change and business requirements; closest to systems analysts (alternative: 2421)."
+  }
+}
