@@ -13,6 +13,11 @@ Last updated: 2026-10-21. Written for a new session that has no earlier context.
 - **P5:** after P3, the Moderate/Fast flip swaps Ravi's #2/#3 and several lower pairs, so no formula change was made. The README demo tip was rewritten (Ravi + Fast AI, Ravi + SDG 16).
 - **Branch:** PR #1 was merged into `main` and the remote work branch was deleted. The work branch was re-created from `main` locally.
 - **Windows scrape tip:** Python failed eMASCO's certificate check (missing Sectigo root). Run the scraper with `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"`.
+- **Stage 2 (2026-10-21):**
+  - **Built:** ILO second-opinion box on each role (ILO WP140, May 2025, Table A1, CC BY 4.0; data in `data/ilo/`, imported by `pipeline/import_ilo.py`; not used in the score). Re-plan notice on Radar after a Refresh with new OpenDOSM data (up to 3 largest rank moves; it appears only when the yearly data changes).
+  - **Preview only (orange banner):** CV upload, Bahasa Malaysia / 中文 (draft translations), other users with an example HR grid. Home has a "Coming in Stage 2" section.
+  - **Awaiting review:** `data/team/isco_map.json` was drafted by Claude, not an official table. Weak fits: 3131-07→3113, 3512-05→3512, 2269-01→2120, 2511-08→2511. The teammate should check it.
+  - **Not planned:** job-posting counts (no free, allowed Malaysian job-ad source).
 - The rest of this file (§1–§6) is from the first session; where it conflicts with this section, this section wins.
 
 ---

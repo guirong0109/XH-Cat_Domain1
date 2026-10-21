@@ -18,6 +18,8 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 
 Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer Network Technician overtakes Energy Audit Technician for #2 (a small margin, under 1 point). Then switch SDG 16 on: Cybersecurity Analyst moves up from #4 to #2. For **Mei Ling**, SDG 3 moves Healthcare Analyst from #6 to #4.
 
+Demo tip: open any role's "Why this score?" to compare our labels with the ILO view. The re-plan notice on Radar appears only after a Refresh brings new OpenDOSM data, and that data changes about once a year. So it will not show on every refresh.
+
 ## The six must-have features
 
 | Feature | How it is delivered |
@@ -43,6 +45,7 @@ Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer N
 | OpenDOSM `wages_occupation` (`api.data.gov.my/opendosm?id=wages_occupation`) | Employed workers by MASCO major group, yearly; 5-year growth | Live refresh, cached in `data/trends.json` | Latest year shown in the app; refresh date shown |
 | OpenDOSM `lfs_month_youth` | Youth unemployment rate (context card) | Same refresh | Latest month shown in the app |
 | eMASCO (MOHR), MASCO 2020 | Role title, code, description, tasks, skills, qualification | One-time snapshot by `pipeline/scrape_emasco.py` | Snapshot dated 2026-10-21 |
+| ILO Working Paper 140 (May 2025), "Generative AI and Jobs: A Refined Global Index of Occupational Exposure", Table A1 (c) ILO 2025, CC BY 4.0 | Second opinion: exposure category, mean and SD for 427 ISCO-08 occupations, shown beside our labels | One-time import by `pipeline/import_ilo.py` into `data/ilo/`; MASCO to ISCO map in `data/team/isco_map.json` | Published May 2025; imported 2026-10-21 |
 | Hays Asia Salary Guide 2025 | Home-page fact | Cited text | 2025 |
 | MOSTI, as cited in the Aiversecity brief | Home-page fact | Cited text | As cited in the brief |
 | UN SDG targets | SDG labels and target text | `data/sdg.json` | Static |
@@ -69,6 +72,8 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 - **Qwen/Qwen2.5-7B-Instruct** labels each existing eMASCO task as automatable, AI-assisted or human-led.
 - **sentence-transformers/all-MiniLM-L6-v2** compares existing skill statements to suggest which are similar.
 - The models **never create roles, courses or numbers**. Roles, tasks and skills come only from the eMASCO snapshot. A person checks the skill mappings.
+- **ILO exposure index (second opinion).** The ILO built this index with AI-assisted scoring, a worker survey and expert review. It is global, not Malaysia-specific, and dated 2025. We show it beside our labels only. It is **not used in the score**.
+- The MASCO to ISCO-08 mapping (`data/team/isco_map.json`) was drafted by Claude from eMASCO descriptions and ISCO titles. It is **not an official table** and is awaiting team review. Weak fits are flagged: 3131-07 to 3113, 3512-05 to 3512, 2269-01 to 2120, 2511-08 to 2511.
 - All AI-made labels and scores are **estimates**, not predictions or advice.
 - **Current labels are placeholder sample labels for this demo (not yet reviewed)** until the RunPod run or a human review is done (see "Current data state"). The app marks them with a "Sample" badge.
 
@@ -115,12 +120,17 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 
 ## Stage 2 plan
 
-- Option 2: job-posting counts as a live demand signal.
-- More AI-trend sources: ILO GenAI exposure index (ISCO-08 to MASCO), arXiv research momentum, ESCO and O*NET skills.
-- CV upload with LLM skill extraction limited to the skill list.
-- Other users: graduates and career switchers, working adults, counsellor view, HR team view with a skills heatmap.
-- Automatic re-planning when new trend data changes a user's results.
-- Bahasa Malaysia and Chinese UI; fairness checks.
+**Built**
+- ILO second opinion: each role's "Why this score?" shows the ILO view next to our labels. Not used in the score.
+- Re-plan notice on Radar after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
+
+**Preview only** (not working; shown with an orange banner)
+- CV upload (`#preview-cv`).
+- Bahasa Malaysia and Chinese UI (`#preview-lang`). The translations are drafts.
+- Other users, with an example HR skills grid (`#preview-users`).
+
+**Not planned**
+- Job-posting counts as a demand signal. We found no free, allowed Malaysian job-ad source.
 
 ## Team
 
