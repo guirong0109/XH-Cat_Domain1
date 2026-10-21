@@ -1,6 +1,7 @@
 import Chip from '../components/Chip.jsx';
 import ExposureBars from '../components/ExposureBars.jsx';
 import JobMarketChart from '../components/JobMarketChart.jsx';
+import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import ReplanNotice from '../components/ReplanNotice.jsx';
 import RadarChart from '../components/RadarChart.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
@@ -42,6 +43,7 @@ export default function Radar({
   ranked,
   focusRoleId,
   refresh,
+  researchRefresh,
   replan,
   onDismissReplan,
   onScenarioChange,
@@ -89,6 +91,19 @@ export default function Radar({
             }`}
           >
             {refresh.message}
+          </div>
+        )}
+      </div>
+      <div role="status" aria-live="polite" className={researchRefresh?.message ? '' : 'sr-only'}>
+        {researchRefresh?.message && (
+          <div
+            className={`rounded-xl border px-4 py-2.5 text-sm ${
+              researchRefresh.status === 'failed'
+                ? 'border-red-200 bg-red-50 text-red-900'
+                : 'border-teal-200 bg-teal-50 text-teal-900'
+            }`}
+          >
+            {researchRefresh.message}
           </div>
         )}
       </div>
@@ -170,7 +185,8 @@ export default function Radar({
         <JobMarketChart trends={data.trends} />
         <ExposureBars roles={exposureRoles} />
       </div>
-      <SkillsDemand roles={data.roles} trends={data.trends} pickedSkills={profile.skills} learnSkills={profile.learn} />
+      <ResearchMomentum research={data.research} />
+      <SkillsDemand roles={data.roles} trends={data.trends} research={data.research} pickedSkills={profile.skills} learnSkills={profile.learn} />
       <YouthCard trends={data.trends} />
     </main>
   );

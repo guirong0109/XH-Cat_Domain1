@@ -62,6 +62,7 @@ export default function App() {
   const [seenTips, setSeenTips] = useState([]);
   const [tipsOff, setTipsOff] = useState(false);
   const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
+  const [researchRefresh, setResearchRefresh] = useState({ status: null, message: '' });
   const [replan, setReplan] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -170,30 +171,50 @@ export default function App() {
     const startedWith = { profile, scenario };
     setReplan(null);
     setRefresh({ pending: true, status: null, message: '' });
-    try {
-      const response = await fetch('/api/refresh-trends', { method: 'POST' });
+    setResearchRefresh({ status: null, message: '' });
+    const post = async (url) => {
+      const response = await fetch(url, { method: 'POST' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const result = await response.json();
-      if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
-        const inputsUnchanged =
-          latestInputs.current.profile === startedWith.profile && latestInputs.current.scenario === startedWith.scenario;
-        if (inputsUnchanged && shouldReplan(result.status, profile.skills.length)) {
-          const oldGroups = data.trends?.groups;
-          const idsFor = (trendGroups) =>
-            rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
-          setReplan({
-            changes: rankChanges(idsFor(oldGroups), idsFor(result.trends.groups)),
-            oldGroups,
-            newGroups: result.trends.groups,
-            year: result.trends.source?.latestYear,
-          });
-        }
-        setData((current) => ({ ...current, trends: result.trends }));
+      return response.json();
+    };
+    // Two independent refreshes: one failing never blocks the other.
+    const [trendsOutcome, researchOutcome] = await Promise.allSettled([
+      post('/api/refresh-trends'),
+      post('/api/refresh-research'),
+    ]);
+
+    if (researchOutcome.status === 'fulfilled') {
+      const researchResult = researchOutcome.value;
+      if ((researchResult.status === 'updated' || researchResult.status === 'failed') && researchResult.research) {
+        setData((current) => ({ ...current, research: researchResult.research }));
       }
-      setRefresh({ pending: false, status: result.status, message: result.message });
-    } catch {
-      setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
+      setResearchRefresh({ status: researchResult.status, message: researchResult.message });
+    } else {
+      setResearchRefresh({ status: 'failed', message: 'Live refresh failed. Please try again later.' });
     }
+
+    if (trendsOutcome.status === 'rejected') {
+      setRefresh({ pending: false, status: 'failed', message: 'Live refresh failed. Please try again later.' });
+      return;
+    }
+    const result = trendsOutcome.value;
+    if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
+      const inputsUnchanged =
+        latestInputs.current.profile === startedWith.profile && latestInputs.current.scenario === startedWith.scenario;
+      if (inputsUnchanged && shouldReplan(result.status, profile.skills.length)) {
+        const oldGroups = data.trends?.groups;
+        const idsFor = (trendGroups) =>
+          rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
+        setReplan({
+          changes: rankChanges(idsFor(oldGroups), idsFor(result.trends.groups)),
+          oldGroups,
+          newGroups: result.trends.groups,
+          year: result.trends.source?.latestYear,
+        });
+      }
+      setData((current) => ({ ...current, trends: result.trends }));
+    }
+    setRefresh({ pending: false, status: result.status, message: result.message });
   };
 
   const openPathway = (roleId) => {
@@ -254,6 +275,7 @@ export default function App() {
         ranked={ranked}
         focusRoleId={focusRoleId}
         refresh={refresh}
+        researchRefresh={researchRefresh}
         replan={replan}
         onDismissReplan={() => setReplan(null)}
         onScenarioChange={changeScenario}

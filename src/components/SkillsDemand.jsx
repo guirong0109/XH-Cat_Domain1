@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { risingSkills } from '../lib/research.js';
 import SourceNote from './SourceNote.jsx';
 import { SHOWN_PER_BAND, displayOrder, skillTrends } from '../lib/skillTrends.js';
 import { formatDate, formatGrowth, groupLabel } from '../lib/roleView.js';
@@ -31,7 +32,7 @@ function countText(count) {
   return `${count} ${count === 1 ? 'skill' : 'skills'}`;
 }
 
-function Band({ band, skills }) {
+function Band({ band, skills, rising }) {
   const [showAll, setShowAll] = useState(false);
   const ordered = displayOrder(skills);
   const shown = showAll ? ordered : ordered.slice(0, SHOWN_PER_BAND);
@@ -61,6 +62,15 @@ function Band({ band, skills }) {
               {skill.label} · {skill.iloMean.toFixed(2)}
               {skill.have && <span className="sr-only"> (you have it)</span>}
               {skill.want && <span className="sr-only"> (you want to learn it)</span>}
+              {rising.has(skill.label) && (
+                <>
+                  {' '}
+                  <strong aria-hidden="true" className={skill.have ? 'text-indigo-200' : 'text-indigo-800'}>
+                    ↑ AI research
+                  </strong>
+                  <span className="sr-only"> (AI research rising)</span>
+                </>
+              )}
             </li>
           ))}
         </ul>
@@ -80,8 +90,9 @@ function Band({ band, skills }) {
 }
 
 // Radar card: every skill in the app, by how much AI is changing the jobs that use it.
-export default function SkillsDemand({ roles, trends, pickedSkills, learnSkills = [] }) {
+export default function SkillsDemand({ roles, trends, research, pickedSkills, learnSkills = [] }) {
   const { bands, jobGroups, anyShrinking } = skillTrends(roles, trends?.groups, pickedSkills, learnSkills);
+  const rising = risingSkills(research);
   const total = bands.changing.length + bands.mixed.length + bands.humanLed.length;
   const source = trends?.source;
   const iloDate = roles.find((role) => role.ilo?.fetchedAt)?.ilo.fetchedAt;
@@ -116,10 +127,15 @@ export default function SkillsDemand({ roles, trends, pickedSkills, learnSkills 
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
         {BANDS.map((band) => (
-          <Band key={band.key} band={band} skills={bands[band.key]} />
+          <Band key={band.key} band={band} skills={bands[band.key]} rising={rising} />
         ))}
       </div>
 
+      {rising.size > 0 && (
+        <p className="m-0 text-xs text-slate-600">
+          ↑ = AI-related research on this skill grew 25% or more last year (OpenAlex).
+        </p>
+      )}
       <p className="m-0 text-[13px] text-slate-700">
         How to read it: the number is the average ILO GenAI exposure (0 = none, 1 = full) of the jobs that use the
         skill. A skill is “changing” when most of those jobs are in an ILO exposed gradient.
