@@ -1,6 +1,6 @@
 import SdgTag from './SdgTag.jsx';
 import { skillStatus } from '../lib/scoring.js';
-import { RANGE_NOTE, groupLabel, scoreBreakdown } from '../lib/roleView.js';
+import { ILO_NO_MATCH, RANGE_NOTE, exposureShares, groupLabel, iloView, labelOrigin, scoreBreakdown } from '../lib/roleView.js';
 import { useTween } from '../lib/useTween.js';
 
 const SKILL_LOOK = {
@@ -33,6 +33,8 @@ export default function RoleCard({
   const shownMatch = useTween({ match: score.match }).match;
   const interestMatch = profile.interests.includes(role.interest);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
+  const ilo = iloView(role);
+  const shares = exposureShares(role);
   const panelId = `why-${role.id}`;
   const first = rank === 1;
 
@@ -72,6 +74,9 @@ export default function RoleCard({
             )}
             {role.labelSource === 'manual' && (
               <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Sample labels</span>
+            )}
+            {ilo && (
+              <span className="rounded-md bg-indigo-100 px-2 py-0.5 text-xs font-bold text-indigo-800">{ilo.badge}</span>
             )}
           </div>
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
@@ -148,6 +153,34 @@ export default function RoleCard({
           <p className="m-0 mt-2 text-[13px] text-slate-600">
             {RANGE_NOTE} This card: {range.low}–{range.high}.
           </p>
+          <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+            <section className="flex flex-col gap-1.5 rounded-lg border border-slate-200 p-3 text-[13px] text-slate-700">
+              <h3 className="m-0 flex flex-wrap items-center gap-2 text-sm font-bold text-[#0F172A]">
+                Our task labels (used in the score)
+                {role.labelSource === 'manual' && (
+                  <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Sample</span>
+                )}
+              </h3>
+              <p className="m-0 tabular-nums">
+                Automatable {shares.automatable}% · AI-assisted {shares.assisted}% · Human-led {shares.human}%
+              </p>
+              <p className="m-0 text-xs text-slate-600">Estimates from eMASCO tasks; {labelOrigin(role.labelSource)}.</p>
+            </section>
+            <section className="flex flex-col gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50/40 p-3 text-[13px] text-slate-700">
+              <h3 className="m-0 text-sm font-bold text-[#0F172A]">ILO second opinion (not in the score)</h3>
+              {ilo ? (
+                <>
+                  <p className="m-0 tabular-nums">{ilo.scoreText}</p>
+                  <p className="m-0">{ilo.iscoText}</p>
+                  <p className="m-0">{ilo.mappingNote}</p>
+                  <p className="m-0 text-xs text-slate-600">{ilo.sourceText}</p>
+                </>
+              ) : (
+                <p className="m-0">{ILO_NO_MATCH}</p>
+              )}
+            </section>
+          </div>
+          <p className="m-0 mt-2 text-[13px] text-slate-600">Two views can disagree. Both are estimates. You decide.</p>
         </div>
       )}
     </article>

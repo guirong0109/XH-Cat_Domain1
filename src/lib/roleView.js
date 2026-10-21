@@ -195,3 +195,19 @@ export function cardLayout(rankedIds, expandedId, heights = {}) {
   });
   return { positions, total: Math.max(0, top - CARD_GAP) };
 }
+
+export const ILO_NO_MATCH = 'No ILO match for this role.';
+
+// ILO second opinion. Shown next to the score, never used in it.
+export function iloView(role) {
+  const ilo = role.ilo;
+  if (!ilo) return null;
+  const fetched = ilo.fetchedAt ? ` Fetched ${formatDate(ilo.fetchedAt)}.` : '';
+  return {
+    badge: `ILO 2025: ${ilo.category}`,
+    scoreText: `${ilo.category} · mean ${ilo.mean.toFixed(2)}, SD ${ilo.sd.toFixed(2)}`,
+    iscoText: `ISCO-08 ${ilo.isco} · ${ilo.iscoTitle}`,
+    mappingNote: "This match from MASCO to ISCO is our team's mapping, not an official table.",
+    sourceText: `Source: ${ilo.source}. The index is global, not Malaysia-specific.${fetched}`,
+  };
+}

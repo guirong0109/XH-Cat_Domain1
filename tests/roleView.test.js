@@ -6,10 +6,13 @@ import {
   biggestGaps,
   cardLayout,
   exposureShares,
+  formatDate,
   formatGrowth,
   formatMonth,
   groupLabel,
   growthBarWidth,
+  ILO_NO_MATCH,
+  iloView,
   jobMarketEmptyText,
   jobMarketRows,
   RANGE_NOTE,
@@ -213,5 +216,40 @@ describe('cardLayout', () => {
 
   it('handles an empty list', () => {
     expect(cardLayout([], null)).toEqual({ positions: {}, total: 0 });
+  });
+});
+
+describe('iloView', () => {
+  const ilo = {
+    isco: '2511',
+    iscoTitle: 'Systems Analysts',
+    mean: 0.49,
+    sd: 0.05,
+    category: 'Gradient 2',
+    source: 'ILO Working Paper 140 (2025), Table A1',
+    fetchedAt: '2026-10-21',
+  };
+
+  it('returns null without ilo', () => {
+    expect(iloView({ id: 'x' })).toBeNull();
+    expect(ILO_NO_MATCH).toBe('No ILO match for this role.');
+  });
+
+  it('builds badge and score text', () => {
+    const view = iloView({ ilo });
+    expect(view.badge).toBe('ILO 2025: Gradient 2');
+    expect(view.scoreText).toContain('Gradient 2');
+    expect(view.scoreText).toContain('0.49');
+    expect(view.scoreText).toContain('0.05');
+  });
+
+  it('builds isco, mapping and source text', () => {
+    const view = iloView({ ilo });
+    expect(view.iscoText).toContain('2511');
+    expect(view.iscoText).toContain('Systems Analysts');
+    expect(view.mappingNote).toBe("This match from MASCO to ISCO is our team's mapping, not an official table.");
+    expect(view.sourceText).toContain('global');
+    expect(view.sourceText).toContain('not Malaysia-specific');
+    expect(view.sourceText).toContain(formatDate('2026-10-21'));
   });
 });
