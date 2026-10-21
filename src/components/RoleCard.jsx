@@ -1,5 +1,5 @@
 import SdgTag from './SdgTag.jsx';
-import { skillStatus } from '../lib/scoring.js';
+import { skillLevel, skillStatus } from '../lib/scoring.js';
 import { ILO_NO_MATCH, RANGE_NOTE, exposureShares, groupLabel, iloView, labelOrigin, scoreBreakdown } from '../lib/roleView.js';
 import { useTween } from '../lib/useTween.js';
 import { learnCount } from '../lib/potential.js';
@@ -89,13 +89,18 @@ export default function RoleCard({
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
             {role.skills.map((skill) => {
               const status = skillStatus(skill.label, profile.skills, similar);
+              const hasLevel = status === 'have' && Object.hasOwn(profile.levels || {}, skill.label);
+              const level = hasLevel ? skillLevel(skill.label, profile) : null;
+              const statusText = level
+                ? `you have it, ${level[0].toUpperCase()}${level.slice(1)} level`
+                : SKILL_STATUS_TEXT[status];
               return (
                 <li key={skill.label} className={`rounded-full px-2.5 py-0.5 text-[13px] ${SKILL_LOOK[status]}`}>
                   {(profile.learn || []).includes(skill.label) && <span aria-hidden="true">★ </span>}
                   {skill.label}
                   <span className="sr-only">
                     {' '}
-                    ({SKILL_STATUS_TEXT[status]}
+                    ({statusText}
                     {(profile.learn || []).includes(skill.label) ? ', you want to learn it' : ''})
                   </span>
                 </li>

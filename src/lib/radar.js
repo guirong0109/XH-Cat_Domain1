@@ -1,7 +1,7 @@
 // Pure helpers for the skills radar SVG. Axis 0 points straight up and the
 // axes go clockwise. A value of 1 sits on the outer ring, 0 at the center.
 
-import { skillStatus } from './scoring.js';
+import { skillCredit, skillStatus } from './scoring.js';
 
 const DEFAULT_CENTER = 150;
 const DEFAULT_RADIUS = 100;
@@ -51,7 +51,11 @@ export const YOU_LEVEL = { have: 1, similar: 0.5, gap: 0.06 };
 export function roleRadarValues(role, profile, similar, scenario) {
   return {
     labels: role.skills.map((skill) => skill.label),
-    you: role.skills.map((skill) => YOU_LEVEL[skillStatus(skill.label, profile.skills, similar)]),
+    you: role.skills.map((skill) =>
+      skillStatus(skill.label, profile.skills, similar) === 'gap'
+        ? YOU_LEVEL.gap
+        : skillCredit(skill.label, profile, similar),
+    ),
     need: role.skills.map((skill) => skill[scenario]),
   };
 }

@@ -65,6 +65,12 @@ describe('roleRadarValues', () => {
     expect(values.need).toEqual([0.8, 0.7, 0.5]);
   });
 
+  it('you values follow the skill level', () => {
+    const levelRole = { skills: [{ label: 'x', moderate: 0.5, fast: 0.5 }, { label: 'y', moderate: 0.5, fast: 0.5 }] };
+    const values = roleRadarValues(levelRole, { skills: ['x', 'y'], levels: { x: 'basic' } }, {}, 'moderate');
+    expect(values.you).toEqual([0.5, 1]);
+  });
+
   it('uses fast importance in the fast scenario', () => {
     expect(roleRadarValues(role, { skills: [] }, similar, 'fast').need).toEqual([0.6, 0.9, 1]);
   });

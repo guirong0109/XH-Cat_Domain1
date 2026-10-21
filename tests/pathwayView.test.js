@@ -31,6 +31,12 @@ describe('pathwayView', () => {
     );
   });
 
+  it('explains a levelup step', () => {
+    expect(whyText({ status: 'levelup', rising: false })).toBe(
+      'You have this skill at Basic level, so this step is shorter. Core to the role today.',
+    );
+  });
+
   it('sums hours and progress, ignoring stale ticks', () => {
     const steps = [
       { label: 'A', hours: 10 },

@@ -16,7 +16,11 @@ export function linksForPortal(portal) {
 }
 
 export function whyText(step) {
-  const lead = step.status === 'similar' ? 'You have a similar skill, so this step is shorter. ' : 'Gap skill. ';
+  const leads = {
+    similar: 'You have a similar skill, so this step is shorter. ',
+    levelup: 'You have this skill at Basic level, so this step is shorter. ',
+  };
+  const lead = leads[step.status] || 'Gap skill. ';
   return lead + (step.rising ? 'Its importance rises as AI spreads.' : 'Core to the role today.');
 }
 

@@ -1,7 +1,7 @@
 // Pure display helpers for the Radar and Roles screens: labels, number
 // formats, the job-market rows, the score breakdown text and card layout.
 
-import { SCENARIO_FACTOR, WEIGHTS, skillStatus } from './scoring.js';
+import { LEVEL_CREDIT, SCENARIO_FACTOR, WEIGHTS, skillStatus } from './scoring.js';
 
 export const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
 
@@ -149,7 +149,7 @@ export function scoreBreakdown(role, score, scenario, trends) {
       value: String(Math.round(score.fit)),
       width: score.fit,
       color: '#0F766E',
-      detail: `${formatNumber(score.earned)} of ${role.skills.length} skills (similar skills count half).`,
+      detail: `${formatNumber(score.earned)} of ${role.skills.length} skills (your level counts: Strong ${String(LEVEL_CREDIT.strong)}, Good ${String(LEVEL_CREDIT.good)}, Basic ${String(LEVEL_CREDIT.basic)}; similar skills count half).`,
       source: `eMASCO ${role.code} skill list (MOHR, MASCO 2020)`,
     },
     {
