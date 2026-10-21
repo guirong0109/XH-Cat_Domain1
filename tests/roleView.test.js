@@ -248,6 +248,9 @@ describe('iloView', () => {
     expect(view.iscoText).toContain('2511');
     expect(view.iscoText).toContain('Systems Analysts');
     expect(view.mappingNote).toBe("This match from MASCO to ISCO is our team's mapping, not an official table.");
+    expect(view.sourceText).toContain('CC BY 4.0');
+    expect(view.scaleText).toContain('Gradient 1 (lowest) to Gradient 4 (highest GenAI exposure)');
+    expect(view.scaleText).toContain('Mean = average task exposure score from 0 to 1');
     expect(view.sourceText).toContain('global');
     expect(view.sourceText).toContain('not Malaysia-specific');
     expect(view.sourceText).toContain(formatDate('2026-10-21'));

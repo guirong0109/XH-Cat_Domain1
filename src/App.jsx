@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import StepNav from './components/StepNav.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
@@ -8,7 +8,6 @@ import Roles from './screens/Roles.jsx';
 import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
-import PreviewBanner from './components/PreviewBanner.jsx';
 import PreviewCv from './screens/PreviewCv.jsx';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
@@ -177,14 +176,22 @@ export default function App() {
     setScenario(next);
   };
 
+  // Latest inputs, so a slow refresh can tell if the student changed them meanwhile.
+  const latestInputs = useRef({ profile, scenario });
+  latestInputs.current = { profile, scenario };
+
   const refreshTrends = async () => {
+    const startedWith = { profile, scenario };
+    setReplan(null);
     setRefresh({ pending: true, status: null, message: '' });
     try {
       const response = await fetch('/api/refresh-trends', { method: 'POST' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
       if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
-        if (shouldReplan(result.status, profile.skills.length)) {
+        const inputsUnchanged =
+          latestInputs.current.profile === startedWith.profile && latestInputs.current.scenario === startedWith.scenario;
+        if (inputsUnchanged && shouldReplan(result.status, profile.skills.length)) {
           const oldGroups = data.trends?.groups;
           const idsFor = (trendGroups) =>
             rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
@@ -238,13 +245,6 @@ export default function App() {
     content = <PreviewLang />;
   } else if (shownScreen === 'preview-users') {
     content = <PreviewUsers data={data} />;
-  } else if (isPreview(shownScreen)) {
-    // Placeholder until the preview screens land. Never looks like a working feature.
-    content = (
-      <main className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6">
-        <PreviewBanner />
-      </main>
-    );
   } else if (shownScreen === 'profile') {
     content = (
       <Profile

@@ -172,6 +172,7 @@ export default function RoleCard({
                 <>
                   <p className="m-0 tabular-nums">{ilo.scoreText}</p>
                   <p className="m-0">{ilo.iscoText}</p>
+                  <p className="m-0 text-xs text-slate-600">{ilo.scaleText}</p>
                   <p className="m-0">{ilo.mappingNote}</p>
                   <p className="m-0 text-xs text-slate-600">{ilo.sourceText}</p>
                 </>

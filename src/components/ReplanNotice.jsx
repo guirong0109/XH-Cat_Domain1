@@ -6,7 +6,7 @@ function demandText(group, oldGroups, newGroups) {
   const before = oldGroups?.[group]?.demand;
   const after = newGroups?.[group]?.demand;
   if (typeof before !== 'number' || typeof after !== 'number') return null;
-  return `Demand for ${groupLabel(group)}: ${before} → ${after}`;
+  return `Demand score for ${groupLabel(group)}: ${before} → ${after} (out of 100)`;
 }
 
 export default function ReplanNotice({ changes, roles, oldGroups, newGroups, trendsSource, onSeeRoles, onDismiss }) {
@@ -36,7 +36,7 @@ export default function ReplanNotice({ changes, roles, oldGroups, newGroups, tre
           );
         })}
       </ul>
-      <p className="m-0 text-sm">Your ticked steps are kept.</p>
+      <p className="m-0 text-sm">Steps unchanged, your ticked steps are kept.</p>
       <div className="flex flex-wrap gap-2">
         <button
           type="button"

@@ -76,8 +76,8 @@ export default function PreviewLang() {
         <p className="m-0 text-[15px] text-slate-700">{copy.body}</p>
         {copy.primary && (
           <div className="flex flex-wrap gap-2.5" aria-hidden="true">
-            <span className="flex min-h-11 items-center rounded-[10px] bg-[#0F766E] px-4 text-sm font-bold text-white">{copy.primary}</span>
-            <span className="flex min-h-11 items-center rounded-[10px] border border-slate-300 bg-white px-4 text-sm">{copy.secondary}</span>
+            <span className="flex min-h-11 items-center rounded-[10px] border-2 border-dashed border-slate-400 bg-slate-100 px-4 text-sm font-bold text-slate-600">{copy.primary} (preview)</span>
+            <span className="flex min-h-11 items-center rounded-[10px] border-2 border-dashed border-slate-300 bg-slate-50 px-4 text-sm text-slate-600">{copy.secondary} (preview)</span>
           </div>
         )}
         {copy.note && (

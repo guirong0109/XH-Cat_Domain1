@@ -37,6 +37,7 @@ function TeamGrid({ data }) {
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border-separate border-spacing-1.5 text-[13px]">
+          <caption className="sr-only">Example team skills compared with {role.title} role skills</caption>
           <thead>
             <tr>
               <th scope="col" className="p-1.5 text-left font-bold">Person</th>
@@ -105,7 +106,9 @@ export default function PreviewUsers({ data }) {
         <TeamGrid data={data} />
       ) : (
         <p className="m-0 rounded-2xl border border-slate-200 bg-white p-5 text-sm text-slate-700">
-          Preview only. This view is planned for Stage 2.
+          {type === 'student'
+            ? 'This is the main app. Start from Home.'
+            : 'Preview only. This view is planned for Stage 2.'}
         </p>
       )}
     </main>

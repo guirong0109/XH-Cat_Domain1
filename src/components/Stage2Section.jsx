@@ -6,7 +6,11 @@ const CARDS = [
   },
   {
     screen: 'preview-lang',
-    title: 'Bahasa Malaysia · 中文',
+    title: (
+      <>
+        Bahasa Malaysia · <span lang="zh">中文</span>
+      </>
+    ),
     text: 'Use the app in your language. Role text from official eMASCO Malay pages.',
   },
   {

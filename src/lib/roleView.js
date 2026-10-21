@@ -196,6 +196,9 @@ export function cardLayout(rankedIds, expandedId, heights = {}) {
   return { positions, total: Math.max(0, top - CARD_GAP) };
 }
 
+export const ILO_SCALE_TEXT =
+  'ILO scale: Not Exposed, Minimal Exposure, then Gradient 1 (lowest) to Gradient 4 (highest GenAI exposure). Mean = average task exposure score from 0 to 1.';
+
 export const ILO_NO_MATCH = 'No ILO match for this role.';
 
 // ILO second opinion. Shown next to the score, never used in it.
@@ -208,6 +211,7 @@ export function iloView(role) {
     scoreText: `${ilo.category} · mean ${ilo.mean.toFixed(2)}, SD ${ilo.sd.toFixed(2)}`,
     iscoText: `ISCO-08 ${ilo.isco} · ${ilo.iscoTitle}`,
     mappingNote: "This match from MASCO to ISCO is our team's mapping, not an official table.",
-    sourceText: `Source: ${ilo.source}. The index is global, not Malaysia-specific.${fetched}`,
+    scaleText: ILO_SCALE_TEXT,
+    sourceText: `Source: ${ilo.source}, CC BY 4.0. The index is global, not Malaysia-specific.${fetched}`,
   };
 }

@@ -54,7 +54,7 @@ export default function PreviewCv({ data }) {
             <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Example</span>
           </div>
           <h2 className="m-0 text-xl font-extrabold">Check the skills we found</h2>
-          <div className="text-[13px] text-slate-600">Example for a sample diploma CV. Tap to keep or remove.</div>
+          <div className="text-[13px] text-slate-600">Example for a sample diploma CV. In the real version you would tap to keep or remove each skill.</div>
           <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
             {rows.map((row) => (
               <li key={row.label} className="flex items-center justify-between gap-2.5 rounded-[10px] border border-slate-200 px-3 py-2.5">
@@ -63,11 +63,11 @@ export default function PreviewCv({ data }) {
                   <div className="text-xs text-slate-600">Found: “{row.line}”</div>
                 </div>
                 <span
-                  className={`shrink-0 rounded-full px-3 py-1 text-[13px] ${
-                    row.keep ? 'bg-[#0F766E] text-white' : 'border border-slate-300 text-slate-700'
+                  className={`shrink-0 rounded-md px-2 py-1 text-xs ${
+                    row.keep ? 'bg-teal-100 text-teal-900' : 'bg-slate-100 text-slate-700'
                   }`}
                 >
-                  {row.keep ? 'Keep' : 'Not sure'}
+                  {row.keep ? 'Keep (example)' : 'Not sure (example)'}
                 </span>
               </li>
             ))}

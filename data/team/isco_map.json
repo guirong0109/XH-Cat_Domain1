@@ -50,7 +50,7 @@
   },
   "2269-01": {
     "isco": "2120",
-    "note": "Collects and analyses health data and reports; closest to statisticians (alternative: 2421)."
+    "note": "Collects and analyses health data and reports; closest to statisticians (alternative: 2421; weak fit)."
   },
   "3514-01": {
     "isco": "3514",
@@ -58,6 +58,6 @@
   },
   "2511-08": {
     "isco": "2511",
-    "note": "Coordinates digital change and business requirements; closest to systems analysts (alternative: 2421)."
+    "note": "Coordinates digital change and business requirements; closest to systems analysts (alternative: 2421; weak fit)."
   }
 }
