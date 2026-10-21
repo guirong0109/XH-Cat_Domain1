@@ -28,7 +28,7 @@ Demo tip: open any role's "Why this score?" to compare our labels with the ILO v
 | AI-trend signal layer | Live OpenDOSM employment trend per MASCO major group (Refresh button, dated) plus AI-exposure labels on eMASCO tasks. |
 | Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel. |
 | Personalised reskilling pathway | Gap skills ordered by future importance, hour estimates, official portal links, progress tick-boxes. |
-| SDG mapping | Every role carries SDG tags with the target cited. The pathway shows SDG 4.4 for learning plus the role's goals. Chosen SDGs add up to +10 points, shown in the breakdown. |
+| SDG mapping | Every role and every skill carries SDG tags with the target cited. Each pathway step shows the SDGs its skill builds, and the SDG panel counts how many steps build each goal. Skill tags are a team mapping (draft, in `data/team/skill_labels.json`) and do not change the score. Chosen SDGs that match the role add up to +10 points, shown in the breakdown. |
 | Handling uncertainty | Two scenarios (Moderate AI, Fast AI), scores shown as a range, and every screen says results are estimates. |
 
 ## Current data state (honest status)

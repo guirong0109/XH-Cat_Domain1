@@ -5,6 +5,8 @@ import {
   linksForPortal,
   pathwaySdgs,
   progress,
+  stepCountText,
+  stepSdgs,
   totalHours,
   whyText,
 } from '../src/lib/pathwayView.js';
@@ -45,6 +47,36 @@ describe('pathwayView', () => {
     expect(list.map((s) => s.chosen)).toEqual([true, false, true]);
     const other = pathwaySdgs({ sdgs: [8] }, { sdgs: [4] }, sdgInfo);
     expect(other.map((s) => [s.goal, s.chosen])).toEqual([[4, false], [8, false]]);
+  });
+
+  it('gives each step its skill SDGs, in order, ignoring unknown goals', () => {
+    const labels = [
+      { label: 'Solar PV basics', sdgs: [4, 7, 13] },
+      { label: 'Teamwork', sdgs: [4] },
+    ];
+    const info = { ...sdgInfo, 7: { label: 'SDG 7', short: 'SDG 7', color: '#FCC30B', target: 'T7' } };
+    expect(stepSdgs('Solar PV basics', labels, info).map((s) => s.goal)).toEqual([4, 7]);
+    expect(stepSdgs('Unknown', labels, info)).toEqual([]);
+  });
+
+  it('counts how many steps build each goal and adds skill-only goals after role goals', () => {
+    const steps = [{ label: 'A' }, { label: 'B' }, { label: 'C' }];
+    const labels = [
+      { label: 'A', sdgs: [4, 9] },
+      { label: 'B', sdgs: [4] },
+      { label: 'C', sdgs: [4, 8] },
+    ];
+    const list = pathwaySdgs({ sdgs: [9] }, { sdgs: [9] }, sdgInfo, steps, labels);
+    expect(list.map((s) => [s.goal, s.stepCount, s.roleGoal, s.chosen])).toEqual([
+      [4, 3, false, false],
+      [9, 1, true, true],
+      [8, 1, false, false],
+    ]);
+    expect(stepCountText(list[0], 3)).toBe('All 3 of your steps');
+    expect(stepCountText(list[1], 3)).toBe('1 of your 3 steps');
+    expect(stepCountText({ stepCount: 0 }, 3)).toBe('');
+    expect(stepCountText({ stepCount: 1 }, 1)).toBe('Your only step');
+    expect(stepCountText({ stepCount: 2 }, 2)).toBe('Both of your steps');
   });
 
   it('states where task labels came from', () => {

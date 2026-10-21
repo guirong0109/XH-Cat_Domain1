@@ -3,127 +3,228 @@
     {
       "label": "Python programming",
       "hours": 40,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "SQL and databases",
       "hours": 25,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Spreadsheets (Excel)",
       "hours": 12,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     },
     {
       "label": "Data visualisation",
       "hours": 12,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Statistics",
       "hours": 30,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Using AI tools",
       "hours": 15,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Web development",
       "hours": 40,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Networking basics",
       "hours": 25,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Network security",
       "hours": 35,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        9,
+        16
+      ]
     },
     {
       "label": "Electrical wiring",
       "hours": 40,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Solar PV basics",
       "hours": 30,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        7,
+        13
+      ]
     },
     {
       "label": "Graphic design",
       "hours": 20,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     },
     {
       "label": "Communication",
       "hours": 10,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4
+      ]
     },
     {
       "label": "Teamwork",
       "hours": 8,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4
+      ]
     },
     {
       "label": "Problem solving",
       "hours": 10,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4
+      ]
     },
     {
       "label": "Customer service",
       "hours": 8,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     },
     {
       "label": "UX research and prototyping",
       "hours": 30,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Content writing",
       "hours": 20,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     },
     {
       "label": "SEO and web analytics",
       "hours": 15,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Energy auditing",
       "hours": 35,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        7,
+        13
+      ]
     },
     {
       "label": "Renewable energy system design",
       "hours": 40,
-      "portal": "tvet"
+      "portal": "tvet",
+      "sdgs": [
+        4,
+        7,
+        13
+      ]
     },
     {
       "label": "Project coordination",
       "hours": 20,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     },
     {
       "label": "Healthcare data and records",
       "hours": 25,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        3
+      ]
     },
     {
       "label": "Version control (Git)",
       "hours": 10,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        9
+      ]
     },
     {
       "label": "Business process analysis",
       "hours": 25,
-      "portal": "elatih"
+      "portal": "elatih",
+      "sdgs": [
+        4,
+        8
+      ]
     }
   ],
   "similar": {

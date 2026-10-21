@@ -1,5 +1,15 @@
 import { buildPathway } from '../lib/scoring.js';
-import { disclosureText, linksForPortal, pathwaySdgs, progress, totalHours, whyText } from '../lib/pathwayView.js';
+import {
+  disclosureText,
+  linksForPortal,
+  pathwaySdgs,
+  progress,
+  stepCountText,
+  stepSdgs,
+  totalHours,
+  whyText,
+} from '../lib/pathwayView.js';
+import SdgTag from '../components/SdgTag.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 
 export default function Pathway({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
@@ -7,7 +17,7 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
   const role = entry.role;
   const steps = buildPathway(role, profile, ctx, scenario, data.skills.labels);
   const { done, total, percent } = progress(steps, doneSkills);
-  const sdgs = pathwaySdgs(role, profile, data.sdg);
+  const sdgs = pathwaySdgs(role, profile, data.sdg, steps, data.skills.labels);
 
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-wrap items-start gap-6 px-4 pt-6 pb-16 sm:px-6">
@@ -68,6 +78,14 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
                     </h2>
                     <span className="text-[13px] text-slate-600">about {step.hours} hours (estimate)</span>
                   </div>
+                  {stepSdgs(step.label, data.skills.labels, data.sdg).length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-xs text-slate-600">Builds skills for:</span>
+                      {stepSdgs(step.label, data.skills.labels, data.sdg).map((sdg) => (
+                        <SdgTag key={sdg.goal} info={sdg} />
+                      ))}
+                    </div>
+                  )}
                   <div className="text-sm text-slate-700">{whyText(step)}</div>
                   <div className="flex flex-wrap gap-2">
                     {linksForPortal(step.portal).map((link) => (
@@ -98,7 +116,8 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
         </ol>
         <SourceNote>
           Order: skill with the highest future importance first. Links go to official portals (HRD Corp e-Latih, HRD
-          Corp claimable courses, MyTVET). The app does not invent course names.
+          Corp claimable courses, MyTVET). The app does not invent course names. Skill-to-SDG tags: our team's
+          mapping (draft), using UN SDG targets. They do not change the score.
         </SourceNote>
       </section>
 
@@ -112,6 +131,14 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
                 <strong>{sdg.label}</strong>
                 <br />
                 {sdg.target}
+                {(sdg.stepCount > 0 || sdg.roleGoal) && (
+                  <>
+                    <br />
+                    <span className="font-semibold text-[#0F766E]">
+                      {[stepCountText(sdg, steps.length), sdg.roleGoal ? 'role goal' : ''].filter(Boolean).join(' · ')}
+                    </span>
+                  </>
+                )}
                 {sdg.chosen && (
                   <>
                     <br />

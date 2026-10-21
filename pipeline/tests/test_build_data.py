@@ -29,8 +29,8 @@ def default_inputs():
             }],
         },
         "team/skill_labels.json": [
-            {"label": "SQL and databases", "hours": 25, "portal": "elatih"},
-            {"label": "Communication", "hours": 10, "portal": "elatih"},
+            {"label": "SQL and databases", "hours": 25, "portal": "elatih", "sdgs": [8]},
+            {"label": "Communication", "hours": 10, "portal": "elatih", "sdgs": [8]},
         ],
         "team/role_skills.json": {CODE: {
             "id": "data-analyst", "interest": "Working with data", "sdgs": [8],
@@ -109,6 +109,22 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(compute_importance("basic", "automatable"), (0.6, 0.4))
         self.assertEqual(compute_importance("specific", "human_led"), (0.8, 0.8))
         self.assertEqual(compute_importance("basic", None), (0.6, 0.6))
+
+    def test_skill_sdgs_passed_through(self):
+        labels = self.build_with()["skills"]["labels"]
+        self.assertEqual(labels[0]["sdgs"], [8])
+
+    def test_skill_without_sdgs_fails(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["sdgs"] = []
+        with self.assertRaisesRegex(ValueError, "Communication"):
+            self.build_with(change)
+
+    def test_skill_unknown_sdg_fails(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][0]["sdgs"] = [99]
+        with self.assertRaisesRegex(ValueError, "99"):
+            self.build_with(change)
 
     def test_build_merges_role(self):
         role = self.build_with()["roles"][0]

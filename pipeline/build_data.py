@@ -158,6 +158,17 @@ def ilo_for_role(code, isco_map, ilo_file):
             "source": ilo_file["source"], "url": ilo_file["url"], "fetchedAt": ilo_file["fetchedAt"]}
 
 
+def check_skill_sdgs(skill_labels, known_goals):
+    """Every skill label needs at least one SDG, and each SDG must be in team/sdg.json."""
+    for entry in skill_labels:
+        goals = entry.get("sdgs") or []
+        if not goals:
+            raise ValueError(f"Skill {entry['label']!r} has no SDG tags")
+        for goal in goals:
+            if str(goal) not in known_goals:
+                raise ValueError(f"Skill {entry['label']!r} uses unknown SDG {goal}")
+
+
 def build(paths):
     """Return {"roles", "skills", "sdg", "samples"} ready to be written as JSON."""
     snapshot = read_json(paths["roles_raw"])
@@ -169,6 +180,7 @@ def build(paths):
     runpod_exposure = without_notes(read_json(paths["exposure"], required=False))
     manual_labels = without_notes(read_json(paths["manual_labels"], required=False))
     all_links = without_notes(read_json(paths["skill_task_links"], required=False))
+    check_skill_sdgs(skill_labels, sdg)
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)
