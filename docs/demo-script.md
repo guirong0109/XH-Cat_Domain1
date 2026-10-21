@@ -30,7 +30,7 @@ Pending (say so if asked):
 - Open **Why this score?**: skill fit per skill, outlook, SDG bonus, each with source and date.
 - Switch **Moderate → Fast**: Data Analyst goes 76 → 73; Business Intelligence Analyst 81 → 80. "Fast AI adoption counts automation more."
 - Scroll to **Trends behind your matches**: radar, job market chart, AI exposure. Press **Refresh data** to show the live OpenDOSM fetch.
-- Show **Move**: sample Mei Ling (Diploma Business, wants "Working with data"). Goal order (Moderate): Healthcare Analyst 63, Database Assistant 59, Data Analyst 56. Her top score, Business Intelligence Analyst 75, is rank 4 because it is not in the sector she picked.
+- Show **Move**: sample Mei Ling (Diploma Business, wants "Working with data"). Goal order (Moderate): Healthcare Analyst 63, Database Assistant 59, Data Analyst 56. Her top score, Business Intelligence Analyst 75, is rank 4 because it is not in the sectors she picked.
 
 ## 2:15 to 2:45 · What to study
 - Open What to study for one role. Course links go only to HRD Corp e-Latih, HRD Corp claimable courses and MyTVET.

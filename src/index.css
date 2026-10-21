@@ -63,7 +63,7 @@ a:focus-visible {
   }
 }
 
-/* Roles list: cards slide to their new rank. Reduced motion turns it off above. */
+/* Role cards: the box shadow transitions on hover. Reduced motion turns it off above. */
 .fr-role-card { transition: box-shadow 0.2s; }
 
 /* Print: only the plan itself (no nav, tips or buttons). */

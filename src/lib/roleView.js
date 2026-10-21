@@ -21,9 +21,6 @@ export function groupLabel(group) {
   return GROUP_LABELS[group] || group;
 }
 
-// Card sizes for the animated Roles list (≥ 640 px). A card is never shorter
-// than these; if its content needs more room the measured height is used.
-
 // The diverging job-market bars reach the edge at ±35 %.
 export const GROWTH_SCALE = 35;
 

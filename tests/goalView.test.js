@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fieldOptions, findField, orderForGoal } from '../src/lib/goalView.js';
+import { fieldOptions, findField, orderForGoal, bestScoreNote } from '../src/lib/goalView.js';
 
 const fields = {
   majors: [
@@ -70,7 +70,6 @@ describe('goalView', () => {
   });
 });
 
-import { bestScoreNote } from '../src/lib/goalView.js';
 describe('bestScoreNote', () => {
   const sr = [
     { role: { id: 'r1', interest: 'C' }, score: { match: 90.4 } },

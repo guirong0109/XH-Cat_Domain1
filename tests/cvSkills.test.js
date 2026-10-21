@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import skills from '../data/skills.json'
-import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES } from '../src/lib/cvSkills.js'
+import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText } from '../src/lib/cvSkills.js'
 
 const labels = [
   { label: 'SQL and databases', keywords: ['sql', 'database'] },
@@ -141,7 +141,6 @@ describe('mergeCvSkills', () => {
   })
 })
 
-import { cvBannerText } from '../src/lib/cvSkills.js'
 describe('cvBannerText', () => {
   it('replaced', () => {
     expect(cvBannerText('replaced', 4)).toBe('We filled in the 4 skills we found. Please check each one.')
