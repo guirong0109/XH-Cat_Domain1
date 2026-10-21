@@ -3,6 +3,7 @@ import ExposureBars from '../components/ExposureBars.jsx';
 import JobMarketChart from '../components/JobMarketChart.jsx';
 import ReplanNotice from '../components/ReplanNotice.jsx';
 import RadarChart from '../components/RadarChart.jsx';
+import SkillsDemand from '../components/SkillsDemand.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
@@ -169,6 +170,7 @@ export default function Radar({
         <JobMarketChart trends={data.trends} />
         <ExposureBars roles={exposureRoles} />
       </div>
+      <SkillsDemand roles={data.roles} trends={data.trends} pickedSkills={profile.skills} />
       <YouthCard trends={data.trends} />
     </main>
   );

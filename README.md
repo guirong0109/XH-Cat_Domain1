@@ -18,7 +18,7 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 
 Demo tip: load **Ravi** and go to Roles. Flip Moderate AI to Fast AI: Computer Network Technician overtakes Energy Audit Technician for #2 (a small margin, under 1 point). Then switch SDG 16 on: Cybersecurity Analyst moves up from #4 to #2. For **Mei Ling**, SDG 3 moves Healthcare Analyst from #6 to #4.
 
-Demo tip: open any role's "Why this score?" to compare our labels with the ILO view. The re-plan notice on Radar appears only after a Refresh brings new OpenDOSM data, and that data changes about once a year. So it will not show on every refresh.
+Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changing and which stay human-led (try Ravi: his Electrical wiring sits in "Stays human-led"). Open any role's "Why this score?" to compare our labels with the ILO view. The re-plan notice on Radar appears only after a Refresh brings new OpenDOSM data, and that data changes about once a year. So it will not show on every refresh.
 
 ## The six must-have features
 
@@ -139,6 +139,10 @@ RunPod is used once, offline, for the labelling and skill-similarity job. The ou
 **Built**
 - ILO second opinion: each role's "Why this score?" shows the ILO view next to our labels. Not used in the score.
 - Re-plan notice on Radar after a Refresh brings new OpenDOSM data. It shows up to 3 of the largest rank moves.
+- "Skills in demand" card on Radar: every skill grouped by how much AI is changing the jobs that use it (ILO 2025 exposure of those roles), with the job growth of their groups (OpenDOSM). With current data no skill is in a shrinking job group, and the card says so rather than labelling any skill as declining.
+
+**Next (after the RunPod run)**
+- Skill-level AI trends from the RunPod skill-to-task links: each skill marked rising or falling under Fast AI, added to the "Skills in demand" card.
 
 **Preview only** (not working; shown with an orange banner)
 - CV upload (`#preview-cv`).
