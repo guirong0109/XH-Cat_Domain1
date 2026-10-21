@@ -29,6 +29,16 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       mounted.current = false;
     };
   }, []);
+  // A PDF dropped outside the zone must not make the browser open it.
+  useEffect(() => {
+    const stop = (event) => event.preventDefault();
+    window.addEventListener('dragover', stop);
+    window.addEventListener('drop', stop);
+    return () => {
+      window.removeEventListener('dragover', stop);
+      window.removeEventListener('drop', stop);
+    };
+  }, []);
   const count = profile.skills.length;
 
   const goToPicker = () => {
@@ -82,8 +92,10 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         {cv ? (
           <div className="flex flex-wrap items-center gap-3">
             <p className="m-0 min-w-0 flex-[1_1_200px] text-[15px]">
-              Read <strong className="break-all">{cv.fileName}</strong>. We filled in the skills we found. Please check
-              each one.
+              Read <strong className="break-all">{cv.fileName}</strong>.{' '}
+              {cv.mode === 'merged'
+                ? `We added ${cv.count} new skills from your CV and kept your picks. Please check each one.`
+                : `We filled in the ${cv.count} skills we found. Please check each one.`}
             </p>
             <button
               type="button"
@@ -144,7 +156,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           <h2 id="your-skills-heading" className="m-0 text-lg font-bold">
             Your skills and levels
           </h2>
-          <span className="text-[13px] text-slate-600">
+          <span aria-live="polite" className="text-[13px] text-slate-600">
             {count} picked{count < MIN_SKILLS ? ` · pick ${MIN_SKILLS - count} more to continue` : ''}
           </span>
         </div>

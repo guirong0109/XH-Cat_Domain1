@@ -1,6 +1,6 @@
 // Orders ranked roles by the student's goal. Never changes scores.
-const NOTE =
-  'Your major or sector is not linked to any of our 15 roles yet, so this is the plain ranking.';
+const noteFor = (count) =>
+  `Your major or sector is not linked to any of our ${count} roles yet, so this is the plain ranking.`;
 
 export function fieldOptions(who, fields) {
   if (who === 'student') return fields.majors;
@@ -37,7 +37,7 @@ export function orderForGoal(ranked, profile, fields) {
     const field = findField(profile, fields);
     if (!field) return { entries: plain(), note: null };
     const { first, rest } = partition(ranked, field.groups, 'field');
-    if (first.length === 0) return { entries: plain(), note: NOTE };
+    if (first.length === 0) return { entries: plain(), note: noteFor(ranked.length) };
     return { entries: [...first, ...rest], note: null };
   }
   return { entries: plain(), note: null };

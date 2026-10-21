@@ -11,6 +11,7 @@ import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
+import { mergeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
@@ -196,15 +197,21 @@ export default function App() {
     });
   };
 
-  // Found skills replace the picked ones; levels are our guesses.
+  // A sample or empty profile is replaced; otherwise the student's picks are kept.
   const applyCvSkills = (found, fileName) => {
+    const { mode } = mergeCvSkills(profile, found);
+    const added = found.filter((item) => !profile.skills.includes(item.label)).length;
     changeProfile((current) => {
-      const skills = found.map((item) => item.label);
-      const levels = Object.fromEntries(found.map((item) => [item.label, item.level]));
+      const { skills, levels } = mergeCvSkills(current, found);
       const learn = current.learn.filter((item) => !skills.includes(item));
       return { ...current, skills, levels, learn };
     });
-    setCv({ fileName, evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])) });
+    setCv({
+      fileName,
+      mode,
+      count: mode === 'merged' ? added : found.length,
+      evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])),
+    });
   };
 
   const setLevel = (label, level) => {

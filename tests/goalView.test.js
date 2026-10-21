@@ -33,7 +33,7 @@ describe('goalView', () => {
     expect(o.entries.every((e) => e.reason === null)).toBe(true);
     expect(o.note).toBeNull();
   });
-  const NOTE = 'Your major or sector is not linked to any of our 15 roles yet, so this is the plain ranking.';
+  const NOTE = `Your major or sector is not linked to any of our ${ranked.length} roles yet, so this is the plain ranking.`;
   it('other field (no groups) gives score order and a note', () => {
     const o = orderForGoal(ranked, { who: 'student', field: 'm-other', goal: 'upgrade' }, fields);
     expect(ids(o)).toEqual(['r1', 'r2', 'r3', 'r4', 'r5']);

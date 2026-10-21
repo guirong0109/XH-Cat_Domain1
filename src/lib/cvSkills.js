@@ -66,3 +66,24 @@ export function extractSkills(text, skillLabels) {
   }
   return found;
 }
+
+// Merge skills found in a CV into the profile. A sample or empty profile is
+// replaced; a profile the student built is kept and only added to.
+export function mergeCvSkills(profile, found) {
+  const held = profile.skills ?? [];
+  if (profile.sampleId || held.length === 0) {
+    return {
+      skills: found.map((item) => item.label),
+      levels: Object.fromEntries(found.map((item) => [item.label, item.level])),
+      mode: 'replaced',
+    };
+  }
+  const skills = [...held];
+  const levels = { ...(profile.levels ?? {}) };
+  for (const item of found) {
+    if (held.includes(item.label)) continue;
+    skills.push(item.label);
+    levels[item.label] = item.level;
+  }
+  return { skills, levels, mode: 'merged' };
+}

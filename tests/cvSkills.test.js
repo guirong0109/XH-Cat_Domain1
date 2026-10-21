@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import skills from '../data/skills.json'
-import { MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES } from '../src/lib/cvSkills.js'
+import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES } from '../src/lib/cvSkills.js'
 
 const labels = [
   { label: 'SQL and databases', keywords: ['sql', 'database'] },
@@ -118,5 +118,25 @@ describe('real keyword list', () => {
   })
   it('still finds the network phrases', () => {
     expect(names('Set up a local area network')).toContain('Networking basics')
+  })
+})
+
+describe('mergeCvSkills', () => {
+  const found = [
+    { label: 'A', level: 'strong', evidence: 'a' },
+    { label: 'B', level: 'basic', evidence: 'b' },
+  ]
+  it('replaces a sample profile', () => {
+    const r = mergeCvSkills({ sampleId: 'aina', skills: ['X'], levels: { X: 'good' } }, found)
+    expect(r).toEqual({ skills: ['A', 'B'], levels: { A: 'strong', B: 'basic' }, mode: 'replaced' })
+  })
+  it('replaces when no skills are picked', () => {
+    expect(mergeCvSkills({ sampleId: null, skills: [], levels: {} }, found).mode).toBe('replaced')
+  })
+  it('merges into the student picks and keeps their level', () => {
+    const r = mergeCvSkills({ sampleId: null, skills: ['X', 'A'], levels: { X: 'basic', A: 'good' } }, found)
+    expect(r.mode).toBe('merged')
+    expect(r.skills).toEqual(['X', 'A', 'B'])
+    expect(r.levels).toEqual({ X: 'basic', A: 'good', B: 'basic' })
   })
 })

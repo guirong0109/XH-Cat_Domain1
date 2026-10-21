@@ -27,7 +27,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - **On the user's Windows PC** use `python` instead of `python3`. Python HTTPS to eMASCO needs `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"`.
 - Inside a Claude cloud sandbox, Node `fetch` needs `NODE_USE_ENV_PROXY=1`.
 - Stop servers with `kill <pid>`, not `pkill`. The user's own server runs on port 3000; use other ports for test servers. Restart port 3000 after changing `server/` code (Node does not reload it).
-- Live refreshes (also behind the Radar "Refresh data" button): `POST /api/refresh-trends` (OpenDOSM) and `POST /api/refresh-research` (OpenAlex). OpenAlex without an API key has a small shared daily budget per IP and returns HTTP 429 when it is used up.
+- Live refreshes (also behind the Matches "Refresh data" button): `POST /api/refresh-trends` (OpenDOSM) and `POST /api/refresh-research` (OpenAlex). OpenAlex without an API key has a small shared daily budget per IP and returns HTTP 429 when it is used up.
 
 ## Layout
 - `server/opendosm.js`: OpenDOSM fetch, validation and group trends.

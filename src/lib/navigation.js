@@ -43,7 +43,7 @@ export function blockingStep(screen, profile, fields) {
 }
 
 export function firstIncompleteStep(profile, fields) {
-  return ['about', 'skills', 'goal'].find((step) => !stepComplete(step, profile, fields)) ?? 'matches';
+  return STEP_SCREENS.slice(0, 3).find((step) => !stepComplete(step, profile, fields)) ?? 'matches';
 }
 
 export function resolveScreen(requested, profile, fields) {

@@ -179,7 +179,7 @@ export default function Matches({
       </div>
 
       {note && (
-        <p role="status" className="m-0 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <p role="status" className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
           {note}
         </p>
       )}
