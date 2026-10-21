@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import skills from '../data/skills.json'
 import { MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES } from '../src/lib/cvSkills.js'
 
 const labels = [
@@ -101,5 +102,21 @@ describe('CV_MESSAGES', () => {
     const keys = ['not-pdf', 'too-big', 'empty', 'password', 'no-text', 'none-found', 'load-failed']
     expect(Object.keys(CV_MESSAGES).sort()).toEqual([...keys].sort())
     for (const k of keys) expect(CV_MESSAGES[k].endsWith('You can pick your skills instead.')).toBe(true)
+  })
+})
+
+describe('real keyword list', () => {
+  const real = skills.labels
+  const names = (text) => extractSkills(text, real).map((f) => f.label)
+  it('does not match Malaysian names', () => {
+    expect(names('Wan Nur Aisyah')).toEqual([])
+    expect(names('Lan')).toEqual([])
+  })
+  it('does not match everyday words', () => {
+    expect(names('I excel at teamwork')).not.toContain('Spreadsheets (Excel)')
+    expect(names('networking events')).not.toContain('Networking basics')
+  })
+  it('still finds the network phrases', () => {
+    expect(names('Set up a local area network')).toContain('Networking basics')
   })
 })
