@@ -1,10 +1,11 @@
 const TIPS = {
-  profile: 'Pick the skills you have. The live radar on the right shows how you compare with your best-fit role.',
-  radar: 'Switch between Moderate and Fast AI: the outlook score changes and roles can re-rank. Every number shows its source.',
-  roles: 'Roles re-rank live. Open “Why this score?” to see the exact maths and sources.',
-  pathway: 'Steps are ordered by future importance. Tick them off as you go.',
+  about: 'Pick who you are, then your major or sector. Or try a demo student.',
+  skills: 'Pick at least 3 skills and set each level. Your level changes the fit score.',
+  goal: 'Your goal changes the order of your matches, not the score.',
+  matches: 'Open “Why this score?” to see the exact maths and sources.',
+  study: 'Steps are ordered by future importance. Tick them off as you go.',
 };
-const TIP_ORDER = ['profile', 'radar', 'roles', 'pathway'];
+const TIP_ORDER = ['about', 'skills', 'goal', 'matches', 'study'];
 
 export default function TipBanner({ screen, seenTips, tipsOff, onDismiss, onHideAll }) {
   if (tipsOff || !TIPS[screen] || seenTips.includes(screen)) return null;

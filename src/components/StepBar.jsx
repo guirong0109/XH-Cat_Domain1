@@ -1,11 +1,13 @@
-import { adjacentSteps, stepPosition } from '../lib/journey.js';
-import { MIN_SKILLS } from '../lib/navigation.js';
+import { adjacentSteps, journeySteps, stepPosition } from '../lib/journey.js';
 
-// Back / Next for the four journey steps. Sticky at the bottom on phones,
+// Back / Next for the five journey steps. Sticky at the bottom on phones,
 // a plain row under the content on wide screens.
-export default function StepBar({ screen, skillCount, onNavigate }) {
+export default function StepBar({ screen, profile, fields, onNavigate }) {
   if (!stepPosition(screen)) return null;
-  const { back, next } = adjacentSteps(screen, skillCount);
+  const { back, next } = adjacentSteps(screen, profile, fields);
+  const lockReason = next?.locked
+    ? journeySteps(screen, profile, fields).find((step) => step.screen === next.screen)?.lockReason
+    : null;
 
   return (
     <div className="fr-noprint sticky bottom-0 z-10 border-t border-slate-200 bg-white lg:static lg:border-0 lg:bg-transparent">
@@ -29,7 +31,7 @@ export default function StepBar({ screen, skillCount, onNavigate }) {
               next.locked ? 'cursor-not-allowed bg-slate-200 text-slate-500' : 'cursor-pointer bg-[#0F766E] text-white hover:bg-[#115E59]'
             }`}
           >
-            {next.locked ? `Add ${MIN_SKILLS} skills to continue` : `Next: ${next.label} →`}
+            {next.locked ? lockReason : `Next: ${next.label} →`}
           </button>
         )}
       </div>

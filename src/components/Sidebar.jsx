@@ -1,9 +1,8 @@
 import { journeySteps, nextHint } from '../lib/journey.js';
 import { formatDate } from '../lib/roleView.js';
-import { experienceLabel } from '../lib/potential.js';
+import { findField } from '../lib/goalView.js';
 
 const PREVIEW_LINKS = [
-  { screen: 'preview-cv', label: 'Start from your CV' },
   {
     screen: 'preview-lang',
     label: (
@@ -53,15 +52,23 @@ function StepMark({ step }) {
   );
 }
 
+const WHO_LABEL = { student: 'Student or fresh graduate', working: 'Working' };
+const GOAL_LABEL = { upgrade: 'Goal: upgrade in my field', move: 'Goal: move to a new role', unsure: 'Goal: not sure yet' };
+
 function profileSummary(data, profile) {
   const sample = data.samples.find((item) => item.id === profile.sampleId);
   const name = sample ? sample.label : 'Your profile';
-  const skills = `${profile.skills.length} ${profile.skills.length === 1 ? 'skill' : 'skills'}`;
-  const interests = `${profile.interests.length} ${profile.interests.length === 1 ? 'interest' : 'interests'}`;
-  const sdgs = profile.sdgs.length ? `SDG ${[...profile.sdgs].sort((a, b) => a - b).join(', ')}` : 'no SDGs yet';
-  const learn = profile.learn?.length ? `★ ${profile.learn.length} to learn` : '';
-  const potential = [experienceLabel(profile.experience), learn].filter(Boolean).join(' · ');
-  return { name, detail: `${skills} · ${interests} · ${sdgs}`, potential };
+  const lines = [];
+  if (profile.who) lines.push(WHO_LABEL[profile.who]);
+  const field = data.fields ? findField(profile, data.fields) : null;
+  if (field) {
+    const wants =
+      profile.goal === 'move' && profile.targetSectors.length ? ` → wants ${profile.targetSectors.join(', ')}` : '';
+    lines.push(`${profile.who === 'working' ? 'Sector' : 'Major'}: ${field.label}${wants}`);
+  }
+  lines.push(`${profile.skills.length} ${profile.skills.length === 1 ? 'skill' : 'skills'}`);
+  if (profile.goal) lines.push(GOAL_LABEL[profile.goal]);
+  return { name, lines };
 }
 
 function dataLine(data) {
@@ -77,7 +84,7 @@ function dataLine(data) {
 // The left panel's content. Used as a fixed panel on wide screens and inside
 // the phone menu. onNavigate is called with a screen name.
 export default function Sidebar({ data, profile, screen, onNavigate, onClose }) {
-  const steps = journeySteps(screen, profile.skills.length);
+  const steps = journeySteps(screen, profile, data.fields ?? null);
   const summary = profileSummary(data, profile);
 
   return (
@@ -115,14 +122,17 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
       <section aria-label="Your profile" className="flex flex-col gap-1 rounded-xl border border-teal-200 bg-[#F0FDFA] p-3">
         <span className="text-xs font-bold text-[#115E59]">YOUR PROFILE</span>
         <span className="text-[15px] font-bold">{summary.name}</span>
-        <span className="text-[13px] text-slate-700">{summary.detail}</span>
-        {summary.potential && <span className="text-[13px] text-slate-700">{summary.potential}</span>}
+        {summary.lines.map((line) => (
+          <span key={line} className="text-[13px] text-slate-700">
+            {line}
+          </span>
+        ))}
         <button
           type="button"
-          onClick={() => onNavigate('profile')}
+          onClick={() => onNavigate('about')}
           className="min-h-11 cursor-pointer self-start border-0 bg-transparent p-0 text-left text-[13px] font-bold text-[#0F766E] underline-offset-2 hover:underline"
         >
-          Edit profile
+          Edit
         </button>
       </section>
 
@@ -153,7 +163,11 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
                       {step.number ? `${step.number} · ${step.label}` : step.label}
                       {step.state === 'done' && <span className="sr-only"> (done)</span>}
                     </span>
-                    {locked && <span className="text-xs font-normal">{step.lockReason}</span>}
+                    {locked ? (
+                      <span className="text-xs font-normal">{step.lockReason}</span>
+                    ) : (
+                      step.sub && <span className="text-xs font-normal text-slate-600">{step.sub}</span>
+                    )}
                   </span>
                   {current && <span className="ml-auto text-[11px]">You are here</span>}
                 </button>
@@ -165,7 +179,7 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
 
       <section aria-label="Next step" className="flex flex-col gap-1.5 rounded-xl bg-slate-50 p-3">
         <span className="text-xs font-bold text-slate-600">NEXT STEP</span>
-        <span className="text-[13px] text-slate-700">{nextHint(screen, profile.skills.length)}</span>
+        <span className="text-[13px] text-slate-700">{nextHint(screen)}</span>
       </section>
 
       <nav aria-label="Coming in Stage 2" className="flex flex-col gap-1">

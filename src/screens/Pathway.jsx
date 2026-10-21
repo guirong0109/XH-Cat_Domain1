@@ -47,8 +47,8 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
           <div className="h-full bg-[#0F766E] transition-[width] duration-300" style={{ width: `${percent}%` }} />
         </div>
 
-        {startingPoint(profile.experience) && (
-          <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.experience)}</p>
+        {startingPoint(profile.who) && (
+          <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.who)}</p>
         )}
 
         {steps.length === 0 && (

@@ -4,25 +4,39 @@ import Sidebar from './components/Sidebar.jsx';
 import StepBar from './components/StepBar.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
-import Profile from './screens/Profile.jsx';
-import Radar from './screens/Radar.jsx';
+import About from './screens/About.jsx';
+import Skills from './screens/Skills.jsx';
+import Goal from './screens/Goal.jsx';
 import Roles from './screens/Roles.jsx';
 import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { toggleLearn } from './lib/potential.js';
-import PreviewCv from './screens/PreviewCv.jsx';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
-import { SCREENS, resolveScreen } from './lib/navigation.js';
+import { OLD_ROUTES, SCREENS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
-const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], experience: null, learn: [], sampleId: null };
+// interests and experience stay until the old Roles/Pathway screens are replaced.
+const EMPTY_PROFILE = {
+  who: null,
+  field: null,
+  skills: [],
+  levels: {},
+  goal: null,
+  targetSectors: [],
+  sdgs: [],
+  learn: [],
+  interests: [],
+  experience: null,
+  sampleId: null,
+};
 
-// A URL hash such as #profile opens that screen directly (handy for demos).
+// A URL hash such as #skills opens that screen directly (handy for demos).
+// Old hashes (#profile, #roles, …) are kept so resolveScreen can redirect them.
 function screenFromHash() {
   const name = window.location.hash.replace('#', '');
-  return SCREENS.includes(name) ? name : 'home';
+  return SCREENS.includes(name) || Object.hasOwn(OLD_ROUTES, name) ? name : 'home';
 }
 
 function urlForScreen(screen) {
@@ -31,11 +45,16 @@ function urlForScreen(screen) {
 
 function profileFromSample(sample) {
   return {
+    who: sample.who ?? null,
+    field: sample.field ?? null,
     skills: [...sample.skills],
-    interests: [...sample.interests],
+    levels: { ...(sample.levels ?? {}) },
+    goal: sample.goal ?? null,
+    targetSectors: [...(sample.targetSectors ?? [])],
     sdgs: [...sample.sdgs],
-    experience: sample.experience ?? null,
     learn: [...(sample.learn ?? [])],
+    interests: [...(sample.interests ?? [])],
+    experience: sample.experience ?? null,
     sampleId: sample.id,
   };
 }
@@ -113,7 +132,8 @@ export default function App() {
 
   // Single guard for every route in (initial hash, hashchange, back, nav):
   // a locked or unknown screen is replaced, and the URL is kept in sync.
-  const shownScreen = resolveScreen(screen, profile.skills.length);
+  const fields = data?.fields ?? null;
+  const shownScreen = resolveScreen(screen, profile, fields);
   useEffect(() => {
     if (!data || shownScreen === screen) return;
     setScreen(shownScreen);
@@ -139,24 +159,45 @@ export default function App() {
     setProfile(EMPTY_PROFILE);
     setReplan(null);
     resetRoleViews();
-    navigate('profile');
+    navigate('about');
   };
 
-  const toggleProfileItem = (field, value) => {
+  // Every profile change clears the sample name and the re-plan notice.
+  const changeProfile = (update) => {
     setReplan(null);
-    setProfile((current) => {
-      const list = current[field];
-      const next = list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
-      // A skill the student now has is no longer a skill to learn.
-      const learn = field === 'skills' ? current.learn.filter((item) => !next.includes(item)) : current.learn;
-      return { ...current, [field]: next, learn, sampleId: null };
-    });
+    setProfile((current) => ({ ...update(current), sampleId: null }));
   };
 
-  const toggleLearnSkill = (label) => setProfile((current) => ({ ...toggleLearn(current, label), sampleId: null }));
+  const toggleIn = (list, value) => (list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
 
-  const chooseExperience = (experience) =>
-    setProfile((current) => ({ ...current, experience: current.experience === experience ? null : experience, sampleId: null }));
+  const chooseWho = (who) =>
+    changeProfile((current) => ({ ...current, who, field: current.who === who ? current.field : null }));
+
+  const chooseField = (id) => changeProfile((current) => ({ ...current, field: id }));
+
+  const toggleSkill = (label) =>
+    changeProfile((current) => {
+      const skills = toggleIn(current.skills, label);
+      const levels = { ...current.levels };
+      if (skills.includes(label)) levels[label] = 'good';
+      else delete levels[label];
+      // A skill the student now has is no longer a skill to learn.
+      const learn = current.learn.filter((item) => !skills.includes(item));
+      return { ...current, skills, levels, learn };
+    });
+
+  const setLevel = (label, level) =>
+    changeProfile((current) => ({ ...current, levels: { ...current.levels, [label]: level } }));
+
+  // Leaving "move" keeps the target sectors; they are only used for "move".
+  const chooseGoal = (goal) => changeProfile((current) => ({ ...current, goal }));
+
+  const toggleTarget = (group) =>
+    changeProfile((current) => ({ ...current, targetSectors: toggleIn(current.targetSectors, group) }));
+
+  const toggleSdg = (goal) => changeProfile((current) => ({ ...current, sdgs: toggleIn(current.sdgs, goal) }));
+
+  const toggleLearnSkill = (label) => changeProfile((current) => toggleLearn(current, label));
 
   const changeScenario = (next) => {
     setReplan(null);
@@ -227,7 +268,7 @@ export default function App() {
   const openPathway = (roleId) => {
     if (roleId !== focusRoleId) setDoneSkills([]);
     setFocusRoleId(roleId);
-    navigate('pathway');
+    navigate('study');
   };
 
   const toggleDone = (label) =>
@@ -246,52 +287,39 @@ export default function App() {
       <Home
         data={data}
         ctx={ctx}
-        onTrySample={(sampleId) => loadSample(sampleId, 'profile')}
+        onTrySample={(sampleId) => loadSample(sampleId, 'matches')}
         onStartFresh={startFresh}
         onNavigate={navigate}
       />
     );
-  } else if (shownScreen === 'preview-cv') {
-    content = <PreviewCv data={data} />;
   } else if (shownScreen === 'preview-lang') {
     content = <PreviewLang />;
   } else if (shownScreen === 'preview-users') {
     content = <PreviewUsers data={data} />;
-  } else if (shownScreen === 'profile') {
+  } else if (shownScreen === 'about') {
     content = (
-      <Profile
+      <About
         data={data}
-        ctx={ctx}
         profile={profile}
-        scenario={scenario}
-        ranked={ranked}
-        onLoadSample={(sampleId) => loadSample(sampleId)}
-        onToggle={toggleProfileItem}
+        onChooseWho={chooseWho}
+        onChooseField={chooseField}
+        onLoadSample={(sampleId) => loadSample(sampleId, 'matches')}
+      />
+    );
+  } else if (shownScreen === 'skills') {
+    content = <Skills data={data} profile={profile} onToggleSkill={toggleSkill} onSetLevel={setLevel} />;
+  } else if (shownScreen === 'goal') {
+    content = (
+      <Goal
+        data={data}
+        profile={profile}
+        onChooseGoal={chooseGoal}
+        onToggleTarget={toggleTarget}
+        onToggleSdg={toggleSdg}
         onToggleLearn={toggleLearnSkill}
-        onChooseExperience={chooseExperience}
-        onNext={() => navigate('radar')}
       />
     );
-  } else if (shownScreen === 'radar') {
-    content = (
-      <Radar
-        data={data}
-        ctx={ctx}
-        profile={profile}
-        scenario={scenario}
-        ranked={ranked}
-        focusRoleId={focusRoleId}
-        refresh={refresh}
-        researchRefresh={researchRefresh}
-        replan={replan}
-        onDismissReplan={() => setReplan(null)}
-        onScenarioChange={changeScenario}
-        onFocus={setFocusRoleId}
-        onRefresh={refreshTrends}
-        onSeeRoles={() => navigate('roles')}
-      />
-    );
-  } else if (shownScreen === 'roles') {
+  } else if (shownScreen === 'matches') {
     content = (
       <Roles
         data={data}
@@ -301,7 +329,7 @@ export default function App() {
         ranked={ranked}
         expandedRoleId={expandedRoleId}
         onScenarioChange={changeScenario}
-        onToggleSdg={(goal) => toggleProfileItem('sdgs', goal)}
+        onToggleSdg={toggleSdg}
         onToggleExpanded={toggleExpanded}
         onPathway={openPathway}
       />
@@ -317,7 +345,7 @@ export default function App() {
         focusRoleId={focusRoleId}
         doneSkills={doneSkills}
         onToggleDone={toggleDone}
-        onBack={() => navigate('roles')}
+        onBack={() => navigate('matches')}
       />
     );
   }
@@ -345,7 +373,7 @@ export default function App() {
           onHideAll={() => setTipsOff(true)}
         />
         <div className="flex-1">{content}</div>
-        <StepBar screen={shownScreen} skillCount={profile.skills.length} onNavigate={navigate} />
+        <StepBar screen={shownScreen} profile={profile} fields={fields} onNavigate={navigate} />
       </div>
     </div>
   );
