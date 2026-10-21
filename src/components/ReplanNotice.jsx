@@ -1,4 +1,5 @@
 import SourceNote from './SourceNote.jsx';
+import { topMoves } from '../lib/replan.js';
 import { formatDate, groupLabel } from '../lib/roleView.js';
 
 function demandText(group, oldGroups, newGroups) {
@@ -18,7 +19,7 @@ export default function ReplanNotice({ changes, roles, oldGroups, newGroups, tre
     );
   }
 
-  const entries = [...changes.up, ...changes.down].slice(0, 3);
+  const entries = topMoves(changes);
   return (
     <section role="status" className="flex flex-col gap-3 rounded-2xl border border-teal-200 bg-teal-50 p-4 text-teal-900">
       <h2 className="m-0 text-base font-bold">New data changed your results</h2>

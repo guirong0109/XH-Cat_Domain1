@@ -24,3 +24,10 @@ export function rankChanges(beforeIds, afterIds) {
 export function shouldReplan(status, skillCount) {
   return status === 'updated' && skillCount >= MIN_SKILLS;
 }
+
+// The biggest moves across risers and fallers together, for the notice.
+export function topMoves(changes, count = 3) {
+  return [...changes.up, ...changes.down]
+    .sort((a, b) => Math.abs(b.from - b.to) - Math.abs(a.from - a.to) || a.to - b.to)
+    .slice(0, count);
+}

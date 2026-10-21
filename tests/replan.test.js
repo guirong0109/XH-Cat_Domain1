@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rankChanges, shouldReplan } from '../src/lib/replan.js';
+import { rankChanges, shouldReplan, topMoves } from '../src/lib/replan.js';
 
 describe('rankChanges', () => {
   it('reports unchanged for the same order', () => {
@@ -44,5 +44,34 @@ describe('shouldReplan', () => {
     expect(shouldReplan('updated', 2)).toBe(false);
     expect(shouldReplan('unchanged', 5)).toBe(false);
     expect(shouldReplan('failed', 5)).toBe(false);
+  });
+});
+
+describe('topMoves', () => {
+  it('puts a 10-place faller before one-place risers', () => {
+    const before = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
+    const after = ['b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'a'];
+    const moves = topMoves(rankChanges(before, after));
+    expect(moves[0]).toEqual({ id: 'a', from: 1, to: 11 });
+    expect(moves).toHaveLength(3);
+  });
+
+  it('breaks ties by new rank', () => {
+    const changes = {
+      up: [{ id: 'x', from: 5, to: 4 }],
+      down: [{ id: 'y', from: 2, to: 3 }],
+      unchanged: false,
+    };
+    expect(topMoves(changes).map((m) => m.id)).toEqual(['y', 'x']);
+  });
+
+  it('caps at count', () => {
+    const changes = {
+      up: [{ id: 'a', from: 3, to: 1 }, { id: 'b', from: 4, to: 3 }],
+      down: [{ id: 'c', from: 1, to: 2 }, { id: 'd', from: 2, to: 4 }],
+      unchanged: false,
+    };
+    expect(topMoves(changes, 2).map((m) => m.id)).toEqual(['a', 'd']);
+    expect(topMoves(changes)).toHaveLength(3);
   });
 });
