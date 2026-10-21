@@ -69,7 +69,7 @@ export function buildPathway(role, profile, ctx, scenario, skillLabels) {
       return {
         label: s.label,
         status,
-        hours: status !== 'gap' ? Math.round(baseHours / 2) : baseHours,
+        hours: status === 'similar' || status === 'levelup' ? Math.round(baseHours / 2) : baseHours,
         importance: s[scenario],
         rising: s.fast > s.moderate,
         portal: info ? info.portal : DEFAULT_PORTAL,

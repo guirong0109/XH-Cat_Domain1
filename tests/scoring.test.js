@@ -246,6 +246,13 @@ describe('buildPathway', () => {
     const p = { skills: role.skills.map((s) => s.label), levels: { 'Gap low': 'basic' }, sdgs: [] };
     expect(buildPathway(role, p, c, 'moderate', skillLabels).map((s) => s.label)).toEqual(['Gap low']);
   });
+  it('basic held skill that is also in the similar map is a levelup step', () => {
+    const p = { skills: ['Close one', 'Other'], levels: { 'Close one': 'basic' }, sdgs: [] };
+    const step = buildPathway(role, p, c, 'fast', skillLabels).find((s) => s.label === 'Close one');
+    expect(step.status).toBe('levelup');
+    expect(step.hours).toBe(13);
+    expect(skillCredit('Close one', p, c.similar)).toBe(0.5);
+  });
 });
 
 describe('WEIGHTS', () => {
