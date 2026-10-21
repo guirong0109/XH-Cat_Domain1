@@ -300,6 +300,15 @@ describe('skillChipText', () => {
 });
 
 describe('fitSkillRows', () => {
+  it('shows no level for a held skill whose level was never chosen', () => {
+    const role = { skills: [{ label: 'A' }, { label: 'B' }] };
+    const profile = { skills: ['A', 'B'], levels: { B: 'good' } };
+    expect(fitSkillRows(role, profile, {})).toEqual([
+      { label: 'A', status: 'have', level: null, credit: 1 },
+      { label: 'B', status: 'have', level: 'good', credit: 0.75 },
+    ]);
+    expect(fitSkillRows(role, { skills: ['A'] }, {})[0]).toEqual({ label: 'A', status: 'have', level: null, credit: 1 });
+  });
   it('gives each skill its status, level and credit', () => {
     const role = { skills: ['A', 'B', 'C', 'D', 'E'].map((label) => ({ label })) };
     const profile = { skills: ['A', 'B', 'C', 'X'], levels: { A: 'strong', B: 'good', C: 'basic' } };

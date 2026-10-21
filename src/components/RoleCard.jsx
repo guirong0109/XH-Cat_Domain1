@@ -24,7 +24,8 @@ const SKILL_LOOK = {
 const FIT_ROW_TEXT = { similar: 'Similar skill', gap: 'Gap to learn' };
 
 function fitRowText(row) {
-  return row.status === 'have' ? `You have it (${levelName(row.level)})` : FIT_ROW_TEXT[row.status];
+  if (row.status !== 'have') return FIT_ROW_TEXT[row.status];
+  return row.level ? `You have it (${levelName(row.level)})` : 'You have it';
 }
 
 // One ranked role. Matches renders cards in DOM in the displayed (goal) order.

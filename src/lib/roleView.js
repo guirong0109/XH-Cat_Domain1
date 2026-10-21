@@ -243,7 +243,8 @@ export function fitSkillRows(role, profile, similar) {
     return {
       label: skill.label,
       status,
-      level: status === 'have' ? skillLevel(skill.label, profile) : null,
+      level:
+        status === 'have' && Object.hasOwn(profile.levels || {}, skill.label) ? skillLevel(skill.label, profile) : null,
       credit: skillCredit(skill.label, profile, similar),
     };
   });
