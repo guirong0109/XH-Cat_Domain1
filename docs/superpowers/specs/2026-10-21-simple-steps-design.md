@@ -158,7 +158,7 @@ Each part ends with tests passing and can be reviewed on its own.
 | P-B | `fields.json`, sample updates, `build_data.py` checks | none |
 | P-C | `goalView.js` ordering | P-B |
 | P-D | `cvSkills.js` extraction + keywords in `skill_labels.json` | none |
-| P-E | Steps 1–3 screens, new routes, left panel, redirects | P-A, P-B |
+| P-E | Steps 1–3 screens, new routes, left panel, redirects. Carried from P-A review: "Why this score?" lists each counted skill with its level (today it shows only the credit legend); skill chips show a visible level mark; RoleCard level text moves into a tested helper in `roleView.js`. | P-A, P-B |
 | P-F | PDF upload in step 2 with `pdfjs-dist` | P-D, P-E |
 | P-G | Steps 4–5 (sources line, trends section, portal order, advice) | P-C, P-E |
 | P-H | Clean-up: remove old Profile/Radar/PreviewCv screens, docs (README, HANDOVER, CLAUDE.md) | all |
