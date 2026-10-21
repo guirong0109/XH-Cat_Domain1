@@ -1,10 +1,5 @@
 const CARDS = [
   {
-    screen: 'preview-cv',
-    title: 'Start from your CV',
-    text: 'Upload a CV. AI suggests skills from our list. You confirm each one.',
-  },
-  {
     screen: 'preview-lang',
     title: (
       <>
@@ -34,7 +29,7 @@ export default function Stage2Section({ onNavigate }) {
       <p className="m-0 max-w-[640px] text-slate-700">
         Ideas we plan to build next. These screens are previews only. They do not work yet.
       </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {CARDS.map((card) => (
           <button
             key={card.screen}

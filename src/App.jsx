@@ -83,6 +83,8 @@ export default function App() {
   const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
   const [researchRefresh, setResearchRefresh] = useState({ status: null, message: '' });
   const [replan, setReplan] = useState(null);
+  // CV file name and evidence lines: memory only, never saved or sent.
+  const [cv, setCv] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -151,6 +153,7 @@ export default function App() {
     if (!sample) return;
     setProfile(profileFromSample(sample));
     setReplan(null);
+    setCv(null);
     resetRoleViews();
     if (nextScreen) navigate(nextScreen);
   };
@@ -158,6 +161,7 @@ export default function App() {
   const startFresh = () => {
     setProfile(EMPTY_PROFILE);
     setReplan(null);
+    setCv(null);
     resetRoleViews();
     navigate('about');
   };
@@ -185,6 +189,17 @@ export default function App() {
       const learn = current.learn.filter((item) => !skills.includes(item));
       return { ...current, skills, levels, learn };
     });
+
+  // Found skills replace the picked ones; levels are our guesses.
+  const applyCvSkills = (found, fileName) => {
+    changeProfile((current) => {
+      const skills = found.map((item) => item.label);
+      const levels = Object.fromEntries(found.map((item) => [item.label, item.level]));
+      const learn = current.learn.filter((item) => !skills.includes(item));
+      return { ...current, skills, levels, learn };
+    });
+    setCv({ fileName, evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])) });
+  };
 
   const setLevel = (label, level) =>
     changeProfile((current) => ({ ...current, levels: { ...current.levels, [label]: level } }));
@@ -307,7 +322,17 @@ export default function App() {
       />
     );
   } else if (shownScreen === 'skills') {
-    content = <Skills data={data} profile={profile} onToggleSkill={toggleSkill} onSetLevel={setLevel} />;
+    content = (
+      <Skills
+        data={data}
+        profile={profile}
+        cv={cv}
+        onToggleSkill={toggleSkill}
+        onSetLevel={setLevel}
+        onCvFound={applyCvSkills}
+        onCvClear={() => setCv(null)}
+      />
+    );
   } else if (shownScreen === 'goal') {
     content = (
       <Goal

@@ -55,7 +55,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - The app **supports** the student's decision; it never decides.
 - Scoring formula and factors (Moderate 0.6, Fast 1.0) and level credits (Basic 0.5, Good 0.75, Strong 1.0, approved 2026-10-21) are fixed by the approved spec. Change them only with the user's approval.
 - Approved dependencies:
-  - App: react, react-dom, express, vite, @vitejs/plugin-react, tailwindcss, @tailwindcss/vite, vitest.
+  - App: react, react-dom, express, vite, @vitejs/plugin-react, tailwindcss, @tailwindcss/vite, vitest, pdfjs-dist.
   - RunPod only: torch, transformers, accelerate, sentence-transformers.
   - Python pipeline: stdlib only.
 - Express 5: no `'*'` routes (path-to-regexp v8).
