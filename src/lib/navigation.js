@@ -1,18 +1,54 @@
-// Which screen may be shown. Later steps need a minimum number of skills, so
-// any route into them (deep link, back button, nav) falls back to profile.
+// Which screen may be shown. A step opens only when the steps before it are
+// complete, so any route into it (deep link, back button, nav) falls back to
+// the first step that is still missing something.
+import { findField } from './goalView.js';
 
+export const STEP_SCREENS = ['about', 'skills', 'goal', 'matches', 'study'];
 // Stage 2 ideas shown as previews only. They are not working features.
-export const PREVIEW_SCREENS = ['preview-cv', 'preview-lang', 'preview-users'];
-export const SCREENS = ['home', 'profile', 'radar', 'roles', 'pathway', ...PREVIEW_SCREENS];
-export const SCREENS_NEEDING_SKILLS = ['radar', 'roles', 'pathway'];
+export const PREVIEW_SCREENS = ['preview-lang', 'preview-users'];
+export const SCREENS = ['home', ...STEP_SCREENS, ...PREVIEW_SCREENS];
 export const MIN_SKILLS = 3;
+// Links and bookmarks from the old journey still work.
+export const OLD_ROUTES = {
+  profile: 'about',
+  radar: 'matches',
+  roles: 'matches',
+  pathway: 'study',
+  'preview-cv': 'skills',
+};
 
 export function isPreview(screen) {
   return PREVIEW_SCREENS.includes(screen);
 }
 
-export function resolveScreen(requestedScreen, skillCount) {
-  if (!SCREENS.includes(requestedScreen)) return 'home';
-  if (SCREENS_NEEDING_SKILLS.includes(requestedScreen) && skillCount < MIN_SKILLS) return 'profile';
-  return requestedScreen;
+export function stepComplete(screen, profile, fields) {
+  if (screen === 'about') {
+    if (!profile?.who) return false;
+    if (!fields) return Boolean(profile.field);
+    return findField(profile, fields) !== null;
+  }
+  if (screen === 'skills') return (profile?.skills?.length ?? 0) >= MIN_SKILLS;
+  if (screen === 'goal') {
+    if (!profile?.goal) return false;
+    return profile.goal !== 'move' || (profile.targetSectors?.length ?? 0) > 0;
+  }
+  return true;
+}
+
+// The first earlier step that is not complete, or null when the step is open.
+export function blockingStep(screen, profile, fields) {
+  const index = STEP_SCREENS.indexOf(screen);
+  if (index < 0) return null;
+  return STEP_SCREENS.slice(0, index).find((step) => !stepComplete(step, profile, fields)) ?? null;
+}
+
+export function firstIncompleteStep(profile, fields) {
+  return ['about', 'skills', 'goal'].find((step) => !stepComplete(step, profile, fields)) ?? 'matches';
+}
+
+export function resolveScreen(requested, profile, fields) {
+  const screen = OLD_ROUTES[requested] ?? requested;
+  if (!SCREENS.includes(screen)) return 'home';
+  if (blockingStep(screen, profile, fields)) return firstIncompleteStep(profile, fields);
+  return screen;
 }

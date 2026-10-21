@@ -24,11 +24,12 @@ describe('experience', () => {
     expect(experienceLabel('nope')).toBe('');
   });
 
-  it('gives a starting-point line only when experience is chosen', () => {
+  it('gives a starting-point line only when who is set', () => {
     expect(startingPoint(null)).toBeNull();
-    expect(startingPoint('none')).toMatch(/^Your starting point: No work experience yet\. /);
-    expect(startingPoint('none')).toMatch(/internship/i);
-    expect(startingPoint('over2')).toMatch(/^Your starting point: 2\+ years full-time\. /);
+    expect(startingPoint('student')).toMatch(/^Your starting point: student\. /);
+    expect(startingPoint('student')).toMatch(/internship/i);
+    expect(startingPoint('working')).toMatch(/^Your starting point: already working\. /);
+    expect(startingPoint('working')).toMatch(/HRD Corp claimable/);
   });
 });
 

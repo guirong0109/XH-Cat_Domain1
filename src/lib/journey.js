@@ -1,44 +1,42 @@
 // The student's journey through the app, as shown in the left panel and the
 // Back / Next bar. Pure helpers; locking follows navigation.js.
-import { MIN_SKILLS, SCREENS_NEEDING_SKILLS } from './navigation.js';
+import { blockingStep } from './navigation.js';
 
 export const JOURNEY = [
-  { screen: 'home', label: 'Home' },
-  { screen: 'profile', label: 'Profile' },
-  { screen: 'radar', label: 'Skills radar' },
-  { screen: 'roles', label: 'Future roles' },
-  { screen: 'pathway', label: 'Learning pathway' },
+  { screen: 'home', label: 'Home', sub: '' },
+  { screen: 'about', label: 'About you', sub: 'Who you are, your major or sector' },
+  { screen: 'skills', label: 'Your skills', sub: 'CV or pick skills' },
+  { screen: 'goal', label: 'Your goal', sub: 'Upgrade, move or not sure' },
+  { screen: 'matches', label: 'Matches', sub: 'Ranked roles and sources' },
+  { screen: 'study', label: 'What to study', sub: 'Courses on official portals' },
 ];
 
 const STEP_COUNT = JOURNEY.length - 1; // home is not a numbered step
 
 const HINTS = {
   home: 'Try a sample student or start your own profile.',
-  profile: 'Pick the skills you have, then see your skills radar.',
-  radar: 'Compare yourself with a role, then see all future roles.',
-  roles: 'Pick a role you like, then open its learning pathway.',
-  pathway: 'Tick off steps as you learn. You can go back and try another role.',
+  about: 'Tell us who you are and pick your major or sector.',
+  skills: 'Upload your CV or pick at least 3 skills, then check each level.',
+  goal: 'Pick your goal, then see your matches.',
+  matches: 'Pick a role, then plan what to study.',
+  study: 'Tick off steps as you learn. You can go back and try another role.',
 };
 
-function skillsMissing(skillCount) {
-  return Math.max(0, MIN_SKILLS - skillCount);
+function labelOf(screen) {
+  return JOURNEY.find((step) => step.screen === screen).label;
 }
 
-function plural(count, word) {
-  return `${count} more ${word}${count === 1 ? '' : 's'}`;
+function lockFor(screen, profile, fields) {
+  const blocker = blockingStep(screen, profile, fields);
+  return blocker ? `Finish ${labelOf(blocker)} first` : null;
 }
 
-function isLocked(screen, skillCount) {
-  return SCREENS_NEEDING_SKILLS.includes(screen) && skillsMissing(skillCount) > 0;
-}
-
-export function journeySteps(screen, skillCount) {
+export function journeySteps(screen, profile, fields) {
   const currentIndex = JOURNEY.findIndex((step) => step.screen === screen);
   return JOURNEY.map((step, index) => {
     const number = index === 0 ? null : index;
-    if (isLocked(step.screen, skillCount)) {
-      return { ...step, number, state: 'locked', lockReason: `Add ${plural(skillsMissing(skillCount), 'skill')} first` };
-    }
+    const lockReason = lockFor(step.screen, profile, fields);
+    if (lockReason) return { ...step, number, state: 'locked', lockReason };
     let state = 'todo';
     if (index === currentIndex) state = 'current';
     else if (currentIndex >= 0 && index < currentIndex) state = 'done';
@@ -51,17 +49,13 @@ export function stepPosition(screen) {
   return index > 0 ? { number: index, total: STEP_COUNT } : null;
 }
 
-export function adjacentSteps(screen, skillCount) {
+export function adjacentSteps(screen, profile, fields) {
   const index = JOURNEY.findIndex((step) => step.screen === screen);
   if (index < 0) return { back: null, next: null };
-  const toLink = (step) => (step ? { ...step, locked: isLocked(step.screen, skillCount) } : null);
+  const toLink = (step) => (step ? { ...step, locked: lockFor(step.screen, profile, fields) !== null } : null);
   return { back: toLink(JOURNEY[index - 1]), next: toLink(JOURNEY[index + 1]) };
 }
 
-export function nextHint(screen, skillCount) {
-  if (!HINTS[screen]) return 'This is a preview. Go back to your journey any time.';
-  if (screen === 'profile' && skillsMissing(skillCount) > 0) {
-    return `Pick ${plural(skillsMissing(skillCount), 'skill')} to unlock your skills radar.`;
-  }
-  return HINTS[screen];
+export function nextHint(screen) {
+  return HINTS[screen] ?? 'This is a preview. Go back to your journey any time.';
 }

@@ -10,20 +10,18 @@ export const EXPERIENCE_OPTIONS = [
 
 export const MAX_LEARN = 3;
 
-const ADVICE = {
-  none: 'Ask your career centre about internships in this role to build real experience.',
-  parttime: 'Ask your career centre about internships in this role to build real experience.',
-  under2: 'Talk to your supervisor or career centre about tasks that use these skills at work.',
-  over2: 'Your work experience counts. Ask your employer about HRD Corp claimable courses for these steps.',
-};
-
 export function experienceLabel(id) {
   return EXPERIENCE_OPTIONS.find((option) => option.id === id)?.label || '';
 }
 
-export function startingPoint(experience) {
-  const label = experienceLabel(experience);
-  return label ? `Your starting point: ${label}. ${ADVICE[experience]}` : null;
+export function startingPoint(who) {
+  if (who === 'student') {
+    return 'Your starting point: student. Ask your career centre about internships in this role to build real experience.';
+  }
+  if (who === 'working') {
+    return 'Your starting point: already working. Your work experience counts. Ask your employer about HRD Corp claimable courses for these steps.';
+  }
+  return null;
 }
 
 export function learnCount(role, learn) {
