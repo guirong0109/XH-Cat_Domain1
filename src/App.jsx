@@ -8,7 +8,8 @@ import Roles from './screens/Roles.jsx';
 import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
-import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, resolveScreen } from './lib/navigation.js';
+import PreviewBanner from './components/PreviewBanner.jsx';
+import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, isPreview, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
 const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], sampleId: null };
@@ -45,7 +46,17 @@ function Header({ screen, onNavigate, lockedScreens }) {
             <span className="block text-xs text-slate-600">AI supports your career decision. You decide.</span>
           </span>
         </button>
-        {screen !== 'home' && <StepNav screen={screen} onNavigate={onNavigate} lockedScreens={lockedScreens} />}
+        {isPreview(screen) ? (
+          <button
+            type="button"
+            onClick={() => onNavigate('home')}
+            className="min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-[#0F172A]"
+          >
+            Back to home
+          </button>
+        ) : (
+          screen !== 'home' && <StepNav screen={screen} onNavigate={onNavigate} lockedScreens={lockedScreens} />
+        )}
       </div>
     </header>
   );
@@ -210,7 +221,20 @@ export default function App() {
   let content;
   if (shownScreen === 'home') {
     content = (
-      <Home data={data} ctx={ctx} onTrySample={(sampleId) => loadSample(sampleId, 'profile')} onStartFresh={startFresh} />
+      <Home
+        data={data}
+        ctx={ctx}
+        onTrySample={(sampleId) => loadSample(sampleId, 'profile')}
+        onStartFresh={startFresh}
+        onNavigate={navigate}
+      />
+    );
+  } else if (isPreview(shownScreen)) {
+    // Placeholder until the preview screens land. Never looks like a working feature.
+    content = (
+      <main className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6">
+        <PreviewBanner />
+      </main>
     );
   } else if (shownScreen === 'profile') {
     content = (

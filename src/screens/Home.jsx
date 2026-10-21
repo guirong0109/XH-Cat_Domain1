@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import RadarChart from '../components/RadarChart.jsx';
 import SourceNote from '../components/SourceNote.jsx';
+import Stage2Section from '../components/Stage2Section.jsx';
 import { roleRadarValues } from '../lib/radar.js';
 import { rankRoles } from '../lib/scoring.js';
 import { formatMonth } from '../lib/roleView.js';
@@ -28,7 +29,7 @@ function FactCard({ value, text, source }) {
   );
 }
 
-export default function Home({ data, ctx, onTrySample, onStartFresh }) {
+export default function Home({ data, ctx, onTrySample, onStartFresh, onNavigate }) {
   const example = useMemo(() => {
     const sample = data.samples.find((item) => item.id === EXAMPLE_SAMPLE_ID) || data.samples[0];
     if (!sample || !data.roles.length) return null;
@@ -102,6 +103,7 @@ export default function Home({ data, ctx, onTrySample, onStartFresh }) {
         />
         <FactCard value={youth.value} text={youth.text} source="OpenDOSM, lfs_month_youth" />
       </div>
+      <Stage2Section onNavigate={onNavigate} />
     </main>
   );
 }
