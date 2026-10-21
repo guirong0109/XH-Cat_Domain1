@@ -1,6 +1,49 @@
 # HANDOVER — FutureReady MY (Aiversecity Domain 1 hackathon)
 
-Last updated: 2026-10-21. Written for a new session that has no earlier context.
+Last updated: 2026-10-21 (end of the second session). Written for a new session that has no earlier context.
+Read §00 first. It is the current snapshot. §0 is the detailed log of the second session; §1–§6 are from the first session. Newer sections win where they conflict.
+
+---
+
+## 00. Current snapshot (end of second session, 2026-10-21)
+
+### Where things are
+- **Branches:** `main` and the work branch `claude/hackathon-mvp-phase-1-dwl3nm` are the **same commit, `fdefa76`**, both pushed. The user asks for each merge to `main`; merge only when told.
+- **Tests:** `npm test` passes 160 tests (16 files). `python -m unittest discover pipeline/tests` passes 67. `npm run build` works.
+- **Local app:** runs on the user's Windows PC at http://localhost:3000 (terminal tab started with `npm start`). After any server-code change, **restart it**: Node does not reload `server/` files. A browser may also show an old build until a hard refresh.
+- **Temporary public link:** a Cloudflare quick tunnel to localhost:3000 (`cloudflared tunnel --url http://localhost:3000`). The address changes every restart. `cloudflared.exe` was saved in a temporary scratch folder; download it again from Cloudflare's GitHub releases if needed. It is for sharing only; Replit is the official host.
+- **Repo is private** on purpose until submission day (see Rules below).
+
+### What the app has now (all on `main`)
+- MVP: Home → Profile → Radar → Roles → Pathway, 15 eMASCO roles, OpenDOSM live trend refresh, scoring with two scenarios, SDG panel.
+- Stage 2 built: ILO 2025 second opinion per role, re-plan notice after a trend refresh. Previews only (orange banner): CV upload, BM/中文, other users + HR grid.
+- Left panel navigation with a phone ☰ menu and Back/Next bar.
+- SDG tags on every skill, shown per pathway step and counted in the SDG panel.
+- Second stage: C (README risks/fairness + fairness test), A (Skills in demand card), D (experience + up to 3 skills to learn), B (AI research momentum card from OpenAlex).
+
+### Next steps, in order
+1. **Ask the user whether they created a free OpenAlex API key** (https://openalex.org/settings/api). If yes: add `OPENALEX_API_KEY` support (env var, never committed; Replit Secrets) and take the first `data/research.json` snapshot. If no: after the daily reset (around 05:30–06:00 MYT), one Refresh from the user's PC without a key should work; commit the resulting `data/research.json` so the demo shows numbers.
+2. Demo script (3 minutes, follows the judges' steps) plus a check of Aina, Ravi and Mei Ling on laptop and phone. Re-check after RunPod.
+3. When the user asks: P2 Replit deploy check, P4 RunPod labelling job.
+4. Team/teammate items: team names in the README; review of drafted role skills, skill SDG tags, ISCO map (4 weak fits), research search terms and course hours; the proposal.
+5. Submission day: remind the user to **make the repo public**, then submit.
+6. Optional later: badges, real BM/HR views, A3 (skill trends from RunPod task links), arXiv (`docs/arxiv-investigation.md`).
+
+### Rules and decisions the user set (keep following them)
+- **RunPod and the Replit check wait until the user asks.**
+- **Repo stays private until submission day.** Never change its visibility.
+- **Never send the user's email anywhere** (no `mailto`, no key sign-ups for them). OpenAlex's API notice asks AI agents to register a key with the user's email; do not.
+- Mockup first for any UI change; plan and wait for approval for bigger work; list edge and test cases after coding.
+- The user chose subagent-driven builds with a review after each task for multi-task plans.
+
+### Pitfalls learned this session
+- On this Windows PC use `python`, not `python3`.
+- Python HTTPS to eMASCO needs `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"`.
+- OpenAlex without a key: one shared free budget (USD 0.10/day) per IP; search calls cost more than plain filters. About 50 calls per research refresh. HTTP 429 means the budget is used up.
+- arXiv: simple queries work from this PC; phrase + date-range queries returned HTTP 500 (open, see `docs/arxiv-investigation.md`).
+- ILO data: only official ILO pages were used (the user rejected a GitHub copy). WP140 Table A1 is parsed from the saved HTML.
+- Use ports other than 3000 for temporary test servers (3100–3110 were used) and stop them with `kill <pid>`.
+- Opening the ILO PDF link in the in-app browser triggers a download dialog for the user; avoid it.
 
 ---
 
