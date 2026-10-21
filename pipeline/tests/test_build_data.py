@@ -29,8 +29,10 @@ def default_inputs():
             }],
         },
         "team/skill_labels.json": [
-            {"label": "SQL and databases", "hours": 25, "portal": "elatih", "sdgs": [8]},
-            {"label": "Communication", "hours": 10, "portal": "elatih", "sdgs": [8]},
+            {"label": "SQL and databases", "hours": 25, "portal": "elatih", "sdgs": [8],
+             "researchTerm": "SQL database"},
+            {"label": "Communication", "hours": 10, "portal": "elatih", "sdgs": [8],
+             "researchTerm": "communication skills"},
         ],
         "team/role_skills.json": {CODE: {
             "id": "data-analyst", "interest": "Working with data", "sdgs": [8],
@@ -118,6 +120,22 @@ class BuildTests(unittest.TestCase):
     def test_skill_without_sdgs_fails(self):
         def change(inputs):
             inputs["team/skill_labels.json"][1]["sdgs"] = []
+        with self.assertRaisesRegex(ValueError, "Communication"):
+            self.build_with(change)
+
+    def test_research_term_passed_through(self):
+        labels = self.build_with()["skills"]["labels"]
+        self.assertEqual(labels[0]["researchTerm"], "SQL database")
+
+    def test_missing_research_term_fails(self):
+        def change(inputs):
+            del inputs["team/skill_labels.json"][1]["researchTerm"]
+        with self.assertRaisesRegex(ValueError, "Communication"):
+            self.build_with(change)
+
+    def test_blank_research_term_fails(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["researchTerm"] = "  "
         with self.assertRaisesRegex(ValueError, "Communication"):
             self.build_with(change)
 

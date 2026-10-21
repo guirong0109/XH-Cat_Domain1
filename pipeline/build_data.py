@@ -169,6 +169,14 @@ def check_skill_sdgs(skill_labels, known_goals):
                 raise ValueError(f"Skill {entry['label']!r} uses unknown SDG {goal}")
 
 
+def check_research_terms(skill_labels):
+    """Every skill label needs a non-blank researchTerm for the OpenAlex research search."""
+    for entry in skill_labels:
+        term = entry.get("researchTerm")
+        if not isinstance(term, str) or not term.strip():
+            raise ValueError(f"Skill {entry['label']!r} has no researchTerm")
+
+
 EXPERIENCE_IDS = {"none", "parttime", "under2", "over2"}  # same ids as src/lib/potential.js
 MAX_LEARN = 3
 
@@ -200,6 +208,7 @@ def build(paths):
     manual_labels = without_notes(read_json(paths["manual_labels"], required=False))
     all_links = without_notes(read_json(paths["skill_task_links"], required=False))
     check_skill_sdgs(skill_labels, sdg)
+    check_research_terms(skill_labels)
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)

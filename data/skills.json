@@ -7,7 +7,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "Python programming"
     },
     {
       "label": "SQL and databases",
@@ -16,7 +17,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "SQL database"
     },
     {
       "label": "Spreadsheets (Excel)",
@@ -25,7 +27,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "spreadsheet"
     },
     {
       "label": "Data visualisation",
@@ -34,7 +37,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "data visualization"
     },
     {
       "label": "Statistics",
@@ -43,7 +47,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "statistical analysis"
     },
     {
       "label": "Using AI tools",
@@ -52,7 +57,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "AI literacy"
     },
     {
       "label": "Web development",
@@ -61,7 +67,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "web development"
     },
     {
       "label": "Networking basics",
@@ -70,7 +77,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "computer network"
     },
     {
       "label": "Network security",
@@ -80,7 +88,8 @@
         4,
         9,
         16
-      ]
+      ],
+      "researchTerm": "network security"
     },
     {
       "label": "Electrical wiring",
@@ -89,7 +98,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "electrical wiring"
     },
     {
       "label": "Solar PV basics",
@@ -99,7 +109,8 @@
         4,
         7,
         13
-      ]
+      ],
+      "researchTerm": "solar photovoltaic"
     },
     {
       "label": "Graphic design",
@@ -108,7 +119,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "graphic design"
     },
     {
       "label": "Communication",
@@ -116,7 +128,8 @@
       "portal": "elatih",
       "sdgs": [
         4
-      ]
+      ],
+      "researchTerm": "communication skills"
     },
     {
       "label": "Teamwork",
@@ -124,7 +137,8 @@
       "portal": "elatih",
       "sdgs": [
         4
-      ]
+      ],
+      "researchTerm": "teamwork"
     },
     {
       "label": "Problem solving",
@@ -132,7 +146,8 @@
       "portal": "elatih",
       "sdgs": [
         4
-      ]
+      ],
+      "researchTerm": "problem solving"
     },
     {
       "label": "Customer service",
@@ -141,7 +156,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "customer service"
     },
     {
       "label": "UX research and prototyping",
@@ -150,7 +166,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "user experience design"
     },
     {
       "label": "Content writing",
@@ -159,7 +176,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "content writing"
     },
     {
       "label": "SEO and web analytics",
@@ -168,7 +186,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "search engine optimization"
     },
     {
       "label": "Energy auditing",
@@ -178,7 +197,8 @@
         4,
         7,
         13
-      ]
+      ],
+      "researchTerm": "energy audit"
     },
     {
       "label": "Renewable energy system design",
@@ -188,7 +208,8 @@
         4,
         7,
         13
-      ]
+      ],
+      "researchTerm": "renewable energy system"
     },
     {
       "label": "Project coordination",
@@ -197,7 +218,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "project management"
     },
     {
       "label": "Healthcare data and records",
@@ -206,7 +228,8 @@
       "sdgs": [
         4,
         3
-      ]
+      ],
+      "researchTerm": "electronic health records"
     },
     {
       "label": "Version control (Git)",
@@ -215,7 +238,8 @@
       "sdgs": [
         4,
         9
-      ]
+      ],
+      "researchTerm": "version control"
     },
     {
       "label": "Business process analysis",
@@ -224,7 +248,8 @@
       "sdgs": [
         4,
         8
-      ]
+      ],
+      "researchTerm": "business process"
     }
   ],
   "similar": {
