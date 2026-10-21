@@ -7,6 +7,7 @@ import Radar from './screens/Radar.jsx';
 import Roles from './screens/Roles.jsx';
 import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
+import { rankChanges, shouldReplan } from './lib/replan.js';
 import { MIN_SKILLS, SCREENS, SCREENS_NEEDING_SKILLS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
@@ -72,6 +73,7 @@ export default function App() {
   const [seenTips, setSeenTips] = useState([]);
   const [tipsOff, setTipsOff] = useState(false);
   const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
+  const [replan, setReplan] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -135,22 +137,30 @@ export default function App() {
     const sample = data.samples.find((item) => item.id === sampleId);
     if (!sample) return;
     setProfile(profileFromSample(sample));
+    setReplan(null);
     resetRoleViews();
     if (nextScreen) navigate(nextScreen);
   };
 
   const startFresh = () => {
     setProfile(EMPTY_PROFILE);
+    setReplan(null);
     resetRoleViews();
     navigate('profile');
   };
 
   const toggleProfileItem = (field, value) => {
+    setReplan(null);
     setProfile((current) => {
       const list = current[field];
       const next = list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
       return { ...current, [field]: next, sampleId: null };
     });
+  };
+
+  const changeScenario = (next) => {
+    setReplan(null);
+    setScenario(next);
   };
 
   const refreshTrends = async () => {
@@ -160,6 +170,17 @@ export default function App() {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const result = await response.json();
       if ((result.status === 'updated' || result.status === 'unchanged') && result.trends) {
+        if (shouldReplan(result.status, profile.skills.length)) {
+          const oldGroups = data.trends?.groups;
+          const idsFor = (trendGroups) =>
+            rankRoles(data.roles, profile, { ...ctx, trendGroups }, scenario).map((entry) => entry.role.id);
+          setReplan({
+            changes: rankChanges(idsFor(oldGroups), idsFor(result.trends.groups)),
+            oldGroups,
+            newGroups: result.trends.groups,
+            year: result.trends.source?.latestYear,
+          });
+        }
         setData((current) => ({ ...current, trends: result.trends }));
       }
       setRefresh({ pending: false, status: result.status, message: result.message });
@@ -214,7 +235,9 @@ export default function App() {
         ranked={ranked}
         focusRoleId={focusRoleId}
         refresh={refresh}
-        onScenarioChange={setScenario}
+        replan={replan}
+        onDismissReplan={() => setReplan(null)}
+        onScenarioChange={changeScenario}
         onFocus={setFocusRoleId}
         onRefresh={refreshTrends}
         onSeeRoles={() => navigate('roles')}
@@ -229,7 +252,7 @@ export default function App() {
         scenario={scenario}
         ranked={ranked}
         expandedRoleId={expandedRoleId}
-        onScenarioChange={setScenario}
+        onScenarioChange={changeScenario}
         onToggleSdg={(goal) => toggleProfileItem('sdgs', goal)}
         onToggleExpanded={toggleExpanded}
         onPathway={openPathway}

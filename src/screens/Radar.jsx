@@ -1,6 +1,7 @@
 import Chip from '../components/Chip.jsx';
 import ExposureBars from '../components/ExposureBars.jsx';
 import JobMarketChart from '../components/JobMarketChart.jsx';
+import ReplanNotice from '../components/ReplanNotice.jsx';
 import RadarChart from '../components/RadarChart.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SourceNote from '../components/SourceNote.jsx';
@@ -40,6 +41,8 @@ export default function Radar({
   ranked,
   focusRoleId,
   refresh,
+  replan,
+  onDismissReplan,
   onScenarioChange,
   onFocus,
   onRefresh,
@@ -88,6 +91,17 @@ export default function Radar({
           </div>
         )}
       </div>
+      {replan && (
+        <ReplanNotice
+          changes={replan.changes}
+          roles={data.roles}
+          oldGroups={replan.oldGroups}
+          newGroups={replan.newGroups}
+          trendsSource={data.trends?.source}
+          onSeeRoles={onSeeRoles}
+          onDismiss={onDismissReplan}
+        />
+      )}
 
       <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
         Estimates, not predictions. {SCENARIO_NOTE}
