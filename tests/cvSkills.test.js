@@ -48,9 +48,25 @@ describe('extractSkills', () => {
   })
 })
 
+describe('common-word keywords', () => {
+  const real = [
+    { label: 'Spreadsheets (Excel)', keywords: ['microsoft excel', 'pivot table'] },
+    { label: 'Web development', keywords: ['reactjs', 'react.js'] },
+    { label: 'Networking basics', keywords: ['computer networking', 'lan'] },
+  ]
+  it('does not match everyday words', () => {
+    expect(extractSkills('I excel at teamwork', real)).toEqual([])
+    expect(extractSkills('react quickly', real)).toEqual([])
+    expect(extractSkills('networking events', real)).toEqual([])
+  })
+  it('matches the phrases', () => {
+    expect(extractSkills('Microsoft Excel and ReactJS', real).map((f) => f.label)).toEqual(['Spreadsheets (Excel)', 'Web development'])
+  })
+})
+
 describe('guessLevel', () => {
   it('strong', () => {
-    for (const line of ['advanced Python', 'expert', 'proficient', 'led a team', '3 years of SQL', '5+ years', '4 yrs Excel', '10 + years']) {
+    for (const line of ['advanced Python', 'expert', 'proficient', 'led a team', '3 years of SQL', '5+ years', '4 yrs Excel', '10 + years', '3.5 years']) {
       expect(guessLevel(line)).toBe('strong')
     }
   })
@@ -60,7 +76,7 @@ describe('guessLevel', () => {
     }
   })
   it('good', () => {
-    for (const line of ['2 years', 'Used Python at work', '']) {
+    for (const line of ['2 years', '1.5 years', '0.5 yrs', 'Machine learning with Python', 'Deep learning', 'Installed LED lighting', 'Used Python at work', '']) {
       expect(guessLevel(line)).toBe('good')
     }
   })

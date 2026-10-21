@@ -151,19 +151,43 @@ class BuildTests(unittest.TestCase):
     def test_missing_keywords_raises(self):
         def change(inputs):
             del inputs["team/skill_labels.json"][1]["keywords"]
-        with self.assertRaisesRegex(ValueError, "Communication"):
+        with self.assertRaisesRegex(ValueError, "Communication.*keywords list"):
             self.build_with(change)
 
     def test_uppercase_keyword_raises(self):
         def change(inputs):
             inputs["team/skill_labels.json"][1]["keywords"] = ["Communication"]
-        with self.assertRaisesRegex(ValueError, "Communication"):
+        with self.assertRaisesRegex(ValueError, "not lower-case"):
             self.build_with(change)
 
     def test_keyword_shared_by_two_skills_raises(self):
         def change(inputs):
             inputs["team/skill_labels.json"][1]["keywords"] = ["sql"]
         with self.assertRaisesRegex(ValueError, "sql"):
+            self.build_with(change)
+
+    def test_non_list_keywords_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = "communication"
+        with self.assertRaisesRegex(ValueError, "keywords list"):
+            self.build_with(change)
+
+    def test_blank_keyword_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = ["communication", "  "]
+        with self.assertRaisesRegex(ValueError, "blank keyword"):
+            self.build_with(change)
+
+    def test_keyword_with_edge_spaces_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = [" communication"]
+        with self.assertRaisesRegex(ValueError, "spaces at the ends"):
+            self.build_with(change)
+
+    def test_keyword_repeated_in_one_skill_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["keywords"] = ["communication", "communication"]
+        with self.assertRaisesRegex(ValueError, "repeats"):
             self.build_with(change)
 
     def test_keywords_passed_through(self):

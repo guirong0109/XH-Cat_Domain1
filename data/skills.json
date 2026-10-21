@@ -40,7 +40,13 @@
       ],
       "researchTerm": "spreadsheet",
       "keywords": [
-        "excel",
+        "microsoft excel",
+        "ms excel",
+        "excel spreadsheet",
+        "excel spreadsheets",
+        "pivot table",
+        "pivot tables",
+        "vlookup",
         "spreadsheet",
         "spreadsheets",
         "google sheets"
@@ -76,8 +82,9 @@
       "keywords": [
         "statistics",
         "statistical",
-        "regression",
-        "spss"
+        "spss",
+        "regression analysis",
+        "linear regression"
       ]
     },
     {
@@ -110,9 +117,11 @@
         "html",
         "css",
         "javascript",
-        "react",
         "web development",
-        "web developer"
+        "web developer",
+        "reactjs",
+        "react.js",
+        "react native"
       ]
     },
     {
@@ -125,12 +134,15 @@
       ],
       "researchTerm": "computer network",
       "keywords": [
-        "networking",
         "tcp/ip",
         "cisco",
         "ccna",
         "routers",
-        "switches"
+        "computer networking",
+        "network administration",
+        "network configuration",
+        "lan",
+        "wan"
       ]
     },
     {
@@ -195,10 +207,12 @@
       "researchTerm": "graphic design",
       "keywords": [
         "graphic design",
-        "photoshop",
+        "adobe illustrator",
+        "adobe photoshop",
         "illustrator",
-        "canva",
-        "adobe"
+        "photoshop",
+        "indesign",
+        "canva"
       ]
     },
     {
@@ -211,8 +225,8 @@
       "researchTerm": "communication skills",
       "keywords": [
         "communication",
-        "presentation",
-        "presented",
+        "communication skills",
+        "presentation skills",
         "public speaking"
       ]
     },

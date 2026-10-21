@@ -180,18 +180,25 @@ def check_research_terms(skill_labels):
 
 
 def check_keywords(skill_labels):
-    """Every skill needs lower-case CV keywords, and no keyword may belong to two skills."""
+    """Every skill needs lower-case CV keywords; none may repeat or belong to two skills."""
     owner = {}
     for entry in skill_labels:
+        label = entry["label"]
         words = entry.get("keywords")
         if not isinstance(words, list) or not words:
-            raise ValueError(f"Skill {entry['label']!r} has no keywords")
+            raise ValueError(f"Skill {label!r} needs a non-empty keywords list")
         for word in words:
-            if not isinstance(word, str) or not word.strip() or word != word.lower():
-                raise ValueError(f"Skill {entry['label']!r} has a keyword that is blank or not lower-case: {word!r}")
-            if word in owner and owner[word] != entry["label"]:
-                raise ValueError(f"Keyword {word!r} is used by both {owner[word]!r} and {entry['label']!r}")
-            owner[word] = entry["label"]
+            if not isinstance(word, str) or not word.strip():
+                raise ValueError(f"Skill {label!r} has a blank keyword: {word!r}")
+            if word != word.strip():
+                raise ValueError(f"Skill {label!r} has a keyword with spaces at the ends: {word!r}")
+            if word != word.lower():
+                raise ValueError(f"Skill {label!r} has a keyword that is not lower-case: {word!r}")
+            if word in owner:
+                if owner[word] == label:
+                    raise ValueError(f"Skill {label!r} repeats the keyword {word!r}")
+                raise ValueError(f"Keyword {word!r} is used by both {owner[word]!r} and {label!r}")
+            owner[word] = label
 
 
 EXPERIENCE_IDS = {"none", "parttime", "under2", "over2"}  # same ids as src/lib/potential.js

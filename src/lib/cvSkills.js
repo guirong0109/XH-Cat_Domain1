@@ -7,7 +7,7 @@ const FALLBACK = 'You can pick your skills instead.';
 
 export const CV_MESSAGES = {
   'not-pdf': `This file is not a PDF. Please choose a PDF file. ${FALLBACK}`,
-  'too-big': `This file is too big. The limit is 5 MB. ${FALLBACK}`,
+  'too-big': `This file is too big. The limit is ${MAX_CV_BYTES / (1024 * 1024)} MB. ${FALLBACK}`,
   empty: `This file is empty. ${FALLBACK}`,
   password: `This PDF has a password, so we cannot read it. ${FALLBACK}`,
   'no-text': `We could not find any text in this PDF. It may be a scan or a picture. ${FALLBACK}`,
@@ -23,17 +23,19 @@ export function checkCvFile({ name, type, size }) {
   return null;
 }
 
-const STRONG_WORDS = /\b(advanced|expert|proficient|led)\b/i;
-const BASIC_WORDS = /\b(basic|beginner|familiar|learning|introductory)\b/i;
-const YEARS = /(\d+)\s*\+?\s*(?:years?|yrs?)\b/gi;
+const STRONG_WORDS = /\b(advanced|expert|proficient)\b/i;
+const LED_WORD = /\b[Ll]ed\b/;
+const BASIC_WORDS = /\b(basic|beginner|familiar|introductory)\b/i;
+const LEARNING = /(?<!\b(?:machine|deep)\s)\blearning\b/i;
+const YEARS = /(?<![\d.])(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)\b/gi;
 
 export function guessLevel(line) {
   const text = String(line || '');
-  if (STRONG_WORDS.test(text)) return 'strong';
+  if (STRONG_WORDS.test(text) || LED_WORD.test(text)) return 'strong';
   for (const m of text.matchAll(YEARS)) {
     if (Number(m[1]) >= 3) return 'strong';
   }
-  if (BASIC_WORDS.test(text)) return 'basic';
+  if (BASIC_WORDS.test(text) || LEARNING.test(text)) return 'basic';
   return 'good';
 }
 
