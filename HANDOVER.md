@@ -20,7 +20,13 @@ Last updated: 2026-10-21. Written for a new session that has no earlier context.
   - **Not planned:** job-posting counts (no free, allowed Malaysian job-ad source).
 - **Left panel navigation (2026-10-21):** a left side panel replaces the header step buttons (`src/components/Sidebar.jsx`; step logic in `src/lib/journey.js`, tested). On screens below `lg` it becomes a ☰ menu in a top bar (`MobileBar.jsx`). Back / Next buttons sit under each step (`StepBar.jsx`). Merged to `main` at `9182fb7`.
 - **Temporary public link:** a Cloudflare quick tunnel (`cloudflared tunnel --url http://localhost:3000`) was used to share the local app. It is not the submission host; Replit is.
-- **Still open:** P2 Replit check, P4 RunPod run (both on hold), teammate review of the drafted role inputs and ISCO map, team names in the README, the proposal, and a demo script re-checked after P4.
+- **SDG tags on every skill (2026-10-21):** `data/team/skill_labels.json` now has `sdgs` per skill (team draft mapping; build fails on a missing or unknown SDG). Each pathway step shows its SDGs and the SDG panel counts steps per goal. This closes must-have #5 ("every role and skill").
+- **MVP second stage (2026-10-21), all merged to `main`:**
+  - **C:** README "Risks and fallbacks" (hardest risk: reliable, updatable trend data) and "Fairness" sections, plus a fairness test in `tests/scoring.test.js`.
+  - **A:** "Skills in demand" card on Radar (`src/lib/skillTrends.js`, `SkillsDemand.jsx`): each skill grouped by the ILO 2025 exposure of the roles that use it, with OpenDOSM job growth. With current data no skill is in a shrinking group, and the card says so. A3 (skill trends from RunPod task links) is the future plan.
+  - **D:** profile captures experience (4 options) and up to 3 skills to learn (`src/lib/potential.js`). Shown as badges on Roles, tags and a starting-point line on Pathway, and a line in the left panel. Never changes the score. Sample students have example values; the build validates them.
+- **Repo visibility:** the user keeps the GitHub repo **private until submission day**. Do not change it; remind them to make it public at submission (the brief requires an accessible repo).
+- **Still open:** P2 Replit check, P4 RunPod run (both on hold), teammate review of the drafted role inputs, skill SDG tags and ISCO map, team names in the README, the proposal, a demo script re-checked after P4, and B (AI-advancement tracker, feasibility being tested).
 - The rest of this file (§1–§6) is from the first session; where it conflicts with this section, this section wins.
 
 ---
