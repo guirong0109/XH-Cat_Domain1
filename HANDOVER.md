@@ -7,7 +7,7 @@ Last updated: 2026-10-21. Written for a new session that has no earlier context.
 ## 0. Update 2026-10-21 (second session)
 
 - **P1 done:** the app runs on the user's Windows PC (`npm install`, `npm run build`, `npm start` → http://localhost:3000). Node 24.16, Python 3.14.
-- **P2 skipped** for now by the user.
+- **P2 (Replit) and P4 (RunPod) are on hold until the user asks.** Do not start either on your own.
 - **P3 done (drafts):** 7 roles added (2543-03, 2541-09, 3313-04, 2141-13, 2269-01, 3514-01, 2511-08), so 15 in total. The skill lists, SDG tags, 9 new skill labels with estimated hours, and SDG 3 were drafted by Claude from the eMASCO text. **The teammate should review them.** Placeholder task labels were added for the new roles too.
 - **P4 flagged:** the user will run RunPod later. Until then all labels show the "Sample" badge.
 - **P5:** after P3, the Moderate/Fast flip swaps Ravi's #2/#3 and several lower pairs, so no formula change was made. The README demo tip was rewritten (Ravi + Fast AI, Ravi + SDG 16).
@@ -18,6 +18,9 @@ Last updated: 2026-10-21. Written for a new session that has no earlier context.
   - **Preview only (orange banner):** CV upload, Bahasa Malaysia / 中文 (draft translations), other users with an example HR grid. Home has a "Coming in Stage 2" section.
   - **Awaiting review:** `data/team/isco_map.json` was drafted by Claude, not an official table. Weak fits: 3131-07→3113, 3512-05→3512, 2269-01→2120, 2511-08→2511. The teammate should check it.
   - **Not planned:** job-posting counts (no free, allowed Malaysian job-ad source).
+- **Left panel navigation (2026-10-21):** a left side panel replaces the header step buttons (`src/components/Sidebar.jsx`; step logic in `src/lib/journey.js`, tested). On screens below `lg` it becomes a ☰ menu in a top bar (`MobileBar.jsx`). Back / Next buttons sit under each step (`StepBar.jsx`). Merged to `main` at `9182fb7`.
+- **Temporary public link:** a Cloudflare quick tunnel (`cloudflared tunnel --url http://localhost:3000`) was used to share the local app. It is not the submission host; Replit is.
+- **Still open:** P2 Replit check, P4 RunPod run (both on hold), teammate review of the drafted role inputs and ISCO map, team names in the README, the proposal, and a demo script re-checked after P4.
 - The rest of this file (§1–§6) is from the first session; where it conflicts with this section, this section wins.
 
 ---
