@@ -14,6 +14,11 @@
     "sdgs": [
       4,
       9
+    ],
+    "experience": "parttime",
+    "learn": [
+      "Using AI tools",
+      "Data visualisation"
     ]
   },
   {
@@ -31,6 +36,10 @@
     "sdgs": [
       7,
       13
+    ],
+    "experience": "none",
+    "learn": [
+      "Solar PV basics"
     ]
   },
   {
@@ -49,6 +58,10 @@
     "sdgs": [
       8,
       4
+    ],
+    "experience": "parttime",
+    "learn": [
+      "Data visualisation"
     ]
   }
 ]

@@ -10,13 +10,14 @@ import Roles from './screens/Roles.jsx';
 import Pathway from './screens/Pathway.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
+import { toggleLearn } from './lib/potential.js';
 import PreviewCv from './screens/PreviewCv.jsx';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
 import { SCREENS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
-const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], sampleId: null };
+const EMPTY_PROFILE = { skills: [], interests: [], sdgs: [], experience: null, learn: [], sampleId: null };
 
 // A URL hash such as #profile opens that screen directly (handy for demos).
 function screenFromHash() {
@@ -29,7 +30,14 @@ function urlForScreen(screen) {
 }
 
 function profileFromSample(sample) {
-  return { skills: [...sample.skills], interests: [...sample.interests], sdgs: [...sample.sdgs], sampleId: sample.id };
+  return {
+    skills: [...sample.skills],
+    interests: [...sample.interests],
+    sdgs: [...sample.sdgs],
+    experience: sample.experience ?? null,
+    learn: [...(sample.learn ?? [])],
+    sampleId: sample.id,
+  };
 }
 
 function StatusMessage({ children, role = 'status' }) {
@@ -138,9 +146,16 @@ export default function App() {
     setProfile((current) => {
       const list = current[field];
       const next = list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
-      return { ...current, [field]: next, sampleId: null };
+      // A skill the student now has is no longer a skill to learn.
+      const learn = field === 'skills' ? current.learn.filter((item) => !next.includes(item)) : current.learn;
+      return { ...current, [field]: next, learn, sampleId: null };
     });
   };
+
+  const toggleLearnSkill = (label) => setProfile((current) => ({ ...toggleLearn(current, label), sampleId: null }));
+
+  const chooseExperience = (experience) =>
+    setProfile((current) => ({ ...current, experience: current.experience === experience ? null : experience, sampleId: null }));
 
   const changeScenario = (next) => {
     setReplan(null);
@@ -224,6 +239,8 @@ export default function App() {
         ranked={ranked}
         onLoadSample={(sampleId) => loadSample(sampleId)}
         onToggle={toggleProfileItem}
+        onToggleLearn={toggleLearnSkill}
+        onChooseExperience={chooseExperience}
         onNext={() => navigate('radar')}
       />
     );

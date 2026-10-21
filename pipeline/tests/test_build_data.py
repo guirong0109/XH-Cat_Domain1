@@ -41,7 +41,8 @@ def default_inputs():
         "team/sdg.json": {"8": {"label": "SDG 8 Decent Work", "short": "SDG 8",
                                 "color": "#A21942", "target": "Target 8.2"}},
         "team/samples.json": [{"id": "aina", "label": "Aina", "skills": ["SQL and databases"],
-                               "interests": ["Working with data"], "sdgs": [8]}],
+                               "interests": ["Working with data"], "sdgs": [8],
+                               "experience": "parttime", "learn": ["Communication"]}],
         "runpod/exposure.json": {CODE: {
             "tasks": [{"text": "Clean data.", "label": "automatable"},
                       {"text": "Present findings.", "label": "human_led"}],
@@ -124,6 +125,33 @@ class BuildTests(unittest.TestCase):
         def change(inputs):
             inputs["team/skill_labels.json"][0]["sdgs"] = [99]
         with self.assertRaisesRegex(ValueError, "99"):
+            self.build_with(change)
+
+    def test_sample_potential_passed_through(self):
+        sample = self.build_with()["samples"][0]
+        self.assertEqual(sample["experience"], "parttime")
+        self.assertEqual(sample["learn"], ["Communication"])
+
+    def test_sample_learn_must_be_known_and_new(self):
+        def unknown(inputs):
+            inputs["team/samples.json"][0]["learn"] = ["Juggling"]
+        with self.assertRaisesRegex(ValueError, "Juggling"):
+            self.build_with(unknown)
+
+        def already_has(inputs):
+            inputs["team/samples.json"][0]["learn"] = ["SQL and databases"]
+        with self.assertRaisesRegex(ValueError, "already has"):
+            self.build_with(already_has)
+
+        def too_many(inputs):
+            inputs["team/samples.json"][0]["learn"] = ["Communication"] * 4
+        with self.assertRaisesRegex(ValueError, "at most 3"):
+            self.build_with(too_many)
+
+    def test_sample_experience_must_be_known(self):
+        def change(inputs):
+            inputs["team/samples.json"][0]["experience"] = "ten years"
+        with self.assertRaisesRegex(ValueError, "ten years"):
             self.build_with(change)
 
     def test_build_merges_role(self):

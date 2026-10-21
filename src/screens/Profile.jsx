@@ -6,6 +6,7 @@ import { roleRadarValues } from '../lib/radar.js';
 import { useTween } from '../lib/useTween.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { SCENARIO_NAME, formatDate } from '../lib/roleView.js';
+import { EXPERIENCE_OPTIONS, MAX_LEARN, learnChoice } from '../lib/potential.js';
 
 function Card({ children }) {
   return <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]">{children}</div>;
@@ -19,7 +20,18 @@ function interestOptions(data) {
   return seen;
 }
 
-export default function Profile({ data, ctx, profile, scenario, ranked, onLoadSample, onToggle, onNext }) {
+export default function Profile({
+  data,
+  ctx,
+  profile,
+  scenario,
+  ranked,
+  onLoadSample,
+  onToggle,
+  onToggleLearn,
+  onChooseExperience,
+  onNext,
+}) {
   const interests = useMemo(() => interestOptions(data), [data]);
   const top = ranked[0];
   const values = top ? roleRadarValues(top.role, profile, ctx.similar, scenario) : null;
@@ -70,6 +82,54 @@ export default function Profile({ data, ctx, profile, scenario, ranked, onLoadSa
                 {label}
               </Chip>
             ))}
+          </div>
+        </Card>
+
+        <Card>
+          <h2 className="m-0 text-lg font-bold">Your experience so far</h2>
+          <p className="m-0 text-sm text-slate-600">Pick one. It helps us word your plan. It does not change any score.</p>
+          <div role="group" aria-label="Your experience so far" className="flex flex-wrap gap-2">
+            {EXPERIENCE_OPTIONS.map((option) => (
+              <Chip
+                key={option.id}
+                pressed={profile.experience === option.id}
+                onClick={() => onChooseExperience(option.id)}
+              >
+                {option.label}
+              </Chip>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="m-0 text-lg font-bold">Skills you want to learn</h2>
+            <span className="text-[13px] text-slate-600">
+              {profile.learn.length} of {MAX_LEARN} picked
+              {profile.learn.length >= MAX_LEARN ? ' · remove one to pick another' : ''}
+            </span>
+          </div>
+          <p className="m-0 text-sm text-slate-600">
+            Your potential: pick up to {MAX_LEARN}. We show which roles build them. It does not change any score.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {data.skills.labels.map(({ label }) => {
+              const choice = learnChoice(label, profile);
+              const picked = profile.learn.includes(label);
+              return (
+                <Chip
+                  key={label}
+                  tone="learn"
+                  pressed={picked}
+                  disabled={choice.disabled}
+                  onClick={() => onToggleLearn(label)}
+                >
+                  {picked && <span aria-hidden="true">★</span>}
+                  {label}
+                  {profile.skills.includes(label) && <span className="text-xs"> · you have it</span>}
+                </Chip>
+              );
+            })}
           </div>
         </Card>
 

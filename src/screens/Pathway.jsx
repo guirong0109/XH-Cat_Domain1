@@ -10,6 +10,7 @@ import {
   whyText,
 } from '../lib/pathwayView.js';
 import SdgTag from '../components/SdgTag.jsx';
+import { startingPoint } from '../lib/potential.js';
 import SourceNote from '../components/SourceNote.jsx';
 
 export default function Pathway({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
@@ -46,6 +47,10 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
           <div className="h-full bg-[#0F766E] transition-[width] duration-300" style={{ width: `${percent}%` }} />
         </div>
 
+        {startingPoint(profile.experience) && (
+          <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.experience)}</p>
+        )}
+
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">
             You already have every listed skill for this role. Talk to your career centre about internships.
@@ -72,10 +77,17 @@ export default function Pathway({ data, ctx, profile, scenario, ranked, focusRol
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-2">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h2 className="m-0 text-lg font-bold">
-                      <span className="sr-only">Step {index + 1}: </span>
-                      {step.label}
-                    </h2>
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <h2 className="m-0 text-lg font-bold">
+                        <span className="sr-only">Step {index + 1}: </span>
+                        {step.label}
+                      </h2>
+                      {(profile.learn || []).includes(step.label) && (
+                        <span className="rounded-md bg-orange-100 px-2 py-0.5 text-xs font-bold text-[#9A3412]">
+                          ★ You want to learn this
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[13px] text-slate-600">about {step.hours} hours (estimate)</span>
                   </div>
                   {stepSdgs(step.label, data.skills.labels, data.sdg).length > 0 && (

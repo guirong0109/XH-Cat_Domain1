@@ -24,7 +24,7 @@ Demo tip: on Radar, the "Skills in demand" card shows which skills AI is changin
 
 | Feature | How it is delivered |
 | --- | --- |
-| Skills profile intake | Skill chips from a fixed list, interest chips, SDG chips, and 3 sample students. CV upload is Stage 2. |
+| Skills profile intake | Current skills (chips from a fixed list), potential (work experience so far and up to 3 skills to learn), interests, SDGs, and 3 sample students. Experience and skills to learn shape badges, tags and advice text but never the score. CV upload is Stage 2. |
 | AI-trend signal layer | Live OpenDOSM employment trend per MASCO major group (Refresh button, dated) plus AI-exposure labels on eMASCO tasks. |
 | Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel. |
 | Personalised reskilling pathway | Gap skills ordered by future importance, hour estimates, official portal links, progress tick-boxes. |

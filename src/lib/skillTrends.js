@@ -16,7 +16,13 @@ function bandFor(exposedCount, roleCount) {
   return 'humanLed';
 }
 
-export function skillTrends(roles, trendGroups, pickedSkills) {
+// Skills the student has or wants come first, so a collapsed list never hides them.
+export function displayOrder(skills) {
+  const mine = (skill) => skill.have || skill.want;
+  return [...skills.filter(mine), ...skills.filter((skill) => !mine(skill))];
+}
+
+export function skillTrends(roles, trendGroups, pickedSkills, learnSkills = []) {
   const bySkill = new Map();
   const jobGroups = [];
   for (const role of roles) {
@@ -47,6 +53,7 @@ export function skillTrends(roles, trendGroups, pickedSkills) {
       iloMean: round(average(withIlo.map((role) => role.ilo.mean)), 2),
       growthPct: growths.length ? round(average(growths), 1) : null,
       have: pickedSkills.includes(label),
+      want: learnSkills.includes(label),
     });
   }
 

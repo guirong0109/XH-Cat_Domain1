@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { SHOWN_PER_BAND, skillTrends } from '../src/lib/skillTrends.js';
+import { SHOWN_PER_BAND, displayOrder, skillTrends } from '../src/lib/skillTrends.js';
 
 const ilo = (category, mean) => ({ category, mean });
 const role = (id, group, skills, iloInfo) => ({ id, group, skills: skills.map((label) => ({ label })), ilo: iloInfo });
@@ -71,6 +71,22 @@ describe('skillTrends', () => {
     const result = skillTrends([role('g', 'managers', ['Leading'], ilo('Gradient 2', 0.45))], trendGroups, []);
     expect(find(result, 'Leading').growthPct).toBeNull();
     expect(result.jobGroups).toEqual([]);
+  });
+
+  it('marks skills the student wants to learn', () => {
+    const result = skillTrends(roles, trendGroups, [], ['Python']);
+    expect(find(result, 'Python').want).toBe(true);
+    expect(find(result, 'Wiring').want).toBe(false);
+  });
+
+  it('puts skills the student has or wants first, keeping exposure order otherwise', () => {
+    const list = [
+      { label: 'A', have: false, want: false },
+      { label: 'B', have: false, want: true },
+      { label: 'C', have: false, want: false },
+      { label: 'D', have: true, want: false },
+    ];
+    expect(displayOrder(list).map((s) => s.label)).toEqual(['B', 'D', 'A', 'C']);
   });
 
   it('shows a fixed number of skills per band before "show all"', () => {

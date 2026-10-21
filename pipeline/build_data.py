@@ -169,6 +169,25 @@ def check_skill_sdgs(skill_labels, known_goals):
                 raise ValueError(f"Skill {entry['label']!r} uses unknown SDG {goal}")
 
 
+EXPERIENCE_IDS = {"none", "parttime", "under2", "over2"}  # same ids as src/lib/potential.js
+MAX_LEARN = 3
+
+
+def check_sample_potential(sample, known_labels):
+    """A sample's experience must be a known option; its skills to learn must be known, new and at most 3."""
+    experience = sample.get("experience")
+    if experience is not None and experience not in EXPERIENCE_IDS:
+        raise ValueError(f"Sample {sample['id']} has unknown experience {experience!r}")
+    learn = sample.get("learn", [])
+    if len(learn) > MAX_LEARN:
+        raise ValueError(f"Sample {sample['id']} can list at most {MAX_LEARN} skills to learn")
+    for label in learn:
+        if label not in known_labels:
+            raise ValueError(f"Sample {sample['id']} wants to learn unknown skill {label!r}")
+        if label in sample["skills"]:
+            raise ValueError(f"Sample {sample['id']} already has {label!r}, so it cannot be a skill to learn")
+
+
 def build(paths):
     """Return {"roles", "skills", "sdg", "samples"} ready to be written as JSON."""
     snapshot = read_json(paths["roles_raw"])
@@ -207,6 +226,7 @@ def build(paths):
         for label in sample["skills"]:
             if label not in known_labels:
                 raise ValueError(f"Sample {sample['id']} uses unknown skill label {label!r}")
+        check_sample_potential(sample, known_labels)
 
     return {
         "roles": roles,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SourceNote from './SourceNote.jsx';
-import { SHOWN_PER_BAND, skillTrends } from '../lib/skillTrends.js';
+import { SHOWN_PER_BAND, displayOrder, skillTrends } from '../lib/skillTrends.js';
 import { formatDate, formatGrowth, groupLabel } from '../lib/roleView.js';
 
 const BANDS = [
@@ -33,7 +33,8 @@ function countText(count) {
 
 function Band({ band, skills }) {
   const [showAll, setShowAll] = useState(false);
-  const shown = showAll ? skills : skills.slice(0, SHOWN_PER_BAND);
+  const ordered = displayOrder(skills);
+  const shown = showAll ? ordered : ordered.slice(0, SHOWN_PER_BAND);
   const hidden = skills.length - shown.length;
 
   return (
@@ -51,11 +52,15 @@ function Band({ band, skills }) {
             <li
               key={skill.label}
               title={`Used in ${skill.roleCount} ${skill.roleCount === 1 ? 'role' : 'roles'}; ${skill.exposedCount} in an ILO exposed gradient`}
-              className={`rounded-full px-2.5 py-0.5 ${skill.have ? 'bg-[#0F766E] text-white' : band.chip}`}
+              className={`rounded-full px-2.5 py-0.5 ${
+                skill.have ? 'bg-[#0F766E] text-white' : skill.want ? 'border-2 border-[#C2410C] bg-white' : band.chip
+              }`}
             >
               {skill.have && <span aria-hidden="true">✓ </span>}
+              {skill.want && <span aria-hidden="true">★ </span>}
               {skill.label} · {skill.iloMean.toFixed(2)}
               {skill.have && <span className="sr-only"> (you have it)</span>}
+              {skill.want && <span className="sr-only"> (you want to learn it)</span>}
             </li>
           ))}
         </ul>
@@ -75,8 +80,8 @@ function Band({ band, skills }) {
 }
 
 // Radar card: every skill in the app, by how much AI is changing the jobs that use it.
-export default function SkillsDemand({ roles, trends, pickedSkills }) {
-  const { bands, jobGroups, anyShrinking } = skillTrends(roles, trends?.groups, pickedSkills);
+export default function SkillsDemand({ roles, trends, pickedSkills, learnSkills = [] }) {
+  const { bands, jobGroups, anyShrinking } = skillTrends(roles, trends?.groups, pickedSkills, learnSkills);
   const total = bands.changing.length + bands.mixed.length + bands.humanLed.length;
   const source = trends?.source;
   const iloDate = roles.find((role) => role.ilo?.fetchedAt)?.ilo.fetchedAt;
@@ -89,7 +94,7 @@ export default function SkillsDemand({ roles, trends, pickedSkills }) {
           <h2 className="m-0 text-lg font-bold">Skills in demand</h2>
           <p className="m-0 mt-1 text-sm text-slate-600">
             All {total} skills in this app, grouped by how much AI is changing the jobs that use them. ✓ = you have
-            it.
+            it, ★ = you want to learn it.
           </p>
         </div>
         {!anyShrinking && jobGroups.length > 0 && (

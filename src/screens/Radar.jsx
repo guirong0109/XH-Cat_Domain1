@@ -170,7 +170,7 @@ export default function Radar({
         <JobMarketChart trends={data.trends} />
         <ExposureBars roles={exposureRoles} />
       </div>
-      <SkillsDemand roles={data.roles} trends={data.trends} pickedSkills={profile.skills} />
+      <SkillsDemand roles={data.roles} trends={data.trends} pickedSkills={profile.skills} learnSkills={profile.learn} />
       <YouthCard trends={data.trends} />
     </main>
   );

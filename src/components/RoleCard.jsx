@@ -2,6 +2,7 @@ import SdgTag from './SdgTag.jsx';
 import { skillStatus } from '../lib/scoring.js';
 import { ILO_NO_MATCH, RANGE_NOTE, exposureShares, groupLabel, iloView, labelOrigin, scoreBreakdown } from '../lib/roleView.js';
 import { useTween } from '../lib/useTween.js';
+import { learnCount } from '../lib/potential.js';
 
 const SKILL_LOOK = {
   have: 'border border-[#0F766E] bg-[#0F766E] text-white',
@@ -32,6 +33,7 @@ export default function RoleCard({
 }) {
   const shownMatch = useTween({ match: score.match }).match;
   const interestMatch = profile.interests.includes(role.interest);
+  const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
   const ilo = iloView(role);
   const shares = exposureShares(role);
@@ -72,6 +74,11 @@ export default function RoleCard({
                 Matches your interest
               </span>
             )}
+            {wanted > 0 && (
+              <span className="rounded-md bg-orange-100 px-2 py-0.5 text-xs font-bold text-[#9A3412]">
+                ★ Builds {wanted} {wanted === 1 ? 'skill' : 'skills'} you want
+              </span>
+            )}
             {role.labelSource === 'manual' && (
               <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Sample labels</span>
             )}
@@ -84,8 +91,13 @@ export default function RoleCard({
               const status = skillStatus(skill.label, profile.skills, similar);
               return (
                 <li key={skill.label} className={`rounded-full px-2.5 py-0.5 text-[13px] ${SKILL_LOOK[status]}`}>
+                  {(profile.learn || []).includes(skill.label) && <span aria-hidden="true">★ </span>}
                   {skill.label}
-                  <span className="sr-only"> ({SKILL_STATUS_TEXT[status]})</span>
+                  <span className="sr-only">
+                    {' '}
+                    ({SKILL_STATUS_TEXT[status]}
+                    {(profile.learn || []).includes(skill.label) ? ', you want to learn it' : ''})
+                  </span>
                 </li>
               );
             })}

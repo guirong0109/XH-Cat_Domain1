@@ -1,5 +1,6 @@
 import { journeySteps, nextHint } from '../lib/journey.js';
 import { formatDate } from '../lib/roleView.js';
+import { experienceLabel } from '../lib/potential.js';
 
 const PREVIEW_LINKS = [
   { screen: 'preview-cv', label: 'Start from your CV' },
@@ -58,7 +59,9 @@ function profileSummary(data, profile) {
   const skills = `${profile.skills.length} ${profile.skills.length === 1 ? 'skill' : 'skills'}`;
   const interests = `${profile.interests.length} ${profile.interests.length === 1 ? 'interest' : 'interests'}`;
   const sdgs = profile.sdgs.length ? `SDG ${[...profile.sdgs].sort((a, b) => a - b).join(', ')}` : 'no SDGs yet';
-  return { name, detail: `${skills} · ${interests} · ${sdgs}` };
+  const learn = profile.learn?.length ? `★ ${profile.learn.length} to learn` : '';
+  const potential = [experienceLabel(profile.experience), learn].filter(Boolean).join(' · ');
+  return { name, detail: `${skills} · ${interests} · ${sdgs}`, potential };
 }
 
 function dataLine(data) {
@@ -113,6 +116,7 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
         <span className="text-xs font-bold text-[#115E59]">YOUR PROFILE</span>
         <span className="text-[15px] font-bold">{summary.name}</span>
         <span className="text-[13px] text-slate-700">{summary.detail}</span>
+        {summary.potential && <span className="text-[13px] text-slate-700">{summary.potential}</span>}
         <button
           type="button"
           onClick={() => onNavigate('profile')}
