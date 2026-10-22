@@ -500,6 +500,184 @@
       "qualification": "Bachelor’s degree or equivalent",
       "group": "professionals",
       "url": "https://emasco.mohr.gov.my/masco/2511-08"
+    },
+    {
+      "code": "2411-01",
+      "title": "Accountant",
+      "description": "Accountant plans, organises, and manages an accounting system to ensure financial records are accurate, complete, and compliant with applicable standards and regulations. They prepare and review financial statements, manage budgets, analyse costs and operational data, and support audits, taxation, and financial planning. Some may specialise in areas such as forensic accounting, project or drilling finances, cost estimation, or strategic financial technology, providing detailed analysis and advice to support organisational decision-making and operational efficiency.",
+      "tasks": [
+        "Record and maintain accurate financial transactions, including journal entries, general ledger updates, and supporting documentation.",
+        "Prepare and review financial statements and management reports, including income statements, balance sheets, and cash flow statements.",
+        "Reconcile bank statements and accounts to ensure the accuracy and completeness of financial records.",
+        "Handle accounts payable and receivable processes, including monitoring payments, collections, and cash flow.",
+        "Prepare and submit tax returns and ensure compliance with relevant tax laws, accounting standards, and financial regulations.",
+        "Support the preparation of budgets, forecasts, and financial plans, including cost estimates, and monitor variances and financial performance.",
+        "Analyse financial and cost data to identify trends, risks, and opportunities for cost control and operational improvement.",
+        "Support internal and external audit activities by preparing documentation, reviewing financial records, and addressing audit queries.",
+        "Evaluate financial controls and provide advice on financial management, risk mitigation, compliance, and process improvements."
+      ],
+      "basic_skills": [
+        "Critical thinking and problem-solving to analyse financial issues and evaluate outcomes.",
+        "Effective communication skills to present financial information clearly and collaborate with stakeholders.",
+        "High attention to detail to ensure accuracy and compliance in financial records, reports, and estimates.",
+        "Proficiency in accounting software and spreadsheet tools (e.g., Microsoft Excel) for financial analysis, reporting, and documentation.",
+        "Strong numerical and analytical skills to interpret financial and cost data accurately."
+      ],
+      "specific_skills": [
+        "Competency in budgeting, forecasting, and financial modelling for planning and control.",
+        "Competency in financial and cost analysis to support decision-making and operational efficiency.",
+        "Competency in financial statement preparation, reporting, and audit processes.",
+        "Knowledge in cost accounting and expense management, including project and operational costing.",
+        "Knowledge in forensic accounting and fraud detection techniques.",
+        "Knowledge in internal controls, auditing practices, and financial risk management.",
+        "Knowledge in payroll administration and statutory contribution compliance.",
+        "Knowledge of Malaysian Financial Reporting Standards (MFRS), International Financial Reporting Standards (IFRS), and relevant tax regulations.",
+        "Proficiency in Enterprise Resource Planning (ERP) systems and accounting software."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2411-01",
+      "scrapedAt": "2026-10-22"
+    },
+    {
+      "code": "2411-02",
+      "title": "Tax Consultant",
+      "description": "Tax Consultant provides expert advice on tax legislation to support an individual or business in meeting their tax obligations and optimising financial outcomes. They assess financial records, prepare and review tax returns, develop tax planning strategies, and ensure compliance with regulatory requirements. The role also involves assisting a client during audits, resolving disputes with tax authorities, and keeping them informed of relevant changes in tax laws.",
+      "tasks": [
+        "Prepare and review personal and corporate tax computations and tax returns in compliance with tax regulations.",
+        "Advise clients on tax planning strategies to minimise tax liabilities within legal and regulatory requirements.",
+        "Research and interpret tax legislation, guidelines, and regulatory updates to ensure accurate tax advice and compliance.",
+        "Liaise with tax authorities on tax audits and dispute resolution matters.",
+        "Identify tax risks and opportunities and recommend appropriate tax planning or compliance solutions.",
+        "Collaborate with auditors and finance teams to support tax compliance, reporting, and audit matters.",
+        "Maintain accurate tax records and supporting documentation for audits and regulatory reviews."
+      ],
+      "basic_skills": [
+        "Effective written and verbal communication to engage with clients and tax authorities.",
+        "Good time management and organisational skills to meet tax deadlines.",
+        "High attention to detail to ensure accuracy in tax documentation and compliance.",
+        "Numerical and reading comprehension skills to understand tax regulations and financial reports.",
+        "Strong analytical and problem-solving skills to interpret tax and financial information accurately."
+      ],
+      "specific_skills": [
+        "Competency in reviewing financial records and supporting tax audit matters.",
+        "Competency in tax advisory and tax planning for client compliance and financial optimisation.",
+        "Knowledge in financial reporting and financial record review to support tax computations and compliance.",
+        "Knowledge in Malaysian tax laws, including the Income Tax Act 1967 and Sales and Service Tax (SST) regulations.",
+        "Knowledge in tax incentives, exemptions, and reliefs.",
+        "Proficiency in preparing and filing corporate, personal, and withholding tax returns.",
+        "Proficiency in tax software and electronic filing platforms."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2411-02",
+      "scrapedAt": "2026-10-22"
+    },
+    {
+      "code": "2411-05",
+      "title": "Auditor",
+      "description": "Auditor examines, analyses, and interprets financial and operational records to ensure accuracy, integrity, and compliance with accounting standards, laws, and internal policies. They plan and conduct audits, assess internal controls, identify risks, and recommend improvements to strengthen governance, safeguard assets, and enhance operational efficiency. The role also involves preparing detailed reports, liaising with management and regulatory bodies, and supporting transparency and reliability in financial and operational reporting.",
+      "tasks": [
+        "Plan and conduct financial, operational, and compliance audits based on organisational risk assessments.",
+        "Examine financial records, transactions, and supporting documents to verify accuracy, reliability, and compliance.",
+        "Evaluate internal control systems, accounting procedures, and risk management frameworks.",
+        "Assess compliance with relevant laws, regulations, standards, and organisational policies.",
+        "Prepare audit working papers and audit reports with findings, conclusions, and recommendations.",
+        "Identify control weaknesses, irregularities, and fraud risks, and recommend corrective actions.",
+        "Analyse financial statements, budgets, cost data, and operational information to support audit assessments.",
+        "Advise management on improvements to governance, risk management, internal controls, and operational efficiency.",
+        "Present audit findings and recommendations to management and relevant stakeholders.",
+        "Follow up on audit recommendations to monitor implementation of corrective actions and strengthened controls."
+      ],
+      "basic_skills": [
+        "Attention to detail to identify errors, irregularities, and inconsistencies in financial records and documents.",
+        "Clear communication skills to present audit findings and engage effectively with stakeholders.",
+        "Critical thinking and problem-solving skills to assess financial processes and audit findings.",
+        "Organisational and time management skills to manage multiple audits and meet reporting deadlines.",
+        "Strong analytical and numerical skills to evaluate financial data, controls, and risks."
+      ],
+      "specific_skills": [
+        "Ability to investigate fraud risks, irregularities, and forensic audit issues.",
+        "Competency in budget and financial analysis for audit planning and review.",
+        "Competency in coordinating and managing complex audit assignments.",
+        "Competency in internal auditing, risk assessment, and evaluation of internal controls.",
+        "Knowledge in financial reporting, account analysis, and cost assessment for audit purposes.",
+        "Knowledge in International Standards on Auditing (ISA), Malaysian Financial Reporting Standards (MFRS), Committee of Sponsoring Organizations of the Treadway Commission (COSO), and relevant International Organization for Standardization (ISO) standards.",
+        "Knowledge in regulatory compliance, corporate governance, and organisational policies.",
+        "Proficiency in audit software, financial management systems, and data analysis tools."
+      ],
+      "qualification": "Bachelor’s degree or equivalent",
+      "group": "professionals",
+      "url": "https://emasco.mohr.gov.my/masco/2411-05",
+      "scrapedAt": "2026-10-22"
+    },
+    {
+      "code": "3313-02",
+      "title": "Audit Assistant Executive Officer",
+      "description": "Audit Assistant Executive Officer assists in the examination and evaluation of an organisation’s financial records, accounting systems and internal controls to ensure accuracy, compliance and proper governance. The role involves performing audit fieldwork, reviewing transactions and financial statements, identifying discrepancies or control weaknesses, and preparing supporting documentation and reports. They may also support routine accounting functions and recommend improvements to financial procedures in line with statutory and regulatory requirements.",
+      "tasks": [
+        "Record and reconcile financial transactions accurately in accounting systems, including invoices, receipts, and other financial documents.",
+        "Maintain complete financial records according to accounting principles.",
+        "Prepare financial statements and periodic financial reports.",
+        "Assist in planning and conducting internal and external audits, including preparation of audit documentation and working papers.",
+        "Review accounting entries and documents for compliance and accuracy, and identify control weaknesses or process gaps, recommending corrective actions where necessary.",
+        "Liaise with clients, suppliers, and internal teams to resolve payment or billing queries."
+      ],
+      "basic_skills": [
+        "Ability to work independently and collaboratively in teams.",
+        "Analytical thinking and problem-solving ability.",
+        "Attention to detail and accuracy in tasks.",
+        "Good communication skills, both oral and written.",
+        "Time management and organisational skills to handle multiple tasks and meet deadlines."
+      ],
+      "specific_skills": [
+        "Ability to perform financial analysis, reporting, and interpretation of audit findings.",
+        "Competency in bookkeeping and preparation of full sets of accounts.",
+        "Competency in internal, tax, and financial auditing, including risk assessment, control evaluation, and audit documentation.",
+        "Competency in payroll processing and management of statutory deductions.",
+        "Familiarity with International Standards on Auditing (ISA) and Malaysian Financial Reporting Standards (MFRS).",
+        "Knowledge in Malaysian financial regulations, taxation (Sales and Service Tax (SST), Potongan Cukai Berjadual (PCB), and statutory compliance (Employees Provident Fund (EPF), Social Security Organization (SOCSO).",
+        "Proficiency in accounting and audit software.",
+        "Proficiency in bank reconciliation, cash management, and month-end closing processes."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3313-02",
+      "scrapedAt": "2026-10-22"
+    },
+    {
+      "code": "3313-03",
+      "title": "Accounting Technician",
+      "description": "Accounting Technician maintains and updates financial records to support the accurate reporting and control of an organisation’s finances. They process financial transactions, prepare reconciliations and accounting schedules, record revenues and expenditures, and assist in the preparation of budget and financial statements in accordance with relevant standards and regulations. Their work supports effective financial management across a range of sectors.",
+      "tasks": [
+        "Record and process financial transactions, including cash, bank, and invoice entries.",
+        "Maintain accurate financial records in accordance with accounting principles.",
+        "Prepare invoices, manage billing, and process payments.",
+        "Reconcile bank and ledger accounts.",
+        "Verify accuracy of financial documents and records.",
+        "Assist in the preparation of financial statements and reports.",
+        "Manage payroll and employee reimbursements.",
+        "Liaise with auditors and tax agents.",
+        "Ensure compliance with Malaysian financial regulations, tax requirements, and accounting standards."
+      ],
+      "basic_skills": [
+        "Attention to detail and accuracy.",
+        "Effective communication skills.",
+        "Problem-solving and analytical skills.",
+        "Time management and organisational skills."
+      ],
+      "specific_skills": [
+        "Ability to handle confidential financial information professionally.",
+        "Ability to prepare and analyse financial reports and statements.",
+        "Competency in maintaining accurate bookkeeping and managing cash transactions.",
+        "Knowledge in accounting principles and best practices.",
+        "Knowledge in tax regulations and audit procedures.",
+        "Proficiency in accounting software."
+      ],
+      "qualification": "Diploma or equivalent",
+      "group": "technicians",
+      "url": "https://emasco.mohr.gov.my/masco/3313-03",
+      "scrapedAt": "2026-10-22"
     }
   ]
 }

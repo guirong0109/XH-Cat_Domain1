@@ -1,8 +1,12 @@
 """Fetch eMASCO occupation pages and save a JSON snapshot for the web app.
 
 Usage: python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json [--allow-partial]
+       python3 pipeline/scrape_emasco.py --add CODE [CODE ...] data/emasco/roles_raw.json [--codes-file PATH]
 
 If any code fails, the existing snapshot is kept unless --allow-partial is given.
+--add fetches only the new codes, appends them to the snapshot (old roles untouched, each new
+role gets "scrapedAt") and appends the codes to the codes file (default data/team/role_codes.json).
+A code already in the snapshot is refused and nothing is written.
 """
 import datetime
 import html.parser
@@ -17,6 +21,7 @@ BASE_URL = "https://emasco.mohr.gov.my/masco/{code}?lang=en"
 USER_AGENT = "FutureReadyMY-hackathon/0.1"
 SECONDS_BETWEEN_REQUESTS = 2
 FETCH_ATTEMPTS = 3
+DEFAULT_CODES_FILE = os.path.join("data", "team", "role_codes.json")
 
 GROUP_BY_FIRST_DIGIT = {
     "1": "managers",
@@ -148,6 +153,14 @@ class HttpsUpgradeRedirectHandler(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
+def make_opener():
+    # The site stores the language choice (?lang=en) in a session cookie.
+    return urllib.request.build_opener(
+        urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()),
+        HttpsUpgradeRedirectHandler(),
+    )
+
+
 def fetch_page(opener, code):
     request = urllib.request.Request(BASE_URL.format(code=code), headers={"User-Agent": USER_AGENT})
     last_error = None
@@ -180,17 +193,67 @@ def build_snapshot(codes, opener):
     return {"fetchedAt": datetime.date.today().isoformat(), "roles": roles}, failures
 
 
-def write_json(path, data):
+def write_json(path, data, **dump_options):
     """Atomic write: a crash mid-write never leaves a half-written file."""
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     temporary_path = path + ".tmp"
     with open(temporary_path, "w", encoding="utf-8") as output_file:
-        json.dump(data, output_file, ensure_ascii=False, indent=2)
+        json.dump(data, output_file, ensure_ascii=False, **({"indent": 2} | dump_options))
         output_file.write("\n")
     os.replace(temporary_path, path)
 
 
+def add_to_snapshot(snapshot, new_roles, today):
+    """Return a new snapshot with new_roles appended; the existing roles are not touched."""
+    existing = {role["code"] for role in snapshot["roles"]}
+    duplicates = [role["code"] for role in new_roles if role["code"] in existing]
+    if duplicates:
+        raise ValueError(f"Already in the snapshot: {', '.join(duplicates)}")
+    added = [dict(role, scrapedAt=today) for role in new_roles]
+    return dict(snapshot, roles=list(snapshot["roles"]) + added)
+
+
+def main_add(argv):
+    codes_path = DEFAULT_CODES_FILE
+    arguments = argv[2:]
+    if "--codes-file" in arguments:
+        position = arguments.index("--codes-file")
+        codes_path = arguments[position + 1]
+        arguments = arguments[:position] + arguments[position + 2:]
+    if len(arguments) < 2:
+        print(__doc__)
+        return 2
+    new_codes, output_path = arguments[:-1], arguments[-1]
+    with open(output_path, encoding="utf-8") as snapshot_file:
+        snapshot = json.load(snapshot_file)
+    with open(codes_path, encoding="utf-8") as codes_file:
+        codes = json.load(codes_file)
+    already = [code for code in new_codes if code in {role["code"] for role in snapshot["roles"]}]
+    if already:
+        print(f"Refused: already in {output_path}: {', '.join(already)}. Nothing was changed.", file=sys.stderr)
+        return 1
+    fetched, failures = build_snapshot(new_codes, make_opener())
+    for failure in failures:
+        print(f"FAILED {failure}", file=sys.stderr)
+    if failures:
+        print(f"{len(failures)} code(s) failed; nothing was changed.", file=sys.stderr)
+        return 1
+    try:
+        updated = add_to_snapshot(snapshot, fetched["roles"], datetime.date.today().isoformat())
+    except ValueError as error:
+        print(f"Refused: {error}. Nothing was changed.", file=sys.stderr)
+        return 1
+    write_json(output_path, updated)
+    # role_codes.json is kept on one line, as the team wrote it.
+    write_json(codes_path, codes + [code for code in new_codes if code not in codes],
+               indent=None, separators=(",", ":"))
+    print(f"Added {len(new_codes)} role(s) to {output_path}; it now has {len(updated['roles'])} roles")
+    return 0
+
+
 def main(argv):
+    if len(argv) > 1 and argv[1] == "--add":
+        return main_add(argv)
     allow_partial = "--allow-partial" in argv[1:]
     argv = [argv[0]] + [argument for argument in argv[1:] if argument != "--allow-partial"]
     if len(argv) != 3:
@@ -198,12 +261,7 @@ def main(argv):
         return 2
     with open(argv[1], encoding="utf-8") as codes_file:
         codes = json.load(codes_file)
-    # The site stores the language choice (?lang=en) in a session cookie.
-    opener = urllib.request.build_opener(
-        urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()),
-        HttpsUpgradeRedirectHandler(),
-    )
-    snapshot, failures = build_snapshot(codes, opener)
+    snapshot, failures = build_snapshot(codes, make_opener())
     for failure in failures:
         print(f"FAILED {failure}", file=sys.stderr)
     if failures and not allow_partial:
