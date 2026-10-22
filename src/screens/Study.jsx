@@ -1,3 +1,4 @@
+import { linkStatus } from '../lib/referenceView.js';
 import { buildPathway } from '../lib/scoring.js';
 import {
   disclosureText,
@@ -104,18 +105,23 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                     </div>
                   )}
                   <div className="text-sm text-slate-700">{whyText(step)}</div>
-                  <div className="flex flex-wrap gap-2">
-                    {linksForPortal(step.portal, profile.who).map((link) => (
-                      <a
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="fr-btn inline-flex min-h-11 items-center rounded-[10px] border border-slate-300 bg-white px-3.5 text-sm font-semibold no-underline"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
+                  <div className="flex flex-col gap-2">
+                    {linksForPortal(step.portal, profile.who).map((link) => {
+                      const status = linkStatus(data.references, link.url);
+                      return (
+                        <div key={link.url} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="fr-btn inline-flex min-h-11 items-center rounded-[10px] border border-slate-300 bg-white px-3.5 text-sm font-semibold no-underline"
+                          >
+                            {link.label}
+                          </a>
+                          <span className={`text-xs ${status.ok === false ? 'text-[#C2410C]' : 'text-slate-600'}`}>{status.text}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                   <label className="fr-noprint inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-sm">
                     <input

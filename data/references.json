@@ -1,0 +1,127 @@
+{
+  "checkedAt": "2026-10-22T13:57:53.565Z",
+  "roles": {
+    "2524-02": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3512-05": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2543-07": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3513-01": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2423-09": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2531-04": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3131-07": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2513-01": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2543-03": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2541-09": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3313-04": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2141-13": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2269-01": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3514-01": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2511-08": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2411-01": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2411-02": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "2411-05": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3313-02": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    },
+    "3313-03": {
+      "ok": true,
+      "checkedAt": "2026-10-22T13:57:53.565Z",
+      "changed": []
+    }
+  },
+  "links": {
+    "https://etris.hrdcorp.gov.my/DigiGov/digigovportal.htm?actionFlag=SC_getSearchCompoPage&applicationMstId=1100012": {
+      "ok": true,
+      "status": 200,
+      "checkedAt": "2026-10-22T13:57:53.565Z"
+    },
+    "https://www.tvet.gov.my/awam-kursus/carian": {
+      "ok": true,
+      "status": 200,
+      "checkedAt": "2026-10-22T13:57:53.565Z"
+    },
+    "https://elatih.hrdcorp.gov.my/": {
+      "ok": true,
+      "status": 200,
+      "checkedAt": "2026-10-22T13:57:53.565Z"
+    },
+    "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html": {
+      "ok": true,
+      "status": 200,
+      "checkedAt": "2026-10-22T13:57:53.565Z"
+    }
+  }
+}

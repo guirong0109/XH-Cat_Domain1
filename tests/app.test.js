@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
@@ -58,6 +58,7 @@ describe('api', () => {
       trends: { groups: {} },
       research: null,
       fields: null,
+      references: null,
     })
   })
 
@@ -232,6 +233,24 @@ describe('POST /api/cv-skills', () => {
     expect(replies.map((reply) => reply.status)).toEqual([200, 200])
     const skillCalls = embed.mock.calls.filter(([texts]) => texts.includes('Spreadsheets (Excel)'))
     expect(skillCalls).toHaveLength(1)
+  })
+
+  it('POST /api/refresh-references checks links and GET /api/data then returns them', async () => {
+    await mkdir(path.join(directory, 'emasco'))
+    await writeFile(path.join(directory, 'emasco', 'roles_raw.json'), JSON.stringify({ roles: [] }))
+    const baseUrl = await start()
+    const result = await (await fetch(`${baseUrl}/api/refresh-references`, { method: 'POST' })).json()
+    expect(result.status).toBe('updated')
+    expect(Object.keys(result.references.links).some((url) => url.includes('elatih.hrdcorp.gov.my'))).toBe(true)
+    const data = await (await fetch(`${baseUrl}/api/data`)).json()
+    expect(data.references.checkedAt).toBe(result.references.checkedAt)
+  })
+
+  it('POST /api/refresh-references answers 500 when the role snapshot is missing', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const baseUrl = await start()
+    const response = await fetch(`${baseUrl}/api/refresh-references`, { method: 'POST' })
+    expect(response.status).toBe(500)
   })
 
   it('never logs the CV text', async () => {

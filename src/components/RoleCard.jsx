@@ -1,4 +1,5 @@
 import SdgTag from './SdgTag.jsx';
+import { roleReference } from '../lib/referenceView.js';
 import {
   ILO_NO_MATCH,
   RANGE_NOTE,
@@ -44,10 +45,12 @@ export default function RoleCard({
   sdgInfo,
   scenario,
   trends,
+  references,
 }) {
   const shownMatch = useTween({ match: score.match }).match;
   const reasonText = whyReason(reason);
   const sources = roleSources(role, trends);
+  const reference = roleReference(references, role);
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
   const fitRows = expanded ? fitSkillRows(role, profile, similar) : [];
@@ -138,6 +141,12 @@ export default function RoleCard({
                 </a>
               ))}
             </p>
+          )}
+          <p className={`m-0 text-xs ${reference.ok === false ? 'text-[#C2410C]' : 'text-slate-600'}`}>
+            eMASCO page: {reference.text}
+          </p>
+          {reference.note && (
+            <p className="m-0 rounded-xl border border-orange-200 bg-orange-50 p-2.5 text-[13px] text-orange-900">{reference.note}</p>
           )}
         </div>
         <div className="flex min-w-[min(100%,250px)] flex-[1_1_250px] flex-col gap-2">

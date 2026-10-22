@@ -8,6 +8,7 @@ import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
+import { referencesLine } from '../lib/referenceView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
 import { roleRadarValues } from '../lib/radar.js';
@@ -98,6 +99,8 @@ export default function Matches({
   onToggleExpanded,
   onFocus,
   onRefresh,
+  referencesRefresh,
+  onRefreshReferences,
   onStudy,
 }) {
   const { entries, note } = orderForGoal(ranked, profile, data.fields);
@@ -186,6 +189,7 @@ export default function Matches({
               sdgInfo={data.sdg}
               scenario={scenario}
               trends={data.trends}
+              references={data.references}
             />
           );
         })}
@@ -199,6 +203,29 @@ export default function Matches({
           </span>
         ))}
       </div>
+      <section aria-labelledby="references-heading" className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]">
+        <h2 id="references-heading" className="m-0 text-lg font-bold">
+          Check our references
+        </h2>
+        <p className="m-0 text-sm text-slate-600">
+          Re-reads the {data.roles.length} eMASCO role pages and checks every link. It takes about 1 minute. We keep the last good data if a site is down. A role that eMASCO changed is flagged for our team, not changed.
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={onRefreshReferences}
+            disabled={referencesRefresh?.pending}
+            aria-busy={referencesRefresh?.pending}
+            className={`fr-btn min-h-11 rounded-[10px] border border-[#0F766E] bg-white px-4 font-semibold text-[#0F766E] ${
+              referencesRefresh?.pending ? 'cursor-wait opacity-70' : 'cursor-pointer'
+            }`}
+          >
+            {referencesRefresh?.pending ? 'Checking… (about 1 minute)' : 'Refresh references'}
+          </button>
+          <span className="text-xs text-slate-600">{referencesLine(data.references)}</span>
+        </div>
+        <RefreshMessage state={referencesRefresh} />
+      </section>
       <SourceNote>
         These are suggestions to discuss with your career counsellor, not decisions. Scores are estimates; open “Why
         this score?” for the sources and dates.

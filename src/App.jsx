@@ -79,6 +79,7 @@ export default function App() {
   const [refresh, setRefresh] = useState({ pending: false, status: null, message: '' });
   const [researchRefresh, setResearchRefresh] = useState({ status: null, message: '' });
   const [replan, setReplan] = useState(null);
+  const [referencesRefresh, setReferencesRefresh] = useState({ pending: false, status: null, message: '' });
   // CV file name and evidence lines: memory only, never saved or sent.
   const [cv, setCv] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -289,6 +290,21 @@ export default function App() {
   const latestInputs = useRef({ profile, scenario });
   latestInputs.current = { profile, scenario };
 
+  // Re-reads the eMASCO role pages and checks the links (about 1 minute). Roles are never edited.
+  const refreshReferences = async () => {
+    if (referencesRefresh.pending) return;
+    setReferencesRefresh({ pending: true, status: null, message: '' });
+    try {
+      const response = await fetch('/api/refresh-references', { method: 'POST' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const result = await response.json();
+      if (result.references) setData((current) => (current ? { ...current, references: result.references } : current));
+      setReferencesRefresh({ pending: false, status: result.status, message: result.message });
+    } catch {
+      setReferencesRefresh({ pending: false, status: 'failed', message: 'The check failed. Please try again later.' });
+    }
+  };
+
   const refreshTrends = async () => {
     const startedWith = { profile, scenario };
     setReplan(null);
@@ -432,6 +448,8 @@ export default function App() {
         onToggleExpanded={toggleExpanded}
         onFocus={setFocusRoleId}
         onRefresh={refreshTrends}
+        referencesRefresh={referencesRefresh}
+        onRefreshReferences={refreshReferences}
         onStudy={openStudy}
       />
     );

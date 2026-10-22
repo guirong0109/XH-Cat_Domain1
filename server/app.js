@@ -6,6 +6,8 @@ import { readTrends, refreshTrends } from './trends.js'
 import { readResearch, refreshResearch } from './research.js'
 import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from './cvMatch.js'
 import { loadSkillVectors } from './skillVectors.js'
+import { readReferences, refreshReferences } from './references.js'
+import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 
 const distDirectory = fileURLToPath(new URL('../dist', import.meta.url))
 
@@ -26,10 +28,11 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
   const app = express()
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
+  const referencesPath = path.join(dataDir, 'references.json')
 
   app.get('/api/data', async (request, response) => {
     try {
-      const [roles, skills, sdg, samples, trends, research, fields] = await Promise.all([
+      const [roles, skills, sdg, samples, trends, research, fields, references] = await Promise.all([
         readJson(path.join(dataDir, 'roles.json')),
         readJson(path.join(dataDir, 'skills.json')),
         readJson(path.join(dataDir, 'sdg.json')),
@@ -37,8 +40,9 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
         readTrends(trendsPath),
         readResearch(researchPath),
         readOptionalJson(path.join(dataDir, 'fields.json')),
+        readReferences(referencesPath),
       ])
-      response.json({ roles, skills, sdg, samples, trends, research, fields })
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })
@@ -57,6 +61,22 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
     } catch (error) {
       console.error('[research] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not refresh research data.' })
+    }
+  })
+
+  // Re-reads the eMASCO role pages and checks the portal and ILO links. It only flags changes;
+  // roles.json is never edited here.
+  app.post('/api/refresh-references', async (request, response) => {
+    try {
+      const [roles, snapshot] = await Promise.all([
+        readJson(path.join(dataDir, 'roles.json')),
+        readJson(path.join(dataDir, 'emasco', 'roles_raw.json')),
+      ])
+      const links = [...new Set([...Object.values(PORTAL_LINKS).map((item) => item.url), ...roles.map((role) => role.ilo?.url).filter(Boolean)])]
+      response.json(await refreshReferences({ filePath: referencesPath, savedRoles: snapshot.roles, links, fetchImpl }))
+    } catch (error) {
+      console.error('[references] refresh failed:', error.message)
+      response.status(500).json({ error: 'Could not check the references.' })
     }
   })
 
