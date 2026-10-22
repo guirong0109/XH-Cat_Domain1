@@ -1,8 +1,8 @@
 # task.md — FutureReady MY: overall progress
 
-Last updated: 2026-10-21. Deadline: **25 Oct 2026, 8:00 am (MYT)**.
-Code state: `main` = work branch `claude/hackathon-mvp-phase-1-dwl3nm`. Tests: 160 app tests and 67 pipeline tests pass; `npm run build` works.
-For the detailed log see `HANDOVER.md` (§00 is the current snapshot). For rules see `CLAUDE.md`.
+Last updated: 2026-10-22. Deadline: **25 Oct 2026, 8:00 am (MYT)**.
+Code state: `main` = `a8cfaf8`; the work branch `claude/hackathon-mvp-phase-1-dwl3nm` adds the embedding test script and docs. Tests: 233 app tests and 102 pipeline tests pass; `npm run build` works.
+For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
 ---
 
@@ -34,6 +34,14 @@ For the detailed log see `HANDOVER.md` (§00 is the current snapshot). For rules
 
 ### Session 3 (2026-10-21): simple-steps redesign (P-A to P-H) is done
 The journey is now five simple steps: About you, Your skills, Your goal, Matches, What to study. It adds a goal-based ordering, levels per skill, a PDF CV reader (browser only, nothing sent or saved) and clean-up of the old Profile, Radar, Roles, Pathway and CV preview screens. Drafts awaiting team review: `data/team/fields.json`, CV keywords in `data/team/skill_labels.json`, sample who/field/levels/goal.
+
+### Session 3, continued (2026-10-22)
+| Step | What was done |
+|---|---|
+| Overnight fixes | "Your highest score" box on Matches; role cards read in rank order for screen readers; levels shown only when chosen; clearer CV message; keyboard focus after Remove. |
+| Demo script | `docs/demo-script.md`, 3 minutes, numbers checked on 22 Oct. |
+| Embedding test | `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` (tested) compare 5 embedding models on `testing/skill_pair_test_set.csv`. Not run yet. |
+| RunPod | Official Claude Code plugin installed; the RunPod MCP is connected (user signed in). |
 
 ---
 
@@ -109,10 +117,12 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 ## 4. Planned but not done yet
 
 ### Must do before submission (25 Oct, 8 am)
-- [ ] **OpenAlex snapshot:** the user creates a free API key (then add `OPENALEX_API_KEY` support), or take one snapshot after the daily reset; commit `data/research.json`.
-- [ ] **P2 Replit:** redeploy from `main` and check the live site (on hold until the user asks).
+- [ ] **Embedding test on RunPod:** run `pipeline/compare_embeddings.py`, commit `testing/results/`, pick a model (next session).
+- [ ] **Brief rule:** "Do not use real CVs" → add a "Use a sample CV" button with made-up CV PDFs.
+- [ ] **OpenAlex snapshot:** one Refresh after the daily reset (about 08:00 MYT); commit `data/research.json`.
+- [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).
 - [ ] **P4 RunPod:** run the labelling job (about USD 5) and rebuild the data (on hold until the user asks).
-- [ ] **Demo script** (3 minutes) and a check of Aina, Ravi and Mei Ling on laptop and phone; redo after RunPod.
+- [x] **Demo script** (3 minutes): `docs/demo-script.md`. Phone check of the Matches step done at 360px. Redo the numbers after RunPod.
 - [ ] **Teammate review** of drafts: role skills, skill SDG tags, ISCO map (4 weak fits), research search terms, course hours.
 - [ ] **Team names** in the README.
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
@@ -121,7 +131,8 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 ### Later / future plan
 - [ ] A3: skill-level AI trends from the RunPod skill-to-task links.
 - [ ] arXiv as a second research source (fix the query problem first).
-- [ ] Turn previews into real features: CV upload with skill extraction, BM/中文 UI, HR team view.
+- [x] CV upload with skill extraction (done in Session 3).
+- [ ] Stage 2, suggested order: HR / career-centre team view (team heatmap, team plan, team SDG view), then BM/中文 UI.
 - [ ] Skill badges and more learner motivation.
 - [ ] Small polish left from reviews (e.g. the OpenDOSM status line waits for OpenAlex; "Live source" badge on stale data).
 - [ ] Not planned: job-posting counts (no free, allowed Malaysian source).

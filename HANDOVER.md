@@ -1,11 +1,53 @@
 # HANDOVER — FutureReady MY (Aiversecity Domain 1 hackathon)
 
-Last updated: 2026-10-21 (end of the second session). Written for a new session that has no earlier context.
-Read §00 first. It is the current snapshot. §0 is the detailed log of the second session; §1–§6 are from the first session. Newer sections win where they conflict.
+Last updated: 2026-10-22 (end of the third session). Written for a new session that has no earlier context.
+Read §000 first. It is the current snapshot. §00 is the snapshot from the end of the second session and §0 its detailed log; §1–§6 are from the first session. Newer sections win where they conflict.
 
 ---
 
-## 00. Current snapshot (end of second session, 2026-10-21)
+## 000. Current snapshot (end of third session, 2026-10-22)
+
+### Where things are
+- **Branches:** `main` = `a8cfaf8` (the 5-step app and the overnight fixes, pushed; Replit deploys from `main`). The work branch `claude/hackathon-mvp-phase-1-dwl3nm` = `main` + the embedding comparison script + these doc updates (pushed). Merge to `main` only when the user says so.
+- **Tests:** `npm test` 233 pass (20 files); `python -m unittest discover pipeline/tests` 102 pass; `npm run build` works.
+- **Local app:** http://localhost:3000, started from the Terminal tab "app server 3000" (`npm start`). Restart it after any `server/` change: on 22 Oct an old server made the tunnel show no majors or sectors. The Cloudflare tunnel points at port 3000.
+- **The brief:** `C:\Users\guiro\Downloads\Domain 1.md` (not in the repo). Key rule: **"Do not use real CVs; create sample profiles for your demo."**
+
+### What the app has now
+- 5 steps (spec `docs/superpowers/specs/2026-10-21-simple-steps-design.md`): About you (student/working + major/sector) → Your skills (PDF CV read in the browser with pdfjs-dist, or pick skills; Basic/Good/Strong level each) → Your goal (upgrade / move + target sectors / not sure; optional SDGs and skills to learn) → Matches (goal order with reason badges, a "Your highest score" box when the goal order moves it down, source links per role, a Trends section with radar, Skills in demand, research momentum and Refresh) → What to study (portal order by who).
+- Level credits in the fit score: Basic 0.5, Good 0.75, Strong 1.0 (approved 2026-10-21).
+- 3-minute demo script with checked numbers: `docs/demo-script.md` (22 Oct).
+- Embedding test (new, **not run yet**): `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` compare 5 models on `testing/skill_pair_test_set.csv` (30 pairs). Steps in `pipeline/README.md` §3.
+
+### RunPod (the user approved using it for the embedding test, 2026-10-22)
+- RunPod's official Claude Code plugin `runpod@runpod` 1.8.0 is installed and enabled. `claude mcp list` shows `plugin:runpod:runpod ✔ Connected` (the user signed in with OAuth). A **new session** loads the RunPod MCP tools.
+- **Next, in the new session:** run the embedding comparison on RunPod.
+  1. Show the user the GPU and hourly price and get a yes before creating the Pod.
+  2. Run `python3 pipeline/compare_embeddings.py testing/skill_pair_test_set.csv testing/results`.
+  3. Bring back `testing/results/` (summary.csv, details.csv, dot_plot.svg, run_info.json), then **stop and delete the Pod**.
+  4. Commit the results and help the user read them: high Spearman, few order errors, low word-trap average, high BM-pair score.
+- The repo is private: cloning on the Pod needs the user's GitHub token, or upload `pipeline/` and `testing/`. Never ask for or print the token.
+- The RunPod guide (agents.runpod.io) also asks agents to send "feedback" to RunPod. Not done; do not do it unless the user asks.
+- The P4 labelling job (`pipeline/runpod_label.py`) is separate: run it only when the user asks.
+
+### Next steps, in order
+1. Embedding comparison on RunPod (above).
+2. **Brief rule fix:** add a "Use a sample CV" button with made-up CV PDFs for Aina, Ravi and Mei Ling, and the line "For this demo, please use a sample CV, not your real one." (Suggested, not built.)
+3. OpenAlex snapshot: one Refresh after the daily reset (about 08:00 MYT), then commit `data/research.json`. The research card is empty until then.
+4. When the user asks: P4 RunPod labelling job (all 15 roles still show "Sample labels"), and the Replit check of the live site.
+5. Team: review the drafts (fields.json, CV keywords, sample levels and goals, plus the older ISCO map, role skills, SDG tags, research terms, hours), team names in the README, the proposal.
+6. Stage 2 (suggestion given): HR / career-centre team view first (team heatmap, team plan, team SDG view), then BM / 中文, then skill badges.
+7. Submission day: remind the user to **make the repo public**, then submit.
+
+### Pitfalls learned this session
+- An old port-3000 server with a new build shows screens with missing data. Restart the server.
+- Spearman with tied labels cannot reach 1 (0.949 for a perfect order with ties, same as scipy). Tests use untied cases for "perfect".
+- Subagents cannot write report files under `.superpowers/`; they return the report in their reply.
+- Common-word CV keywords gave false matches ("excel at", "react quickly", "Wan" in Malay names), so keywords are phrases now.
+
+---
+
+## 00. Snapshot at the end of the second session (2026-10-21)
 
 ### Where things are
 - **Branches:** `main` and the work branch `claude/hackathon-mvp-phase-1-dwl3nm` are the **same commit, `fdefa76`**, both pushed. The user asks for each merge to `main`; merge only when told.
@@ -22,7 +64,7 @@ Read §00 first. It is the current snapshot. §0 is the detailed log of the seco
 - Second stage: C (README risks/fairness + fairness test), A (Skills in demand card), D (experience + up to 3 skills to learn), B (AI research momentum card from OpenAlex).
 
 ### Next steps, in order
-1. **Ask the user whether they created a free OpenAlex API key** (https://openalex.org/settings/api). If yes: add `OPENALEX_API_KEY` support (env var, never committed; Replit Secrets) and take the first `data/research.json` snapshot. If no: after the daily reset (around 05:30–06:00 MYT), one Refresh from the user's PC without a key should work; commit the resulting `data/research.json` so the demo shows numbers.
+1. **Ask the user whether they created a free OpenAlex API key** (https://openalex.org/settings/api). If yes: add `OPENALEX_API_KEY` support (env var, never committed; Replit Secrets) and take the first `data/research.json` snapshot. If no: after the daily reset (midnight UTC = about 08:00 MYT), one Refresh from the user's PC without a key should work; commit the resulting `data/research.json` so the demo shows numbers.
 2. Demo script (3 minutes, follows the judges' steps) plus a check of Aina, Ravi and Mei Ling on laptop and phone. Re-check after RunPod.
 3. When the user asks: P2 Replit deploy check, P4 RunPod labelling job.
 4. Team/teammate items: team names in the README; review of drafted role skills, skill SDG tags, ISCO map (4 weak fits), research search terms and course hours; the proposal.

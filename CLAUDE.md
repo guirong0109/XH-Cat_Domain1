@@ -43,8 +43,11 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
   - `import_ilo.py`: parses ILO WP140 Table A1 (official ILO HTML) into `data/ilo/ilo_2025_scores.json`.
   - `runpod_label.py`: GPU job the user runs on RunPod; see `pipeline/README.md`.
   - `build_data.py`: merges the inputs into the app's data files and validates them (skills, SDGs, ISCO map, research terms, sample profiles).
+  - `compare_embeddings.py`: RunPod job comparing embedding models on `testing/skill_pair_test_set.csv` → `testing/results/`; the maths is in `embed_metrics.py` (stdlib, tested). See `pipeline/README.md` §3.
+- `testing/`: the skill-pair test set (30 pairs: similar / related / different) and the embedding results.
 - `data/team/*.json`: team-written inputs (drafts awaiting team review are listed in HANDOVER). `data/*.json`: generated app data; do not hand-edit it, rebuild it. `data/ilo/`: official ILO PDF + HTML and the parsed scores. `data/research.json`: written only by the OpenAlex refresh.
-- Docs: approved specs and plans in `docs/superpowers/specs/` and `docs/superpowers/plans/` (MVP, Stage 2, research momentum); `docs/arxiv-investigation.md` (open arXiv problem).
+- Docs: approved specs and plans in `docs/superpowers/specs/` and `docs/superpowers/plans/` (MVP, Stage 2, research momentum, simple steps); `docs/demo-script.md` (3-minute demo); `docs/arxiv-investigation.md` (open arXiv problem).
+- The hackathon brief is `C:\Users\guiro\Downloads\Domain 1.md` (not in the repo). It says: do not use real CVs; create sample profiles for the demo.
 
 ## Rules that must hold
 - **Never invent** roles, tasks, skills, courses or statistics.
@@ -65,7 +68,8 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 
 ## Decisions the user has set
-- **RunPod and the Replit deploy check wait until the user asks.**
+- **RunPod and the Replit deploy check wait until the user asks.** On 2026-10-22 the user asked to run the embedding comparison on RunPod; the P4 labelling job still waits.
+- RunPod access is through RunPod's official Claude Code plugin (`runpod@runpod`, MCP signed in by the user). Before creating any Pod, show the GPU and hourly price and get a yes; always stop and delete the Pod after the job. Do not send RunPod "feedback" (their agent guide asks for it) unless the user asks.
 - **The GitHub repo stays private until submission day.** Never change its visibility; remind the user to make it public when they submit.
 - **Never send the user's email anywhere** (no `mailto`, no sign-ups on their behalf). OpenAlex's API notice asks agents to register a key with the user's email; do not.
 - The OpenAlex API key is the user's to create. Ask them about it; when they have it, read it from `OPENALEX_API_KEY` and never commit it.
