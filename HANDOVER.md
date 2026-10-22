@@ -1,6 +1,6 @@
 # HANDOVER — FutureReady MY (Aiversecity Domain 1 hackathon)
 
-Last updated: 2026-10-22 evening (end of the fourth session: Stage 2 merged to main). Written for a new session that has no earlier context.
+Last updated: 2026-10-22 night (fifth session: CV review, weak-fit hint, reference checks, all merged to main). Written for a new session that has no earlier context.
 Read §000 first. It is the current snapshot. §00 is the snapshot from the end of the second session and §0 its detailed log; §1–§6 are from the first session. Newer sections win where they conflict.
 
 ---
@@ -8,8 +8,10 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 ## 000. Current snapshot (2026-10-22 evening, Stage 2 merged)
 
 ### Where things are now (read this first)
-- **Branches:** `main` = `claude/stage2-cv-all-fields` = **`1af6d2a`**, both pushed (the user asked to merge Stage 2 to main on 22 Oct to try it). Replit deploys from `main`. The older work branch `claude/hackathon-mvp-phase-1-dwl3nm` stays at `7c18d48` (pre-Stage-2 MVP). **New work goes on `claude/stage2-cv-all-fields`.**
-- **Tests:** `npm test` 299 pass (27 files); `python -m unittest discover pipeline/tests` 165 pass; `npm run build` works.
+- **Newest work (all below, merged):** CV review with Add/Not mine for AI matches and a clean slate on a new CV; weak-fit hint and unmatched CV lines for CVs outside our fields; dated reference checks (Refresh references). Read those three sections right after this list.
+- **Next ideas, not approved:** (a) bge-m3 whole-CV field check with an "outside our 20 roles" outcome (needs 2-3 made-up out-of-scope CVs and a measured cutoff); (b) more roles from eMASCO for other fields, e.g. hospitality (Stage 2; needs team review); (c) OpenAlex snapshot after the 08:00 MYT reset; (d) teammate review of drafts; (e) RunPod Billing screenshot and public repo on submission day.
+- **Branches:** `main` = `claude/stage2-cv-all-fields` = **`6f57713`**, both pushed (Stage 2 was merged on 22 Oct; the CV review, weak-fit hint and reference checks followed the same night). Replit deploys from `main`. The older work branch `claude/hackathon-mvp-phase-1-dwl3nm` stays at `7c18d48` (pre-Stage-2 MVP). **New work goes on `claude/stage2-cv-all-fields`.**
+- **Tests:** `npm test` 343 pass (30 files); `python -m unittest discover pipeline/tests` 165 pass; `npm run build` works.
 - **Local app:** http://localhost:3000 from the Terminal tab "app server 3000" (`npm start`, prints "AI model ready" after ~1 min). Public link: Cloudflare quick tunnel from the tab "cloudflare tunnel" (`"C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3000`); **the link changes on every restart** (last: https://casio-invalid-genuine-nelson.trycloudflare.com). Both tabs close when the app session restarts — start them again.
 - **Replit:** gets Stage 2 from `main` but has no `models/` folder, so the CV AI step is **off** there (keyword-only, by design). The Replit check is still waiting for the user.
 - **Demo numbers** in `docs/demo-script.md` come from the pre-Stage-2 `main`; re-check them now that `main` has 20 roles.

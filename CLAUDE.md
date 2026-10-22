@@ -33,16 +33,17 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - **On the user's Windows PC** use `python` instead of `python3`. Python HTTPS to eMASCO needs `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"`.
 - Inside a Claude cloud sandbox, Node `fetch` needs `NODE_USE_ENV_PROXY=1`.
 - Stop servers with `kill <pid>`, not `pkill`. The user's own server runs on port 3000; use other ports for test servers. Restart port 3000 after changing `server/` code (Node does not reload it).
-- Live refreshes (also behind the Matches "Refresh data" button): `POST /api/refresh-trends` (OpenDOSM) and `POST /api/refresh-research` (OpenAlex). OpenAlex without an API key has a small shared daily budget per IP and returns HTTP 429 when it is used up.
+- Live refreshes (also behind the Matches "Refresh data" button): `POST /api/refresh-trends` (OpenDOSM), `POST /api/refresh-research` (OpenAlex) and `POST /api/refresh-references` (eMASCO role pages + portal/ILO links; about 1 minute, 2 s between pages; writes `data/references.json`). OpenAlex without an API key has a small shared daily budget per IP and returns HTTP 429 when it is used up.
 
 ## Layout
 - `server/opendosm.js`: OpenDOSM fetch, validation and group trends.
 - `server/trends.js`: atomic, single in-flight refresh of `data/trends.json`.
 - `server/research.js`: OpenAlex AI-research counts per skill (5 at a time, 8 s timeout, all-or-nothing, atomic, single in-flight) → `data/research.json`.
 - `server/embed.js`: bge-m3 ONNX embedder (local from `models/`, or remote `EMBED_URL`). `server/cvMatch.js`: CV line split, best line per skill, `CUTOFF` and `SKILL_TEXT_MODE` (set by `scripts/eval-cv.mjs`). `server/skillVectors.js`: skill vectors cached in `data/cache/`.
-- `server/app.js`: `GET /api/data`, `POST /api/refresh-trends`, `POST /api/refresh-research`, and serving `dist/`.
+- `server/references.js`: Node eMASCO page reader, link checker and the refresh (single in-flight, atomic, keeps the last good result). It only **flags** changed roles; it never edits `roles.json`.
+- `server/app.js`: `GET /api/data` (includes `references`), `POST /api/refresh-trends`, `POST /api/refresh-research`, `POST /api/refresh-references`, `POST /api/cv-skills`, and serving `dist/`.
 - `src/lib/scoring.js`: **all** scoring maths, pure and tested. The UI must not re-implement it; import `WEIGHTS` and `SCENARIO_FACTOR`.
-- Pure UI helpers, each with tests: `roleView.js` (incl. ILO view), `pathwayView.js` (incl. skill SDGs), `goalView.js` (goal order and reasons), `cvSkills.js` (CV keyword matching), `fieldCheck.js` (field-mismatch hint from CV skills), `pdfText.js` and `pdfLoader.js` (read a PDF CV in the browser), `radar.js`, `navigation.js` (incl. preview routes), `journey.js` (left panel steps), `replan.js`, `skillTrends.js` (Skills in demand), `potential.js` (starting point, skills to learn), `research.js` (research momentum), `previewView.js` (HR grid), `useTween.js`.
+- Pure UI helpers, each with tests: `roleView.js` (incl. ILO view), `pathwayView.js` (incl. skill SDGs), `goalView.js` (goal order and reasons), `cvSkills.js` (CV keyword matching, `removeCvSkills`, `cvReviewLine`, `unmatchedLines`), `fieldCheck.js` (field-mismatch hint `suggestField` and weak-fit hint `weakFit`), `referenceView.js` ("checked on" labels), `pdfText.js` and `pdfLoader.js` (read a PDF CV in the browser), `radar.js`, `navigation.js` (incl. preview routes), `journey.js` (left panel steps), `replan.js`, `skillTrends.js` (Skills in demand), `potential.js` (starting point, skills to learn), `research.js` (research momentum), `previewView.js` (HR grid), `useTween.js`.
 - `src/screens/`: Home, About, Skills, Goal, Matches, Study, and the Stage 2 previews PreviewLang, PreviewUsers (orange "not working yet" banner).
 - `src/components/`: presentational parts, incl. `Sidebar`, `MobileBar`, `StepBar` (navigation), `SkillsDemand`, `ResearchMomentum`, `ReplanNotice`, `Stage2Section`, `PreviewBanner`.
 - `pipeline/`:
@@ -73,6 +74,8 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Express 5: no `'*'` routes (path-to-regexp v8).
 - UI: touch targets ≥ 44px, honour `prefers-reduced-motion`, works at 360px width, colours teal `#0F766E` and orange `#C2410C`, font Plus Jakarta Sans.
 - Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours, majors and sectors map `fields.json`, CV keywords, similar-skill decisions in `data/team/similar_review.csv`, the CV test set `testing/cv_test_set/` incl. the finance CVs cv11-cv12, the accounting skill names `data/team/a1_new_skills.json`, the statement sheet `data/team/a1_skill_review.csv`, the sample student Farah) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, skills to learn) must say so.
+- CV review: keyword matches are added at once; AI (bge-m3) matches wait for the student's Add skill; a new CV (Change) removes the old CV's skills. Hints (field notice, weak fit) only suggest; the student decides. CV text is never stored or logged.
+- References: every reference link shows a "checked on" date. A role that eMASCO changed is flagged for the team and the saved version stays; never overwrite roles, skills or labels automatically. Do not scrape the course portals (no API); links to them only.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 
@@ -86,7 +89,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - For multi-task plans the user chose subagent-driven builds with a review after each task.
 
 ## Git
-- Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
+- Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22; later work merged the same night, `main` = `6f57713`). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
 - Merge into `main` only when the user says so: fast-forward (`git merge --ff-only`) and push `main`, then switch back to the work branch. Replit deploys from `main`.
 - Do not open a PR unless the user asks.
 - Do not put model names in commit subjects or bodies, or in code.
