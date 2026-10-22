@@ -42,7 +42,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Demo script | `docs/demo-script.md`, 3 minutes, numbers checked on 22 Oct. |
 | Embedding test | `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` (tested) compare 5 embedding models on `testing/skill_pair_test_set.csv`. **Run on RunPod (A40, about $0.18)**; results in `testing/results/`, proof in `testing/runpod_evidence.md` and `testing/evidence/`. |
 | Model decision | **bge-m3** chosen by the user: it matches Bahasa Malaysia ("perakaunan" = "accounting" 0.758) and is second best on English (Spearman 0.538, 71 order errors). all-mpnet-base-v2 was best on English (0.599, 59) but failed the BM pair. Not used in the app yet. |
-| bge-m3 similar skills | Plan approved (cutoff 0.70). Tasks 1-2 built and reviewed: similar.json check, RunPod review-sheet script, apply script. Task 3 RunPod run done (A40, est. $0.07): 3 pairs reach 0.70, all already listed; no new suggestions; 14 of 17 current pairs score below 0.70. Next: Task 4 team review + user approval. |
+| bge-m3 similar skills | Plan approved (cutoff 0.70). Tasks 1-2 built and reviewed: similar.json check, RunPod review-sheet script, apply script. Task 3 RunPod run done (A40, est. $0.07): 3 pairs reach 0.70, all already listed; no new suggestions; 14 of 17 current pairs score below 0.70. Task 4 done: user approved Claude's judgement (keep 17, add SQL → Healthcare data and records, Web development → SEO and web analytics); only Aina changes (Healthcare Analyst 57 → 63, #2 in goal order). Still a draft until a teammate reviews `data/team/similar_review.csv`. |
 | RunPod | Official Claude Code plugin installed; the RunPod MCP is connected (user signed in). |
 
 ---

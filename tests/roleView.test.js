@@ -174,7 +174,7 @@ describe('scoreBreakdown', () => {
     const score = scoreRole(role, profile, ctx, 'moderate');
     const { parts, formula } = scoreBreakdown(role, score, 'moderate', trends);
     expect(parts.map((part) => part.label)).toEqual(['Skill fit · 60%', 'Future outlook · 40%', 'SDG bonus']);
-    expect(parts[0].detail).toBe('1.5 of 4 skills (your level counts: Strong 1, Good 0.75, Basic 0.5; similar skills count half).');
+    expect(parts[0].detail).toBe('1.5 of 4 skills (your level counts: Strong 1, Good 0.75, Basic 0.5; similar skills count half). Similar-skill pairs: AI estimate (bge-m3, 22 Oct 2026), draft awaiting team review.');
     expect(parts[0].source).toBe('eMASCO 2524-02 skill list (MOHR, MASCO 2020)');
     expect(parts[1].detail).toBe('Job demand 75.6 (Professionals +12.8%, 2020–2025). Automatable tasks 25% × 0.6.');
     expect(parts[1].source).toContain('task labels: placeholder samples (not yet reviewed)');

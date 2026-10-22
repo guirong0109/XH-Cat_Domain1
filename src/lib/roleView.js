@@ -143,7 +143,7 @@ export function scoreBreakdown(role, score, scenario, trends) {
       value: String(Math.round(score.fit)),
       width: score.fit,
       color: '#0F766E',
-      detail: `${formatNumber(score.earned)} of ${role.skills.length} skills (your level counts: Strong ${String(LEVEL_CREDIT.strong)}, Good ${String(LEVEL_CREDIT.good)}, Basic ${String(LEVEL_CREDIT.basic)}; similar skills count half).`,
+      detail: `${formatNumber(score.earned)} of ${role.skills.length} skills (your level counts: Strong ${String(LEVEL_CREDIT.strong)}, Good ${String(LEVEL_CREDIT.good)}, Basic ${String(LEVEL_CREDIT.basic)}; similar skills count half). Similar-skill pairs: AI estimate (bge-m3, 22 Oct 2026), draft awaiting team review.`,
       source: `eMASCO ${role.code} skill list (MOHR, MASCO 2020)`,
     },
     {

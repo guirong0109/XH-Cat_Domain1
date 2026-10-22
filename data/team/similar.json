@@ -1,51 +1,53 @@
 {
-  "Data visualisation": [
-    "Spreadsheets (Excel)"
-  ],
-  "Statistics": [
-    "Spreadsheets (Excel)"
-  ],
-  "Network security": [
-    "Networking basics"
-  ],
-  "Solar PV basics": [
-    "Electrical wiring"
-  ],
-  "Web development": [
-    "Python programming",
-    "Graphic design"
-  ],
-  "Customer service": [
-    "Communication"
-  ],
-  "Using AI tools": [
-    "Python programming"
-  ],
-  "UX research and prototyping": [
-    "Graphic design"
+  "Business process analysis": [
+    "Data visualisation"
   ],
   "Content writing": [
     "Communication"
   ],
-  "SEO and web analytics": [
-    "Data visualisation"
+  "Customer service": [
+    "Communication"
+  ],
+  "Data visualisation": [
+    "Spreadsheets (Excel)"
   ],
   "Energy auditing": [
     "Electrical wiring"
   ],
-  "Renewable energy system design": [
-    "Solar PV basics"
+  "Healthcare data and records": [
+    "SQL and databases",
+    "Statistics"
+  ],
+  "Network security": [
+    "Networking basics"
   ],
   "Project coordination": [
     "Teamwork"
   ],
-  "Healthcare data and records": [
-    "Statistics"
+  "Renewable energy system design": [
+    "Solar PV basics"
+  ],
+  "SEO and web analytics": [
+    "Data visualisation",
+    "Web development"
+  ],
+  "Solar PV basics": [
+    "Electrical wiring"
+  ],
+  "Statistics": [
+    "Spreadsheets (Excel)"
+  ],
+  "UX research and prototyping": [
+    "Graphic design"
+  ],
+  "Using AI tools": [
+    "Python programming"
   ],
   "Version control (Git)": [
     "Web development"
   ],
-  "Business process analysis": [
-    "Data visualisation"
+  "Web development": [
+    "Graphic design",
+    "Python programming"
   ]
 }

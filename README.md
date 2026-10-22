@@ -78,7 +78,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 ## AI disclosure
 
 - **Qwen/Qwen2.5-7B-Instruct** labels each existing eMASCO task as automatable, AI-assisted or human-led.
-- **BAAI/bge-m3** compares existing skill statements to suggest which are similar.
+- **BAAI/bge-m3** compares existing skill statements to suggest which are similar. It was chosen from 5 models on a 30-pair test (`testing/results/`), because it was the only one that matched Bahasa Malaysia ("perakaunan" = "accounting"). On 22 Oct 2026 it scored all 300 pairs of the 25 app skills (`data/runpod/similar_review.csv`). The similar-skill list (`data/team/similar.json`, half credit in the fit score) keeps the 17 earlier pairs and adds 2 (SQL and databases → Healthcare data and records; Web development → SEO and web analytics). These decisions were **drafted by Claude** and are awaiting team review; the app labels them "draft awaiting team review".
 - The models **never create roles, courses or numbers**. Roles, tasks and skills come only from the eMASCO snapshot. A person checks the skill mappings.
 - **ILO exposure index (second opinion).** The ILO built this index with AI-assisted scoring, a worker survey and expert review. It is global, not Malaysia-specific, and dated 2025. We show it beside our labels only. It is **not used in the score**.
 - The MASCO to ISCO-08 mapping (`data/team/isco_map.json`) was drafted by Claude from eMASCO descriptions and ISCO titles. It is **not an official table** and is awaiting team review. Weak fits are flagged: 3131-07 to 3113, 3512-05 to 3512, 2269-01 to 2120, 2511-08 to 2511.
@@ -146,7 +146,7 @@ Python scripts in `pipeline/` (standard library only, except the RunPod job) bui
 
 ## RunPod usage and cost
 
-RunPod is used once, offline, for the labelling and skill-similarity job. The output is committed, and the live app never calls a GPU. Plan: one 24 GB GPU Pod for a short batch job. Expected spend is **under USD 5** of the USD 25 budget. This job has not been run yet. Steps are in [pipeline/README.md](pipeline/README.md).
+RunPod is used offline only; the outputs are committed, and the live app never calls a GPU. Done on 22 Oct 2026: the embedding model test and the bge-m3 skill-similarity run (about USD 0.25 together; log in `testing/runpod_evidence.md`). Not run yet: the task labelling job (one 24 GB GPU Pod, expected **under USD 5** of the USD 25 budget). Steps are in [pipeline/README.md](pipeline/README.md).
 
 ## Stage 2 plan
 

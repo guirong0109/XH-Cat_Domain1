@@ -24,7 +24,7 @@ Pending (say so if asked):
 - Pick **Upgrade in my field**. (Later we show **Move to a new role**.)
 
 ## 1:15 to 2:15 · Matches
-- Goal order for Aina (Moderate): **Data Analyst 76**, Database Assistant 62, Website Developer 58.
+- Goal order for Aina (Moderate): **Data Analyst 76**, Healthcare Analyst 63, Database Assistant 62. (Healthcare Analyst rose from 57 after the 22 Oct similar-skill update: SQL now gives half credit for Healthcare data and records.)
 - Point at the teal box: "Her highest score is **Business Intelligence Analyst (81)**, but it is not linked to her major, so it is rank 8. The goal changes the order, never the score." Press **Show it**.
 - Point at the **Sources** line on a card (eMASCO page, OpenDOSM, ILO).
 - Open **Why this score?**: skill fit per skill, outlook, SDG bonus, each with source and date.
