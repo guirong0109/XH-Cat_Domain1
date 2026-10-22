@@ -26,8 +26,15 @@ export function whyText(step) {
   return lead + (step.rising ? 'Its importance rises as AI spreads.' : 'Core to the role today.');
 }
 
+// Sum of the known hours, plus how many steps have no estimate (hours: null).
 export function totalHours(steps) {
-  return steps.reduce((sum, step) => sum + step.hours, 0);
+  let known = 0;
+  let missing = 0;
+  for (const step of steps) {
+    if (typeof step.hours === 'number') known += step.hours;
+    else missing += 1;
+  }
+  return { known, missing };
 }
 
 // Only labels that are still steps count (stale ticks are ignored).

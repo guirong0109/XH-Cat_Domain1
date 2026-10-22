@@ -37,12 +37,23 @@ describe('pathwayView', () => {
     );
   });
 
+  it('totals known hours and counts null steps, never NaN', () => {
+    const steps = [
+      { label: 'A', hours: 10 },
+      { label: 'B', hours: null },
+      { label: 'C', hours: null },
+    ];
+    expect(totalHours(steps)).toEqual({ known: 10, missing: 2 });
+    expect(totalHours([{ label: 'B', hours: null }])).toEqual({ known: 0, missing: 1 });
+    expect(totalHours([])).toEqual({ known: 0, missing: 0 });
+  });
+
   it('sums hours and progress, ignoring stale ticks', () => {
     const steps = [
       { label: 'A', hours: 10 },
       { label: 'B', hours: 5 },
     ];
-    expect(totalHours(steps)).toBe(15);
+    expect(totalHours(steps)).toEqual({ known: 15, missing: 0 });
     expect(progress(steps, ['A', 'Z'])).toEqual({ done: 1, total: 2, percent: 50 });
     expect(progress([], [])).toEqual({ done: 0, total: 0, percent: 0 });
   });

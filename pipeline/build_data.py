@@ -179,6 +179,35 @@ def check_research_terms(skill_labels):
             raise ValueError(f"Skill {entry['label']!r} has no researchTerm")
 
 
+def check_hours(skill_labels):
+    """hours is a positive number, or null when the team has no estimate yet."""
+    for entry in skill_labels:
+        hours = entry.get("hours", "missing")
+        if hours is None:
+            continue
+        if isinstance(hours, bool) or not isinstance(hours, (int, float)) or hours <= 0:
+            raise ValueError(f"Skill {entry['label']!r} needs hours as a positive number or null, got {hours!r}")
+
+
+def check_statements(skill_labels, known_codes):
+    """Optional statements are {text, code}: non-blank eMASCO text and a role code in the snapshot."""
+    for entry in skill_labels:
+        label = entry["label"]
+        statements = entry.get("statements")
+        if statements is None:
+            continue
+        if not isinstance(statements, list):
+            raise ValueError(f"Skill {label!r} needs statements as a list")
+        for statement in statements:
+            if not isinstance(statement, dict):
+                raise ValueError(f"Skill {label!r} has a statement that is not an object: {statement!r}")
+            text = statement.get("text")
+            if not isinstance(text, str) or not text.strip():
+                raise ValueError(f"Skill {label!r} has a statement with blank text")
+            if statement.get("code") not in known_codes:
+                raise ValueError(f"Skill {label!r} has a statement with unknown role code {statement.get('code')!r}")
+
+
 def check_keywords(skill_labels):
     """Every skill needs lower-case CV keywords; none may repeat or belong to two skills."""
     owner = {}
@@ -296,6 +325,8 @@ def build(paths):
     check_skill_sdgs(skill_labels, sdg)
     check_research_terms(skill_labels)
     check_keywords(skill_labels)
+    check_hours(skill_labels)
+    check_statements(skill_labels, set(raw_by_code))
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)

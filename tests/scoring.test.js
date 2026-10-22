@@ -225,6 +225,19 @@ describe('buildPathway', () => {
     expect(alpha.portal).toBe('elatih');
   });
 
+  it('keeps null hours as null, also for similar and levelup steps', () => {
+    const labels = [
+      { label: 'Close one', hours: null, portal: 'tvet' },
+      { label: 'Gap high', hours: null, portal: 'elatih' },
+      { label: 'Have it', hours: null, portal: 'elatih' },
+    ];
+    const p = { skills: ['Have it', 'Other'], levels: { 'Have it': 'basic' }, sdgs: [] };
+    const path = buildPathway(role, p, c, 'fast', labels);
+    expect(path.find((s) => s.label === 'Gap high').hours).toBeNull();
+    expect(path.find((s) => s.label === 'Close one').hours).toBeNull();
+    expect(path.find((s) => s.label === 'Have it').hours).toBeNull();
+  });
+
   it('returns empty when all skills held', () => {
     const all = { skills: role.skills.map((s) => s.label), sdgs: [] };
     expect(buildPathway(role, all, c, 'fast', skillLabels)).toEqual([]);

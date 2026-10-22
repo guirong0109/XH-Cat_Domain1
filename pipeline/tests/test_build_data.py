@@ -147,6 +147,55 @@ class BuildTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Communication"):
             self.build_with(change)
 
+    def test_null_hours_passed_through(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["hours"] = None
+
+        self.assertIsNone(self.build_with(change)["skills"]["labels"][1]["hours"])
+
+    def test_bad_hours_raise(self):
+        for bad in (0, -5, "x", True):
+            def change(inputs, bad=bad):
+                inputs["team/skill_labels.json"][1]["hours"] = bad
+
+            with self.assertRaisesRegex(ValueError, "Communication.*hours"):
+                self.build_with(change)
+
+    def test_missing_hours_raises(self):
+        def change(inputs):
+            del inputs["team/skill_labels.json"][1]["hours"]
+
+        with self.assertRaisesRegex(ValueError, "Communication.*hours"):
+            self.build_with(change)
+
+    def test_statements_passed_through(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["statements"] = [{"text": "Talk to clients.", "code": CODE}]
+
+        labels = self.build_with(change)["skills"]["labels"]
+        self.assertEqual(labels[1]["statements"], [{"text": "Talk to clients.", "code": CODE}])
+
+    def test_blank_statement_text_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["statements"] = [{"text": "  ", "code": CODE}]
+
+        with self.assertRaisesRegex(ValueError, "Communication.*statement"):
+            self.build_with(change)
+
+    def test_unknown_statement_code_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["statements"] = [{"text": "Talk.", "code": "0000-00"}]
+
+        with self.assertRaisesRegex(ValueError, "0000-00"):
+            self.build_with(change)
+
+    def test_statements_not_a_list_raises(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][1]["statements"] = "Talk."
+
+        with self.assertRaisesRegex(ValueError, "Communication.*statements"):
+            self.build_with(change)
+
     def test_missing_keywords_raises(self):
         def change(inputs):
             del inputs["team/skill_labels.json"][1]["keywords"]

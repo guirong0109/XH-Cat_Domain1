@@ -66,10 +66,12 @@ export function buildPathway(role, profile, ctx, scenario, skillLabels) {
       }
       const info = byLabel.get(s.label);
       const baseHours = info ? info.hours : DEFAULT_HOURS;
+      const shorter = status === 'similar' || status === 'levelup';
       return {
         label: s.label,
         status,
-        hours: status === 'similar' || status === 'levelup' ? Math.round(baseHours / 2) : baseHours,
+        // null means the team has no estimate yet; it is never halved or defaulted.
+        hours: baseHours === null || baseHours === undefined ? null : shorter ? Math.round(baseHours / 2) : baseHours,
         importance: s[scenario],
         rising: s.fast > s.moderate,
         portal: info ? info.portal : DEFAULT_PORTAL,

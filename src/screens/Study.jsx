@@ -21,6 +21,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
   const role = entry.role;
   const steps = buildPathway(role, profile, ctx, scenario, data.skills.labels);
   const { done, total, percent } = progress(steps, doneSkills);
+  const hoursTotal = totalHours(steps);
   const sdgs = pathwaySdgs(role, profile, data.sdg, steps, data.skills.labels);
 
   return (
@@ -36,7 +37,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
           </button>
           <h1 className="m-0 mt-1.5 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your pathway to {role.title}</h1>
           <p className="m-0 text-slate-600">
-            MASCO {role.code} · {total} {total === 1 ? 'step' : 'steps'} · about {totalHours(steps)} hours (estimate) · {done} of {total} done
+            MASCO {role.code} · {total} {total === 1 ? 'step' : 'steps'} · about {hoursTotal.known} hours (estimate){hoursTotal.missing > 0 ? ', some steps not estimated' : ''} · {done} of {total} done
           </p>
         </div>
         <div
@@ -91,7 +92,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                         </span>
                       )}
                     </div>
-                    <span className="text-[13px] text-slate-600">about {step.hours} hours (estimate)</span>
+                    <span className="text-[13px] text-slate-600">{step.hours === null ? 'Hours not estimated' : `about ${step.hours} hours (estimate)`}</span>
                   </div>
                   {stepSdgs(step.label, data.skills.labels, data.sdg).length > 0 && (
                     <div className="flex flex-wrap items-center gap-1.5">
