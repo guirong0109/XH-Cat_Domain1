@@ -48,7 +48,7 @@ function keywordRegex(keywords) {
   return new RegExp(`(?<![\\p{L}\\p{N}])(?:${parts.join('|')})(?![\\p{L}\\p{N}])`, 'iu');
 }
 
-function cut(line) {
+export function cut(line) {
   const t = line.trim();
   return t.length > 80 ? `${t.slice(0, 79)}…` : t;
 }
