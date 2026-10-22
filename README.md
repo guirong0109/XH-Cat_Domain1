@@ -11,7 +11,7 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 ## How it works (5 steps)
 
 1. **About you**: say whether you are a student or already working, then pick your major or sector. Or load a sample student (Aina, Ravi, Mei Ling).
-2. **Your skills**: tick your skills and set a level for each (Basic, Good, Strong). You can also read a PDF CV: the PDF is read in your browser; its text is sent to our own server for an AI check and is not saved or logged. It only suggests skills for you to confirm.
+2. **Your skills**: tick your skills and set a level for each (Basic, Good, Strong). You can also read a PDF CV: the PDF is read in your browser; its text is sent to our own server for an AI check and is not saved or logged. It only suggests skills for you to confirm. If your CV skills fit another major clearly better than the one you picked, a hint offers to switch (you decide; it never changes the score).
 3. **Your goal**: upgrade in your field, move to a new field, or not sure yet. Pick target sectors, SDGs you care about and up to 3 skills to learn.
 4. **Matches**: roles ranked for you, each with a score range, sources and a "Why this score?" breakdown. It also shows the Future Skills Radar, the OpenDOSM trend, AI-exposure bars, the Moderate/Fast AI toggle and a Refresh data button.
 5. **What to study**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.

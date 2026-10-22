@@ -1,14 +1,14 @@
 {
-  "cv01": { "set": "tune", "person": "Aina", "skills": ["Python programming", "SQL and databases", "Spreadsheets (Excel)", "Communication"] },
-  "cv02": { "set": "tune", "person": "Ravi", "skills": ["Electrical wiring", "Problem solving", "Teamwork", "Networking basics"] },
-  "cv03": { "set": "holdout", "person": "Mei Ling", "skills": ["Spreadsheets (Excel)", "Communication", "Customer service", "Graphic design"] },
-  "cv04": { "set": "tune", "person": "Wan Nurul Izzati", "skills": ["Graphic design", "UX research and prototyping", "Teamwork"] },
-  "cv05": { "set": "tune", "person": "Muhammad Faiz", "skills": ["Web development", "Version control (Git)", "Using AI tools"] },
-  "cv06": { "set": "holdout", "person": "Siti Hajar", "skills": ["Healthcare data and records", "Spreadsheets (Excel)", "Customer service"] },
-  "cv07": { "set": "tune", "person": "Lim Wei Jie", "skills": ["Solar PV basics", "Energy auditing", "Renewable energy system design", "Electrical wiring"] },
-  "cv08": { "set": "holdout", "person": "Nurul Ain", "skills": ["Content writing", "SEO and web analytics", "Customer service"] },
-  "cv09": { "set": "tune", "person": "Kavitha", "skills": ["Networking basics", "Network security", "Problem solving"] },
-  "cv10": { "set": "holdout", "person": "Ahmad Hafiz", "skills": ["Project coordination", "Business process analysis", "Data visualisation", "Statistics"] },
-  "cv11": { "set": "tune", "person": "Nur Syafiqah", "skills": ["Accounting software (ERP)", "Bookkeeping and reconciliation", "Payroll", "Tax compliance", "Financial analysis", "Spreadsheets (Excel)"] },
-  "cv12": { "set": "holdout", "person": "Chong Pei Shan", "skills": ["Auditing and internal control", "Accounting and audit standards", "Financial reporting", "Accounting software (ERP)", "Budgeting and costing", "Teamwork"] }
+  "cv01": { "field": "m-data", "set": "tune", "person": "Aina", "skills": ["Python programming", "SQL and databases", "Spreadsheets (Excel)", "Communication"] },
+  "cv02": { "field": "m-ee", "set": "tune", "person": "Ravi", "skills": ["Electrical wiring", "Problem solving", "Teamwork", "Networking basics"] },
+  "cv03": { "field": "m-business", "set": "holdout", "person": "Mei Ling", "skills": ["Spreadsheets (Excel)", "Communication", "Customer service", "Graphic design"] },
+  "cv04": { "field": "m-design", "set": "tune", "person": "Wan Nurul Izzati", "skills": ["Graphic design", "UX research and prototyping", "Teamwork"] },
+  "cv05": { "field": "m-it", "set": "tune", "person": "Muhammad Faiz", "skills": ["Web development", "Version control (Git)", "Using AI tools"] },
+  "cv06": { "field": "m-health", "set": "holdout", "person": "Siti Hajar", "skills": ["Healthcare data and records", "Spreadsheets (Excel)", "Customer service"] },
+  "cv07": { "field": "m-ee", "set": "tune", "person": "Lim Wei Jie", "skills": ["Solar PV basics", "Energy auditing", "Renewable energy system design", "Electrical wiring"] },
+  "cv08": { "field": "m-design", "set": "holdout", "person": "Nurul Ain", "skills": ["Content writing", "SEO and web analytics", "Customer service"] },
+  "cv09": { "field": "m-it", "set": "tune", "person": "Kavitha", "skills": ["Networking basics", "Network security", "Problem solving"] },
+  "cv10": { "field": "m-data", "set": "holdout", "person": "Ahmad Hafiz", "skills": ["Project coordination", "Business process analysis", "Data visualisation", "Statistics"] },
+  "cv11": { "field": "m-business", "set": "tune", "person": "Nur Syafiqah", "skills": ["Accounting software (ERP)", "Bookkeeping and reconciliation", "Payroll", "Tax compliance", "Financial analysis", "Spreadsheets (Excel)"] },
+  "cv12": { "field": "m-business", "set": "holdout", "person": "Chong Pei Shan", "skills": ["Auditing and internal control", "Accounting and audit standards", "Financial reporting", "Accounting software (ERP)", "Budgeting and costing", "Teamwork"] }
 }

@@ -361,6 +361,7 @@ export default function App() {
         onSetLevel={setLevel}
         onCvFound={applyCvSkills}
         onCvClear={() => setCv(null)}
+        onChooseField={chooseField}
       />
     );
   } else if (shownScreen === 'goal') {

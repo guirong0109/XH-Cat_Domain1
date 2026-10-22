@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Chip from '../components/Chip.jsx';
 import LevelSwitch from '../components/LevelSwitch.jsx';
 import {
@@ -14,6 +14,7 @@ import {
 } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
+import { suggestField } from '../lib/fieldCheck.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
 
@@ -27,7 +28,7 @@ function Card({ children, ...rest }) {
   );
 }
 
-export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvClear }) {
+export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvClear, onChooseField }) {
   const pickerRef = useRef(null);
   const headingRef = useRef(null);
   const removeRefs = useRef(new Map());
@@ -69,6 +70,14 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     };
   }, []);
   const count = profile.skills.length;
+  // Field-mismatch notice: only for CV skills, re-checked whenever the skills change.
+  const [keptFor, setKeptFor] = useState(null);
+  const pickedMajor = data.fields?.majors.find((major) => major.id === profile.field);
+  const fieldSuggestion = useMemo(
+    () => (cv && data.fields ? suggestField(profile.skills, profile.field, data.roles, data.fields) : null),
+    [cv, data.fields, data.roles, profile.skills, profile.field],
+  );
+  const showFieldNotice = fieldSuggestion && keptFor !== `${cv.fileName}|${profile.field}`;
 
   const goToPicker = () => {
     pickerRef.current?.scrollIntoView({ block: 'start' });
@@ -194,6 +203,31 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             >
               I don't have a CV
             </button>
+          </div>
+        )}
+        {showFieldNotice && (
+          <div aria-live="polite" className="flex flex-col gap-3 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
+            <p className="m-0">
+              Your CV looks closer to <strong>{fieldSuggestion.label}</strong>.
+              {pickedMajor ? ` You picked ${pickedMajor.label}.` : ''} Based on {fieldSuggestion.skills.length} skills in
+              your CV: {fieldSuggestion.skills.join(', ')}. This is a hint only. You decide.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => onChooseField(fieldSuggestion.majorId)}
+                className="fr-btn min-h-11 cursor-pointer rounded-xl border border-[#C2410C] bg-white px-4 text-sm font-bold text-[#C2410C]"
+              >
+                Switch to {fieldSuggestion.label}
+              </button>
+              <button
+                type="button"
+                onClick={() => setKeptFor(`${cv.fileName}|${profile.field}`)}
+                className="fr-btn min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700"
+              >
+                Keep {pickedMajor ? pickedMajor.label : 'my pick'}
+              </button>
+            </div>
           </div>
         )}
         <div aria-live="polite" className="flex flex-col gap-1">
