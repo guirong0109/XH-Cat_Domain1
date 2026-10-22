@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import crawl_emasco_all  # noqa: E402
 from crawl_emasco_all import PageStore, child_codes, crawl, is_occupation_code  # noqa: E402
+from scrape_emasco import MALAY_HEADINGS  # noqa: E402
 
 FIXTURE_PATH = os.path.join(os.path.dirname(__file__), "fixtures", "emasco_2511-01.html")
 
@@ -86,6 +87,33 @@ class CrawlTests(unittest.TestCase):
         roles, parse_failed, _ = crawl(store, ["2511"], log=lambda message: None)
         self.assertEqual(roles, [])
         self.assertEqual(len(parse_failed), 1)
+
+
+class MalayTests(unittest.TestCase):
+    def setUp(self):
+        fixture = os.path.join(os.path.dirname(__file__), "fixtures", "emasco_1121-01_bm.html")
+        with open(fixture, encoding="utf-8") as fixture_file:
+            self.malay_html = fixture_file.read()
+
+    def test_malay_page_parses_with_malay_headings(self):
+        store = FakeStore({"1121-01": self.malay_html})
+        roles, parse_failed, _ = crawl(store, ["1121-01"], log=lambda message: None, headings=MALAY_HEADINGS)
+        self.assertEqual(parse_failed, [])
+        self.assertEqual(roles[0]["title"], "Pengarah Urusan/Ketua Pegawai Eksekutif")
+        self.assertEqual((len(roles[0]["tasks"]), len(roles[0]["basic_skills"]), len(roles[0]["specific_skills"])), (9, 5, 9))
+        self.assertEqual(roles[0]["qualification"], "Ijazah Sarjana Muda atau setaraf")
+
+    def test_malay_page_with_english_headings_is_a_parse_failure(self):
+        roles, parse_failed, _ = crawl(FakeStore({"1121-01": self.malay_html}), ["1121-01"], log=lambda message: None)
+        self.assertEqual(roles, [])
+        self.assertEqual(len(parse_failed), 1)
+
+    def test_store_asks_for_its_language(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            store = PageStore(raw_dir, opener="opener", pause=0, language="bm")
+            with mock.patch.object(crawl_emasco_all, "fetch_page", return_value="<html></html>") as fetch:
+                store.get("11")
+            fetch.assert_called_once_with("opener", "11", "bm")
 
 
 class PageStoreTests(unittest.TestCase):

@@ -17,7 +17,7 @@ import sys
 import time
 import urllib.request
 
-BASE_URL = "https://emasco.mohr.gov.my/masco/{code}?lang=en"
+BASE_URL = "https://emasco.mohr.gov.my/masco/{code}?lang={language}"
 USER_AGENT = "FutureReadyMY-hackathon/0.1"
 SECONDS_BETWEEN_REQUESTS = 2
 FETCH_ATTEMPTS = 3
@@ -33,6 +33,17 @@ GROUP_BY_FIRST_DIGIT = {
     "7": "craft",
     "8": "operators",
     "9": "elementary",
+}
+
+ENGLISH_HEADINGS = {
+    "code": "MASCO Code", "compare": "Compare", "tasks": "Tasks", "skills": "Skills",
+    "basic": "Basic", "specific": "Specific", "additional": "Additional Info",
+    "qualification": "QUALIFICATION", "courses": "Related Courses",
+}
+MALAY_HEADINGS = {
+    "code": "Kod MASCO", "compare": "Bandingkan", "tasks": "Tugasan", "skills": "Kemahiran",
+    "basic": "Asas", "specific": "Khusus", "additional": "Maklumat Tambahan",
+    "qualification": "KELAYAKAN", "courses": "Kursus Yang Berkaitan",
 }
 
 INLINE_TAGS = {"a", "span", "b", "strong", "em", "i", "u", "small", "sup", "sub", "abbr"}
@@ -96,30 +107,30 @@ def _first_index_of_any(blocks, headings, start, fallback):
     return fallback
 
 
-def parse_role_page(page_html):
+def parse_role_page(page_html, headings=ENGLISH_HEADINGS):
     blocks = _visible_blocks(page_html)
 
-    code_label = _index_after(blocks, "MASCO Code", 0, "role header")
+    code_label = _index_after(blocks, headings["code"], 0, "role header")
     code = blocks[code_label + 1]
-    compare_label = _index_after(blocks, "Compare", code_label, "role header")
+    compare_label = _index_after(blocks, headings["compare"], code_label, "role header")
     title = blocks[compare_label + 1]
 
-    tasks_heading = _index_after(blocks, "Tasks", compare_label, f"role {code}")
+    tasks_heading = _index_after(blocks, headings["tasks"], compare_label, f"role {code}")
     description = blocks[tasks_heading - 1]
 
-    skills_heading = _index_after(blocks, "Skills", tasks_heading, f"role {code}")
+    skills_heading = _index_after(blocks, headings["skills"], tasks_heading, f"role {code}")
     after_tasks = _first_index_of_any(blocks, {"MSIC", "NOSS", "NEC"}, tasks_heading, skills_heading)
     tasks = blocks[tasks_heading + 1:min(after_tasks, skills_heading)]
 
-    basic_heading = _index_after(blocks, "Basic", skills_heading, f"role {code}")
-    specific_heading = _index_after(blocks, "Specific", basic_heading, f"role {code}")
-    additional_heading = _index_after(blocks, "Additional Info", specific_heading, f"role {code}")
+    basic_heading = _index_after(blocks, headings["basic"], skills_heading, f"role {code}")
+    specific_heading = _index_after(blocks, headings["specific"], basic_heading, f"role {code}")
+    additional_heading = _index_after(blocks, headings["additional"], specific_heading, f"role {code}")
     basic_skills = blocks[basic_heading + 1:specific_heading]
     specific_skills = blocks[specific_heading + 1:additional_heading]
 
-    qualification_heading = _index_after(blocks, "QUALIFICATION", additional_heading, f"role {code}")
+    qualification_heading = _index_after(blocks, headings["qualification"], additional_heading, f"role {code}")
     qualification_end = _first_index_of_any(
-        blocks, {"Related Courses"}, qualification_heading, qualification_heading + 2
+        blocks, {headings["courses"]}, qualification_heading, qualification_heading + 2
     )
     qualification = " ".join(blocks[qualification_heading + 1:qualification_end])
 
@@ -161,8 +172,8 @@ def make_opener():
     )
 
 
-def fetch_page(opener, code):
-    request = urllib.request.Request(BASE_URL.format(code=code), headers={"User-Agent": USER_AGENT})
+def fetch_page(opener, code, language="en"):
+    request = urllib.request.Request(BASE_URL.format(code=code, language=language), headers={"User-Agent": USER_AGENT})
     last_error = None
     for attempt in range(FETCH_ATTEMPTS):
         if attempt > 0:

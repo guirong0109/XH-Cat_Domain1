@@ -1,7 +1,8 @@
 """Crawl every eMASCO occupation page (English) and save a JSON snapshot.
 
-Usage: python pipeline/crawl_emasco_all.py [output.json] [--only PREFIX] [--raw-dir DIR]
-       default output: data/emasco/all_roles.json, default raw folder: data/emasco/raw
+Usage: python pipeline/crawl_emasco_all.py [output.json] [--lang en|bm] [--only PREFIX] [--raw-dir DIR]
+       en (default): data/emasco/all_roles.json, raw pages in data/emasco/raw
+       bm (Malay):   data/emasco/all_roles_bm.json, raw pages in data/emasco/raw_bm
 
 Walks the code tree (/masco/1 -> /masco/11 -> /masco/111 -> /masco/1111 -> /masco/1111-01).
 Every page is saved as raw HTML first, so a stopped run resumes from the saved pages
@@ -17,11 +18,14 @@ import urllib.error
 import urllib.request
 import urllib.robotparser
 
-from scrape_emasco import SECONDS_BETWEEN_REQUESTS, USER_AGENT, fetch_page, group_for_code, make_opener, parse_role_page, write_json
+from scrape_emasco import (ENGLISH_HEADINGS, MALAY_HEADINGS, SECONDS_BETWEEN_REQUESTS, USER_AGENT, fetch_page,
+                           group_for_code, make_opener, parse_role_page, write_json)
 
 SITE_URL = "https://emasco.mohr.gov.my"
-DEFAULT_OUTPUT = os.path.join("data", "emasco", "all_roles.json")
-DEFAULT_RAW_DIR = os.path.join("data", "emasco", "raw")
+LANGUAGES = {
+    "en": {"output": "all_roles.json", "raw_dir": "raw", "headings": ENGLISH_HEADINGS},
+    "bm": {"output": "all_roles_bm.json", "raw_dir": "raw_bm", "headings": MALAY_HEADINGS},
+}
 TOP_LEVEL_CODES = [str(digit) for digit in range(1, 10)]  # group 0 (Armed Forces) has no codes
 CODE_LINK = re.compile(r"/masco/(\d+(?:-\d+)?)")
 OCCUPATION_CODE = re.compile(r"^\d{4}-\d{2}$")
@@ -58,8 +62,9 @@ def robots_allows(code_path="/masco/1"):
 class PageStore:
     """Raw HTML on disk: read it if saved, otherwise fetch politely and save it."""
 
-    def __init__(self, raw_dir, opener, pause=SECONDS_BETWEEN_REQUESTS):
+    def __init__(self, raw_dir, opener, pause=SECONDS_BETWEEN_REQUESTS, language="en"):
         self.raw_dir = raw_dir
+        self.language = language
         self.opener = opener
         self.pause = pause
         self.fetched_count = 0
@@ -72,7 +77,7 @@ class PageStore:
                 return saved_file.read()
         if self.fetched_count > 0:
             time.sleep(self.pause)
-        page_html = fetch_page(self.opener, code)
+        page_html = fetch_page(self.opener, code, self.language)
         self.fetched_count += 1
         temporary_path = path + ".tmp"
         with open(temporary_path, "w", encoding="utf-8") as output_file:
@@ -81,7 +86,7 @@ class PageStore:
         return page_html
 
 
-def crawl(store, start_codes, log=print):
+def crawl(store, start_codes, log=print, headings=ENGLISH_HEADINGS):
     roles, parse_failed, fetch_failed = [], [], []
     stack = list(reversed(start_codes))
     seen = set()
@@ -97,7 +102,7 @@ def crawl(store, start_codes, log=print):
             continue
         if is_occupation_code(code):
             try:
-                role = parse_role_page(page_html)
+                role = parse_role_page(page_html, headings)
                 if role["code"] != code:
                     raise ValueError(f"page returned code {role['code']}")
                 role["group"] = group_for_code(code)
@@ -115,26 +120,29 @@ def crawl(store, start_codes, log=print):
 
 def main(argv):
     arguments = argv[1:]
-    only_prefix, raw_dir = None, DEFAULT_RAW_DIR
-    for flag in ("--only", "--raw-dir"):
+    options = {"--only": None, "--raw-dir": None, "--lang": "en"}
+    for flag in options:
         if flag in arguments:
             position = arguments.index(flag)
-            value = arguments[position + 1]
+            options[flag] = arguments[position + 1]
             arguments = arguments[:position] + arguments[position + 2:]
-            if flag == "--only":
-                only_prefix = value
-            else:
-                raw_dir = value
-    output_path = arguments[0] if arguments else DEFAULT_OUTPUT
+    if options["--lang"] not in LANGUAGES:
+        print(f"--lang must be one of: {', '.join(LANGUAGES)}", file=sys.stderr)
+        return 2
+    language = options["--lang"]
+    only_prefix = options["--only"]
+    language_settings = LANGUAGES[language]
+    raw_dir = options["--raw-dir"] or os.path.join("data", "emasco", language_settings["raw_dir"])
+    output_path = arguments[0] if arguments else os.path.join("data", "emasco", language_settings["output"])
     if not robots_allows():
         print("robots.txt forbids crawling /masco/. Stopped.", file=sys.stderr)
         return 1
     start_codes = TOP_LEVEL_CODES if only_prefix is None else [only_prefix]
-    store = PageStore(raw_dir, make_opener())
-    roles, parse_failed, fetch_failed = crawl(store, start_codes)
+    store = PageStore(raw_dir, make_opener(), language=language)
+    roles, parse_failed, fetch_failed = crawl(store, start_codes, headings=language_settings["headings"])
     snapshot = {
         "fetchedAt": datetime.date.today().isoformat(),
-        "language": "en",
+        "language": language,
         "roles": roles,
         "parseFailed": parse_failed,
         "fetchFailed": fetch_failed,
