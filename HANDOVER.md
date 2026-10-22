@@ -17,6 +17,12 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 - **Open decision for the user:** the AI cutoff (0.72, by the precision ≥ 0.90 rule) makes the AI add almost nothing; skills in Bahasa Malaysia lines are missed. Suggested experiment (not approved yet): drop heading lines (e.g. "PROJECTS" scores 0.71) and re-measure a lower cutoff.
 
 
+### CV review on the Skills screen (2026-10-22, merged to `main` at `dced3d6`)
+- Keyword matches are added at once ("sure"). AI (bge-m3) matches go to an orange "Check these" card with the CV line; a skill is added only on **Add skill** (**Not mine** dismisses). One label "AI estimate" (no invented close/possible threshold).
+- **A new CV starts clean:** **Change** removes every skill the old CV added (`cv.added`), with levels, evidence, AI checks and the field notice. Skills picked by hand stay. Logic: `removeCvSkills`, `cvReviewLine` in `src/lib/cvSkills.js`; state in `src/App.jsx` (`applyCvSkills`, `suggestCv`, `acceptSuggestion`, `dismissSuggestion`, `clearCv`).
+- Demo line near the upload: use a made-up CV (cv01-cv12), not a real one. Upload itself stays real.
+- Tests: `npm test` 306 pass; pipeline 165 pass. Not yet checked by the user in a browser; no UI component tests.
+
 ### Stage 2 · project B: CV reading with bge-m3 (2026-10-22)
 - **Field-mismatch notice (2026-10-22):** `src/lib/fieldCheck.js` + Skills screen hint. Rule: >=3 skills and best other major covers >=2 more than the picked one, no tie. Check on the 12 made-up CVs, using the answer-key skills as input (not app-detected) (`scripts/eval-field.mjs`, `testing/results/field_check_eval.csv`; the per-CV field labels are Claude drafts): true field picked, 0 of 12 false notices; other major picked, 17 of 84 right, 0 wrong, 67 no notice. Rule not tuned on these results.
 - **Branch:** `claude/stage2-cv-all-fields`, merged to `main` (`1af6d2a`). Spec `docs/superpowers/specs/2026-10-22-stage2-cv-reading-design.md`.

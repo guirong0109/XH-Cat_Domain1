@@ -50,6 +50,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 |---|---|
 | CV reading with bge-m3 | Server embeds CV lines (text only, not stored) and suggests skills marked "Found by AI · estimate". Cutoff 0.72 set on 6 made-up tuning CVs. Held-out precision / recall: keyword 0.80 / 0.57, AI 1.00 / 0.07, combined 0.82 / 0.64 (**below the 0.90 target**). Open: team review of `testing/cv_test_set/`; hosting needs ~2-3 GB RAM. |
 | Field-mismatch notice | Skills screen hint "Your CV looks closer to X" with Switch / Keep, from CV-found skills only. 12 test CVs: 0 false notices with the true field; 17 of 84 right, 0 wrong with another field. Plus the "SQL Account" keyword fix. |
+| CV review screen | AI matches wait for Add skill / Not mine; a new CV clears the old CV's skills; demo line to use a made-up CV. Merged `dced3d6`. Needs the user's browser check. |
 | Stage 2 · A1 accounting roles | 5 eMASCO accounting roles, 13 new skills from eMASCO statements (names drafted by Claude, awaiting review; "Hours not estimated"), sample student Farah. Re-measured with finance CVs cv11 (tune) and cv12 (holdout): cutoff stays 0.72; held-out keyword 0.85 / 0.55, AI 1.00 / 0.05, combined 0.86 / 0.60. The AI adds no finance skill at 0.72. Open: teammate review of `a1_skill_review.csv`, `a1_new_skills.json`, Farah, cv11-cv12; Kaggle labelling job is the user's decision. |
 
 ---
@@ -128,7 +129,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 ### Must do before submission (25 Oct, 8 am)
 - [x] **Embedding test on RunPod:** run on 22 Oct, results committed, **bge-m3** chosen. Billing screenshot waits until before submission (see below).
 - [ ] **RunPod Billing screenshot** before submission, covering all RunPod jobs → `testing/evidence/4_billing.png` and the real amounts in `testing/runpod_evidence.md`. Ask the user.
-- [ ] **Brief rule:** "Do not use real CVs" → add a "Use a sample CV" button with made-up CV PDFs.
+- [x] **Brief rule:** user chose to keep real upload and demo with a made-up CV; demo line added on the Skills screen (no sample button).
 - [ ] **OpenAlex snapshot:** one Refresh after the daily reset (about 08:00 MYT); commit `data/research.json`.
 - [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).
 - [ ] **P4 RunPod:** run the labelling job (about USD 5) and rebuild the data (on hold until the user asks).
