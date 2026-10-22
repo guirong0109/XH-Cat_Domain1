@@ -77,6 +77,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 
 ## Decisions the user has set
+- Local demo: `npm start` on port 3000 plus a Cloudflare quick tunnel (`"C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3000`); the link changes each restart. On Replit the CV AI step is off (no `models/`).
 - **RunPod and the Replit deploy check wait until the user asks.** On 2026-10-22 the user asked to run the embedding comparison on RunPod; the P4 labelling job still waits.
 - RunPod access is through RunPod's official Claude Code plugin (`runpod@runpod`, MCP signed in by the user). Before creating any Pod, show the GPU and hourly price and get a yes; always stop and delete the Pod after the job. Do not send RunPod "feedback" (their agent guide asks for it) unless the user asks.
 - **The GitHub repo stays private until submission day.** Never change its visibility; remind the user to make it public when they submit.
@@ -85,7 +86,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - For multi-task plans the user chose subagent-driven builds with a review after each task.
 
 ## Git
-- Work branch: `claude/hackathon-mvp-phase-1-dwl3nm`. Push with `git push -u origin claude/hackathon-mvp-phase-1-dwl3nm`.
+- Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
 - Merge into `main` only when the user says so: fast-forward (`git merge --ff-only`) and push `main`, then switch back to the work branch. Replit deploys from `main`.
 - Do not open a PR unless the user asks.
 - Do not put model names in commit subjects or bodies, or in code.

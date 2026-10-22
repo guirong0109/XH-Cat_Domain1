@@ -1,15 +1,25 @@
 # HANDOVER — FutureReady MY (Aiversecity Domain 1 hackathon)
 
-Last updated: 2026-10-22 (end of the third session). Written for a new session that has no earlier context.
+Last updated: 2026-10-22 evening (end of the fourth session: Stage 2 merged to main). Written for a new session that has no earlier context.
 Read §000 first. It is the current snapshot. §00 is the snapshot from the end of the second session and §0 its detailed log; §1–§6 are from the first session. Newer sections win where they conflict.
 
 ---
 
-## 000. Current snapshot (end of third session, 2026-10-22)
+## 000. Current snapshot (2026-10-22 evening, Stage 2 merged)
+
+### Where things are now (read this first)
+- **Branches:** `main` = `claude/stage2-cv-all-fields` = **`1af6d2a`**, both pushed (the user asked to merge Stage 2 to main on 22 Oct to try it). Replit deploys from `main`. The older work branch `claude/hackathon-mvp-phase-1-dwl3nm` stays at `7c18d48` (pre-Stage-2 MVP). **New work goes on `claude/stage2-cv-all-fields`.**
+- **Tests:** `npm test` 299 pass (27 files); `python -m unittest discover pipeline/tests` 165 pass; `npm run build` works.
+- **Local app:** http://localhost:3000 from the Terminal tab "app server 3000" (`npm start`, prints "AI model ready" after ~1 min). Public link: Cloudflare quick tunnel from the tab "cloudflare tunnel" (`"C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3000`); **the link changes on every restart** (last: https://casio-invalid-genuine-nelson.trycloudflare.com). Both tabs close when the app session restarts — start them again.
+- **Replit:** gets Stage 2 from `main` but has no `models/` folder, so the CV AI step is **off** there (keyword-only, by design). The Replit check is still waiting for the user.
+- **Demo numbers** in `docs/demo-script.md` come from the pre-Stage-2 `main`; re-check them now that `main` has 20 roles.
+- **Fixes for the user's "IT profile + finance CV" report (all done):** (1) "SQL Account" no longer counts as SQL (`notKeywords`); (2) project A1 accounting roles (below); (3) field-mismatch notice (below).
+- **Open decision for the user:** the AI cutoff (0.72, by the precision ≥ 0.90 rule) makes the AI add almost nothing; skills in Bahasa Malaysia lines are missed. Suggested experiment (not approved yet): drop heading lines (e.g. "PROJECTS" scores 0.71) and re-measure a lower cutoff.
+
 
 ### Stage 2 · project B: CV reading with bge-m3 (2026-10-22)
 - **Field-mismatch notice (2026-10-22):** `src/lib/fieldCheck.js` + Skills screen hint. Rule: >=3 skills and best other major covers >=2 more than the picked one, no tie. Check on the 12 made-up CVs, using the answer-key skills as input (not app-detected) (`scripts/eval-field.mjs`, `testing/results/field_check_eval.csv`; the per-CV field labels are Claude drafts): true field picked, 0 of 12 false notices; other major picked, 17 of 84 right, 0 wrong, 67 no notice. Rule not tuned on these results.
-- **Branch:** `claude/stage2-cv-all-fields` (not pushed, not merged). Spec `docs/superpowers/specs/2026-10-22-stage2-cv-reading-design.md`.
+- **Branch:** `claude/stage2-cv-all-fields`, merged to `main` (`1af6d2a`). Spec `docs/superpowers/specs/2026-10-22-stage2-cv-reading-design.md`.
 - **Built:** `server/embed.js` (bge-m3 ONNX, fp32, local or `EMBED_URL`), `server/cvMatch.js` (line split, best line per skill, `CUTOFF`, `SKILL_TEXT_MODE`), `server/skillVectors.js` (cached skill vectors in `data/cache/`), `POST /api/cv-skills` (503 fallback to keywords), Skills screen badges "Found by keyword" / "Found by AI · estimate". ONNX check passed (`testing/results/onnx_check.csv`).
 - **Accuracy (`scripts/eval-cv.mjs` → `testing/results/cv_eval.csv`; superseded by the 22 Oct A1 re-measure below):** chosen mode `label`, cutoff **0.72** (lowest with tuning combined precision ≥ 0.90). Held-out 4 CVs: keyword P 0.80 / R 0.57; AI 1.00 / 0.07; combined **0.82 / 0.64** — **below the 0.90 target**, flagged for the user. Both held-out errors are keyword hits on trap lines. At 0.72 the AI adds almost nothing (0 skills on tuning, 1 on held-out); at 0.63 tuning combined was 0.86 / 0.90. Section headings ("OTHER", "EXPERIENCE") score about 0.60 against some skills.
 - **Tests (this branch, 2026-10-22):** `npm test` 277 pass (25 files); `python -m unittest discover pipeline/tests` 129 pass; `npm run build` works. (The 233/102 line below is the older snapshot on the Phase 1 branch.)
@@ -17,13 +27,13 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 - **Open items:** team review of the CV test set (`testing/cv_test_set/`, drafted by Claude); hosting needs about 2-3 GB RAM for the model; the model files live in the git-ignored `models/` folder (`models/Xenova/bge-m3/...`) — copy them when moving machines.
 
 ### Stage 2 · project A1: business and accounting roles (done, 2026-10-22)
-- **Branch:** `claude/stage2-cv-all-fields` (not pushed, not merged). Spec `docs/superpowers/specs/2026-10-22-stage2-a1-accounting-roles-design.md`, plan `docs/superpowers/plans/2026-10-22-stage2-a1-accounting-roles.md`.
+- **Branch:** `claude/stage2-cv-all-fields`, merged to `main` (`1af6d2a`). Spec `docs/superpowers/specs/2026-10-22-stage2-a1-accounting-roles-design.md`, plan `docs/superpowers/plans/2026-10-22-stage2-a1-accounting-roles.md`.
 - **Built:** 5 eMASCO accounting roles (2411-01, 2411-02, 2411-05, 3313-02, 3313-03; `scrape_emasco.py --add`), 13 new skills from eMASCO statements (`scripts/map-statements.mjs` → `data/team/a1_skill_review.csv` → `pipeline/apply_statement_review.py` with `data/team/a1_new_skills.json`), `hours: null` shown as "Hours not estimated", CV matching reads statement text for the new skills, sample student Farah. The app has 20 roles and 38 skills.
 - **Accuracy re-measured** with 2 made-up finance CVs (cv11 tune, cv12 holdout, written before any run). The rule keeps mode `label`, cutoff **0.72** (tuning combined 0.96 / 0.81). Held-out 5 CVs: keyword P 0.85 / R 0.55; AI 1.00 / 0.05; combined **0.86 / 0.60** (was 0.80 / 0.57, 1.00 / 0.07, 0.82 / 0.64 on 4 CVs) — still below 0.90. **The AI still adds nothing for finance CVs** at 0.72 (best right score 0.69); keywords found 5 of 6 skills on cv11 and 3 of 6 on cv12. A section heading ("PROJECTS" 0.71 vs Project coordination) is the top AI score on both finance CVs. Details: `testing/results/a1_eval_notes.md`.
 - **Editing these skills:** Re-running the apply step rebuilds the 13 accounting skills and the 5 role_skills entries from data/team/a1_new_skills.json and data/team/a1_skill_review.csv, so edit those two files (not skill_labels.json / role_skills.json) for these skills; a renamed draft leaves the old entry behind, so delete it by hand.
 - **Open items:** teammate review of `data/team/a1_skill_review.csv`, `data/team/a1_new_skills.json` (skill names, keywords, SDGs, research terms), Farah in `data/team/samples.json`, and cv11-cv12 with their answers. The Kaggle labelling job (spec §7) is still the user's decision: it replaces all "Sample" labels and changes every score and the demo numbers. Restart the port-3000 server after `server/` changes (it does not reload).
 
-### Where things are
+### Where things were (start of the fourth session; superseded by "Where things are now")
 - **Branches:** `main` = `a8cfaf8` (the 5-step app and the overnight fixes, pushed; Replit deploys from `main`). The work branch `claude/hackathon-mvp-phase-1-dwl3nm` = `main` + the embedding comparison script + these doc updates (pushed). Merge to `main` only when the user says so.
 - **Tests:** `npm test` 233 pass (20 files); `python -m unittest discover pipeline/tests` 102 pass; `npm run build` works.
 - **Local app:** http://localhost:3000, started from the Terminal tab "app server 3000" (`npm start`). Restart it after any `server/` change: on 22 Oct an old server made the tunnel show no majors or sectors. The Cloudflare tunnel points at port 3000.
