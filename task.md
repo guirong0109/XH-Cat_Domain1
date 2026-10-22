@@ -1,7 +1,7 @@
 # task.md — FutureReady MY: overall progress
 
 Last updated: 2026-10-22. Deadline: **25 Oct 2026, 8:00 am (MYT)**.
-Code state (22 Oct evening): `main` = `claude/stage2-cv-all-fields` = `1af6d2a` (Stage 2 merged at the user's request; Replit deploys `main`, CV AI off there). New work goes on `claude/stage2-cv-all-fields`. Tests: 299 app tests and 165 pipeline tests pass; `npm run build` works.
+Code state (22 Oct evening): `main` = `claude/stage2-cv-all-fields` = `efb39e2` (Stage 2 merged at the user's request; Replit deploys `main`, CV AI off there). New work goes on `claude/stage2-cv-all-fields`. Tests: 317 app tests and 165 pipeline tests pass; `npm run build` works.
 For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
 ---
@@ -51,6 +51,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | CV reading with bge-m3 | Server embeds CV lines (text only, not stored) and suggests skills marked "Found by AI · estimate". Cutoff 0.72 set on 6 made-up tuning CVs. Held-out precision / recall: keyword 0.80 / 0.57, AI 1.00 / 0.07, combined 0.82 / 0.64 (**below the 0.90 target**). Open: team review of `testing/cv_test_set/`; hosting needs ~2-3 GB RAM. |
 | Field-mismatch notice | Skills screen hint "Your CV looks closer to X" with Switch / Keep, from CV-found skills only. 12 test CVs: 0 false notices with the true field; 17 of 84 right, 0 wrong with another field. Plus the "SQL Account" keyword fix. |
 | CV review screen | AI matches wait for Add skill / Not mine; a new CV clears the old CV's skills; demo line to use a made-up CV. Merged `dced3d6`. Needs the user's browser check. |
+| CV outside our fields | Weak-fit note (few CV skills fit the picked major) and, when nothing matches, a message plus up to 5 unmatched CV lines. Merged `efb39e2`. Idea left: bge-m3 whole-CV field check (not built). |
 | Stage 2 · A1 accounting roles | 5 eMASCO accounting roles, 13 new skills from eMASCO statements (names drafted by Claude, awaiting review; "Hours not estimated"), sample student Farah. Re-measured with finance CVs cv11 (tune) and cv12 (holdout): cutoff stays 0.72; held-out keyword 0.85 / 0.55, AI 1.00 / 0.05, combined 0.86 / 0.60. The AI adds no finance skill at 0.72. Open: teammate review of `a1_skill_review.csv`, `a1_new_skills.json`, Farah, cv11-cv12; Kaggle labelling job is the user's decision. |
 
 ---
