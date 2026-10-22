@@ -13,7 +13,7 @@
       "portal": "elatih",
       "sdgs": [4],
       "researchTerm": "attention to detail",
-      "keywords": ["attention to detail", "detail-oriented", "detail oriented", "meticulous", "eye for detail"]
+      "keywords": ["attention to detail"]
     },
     "g04a": {
       "label": "Financial reporting",
@@ -27,7 +27,7 @@
       "portal": "elatih",
       "sdgs": [4, 8],
       "researchTerm": "financial analysis",
-      "keywords": ["financial analysis", "financial analyst", "ratio analysis", "financial ratios", "cost analysis"]
+      "keywords": ["financial analysis", "ratio analysis", "financial ratios", "cost analysis"]
     },
     "g04c": {
       "label": "Budgeting and costing",
@@ -41,7 +41,7 @@
       "portal": "elatih",
       "sdgs": [4, 16],
       "researchTerm": "auditing",
-      "keywords": ["internal audit", "external audit", "statutory audit", "financial audit", "audit working papers", "auditor", "audit assistant", "internal control", "internal controls", "corporate governance"],
+      "keywords": ["internal audit", "external audit", "statutory audit", "financial audit", "audit working papers", "internal control", "internal controls", "corporate governance"],
       "notKeywords": ["energy audit", "energy auditor", "energy auditing"]
     },
     "g04e": {
@@ -91,7 +91,7 @@
       "portal": "elatih",
       "sdgs": [4],
       "researchTerm": "time management",
-      "keywords": ["time management", "organisational skills", "organizational skills", "meet deadlines", "meeting deadlines", "multitasking", "multi-tasking"]
+      "keywords": ["time management"]
     },
     "g10": {
       "label": "Tax compliance",

@@ -232,3 +232,30 @@ describe('aiOnly', () => {
     expect(aiOnly(undefined)).toEqual([])
   })
 })
+
+describe('extractSkills with the real accounting keywords (precision first)', () => {
+  // Skills made from eMASCO statements; a wrong skill is worse than a missed one.
+  const accounting = skills.labels.filter((s) => s.statements)
+  const names = (text) => extractSkills(text, accounting).map((f) => f.label)
+
+  it('has the accounting skills to check', () => {
+    expect(accounting.map((s) => s.label)).toEqual(
+      expect.arrayContaining(['Auditing and internal control', 'Time management', 'Attention to detail']))
+  })
+
+  it('a job title of someone else is not a skill', () => {
+    expect(names('Reported to the external auditor every month')).toEqual([])
+    expect(names('Worked with the financial analyst and the audit assistant')).toEqual([])
+  })
+
+  it('CV filler gives no credit', () => {
+    expect(names('I enjoy multitasking and multi-tasking')).toEqual([])
+    expect(names('Detail-oriented, detail oriented, meticulous team player')).toEqual([])
+    expect(names('Able to meet deadlines; good organisational skills')).toEqual([])
+  })
+
+  it('specific evidence still counts', () => {
+    expect(names('Prepared bank reconciliations and audit working papers')).toEqual(
+      ['Auditing and internal control', 'Bookkeeping and reconciliation'])
+  })
+})
