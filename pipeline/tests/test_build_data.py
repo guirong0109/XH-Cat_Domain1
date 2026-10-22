@@ -189,6 +189,24 @@ class BuildTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "repeats"):
             self.build_with(change)
 
+    def test_not_keywords_must_be_lower_case(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][0]["notKeywords"] = ["SQL Account"]
+        with self.assertRaisesRegex(ValueError, "not lower-case"):
+            self.build_with(change)
+
+    def test_not_keywords_must_be_a_list(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][0]["notKeywords"] = "sql account"
+        with self.assertRaisesRegex(ValueError, "notKeywords"):
+            self.build_with(change)
+
+    def test_not_keywords_passed_through(self):
+        def change(inputs):
+            inputs["team/skill_labels.json"][0]["notKeywords"] = ["sql account"]
+        labels = self.build_with(change)["skills"]["labels"]
+        self.assertEqual(labels[0]["notKeywords"], ["sql account"])
+
     def test_keywords_passed_through(self):
         labels = self.build_with()["skills"]["labels"]
         self.assertEqual(labels[0]["keywords"], ["sql", "database"])

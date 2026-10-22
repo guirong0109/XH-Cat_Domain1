@@ -199,6 +199,14 @@ def check_keywords(skill_labels):
                     raise ValueError(f"Skill {label!r} repeats the keyword {word!r}")
                 raise ValueError(f"Keyword {word!r} is used by both {owner[word]!r} and {label!r}")
             owner[word] = label
+        not_words = entry.get("notKeywords", [])
+        if not isinstance(not_words, list):
+            raise ValueError(f"Skill {label!r} needs notKeywords as a list")
+        for phrase in not_words:
+            if not isinstance(phrase, str) or not phrase.strip() or phrase != phrase.strip():
+                raise ValueError(f"Skill {label!r} has a bad notKeywords phrase: {phrase!r}")
+            if phrase != phrase.lower():
+                raise ValueError(f"Skill {label!r} has a notKeywords phrase that is not lower-case: {phrase!r}")
 
 
 def check_similar(similar, known_labels):

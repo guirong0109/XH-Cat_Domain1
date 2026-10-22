@@ -28,6 +28,9 @@
         "postgresql",
         "database",
         "databases"
+      ],
+      "notKeywords": [
+        "sql account"
       ]
     },
     {

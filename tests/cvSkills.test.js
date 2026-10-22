@@ -19,6 +19,14 @@ describe('extractSkills', () => {
     expect(found.map((f) => f.label)).toEqual(['Data visualisation'])
   })
 
+  it('ignores a keyword inside a notKeywords phrase', () => {
+    const withTrap = [{ label: 'SQL and databases', keywords: ['sql'], notKeywords: ['sql account'] }]
+    expect(extractSkills('Handled payables in SQL Account', withTrap)).toEqual([])
+    expect(extractSkills('Used SQL Account and wrote SQL queries', withTrap).map((f) => f.label)).toEqual([
+      'SQL and databases',
+    ])
+  })
+
   it('finds a keyword next to punctuation', () => {
     expect(extractSkills('Skills: SQL, Excel.', labels).map((f) => f.label)).toEqual([
       'SQL and databases',

@@ -60,7 +60,10 @@ export function extractSkills(text, skillLabels) {
     const keywords = (skill.keywords || []).filter(Boolean);
     if (!keywords.length) continue;
     const re = keywordRegex(keywords);
-    const line = lines.find((l) => re.test(l));
+    // Phrases like "sql account" (accounting software) must not count as the keyword.
+    const notWords = (skill.notKeywords || []).filter(Boolean);
+    const notRe = notWords.length ? new RegExp(keywordRegex(notWords).source, 'giu') : null;
+    const line = lines.find((l) => re.test(notRe ? l.replace(notRe, ' ') : l));
     if (line === undefined) continue;
     found.push({ label: skill.label, level: guessLevel(line), evidence: cut(line) });
   }
