@@ -1,0 +1,63 @@
+﻿code,role,type,statement,best_existing,score,group,decision
+2411-01,Accountant,basic,Critical thinking and problem-solving to analyse financial issues and evaluate outcomes.,Problem solving,0.6482,g01,new
+2411-01,Accountant,basic,Effective communication skills to present financial information clearly and collaborate with stakeholders.,Communication,0.5932,g02,new
+2411-01,Accountant,basic,"High attention to detail to ensure accuracy and compliance in financial records, reports, and estimates.",Problem solving,0.5221,g03,new
+2411-01,Accountant,basic,"Proficiency in accounting software and spreadsheet tools (e.g., Microsoft Excel) for financial analysis, reporting, and documentation.",Spreadsheets (Excel),0.5542,g04,new
+2411-01,Accountant,basic,Strong numerical and analytical skills to interpret financial and cost data accurately.,Data visualisation,0.5549,g04,new
+2411-01,Accountant,specific,"Competency in budgeting, forecasting, and financial modelling for planning and control.",Project coordination,0.589,g04,new
+2411-01,Accountant,specific,Competency in financial and cost analysis to support decision-making and operational efficiency.,Business process analysis,0.6078,g04,new
+2411-01,Accountant,specific,"Competency in financial statement preparation, reporting, and audit processes.",Energy auditing,0.5891,g04,new
+2411-01,Accountant,specific,"Knowledge in cost accounting and expense management, including project and operational costing.",Project coordination,0.5917,g04,new
+2411-01,Accountant,specific,Knowledge in forensic accounting and fraud detection techniques.,Problem solving,0.5685,g05,new
+2411-01,Accountant,specific,"Knowledge in internal controls, auditing practices, and financial risk management.",Energy auditing,0.5992,g04,new
+2411-01,Accountant,specific,Knowledge in payroll administration and statutory contribution compliance.,Problem solving,0.5906,g06,new
+2411-01,Accountant,specific,"Knowledge of Malaysian Financial Reporting Standards (MFRS), International Financial Reporting Standards (IFRS), and relevant tax regulations.",Data visualisation,0.4479,g07,new
+2411-01,Accountant,specific,Proficiency in Enterprise Resource Planning (ERP) systems and accounting software.,Business process analysis,0.5538,g04,new
+2411-02,Tax Consultant,basic,Effective written and verbal communication to engage with clients and tax authorities.,Communication,0.6733,g08,new
+2411-02,Tax Consultant,basic,Good time management and organisational skills to meet tax deadlines.,Problem solving,0.5847,g09,new
+2411-02,Tax Consultant,basic,High attention to detail to ensure accuracy in tax documentation and compliance.,Customer service,0.5388,g03,new
+2411-02,Tax Consultant,basic,Numerical and reading comprehension skills to understand tax regulations and financial reports.,Problem solving,0.5558,g04,new
+2411-02,Tax Consultant,basic,Strong analytical and problem-solving skills to interpret tax and financial information accurately.,Problem solving,0.6167,g04,new
+2411-02,Tax Consultant,specific,Competency in reviewing financial records and supporting tax audit matters.,Energy auditing,0.6122,g04,new
+2411-02,Tax Consultant,specific,Competency in tax advisory and tax planning for client compliance and financial optimisation.,Customer service,0.5705,g04,new
+2411-02,Tax Consultant,specific,Knowledge in financial reporting and financial record review to support tax computations and compliance.,Energy auditing,0.5515,g04,new
+2411-02,Tax Consultant,specific,"Knowledge in Malaysian tax laws, including the Income Tax Act 1967 and Sales and Service Tax (SST) regulations.",Customer service,0.4798,g10,new
+2411-02,Tax Consultant,specific,"Knowledge in tax incentives, exemptions, and reliefs.",Problem solving,0.5939,g04,new
+2411-02,Tax Consultant,specific,"Proficiency in preparing and filing corporate, personal, and withholding tax returns.",Problem solving,0.5227,g11,new
+2411-02,Tax Consultant,specific,Proficiency in tax software and electronic filing platforms.,Using AI tools,0.581,g04,new
+2411-05,Auditor,basic,"Attention to detail to identify errors, irregularities, and inconsistencies in financial records and documents.",Problem solving,0.5292,g03,new
+2411-05,Auditor,basic,Clear communication skills to present audit findings and engage effectively with stakeholders.,Communication,0.5784,g02,new
+2411-05,Auditor,basic,Critical thinking and problem-solving skills to assess financial processes and audit findings.,Problem solving,0.6129,g01,new
+2411-05,Auditor,basic,Organisational and time management skills to manage multiple audits and meet reporting deadlines.,Energy auditing,0.5602,g09,new
+2411-05,Auditor,basic,"Strong analytical and numerical skills to evaluate financial data, controls, and risks.",Problem solving,0.5419,g04,new
+2411-05,Auditor,specific,"Ability to investigate fraud risks, irregularities, and forensic audit issues.",Energy auditing,0.5635,g12,new
+2411-05,Auditor,specific,Competency in budget and financial analysis for audit planning and review.,Energy auditing,0.6049,g04,new
+2411-05,Auditor,specific,Competency in coordinating and managing complex audit assignments.,Project coordination,0.6309,g13,new
+2411-05,Auditor,specific,"Competency in internal auditing, risk assessment, and evaluation of internal controls.",Energy auditing,0.6118,g04,new
+2411-05,Auditor,specific,"Knowledge in financial reporting, account analysis, and cost assessment for audit purposes.",Energy auditing,0.635,g04,new
+2411-05,Auditor,specific,"Knowledge in International Standards on Auditing (ISA), Malaysian Financial Reporting Standards (MFRS), Committee of Sponsoring Organizations of the Treadway Commission (COSO), and relevant International Organization for Standardization (ISO) standards.",Energy auditing,0.47,g07,new
+2411-05,Auditor,specific,"Knowledge in regulatory compliance, corporate governance, and organisational policies.",Problem solving,0.5874,g04,new
+2411-05,Auditor,specific,"Proficiency in audit software, financial management systems, and data analysis tools.",Using AI tools,0.622,g04,new
+3313-02,Audit Assistant Executive Officer,basic,Ability to work independently and collaboratively in teams.,Teamwork,0.6667,g14,new
+3313-02,Audit Assistant Executive Officer,basic,Analytical thinking and problem-solving ability.,Problem solving,0.71,g01,new
+3313-02,Audit Assistant Executive Officer,basic,Attention to detail and accuracy in tasks.,Teamwork,0.6387,g03,new
+3313-02,Audit Assistant Executive Officer,basic,"Good communication skills, both oral and written.",Communication,0.6749,g15,new
+3313-02,Audit Assistant Executive Officer,basic,Time management and organisational skills to handle multiple tasks and meet deadlines.,Teamwork,0.5933,g09,new
+3313-02,Audit Assistant Executive Officer,specific,"Ability to perform financial analysis, reporting, and interpretation of audit findings.",Energy auditing,0.6194,g04,new
+3313-02,Audit Assistant Executive Officer,specific,Competency in bookkeeping and preparation of full sets of accounts.,Problem solving,0.5554,g04,new
+3313-02,Audit Assistant Executive Officer,specific,"Competency in internal, tax, and financial auditing, including risk assessment, control evaluation, and audit documentation.",Energy auditing,0.625,g04,new
+3313-02,Audit Assistant Executive Officer,specific,Competency in payroll processing and management of statutory deductions.,Problem solving,0.5697,g06,new
+3313-02,Audit Assistant Executive Officer,specific,Familiarity with International Standards on Auditing (ISA) and Malaysian Financial Reporting Standards (MFRS).,Energy auditing,0.4787,g07,new
+3313-02,Audit Assistant Executive Officer,specific,"Knowledge in Malaysian financial regulations, taxation (Sales and Service Tax (SST), Potongan Cukai Berjadual (PCB), and statutory compliance (Employees Provident Fund (EPF), Social Security Organization (SOCSO).",Problem solving,0.4887,g10,new
+3313-02,Audit Assistant Executive Officer,specific,Proficiency in accounting and audit software.,Energy auditing,0.6033,g04,new
+3313-02,Audit Assistant Executive Officer,specific,"Proficiency in bank reconciliation, cash management, and month-end closing processes.",Customer service,0.5621,g16,new
+3313-03,Accounting Technician,basic,Attention to detail and accuracy.,Problem solving,0.6338,g03,new
+3313-03,Accounting Technician,basic,Effective communication skills.,Communication,0.7338,,link
+3313-03,Accounting Technician,basic,Problem-solving and analytical skills.,Problem solving,0.7463,,link
+3313-03,Accounting Technician,basic,Time management and organisational skills.,Teamwork,0.626,g09,new
+3313-03,Accounting Technician,specific,Ability to handle confidential financial information professionally.,Problem solving,0.5474,g04,new
+3313-03,Accounting Technician,specific,Ability to prepare and analyse financial reports and statements.,Problem solving,0.5669,g04,new
+3313-03,Accounting Technician,specific,Competency in maintaining accurate bookkeeping and managing cash transactions.,Problem solving,0.5242,g04,new
+3313-03,Accounting Technician,specific,Knowledge in accounting principles and best practices.,Problem solving,0.6088,g04,new
+3313-03,Accounting Technician,specific,Knowledge in tax regulations and audit procedures.,Energy auditing,0.6022,g04,new
+3313-03,Accounting Technician,specific,Proficiency in accounting software.,Problem solving,0.6369,g04,new
