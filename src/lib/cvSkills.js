@@ -160,3 +160,20 @@ export function cvReviewLine(mode, sure, check) {
   const line = `We found ${total} ${total === 1 ? 'skill' : 'skills'}: ${sure} sure, ${check} to check.`;
   return mode === 'merged' ? `${line} We kept your picks.` : line;
 }
+
+const MIN_WORDS = 4;
+
+// A few real sentences from the CV, shown when no skill matched. Headings, names and dates are skipped.
+export function unmatchedLines(text, max = 5) {
+  const sentences = [];
+  for (const raw of String(text ?? '').split(/\r?\n/)) {
+    const line = raw
+      .replace(/^[\s\-–—•*·●▪◦▶>]+/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (line.split(' ').length < MIN_WORDS) continue;
+    if (line === line.toUpperCase() && /\p{L}/u.test(line)) continue;
+    sentences.push(cut(line));
+  }
+  return { lines: sentences.slice(0, max), total: sentences.length };
+}

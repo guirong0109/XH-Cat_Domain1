@@ -11,6 +11,7 @@ import {
   fetchCvSkills,
   mergeMatches,
   sourceBadge,
+  unmatchedLines,
 } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
@@ -47,6 +48,8 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   const fileRef = useRef(null);
   const [reading, setReading] = useState(false);
   const [cvError, setCvError] = useState(null);
+  // CV lines shown when no skill matched: memory only, never saved or sent.
+  const [unread, setUnread] = useState(null);
   const [dragging, setDragging] = useState(false);
   // null | 'checking' | 'done' | 'fallback'
   const [aiStatus, setAiStatus] = useState(null);
@@ -94,6 +97,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     if (fileRef.current) fileRef.current.value = '';
     if (!file || reading) return;
     setCvError(null);
+    setUnread(null);
     const bad = checkCvFile(file);
     if (bad) {
       setCvError(bad);
@@ -116,6 +120,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       if (!ai.ok) {
         if (keywordFound.length === 0) {
           setCvError('none-found');
+          setUnread(unmatchedLines(text));
           setAiStatus(null);
         } else {
           setAiStatus('fallback');
@@ -125,6 +130,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       const suggestions = aiOnly(mergeMatches(keywordFound, ai.skills));
       if (keywordFound.length === 0 && suggestions.length === 0) {
         setCvError('none-found');
+          setUnread(unmatchedLines(text));
         setAiStatus(null);
         return;
       }
@@ -154,6 +160,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     setReading(false);
     onCvClear();
     setCvError(null);
+    setUnread(null);
   };
 
   return (
@@ -283,9 +290,40 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           {aiStatus === 'done' && <p className="m-0 text-[13px] text-slate-600">{CV_AI_TEXT.privacy}</p>}
         </div>
         {cvError && (
-          <p role="alert" className="m-0 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
-            {CV_MESSAGES[cvError]}
-          </p>
+          <div role="alert" className="flex flex-col gap-3 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
+            <p className="m-0">{CV_MESSAGES[cvError]}</p>
+            {cvError === 'none-found' && unread && unread.lines.length > 0 && (
+              <div className="flex flex-col gap-1">
+                <p className="m-0 text-[13px] font-bold">What we read in your CV, not matched to any skill we know</p>
+                <ul className="m-0 list-disc pl-5 text-[13px] break-words">
+                  {unread.lines.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+                <p className="m-0 text-xs">
+                  Showing {unread.lines.length} of {unread.total} lines. Your CV text stays on this screen and is not saved.
+                </p>
+              </div>
+            )}
+            {cvError === 'none-found' && (
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="fr-btn min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700"
+                >
+                  Upload another CV
+                </button>
+                <button
+                  type="button"
+                  onClick={goToPicker}
+                  className="fr-btn min-h-11 cursor-pointer rounded-xl border border-[#0F766E] bg-white px-4 text-sm font-bold text-[#0F766E]"
+                >
+                  Pick my skills
+                </button>
+              </div>
+            )}
+          </div>
         )}
         {aiStatus !== 'done' && (
           <p className="m-0 text-[13px] text-slate-600">

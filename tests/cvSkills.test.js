@@ -300,3 +300,51 @@ describe('cvReviewLine', () => {
     expect(cvReviewLine('merged', 2, 1)).toBe('We found 3 skills: 2 sure, 1 to check. We kept your picks.')
   })
 })
+
+import { unmatchedLines } from '../src/lib/cvSkills.js'
+
+describe('unmatchedLines', () => {
+  const cv = [
+    'AHMAD BIN ALI',
+    'EXPERIENCE',
+    '• Prepared 200 meals daily for a hotel restaurant',
+    '- Led a kitchen team of 6 during peak service',
+    'Kuala Lumpur',
+    '',
+    '  Managed   food stock and supplier orders  ',
+    '2019 - 2023',
+    'FOLLOWED HALAL AND FOOD SAFETY RULES',
+    'Trained 3 junior cooks',
+    'Handled night shift cleaning duties',
+    'Worked weekends when needed',
+  ].join('\n')
+
+  it('keeps real sentences, drops short lines and all-caps headings', () => {
+    const { lines } = unmatchedLines(cv, 10)
+    expect(lines).toEqual([
+      'Prepared 200 meals daily for a hotel restaurant',
+      'Led a kitchen team of 6 during peak service',
+      'Managed food stock and supplier orders',
+      'Trained 3 junior cooks',
+      'Handled night shift cleaning duties',
+      'Worked weekends when needed',
+    ])
+  })
+
+  it('returns at most the limit and the real total', () => {
+    const result = unmatchedLines(cv, 5)
+    expect(result.lines).toHaveLength(5)
+    expect(result.total).toBe(6)
+  })
+
+  it('cuts very long lines', () => {
+    const long = `Managed ${'a'.repeat(200)} and more words here`
+    expect(unmatchedLines(long, 5).lines[0].length).toBeLessThanOrEqual(80)
+  })
+
+  it('returns nothing for empty or heading-only text', () => {
+    expect(unmatchedLines('', 5)).toEqual({ lines: [], total: 0 })
+    expect(unmatchedLines('SKILLS\nEDUCATION\nCONTACT ME NOW PLEASE', 5)).toEqual({ lines: [], total: 0 })
+    expect(unmatchedLines(undefined, 5)).toEqual({ lines: [], total: 0 })
+  })
+})
