@@ -37,6 +37,13 @@ export function totalHours(steps) {
   return { known, missing };
 }
 
+// Header text for the total; never shows a number when no step has an estimate.
+export function hoursSummary({ known, missing }) {
+  if (missing === 0) return `about ${known} hours (estimate)`;
+  if (known === 0) return 'hours not estimated';
+  return `about ${known} hours (estimate), some steps not estimated`;
+}
+
 // Only labels that are still steps count (stale ticks are ignored).
 export function progress(steps, doneSkills) {
   const done = steps.filter((step) => doneSkills.includes(step.label)).length;

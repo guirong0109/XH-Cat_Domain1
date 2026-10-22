@@ -8,6 +8,7 @@ import {
   stepCountText,
   stepSdgs,
   totalHours,
+  hoursSummary,
   whyText,
 } from '../src/lib/pathwayView.js';
 
@@ -46,6 +47,12 @@ describe('pathwayView', () => {
     expect(totalHours(steps)).toEqual({ known: 10, missing: 2 });
     expect(totalHours([{ label: 'B', hours: null }])).toEqual({ known: 0, missing: 1 });
     expect(totalHours([])).toEqual({ known: 0, missing: 0 });
+  });
+
+  it('summarises hours without inventing a number', () => {
+    expect(hoursSummary({ known: 15, missing: 0 })).toBe('about 15 hours (estimate)');
+    expect(hoursSummary({ known: 10, missing: 2 })).toBe('about 10 hours (estimate), some steps not estimated');
+    expect(hoursSummary({ known: 0, missing: 3 })).toBe('hours not estimated');
   });
 
   it('sums hours and progress, ignoring stale ticks', () => {
