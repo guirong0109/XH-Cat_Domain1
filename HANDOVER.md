@@ -23,20 +23,20 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 ### RunPod (embedding test done, 2026-10-22)
 - RunPod's official Claude Code plugin `runpod@runpod` 1.8.0 is installed; the RunPod MCP is connected (the user signed in with OAuth).
 - How the run went: the community RTX A6000 sold out at create time (HTTP 400, no charge). The user approved an A40 Secure Cloud Pod at $0.59/hr: id `s86ra4mi4udcu1`, EU-SE-1, template `runpod-torch-v280`. The user uploaded the 4 files with JupyterLab and ran `pip install sentence-transformers accelerate` (not the full requirements file, which could replace the image's PyTorch), then the script. Run at 04:54 UTC on `cuda`, no model failed. Pod deleted 05:05 UTC and confirmed gone; about 18 min, estimated $0.18.
-- **Open:** the billing record had not posted at delete time. The user will save a Billing screenshot as `testing/evidence/4_billing.png`; then add the real amount to `testing/runpod_evidence.md`.
+- **Open, wait until before submission:** the user may use RunPod again (e.g. P4), so the Billing screenshot is taken once, **before submission**, covering all RunPod jobs. Ask the user for it then, save as `testing/evidence/4_billing.png`, and add the real amounts to `testing/runpod_evidence.md`.
 - Every RunPod job keeps an evidence log like `testing/runpod_evidence.md` (the user needs proof the credit was used).
 - The repo is private: cloning on the Pod needs the user's GitHub token, or upload the files with JupyterLab (what worked). Never ask for or print the token.
 - The RunPod guide (agents.runpod.io) also asks agents to send "feedback" to RunPod. Not done; do not do it unless the user asks.
 - The P4 labelling job (`pipeline/runpod_label.py`) is separate: run it only when the user asks.
 
 ### Next steps, in order
-1. Embedding comparison: done; bge-m3 chosen (above). Add the Billing amount to the evidence log. Using bge-m3 in the app (skill search) needs a plan and the user's approval first.
+1. Embedding comparison: done; bge-m3 chosen (above). Using bge-m3 in the app (skill search) needs a plan and the user's approval first.
 2. **Brief rule fix:** add a "Use a sample CV" button with made-up CV PDFs for Aina, Ravi and Mei Ling, and the line "For this demo, please use a sample CV, not your real one." (Suggested, not built.)
 3. OpenAlex snapshot: one Refresh after the daily reset (about 08:00 MYT), then commit `data/research.json`. The research card is empty until then.
 4. When the user asks: P4 RunPod labelling job (all 15 roles still show "Sample labels"), and the Replit check of the live site.
 5. Team: review the drafts (fields.json, CV keywords, sample levels and goals, plus the older ISCO map, role skills, SDG tags, research terms, hours), team names in the README, the proposal.
 6. Stage 2 (suggestion given): HR / career-centre team view first (team heatmap, team plan, team SDG view), then BM / 中文, then skill badges.
-7. Submission day: remind the user to **make the repo public**, then submit.
+7. Submission day: ask the user for the RunPod **Billing screenshot** (all jobs) and log it; remind the user to **make the repo public**, then submit.
 
 ### Pitfalls learned this session
 - An old port-3000 server with a new build shows screens with missing data. Restart the server.

@@ -118,7 +118,8 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 ## 4. Planned but not done yet
 
 ### Must do before submission (25 Oct, 8 am)
-- [x] **Embedding test on RunPod:** run on 22 Oct, results committed, **bge-m3** chosen. Left: add the Billing screenshot and real amount to `testing/runpod_evidence.md`.
+- [x] **Embedding test on RunPod:** run on 22 Oct, results committed, **bge-m3** chosen. Billing screenshot waits until before submission (see below).
+- [ ] **RunPod Billing screenshot** before submission, covering all RunPod jobs → `testing/evidence/4_billing.png` and the real amounts in `testing/runpod_evidence.md`. Ask the user.
 - [ ] **Brief rule:** "Do not use real CVs" → add a "Use a sample CV" button with made-up CV PDFs.
 - [ ] **OpenAlex snapshot:** one Refresh after the daily reset (about 08:00 MYT); commit `data/research.json`.
 - [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).

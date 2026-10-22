@@ -26,7 +26,7 @@ Times are UTC, with Malaysia time (MYT = UTC+8) in brackets.
 | 2026-10-22 ~05:04 (13:04 MYT) | User downloaded the 4 result files into `testing/results/` and saved screenshots in `testing/evidence/` | `1_nvidia_smi.png`, `1_run_and_gpu.png`, `2_script_output.png`, `3_pod_running.png` |
 | 2026-10-22 ~05:05 (13:05 MYT) | Delete Pod (`delete-pod s86ra4mi4udcu1`) | HTTP 204 |
 | 2026-10-22 05:05 (13:05 MYT) | Check it is gone | `get-pod` → 404 "pod not found"; `list-pods` → no pods on the account |
-| 2026-10-22 05:05 (13:05 MYT) | Billing read (`list-pod-billing`, this Pod, today) | No record yet (billing posts later). Estimate: about 18 min × $0.59/hr ≈ $0.18. Confirm with the Billing screenshot. |
+| 2026-10-22 05:05 (13:05 MYT) | Billing read (`list-pod-billing`, this Pod, today) | No record yet (billing posts later). Estimate: about 18 min × $0.59/hr ≈ $0.18. Confirm with the Billing screenshot, taken before submission (covers all RunPod jobs). |
 
 ### Script output on the Pod (copied from the user's terminal screenshot)
 | Model | avg similar | avg related | avg different | Spearman | Order errors | Word-trap avg | BM pair | Encode s |
