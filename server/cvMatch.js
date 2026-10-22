@@ -2,7 +2,10 @@ import { cut } from '../src/lib/cvSkills.js'
 
 export const MAX_CHARS = 20000
 export const MAX_LINES = 300
-export const CUTOFF = 0.6
+// Set from testing/results/cv_eval.csv (scripts/eval-cv.mjs, 2026-10-22): the lowest cutoff whose
+// tuning-set combined precision is >= 0.90, best recall across the two skill-text modes.
+// At 0.72 the AI step finds no skill on the tuning CVs; on the held-out CVs it added 1 right skill.
+export const CUTOFF = 0.72
 export const SKILL_TEXT_MODE = 'label'
 
 export function splitCvLines(text) {

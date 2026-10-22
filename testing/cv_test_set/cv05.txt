@@ -1,0 +1,14 @@
+Muhammad Faiz bin Rosli
+Diploma in Computer Science
+Shah Alam, Selangor
+
+PROJECTS
+- Built a small online shop website with HTML, CSS and JavaScript
+- Membina laman web tempahan untuk kedai makan keluarga
+- Kept the team's code on GitHub and used branches and pull requests
+- Used ChatGPT to draft test cases, then checked each one by hand
+
+OTHER
+- Attended a career networking night organised by the faculty
+- Energetic and positive person who likes to learn
+- Hobbies: cycling

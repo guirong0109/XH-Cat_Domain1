@@ -1,0 +1,14 @@
+Nur Aina binti Hassan
+Diploma in Information Technology
+Kuala Lumpur
+
+EXPERIENCE
+- Built MySQL sales reports for a retail company during my internship
+- Wrote Python scripts to clean the daily sales files before loading them
+- Kemas kini data inventori dalam Microsoft Excel setiap minggu menggunakan pivot table
+- Presented the monthly sales findings to the store managers
+
+OTHER
+- Menulis laporan ringkas dan membentangkannya kepada pensyarah dan rakan sekelas
+- Member of the college hiking club
+- Hobbies: reading novels and baking

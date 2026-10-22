@@ -1,0 +1,12 @@
+{
+  "cv01": { "set": "tune", "person": "Aina", "skills": ["Python programming", "SQL and databases", "Spreadsheets (Excel)", "Communication"] },
+  "cv02": { "set": "tune", "person": "Ravi", "skills": ["Electrical wiring", "Problem solving", "Teamwork", "Networking basics"] },
+  "cv03": { "set": "holdout", "person": "Mei Ling", "skills": ["Spreadsheets (Excel)", "Communication", "Customer service", "Graphic design"] },
+  "cv04": { "set": "tune", "person": "Wan Nurul Izzati", "skills": ["Graphic design", "UX research and prototyping", "Teamwork"] },
+  "cv05": { "set": "tune", "person": "Muhammad Faiz", "skills": ["Web development", "Version control (Git)", "Using AI tools"] },
+  "cv06": { "set": "holdout", "person": "Siti Hajar", "skills": ["Healthcare data and records", "Spreadsheets (Excel)", "Customer service"] },
+  "cv07": { "set": "tune", "person": "Lim Wei Jie", "skills": ["Solar PV basics", "Energy auditing", "Renewable energy system design", "Electrical wiring"] },
+  "cv08": { "set": "holdout", "person": "Nurul Ain", "skills": ["Content writing", "SEO and web analytics", "Customer service"] },
+  "cv09": { "set": "tune", "person": "Kavitha", "skills": ["Networking basics", "Network security", "Problem solving"] },
+  "cv10": { "set": "holdout", "person": "Ahmad Hafiz", "skills": ["Project coordination", "Business process analysis", "Data visualisation", "Statistics"] }
+}

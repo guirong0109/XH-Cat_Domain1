@@ -148,7 +148,7 @@ describe('POST /api/cv-skills', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.model).toBe('fake-model')
-    expect(body.cutoff).toBe(0.6)
+    expect(body.cutoff).toBe(0.72)
     expect(body.skills).toEqual([{ label: 'Spreadsheets (Excel)', score: 1, evidence: secretLine }])
   })
 

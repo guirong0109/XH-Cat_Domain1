@@ -45,6 +45,11 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | bge-m3 similar skills | Plan approved (cutoff 0.70). Tasks 1-2 built and reviewed: similar.json check, RunPod review-sheet script, apply script. Task 3 RunPod run done (A40, est. $0.07): 3 pairs reach 0.70, all already listed; no new suggestions; 14 of 17 current pairs score below 0.70. Task 4 done: user approved Claude's judgement (keep 17, add SQL → Healthcare data and records, Web development → SEO and web analytics); only Aina changes (Healthcare Analyst 57 → 63, #2 in goal order). Still a draft until a teammate reviews `data/team/similar_review.csv`. |
 | RunPod | Official Claude Code plugin installed; the RunPod MCP is connected (user signed in). |
 
+### Stage 2 · project B (2026-10-22, branch `claude/stage2-cv-all-fields`)
+| Step | What was done |
+|---|---|
+| CV reading with bge-m3 | Server embeds CV lines (text only, not stored) and suggests skills marked "Found by AI · estimate". Cutoff 0.72 set on 6 made-up tuning CVs. Held-out precision / recall: keyword 0.80 / 0.57, AI 1.00 / 0.07, combined 0.82 / 0.64 (**below the 0.90 target**). Open: team review of `testing/cv_test_set/`; hosting needs ~2-3 GB RAM. |
+
 ---
 
 ## 2. Functions already implemented

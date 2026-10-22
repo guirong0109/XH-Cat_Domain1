@@ -7,6 +7,12 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 
 ## 000. Current snapshot (end of third session, 2026-10-22)
 
+### Stage 2 · project B: CV reading with bge-m3 (2026-10-22)
+- **Branch:** `claude/stage2-cv-all-fields` (not pushed, not merged). Spec `docs/superpowers/specs/2026-10-22-stage2-cv-reading-design.md`.
+- **Built:** `server/embed.js` (bge-m3 ONNX, fp32, local or `EMBED_URL`), `server/cvMatch.js` (line split, best line per skill, `CUTOFF`, `SKILL_TEXT_MODE`), `server/skillVectors.js` (cached skill vectors in `data/cache/`), `POST /api/cv-skills` (503 fallback to keywords), Skills screen badges "Found by keyword" / "Found by AI · estimate". ONNX check passed (`testing/results/onnx_check.csv`).
+- **Accuracy (`scripts/eval-cv.mjs` → `testing/results/cv_eval.csv`):** chosen mode `label`, cutoff **0.72** (lowest with tuning combined precision ≥ 0.90). Held-out 4 CVs: keyword P 0.80 / R 0.57; AI 1.00 / 0.07; combined **0.82 / 0.64** — **below the 0.90 target**, flagged for the user. Both held-out errors are keyword hits on trap lines. At 0.72 the AI adds almost nothing (0 skills on tuning, 1 on held-out); at 0.63 tuning combined was 0.86 / 0.90. Section headings ("OTHER", "EXPERIENCE") score about 0.60 against some skills.
+- **Open items:** team review of the CV test set (`testing/cv_test_set/`, drafted by Claude); hosting needs about 2-3 GB RAM for the model; the model files live in the git-ignored `models/` folder (`models/Xenova/bge-m3/...`) — copy them when moving machines.
+
 ### Where things are
 - **Branches:** `main` = `a8cfaf8` (the 5-step app and the overnight fixes, pushed; Replit deploys from `main`). The work branch `claude/hackathon-mvp-phase-1-dwl3nm` = `main` + the embedding comparison script + these doc updates (pushed). Merge to `main` only when the user says so.
 - **Tests:** `npm test` 233 pass (20 files); `python -m unittest discover pipeline/tests` 102 pass; `npm run build` works.
