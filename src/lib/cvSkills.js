@@ -11,7 +11,7 @@ export const CV_MESSAGES = {
   empty: `This file is empty. ${FALLBACK}`,
   password: `This PDF has a password, so we cannot read it. ${FALLBACK}`,
   'no-text': `We could not find any text in this PDF. It may be a scan or a picture. ${FALLBACK}`,
-  'none-found': `We did not find any skills we know in this CV. ${FALLBACK}`,
+  'none-found': `We did not find any skills we know in this CV. This app covers 20 roles in tech, data, business, engineering, design, education and health, so your CV may be outside what we cover. ${FALLBACK}`,
   'load-failed': `We could not read this PDF. Please try again. ${FALLBACK}`,
 };
 
