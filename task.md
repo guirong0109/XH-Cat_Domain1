@@ -40,7 +40,8 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 |---|---|
 | Overnight fixes | "Your highest score" box on Matches; role cards read in rank order for screen readers; levels shown only when chosen; clearer CV message; keyboard focus after Remove. |
 | Demo script | `docs/demo-script.md`, 3 minutes, numbers checked on 22 Oct. |
-| Embedding test | `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` (tested) compare 5 embedding models on `testing/skill_pair_test_set.csv`. Not run yet. |
+| Embedding test | `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` (tested) compare 5 embedding models on `testing/skill_pair_test_set.csv`. **Run on RunPod (A40, about $0.18)**; results in `testing/results/`, proof in `testing/runpod_evidence.md` and `testing/evidence/`. |
+| Model decision | **bge-m3** chosen by the user: it matches Bahasa Malaysia ("perakaunan" = "accounting" 0.758) and is second best on English (Spearman 0.538, 71 order errors). all-mpnet-base-v2 was best on English (0.599, 59) but failed the BM pair. Not used in the app yet. |
 | RunPod | Official Claude Code plugin installed; the RunPod MCP is connected (user signed in). |
 
 ---
@@ -117,7 +118,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 ## 4. Planned but not done yet
 
 ### Must do before submission (25 Oct, 8 am)
-- [ ] **Embedding test on RunPod:** run `pipeline/compare_embeddings.py`, commit `testing/results/`, pick a model (next session).
+- [x] **Embedding test on RunPod:** run on 22 Oct, results committed, **bge-m3** chosen. Left: add the Billing screenshot and real amount to `testing/runpod_evidence.md`.
 - [ ] **Brief rule:** "Do not use real CVs" → add a "Use a sample CV" button with made-up CV PDFs.
 - [ ] **OpenAlex snapshot:** one Refresh after the daily reset (about 08:00 MYT); commit `data/research.json`.
 - [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).

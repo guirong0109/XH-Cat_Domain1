@@ -17,21 +17,20 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 - 5 steps (spec `docs/superpowers/specs/2026-10-21-simple-steps-design.md`): About you (student/working + major/sector) → Your skills (PDF CV read in the browser with pdfjs-dist, or pick skills; Basic/Good/Strong level each) → Your goal (upgrade / move + target sectors / not sure; optional SDGs and skills to learn) → Matches (goal order with reason badges, a "Your highest score" box when the goal order moves it down, source links per role, a Trends section with radar, Skills in demand, research momentum and Refresh) → What to study (portal order by who).
 - Level credits in the fit score: Basic 0.5, Good 0.75, Strong 1.0 (approved 2026-10-21).
 - 3-minute demo script with checked numbers: `docs/demo-script.md` (22 Oct).
-- Embedding test (new, **not run yet**): `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` compare 5 models on `testing/skill_pair_test_set.csv` (30 pairs). Steps in `pipeline/README.md` §3.
+- Embedding test **done on RunPod (22 Oct)**: `pipeline/compare_embeddings.py` compared 5 models on `testing/skill_pair_test_set.csv` (30 pairs). Results in `testing/results/`, proof in `testing/runpod_evidence.md` and `testing/evidence/` (screenshots).
+- **Decision (user, 2026-10-22): use `BAAI/bge-m3` as the embedding model**, because it handles Bahasa Malaysia: "perakaunan" vs "accounting" scored 0.758, above its own similar-pair average (0.722). The English-only models scored that pair 0.19–0.33. Its English ranking is second best (Spearman 0.538, 71 order errors; all-mpnet-base-v2 was best on English with 0.599 and 59 but failed the BM pair). Not wired into the app yet. bge-m3 scores sit high (different pairs average 0.59), so any match threshold must come from its own results, not from other models. 30 pairs is a small test.
 
-### RunPod (the user approved using it for the embedding test, 2026-10-22)
-- RunPod's official Claude Code plugin `runpod@runpod` 1.8.0 is installed and enabled. `claude mcp list` shows `plugin:runpod:runpod ✔ Connected` (the user signed in with OAuth). A **new session** loads the RunPod MCP tools.
-- **Next, in the new session:** run the embedding comparison on RunPod.
-  1. Show the user the GPU and hourly price and get a yes before creating the Pod.
-  2. Run `python3 pipeline/compare_embeddings.py testing/skill_pair_test_set.csv testing/results`.
-  3. Bring back `testing/results/` (summary.csv, details.csv, dot_plot.svg, run_info.json), then **stop and delete the Pod**.
-  4. Commit the results and help the user read them: high Spearman, few order errors, low word-trap average, high BM-pair score.
-- The repo is private: cloning on the Pod needs the user's GitHub token, or upload `pipeline/` and `testing/`. Never ask for or print the token.
+### RunPod (embedding test done, 2026-10-22)
+- RunPod's official Claude Code plugin `runpod@runpod` 1.8.0 is installed; the RunPod MCP is connected (the user signed in with OAuth).
+- How the run went: the community RTX A6000 sold out at create time (HTTP 400, no charge). The user approved an A40 Secure Cloud Pod at $0.59/hr: id `s86ra4mi4udcu1`, EU-SE-1, template `runpod-torch-v280`. The user uploaded the 4 files with JupyterLab and ran `pip install sentence-transformers accelerate` (not the full requirements file, which could replace the image's PyTorch), then the script. Run at 04:54 UTC on `cuda`, no model failed. Pod deleted 05:05 UTC and confirmed gone; about 18 min, estimated $0.18.
+- **Open:** the billing record had not posted at delete time. The user will save a Billing screenshot as `testing/evidence/4_billing.png`; then add the real amount to `testing/runpod_evidence.md`.
+- Every RunPod job keeps an evidence log like `testing/runpod_evidence.md` (the user needs proof the credit was used).
+- The repo is private: cloning on the Pod needs the user's GitHub token, or upload the files with JupyterLab (what worked). Never ask for or print the token.
 - The RunPod guide (agents.runpod.io) also asks agents to send "feedback" to RunPod. Not done; do not do it unless the user asks.
 - The P4 labelling job (`pipeline/runpod_label.py`) is separate: run it only when the user asks.
 
 ### Next steps, in order
-1. Embedding comparison on RunPod (above).
+1. Embedding comparison: done; bge-m3 chosen (above). Add the Billing amount to the evidence log. Using bge-m3 in the app (skill search) needs a plan and the user's approval first.
 2. **Brief rule fix:** add a "Use a sample CV" button with made-up CV PDFs for Aina, Ravi and Mei Ling, and the line "For this demo, please use a sample CV, not your real one." (Suggested, not built.)
 3. OpenAlex snapshot: one Refresh after the daily reset (about 08:00 MYT), then commit `data/research.json`. The research card is empty until then.
 4. When the user asks: P4 RunPod labelling job (all 15 roles still show "Sample labels"), and the Replit check of the live site.
