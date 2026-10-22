@@ -1,5 +1,7 @@
 # FutureReady MY: three-minute demo script
 
+Stage 2 branch has 20 roles; numbers below are from main.
+
 Numbers checked on 22 Oct 2026 with `src/lib` (`rankRoles` + `orderForGoal`) and `data/*.json`.
 Job trend data: OpenDOSM, fetched 20 Oct 2026 (latest year 2025). If you press Refresh data before the demo, re-check the numbers.
 
