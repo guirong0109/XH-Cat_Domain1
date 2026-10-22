@@ -24,7 +24,7 @@ export function splitCvLines(text) {
 }
 
 export function skillTexts(skill, mode) {
-  if (skill.statements?.length) return [skill.label, ...skill.statements]
+  if (skill.statements?.length) return [skill.label, ...skill.statements.map((s) => (typeof s === 'string' ? s : s.text))]
   if (mode === 'label+keywords') return [skill.label, ...(skill.keywords ?? [])]
   return [skill.label]
 }

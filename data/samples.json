@@ -90,9 +90,9 @@
       "Bookkeeping and reconciliation",
       "Financial reporting",
       "Accounting software (ERP)",
+      "Spreadsheets (Excel)",
       "Tax compliance",
-      "Communication",
-      "Attention to detail"
+      "Communication"
     ],
     "sdgs": [
       8,
@@ -108,9 +108,9 @@
       "Bookkeeping and reconciliation": "good",
       "Financial reporting": "good",
       "Accounting software (ERP)": "basic",
+      "Spreadsheets (Excel)": "good",
       "Tax compliance": "basic",
-      "Communication": "good",
-      "Attention to detail": "good"
+      "Communication": "good"
     },
     "goal": "upgrade",
     "targetSectors": []

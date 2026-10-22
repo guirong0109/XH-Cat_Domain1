@@ -18,6 +18,9 @@ describe('skillTexts', () => {
   it('uses statements, label, or label+keywords', () => {
     expect(skillTexts({ label: 'A', keywords: ['k'], statements: ['s'] }, 'label')).toEqual(['A', 's'])
     expect(skillTexts({ label: 'A', keywords: ['k'] }, 'label')).toEqual(['A'])
+    expect(
+      skillTexts({ label: 'Bookkeeping', statements: [{ text: 'Competency in bookkeeping', code: '3313-03' }] }, 'label'),
+    ).toEqual(['Bookkeeping', 'Competency in bookkeeping'])
     expect(skillTexts({ label: 'A', keywords: ['k'] }, 'label+keywords')).toEqual(['A', 'k'])
   })
 })
