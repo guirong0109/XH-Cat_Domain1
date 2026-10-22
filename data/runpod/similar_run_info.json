@@ -1,0 +1,8 @@
+{
+  "model": "BAAI/bge-m3",
+  "device": "cuda",
+  "ranAt": "2026-10-22T05:37:09+00:00",
+  "minScore": 0.7,
+  "skills": 25,
+  "pairs": 300
+}

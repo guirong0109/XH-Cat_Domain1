@@ -1,0 +1,301 @@
+﻿skill_a,skill_b,score,now_listed,suggested,decision
+Web development,Graphic design,0.7247,b_helps_a,yes,b_helps_a
+Networking basics,Network security,0.71,a_helps_b,yes,a_helps_b
+Teamwork,Project coordination,0.7046,a_helps_b,yes,a_helps_b
+Teamwork,Problem solving,0.6979,no,no,no
+Using AI tools,Problem solving,0.6805,no,no,no
+Problem solving,Customer service,0.6633,no,no,no
+Data visualisation,Graphic design,0.6476,no,no,no
+Web development,Network security,0.6425,no,no,no
+Communication,Project coordination,0.6413,no,no,no
+Web development,Project coordination,0.6407,no,no,no
+Communication,Problem solving,0.6344,no,no,no
+Web development,Networking basics,0.6323,no,no,no
+SQL and databases,SEO and web analytics,0.6315,no,no,no
+Communication,Teamwork,0.6314,no,no,no
+Problem solving,Project coordination,0.6264,no,no,no
+Python programming,Problem solving,0.6252,no,no,no
+Communication,Customer service,0.6251,a_helps_b,no,a_helps_b
+Web development,Content writing,0.6235,no,no,no
+Data visualisation,Using AI tools,0.6194,no,no,no
+Graphic design,UX research and prototyping,0.6187,a_helps_b,no,a_helps_b
+Statistics,Healthcare data and records,0.612,a_helps_b,no,a_helps_b
+Networking basics,Solar PV basics,0.6097,no,no,no
+SQL and databases,Data visualisation,0.6089,no,no,no
+Python programming,Using AI tools,0.6074,a_helps_b,no,a_helps_b
+Problem solving,UX research and prototyping,0.6049,no,no,no
+Python programming,Electrical wiring,0.6047,no,no,no
+Web development,Problem solving,0.6047,no,no,no
+Networking basics,Electrical wiring,0.6044,no,no,no
+Python programming,Web development,0.6042,a_helps_b,no,a_helps_b
+Web development,UX research and prototyping,0.6021,no,no,no
+Web development,SEO and web analytics,0.6021,no,no,no
+SQL and databases,Using AI tools,0.6015,no,no,no
+Teamwork,Customer service,0.6013,no,no,no
+SQL and databases,Healthcare data and records,0.6005,no,no,no
+Graphic design,Problem solving,0.5989,no,no,no
+Graphic design,Communication,0.597,no,no,no
+Statistics,Communication,0.5967,no,no,no
+Statistics,Customer service,0.5956,no,no,no
+Using AI tools,UX research and prototyping,0.5944,no,no,no
+Python programming,Data visualisation,0.5917,no,no,no
+Python programming,Project coordination,0.5917,no,no,no
+Graphic design,Customer service,0.5912,no,no,no
+Electrical wiring,Problem solving,0.5887,no,no,no
+Web development,Communication,0.5865,no,no,no
+Data visualisation,Web development,0.5864,no,no,no
+Electrical wiring,Customer service,0.5838,no,no,no
+Using AI tools,SEO and web analytics,0.5831,no,no,no
+Electrical wiring,Energy auditing,0.5827,a_helps_b,no,a_helps_b
+Network security,Customer service,0.5815,no,no,no
+Data visualisation,Problem solving,0.5783,no,no,no
+Network security,Problem solving,0.5781,no,no,no
+Network security,Electrical wiring,0.5779,no,no,no
+SQL and databases,Problem solving,0.5776,no,no,no
+Using AI tools,Web development,0.5763,no,no,no
+Using AI tools,Teamwork,0.576,no,no,no
+Networking basics,Problem solving,0.5755,no,no,no
+Using AI tools,Business process analysis,0.5737,no,no,no
+SQL and databases,Network security,0.5731,no,no,no
+Network security,Graphic design,0.5731,no,no,no
+Electrical wiring,Project coordination,0.5726,no,no,no
+Python programming,Graphic design,0.5724,no,no,no
+Problem solving,Content writing,0.5716,no,no,no
+Statistics,Problem solving,0.5712,no,no,no
+Using AI tools,Customer service,0.571,no,no,no
+Network security,Communication,0.5706,no,no,no
+Graphic design,Project coordination,0.5696,no,no,no
+UX research and prototyping,Project coordination,0.569,no,no,no
+Web development,Customer service,0.5682,no,no,no
+Networking basics,Project coordination,0.5669,no,no,no
+Statistics,Teamwork,0.5662,no,no,no
+Python programming,SQL and databases,0.5661,no,no,no
+Electrical wiring,Communication,0.5661,no,no,no
+Web development,Teamwork,0.5654,no,no,no
+Energy auditing,Business process analysis,0.561,no,no,no
+Data visualisation,Business process analysis,0.5609,a_helps_b,no,a_helps_b
+Python programming,Network security,0.5568,no,no,no
+Python programming,Teamwork,0.5566,no,no,no
+Communication,Content writing,0.5557,a_helps_b,no,a_helps_b
+Teamwork,Content writing,0.5552,no,no,no
+Using AI tools,Communication,0.5534,no,no,no
+Graphic design,Content writing,0.5512,no,no,no
+Electrical wiring,Graphic design,0.5509,no,no,no
+Using AI tools,Graphic design,0.5506,no,no,no
+Energy auditing,Renewable energy system design,0.5501,no,no,no
+SQL and databases,UX research and prototyping,0.5484,no,no,no
+Network security,Teamwork,0.5478,no,no,no
+Python programming,Networking basics,0.5471,no,no,no
+Electrical wiring,Teamwork,0.5469,no,no,no
+SQL and databases,Web development,0.5466,no,no,no
+Content writing,Project coordination,0.5458,no,no,no
+Customer service,Business process analysis,0.5439,no,no,no
+Problem solving,Business process analysis,0.5434,no,no,no
+Energy auditing,Project coordination,0.5434,no,no,no
+Data visualisation,UX research and prototyping,0.5419,no,no,no
+Networking basics,Communication,0.5411,no,no,no
+Graphic design,Teamwork,0.5402,no,no,no
+Statistics,Network security,0.5398,no,no,no
+Data visualisation,Project coordination,0.539,no,no,no
+Statistics,Using AI tools,0.5385,no,no,no
+Data visualisation,Electrical wiring,0.5383,no,no,no
+Graphic design,Business process analysis,0.536,no,no,no
+Web development,Business process analysis,0.5344,no,no,no
+Customer service,Healthcare data and records,0.534,no,no,no
+SQL and databases,Statistics,0.5321,no,no,no
+Network security,Project coordination,0.532,no,no,no
+UX research and prototyping,Business process analysis,0.5313,no,no,no
+Using AI tools,Project coordination,0.5312,no,no,no
+Networking basics,Teamwork,0.5308,no,no,no
+UX research and prototyping,SEO and web analytics,0.5301,no,no,no
+SQL and databases,Customer service,0.5294,no,no,no
+Python programming,Business process analysis,0.5282,no,no,no
+Data visualisation,SEO and web analytics,0.5275,a_helps_b,no,a_helps_b
+Customer service,UX research and prototyping,0.5274,no,no,no
+Data visualisation,Communication,0.5268,no,no,no
+Using AI tools,Content writing,0.5266,no,no,no
+Data visualisation,Healthcare data and records,0.5263,no,no,no
+Networking basics,SEO and web analytics,0.5253,no,no,no
+Problem solving,Energy auditing,0.5253,no,no,no
+Data visualisation,Statistics,0.5246,no,no,no
+Teamwork,UX research and prototyping,0.524,no,no,no
+Graphic design,Renewable energy system design,0.5235,no,no,no
+Solar PV basics,Renewable energy system design,0.5233,a_helps_b,no,a_helps_b
+Project coordination,Business process analysis,0.5233,no,no,no
+Using AI tools,Energy auditing,0.5222,no,no,no
+Data visualisation,Energy auditing,0.5215,no,no,no
+Spreadsheets (Excel),Data visualisation,0.5205,a_helps_b,no,a_helps_b
+Customer service,Energy auditing,0.5187,no,no,no
+Networking basics,Graphic design,0.5186,no,no,no
+Project coordination,Version control (Git),0.5181,no,no,no
+SEO and web analytics,Energy auditing,0.518,no,no,no
+Data visualisation,Network security,0.5174,no,no,no
+Data visualisation,Version control (Git),0.5169,no,no,no
+Web development,Electrical wiring,0.5168,no,no,no
+Using AI tools,Networking basics,0.5167,no,no,no
+Python programming,Customer service,0.5166,no,no,no
+Data visualisation,Customer service,0.5159,no,no,no
+Python programming,Statistics,0.5153,no,no,no
+SEO and web analytics,Business process analysis,0.5153,no,no,no
+Python programming,Version control (Git),0.5151,no,no,no
+Using AI tools,Network security,0.514,no,no,no
+Using AI tools,Healthcare data and records,0.5132,no,no,no
+SQL and databases,Communication,0.5116,no,no,no
+Network security,Energy auditing,0.5116,no,no,no
+SQL and databases,Project coordination,0.5104,no,no,no
+SQL and databases,Networking basics,0.5103,no,no,no
+UX research and prototyping,Content writing,0.5095,no,no,no
+Statistics,Electrical wiring,0.5094,no,no,no
+Python programming,Energy auditing,0.5074,no,no,no
+SQL and databases,Teamwork,0.5051,no,no,no
+Data visualisation,Teamwork,0.5044,no,no,no
+Networking basics,UX research and prototyping,0.504,no,no,no
+Web development,Version control (Git),0.5032,a_helps_b,no,a_helps_b
+Communication,UX research and prototyping,0.5032,no,no,no
+Python programming,Content writing,0.5029,no,no,no
+Teamwork,Energy auditing,0.5025,no,no,no
+Spreadsheets (Excel),Using AI tools,0.5018,no,no,no
+Python programming,UX research and prototyping,0.5017,no,no,no
+Electrical wiring,Renewable energy system design,0.5016,no,no,no
+Statistics,Graphic design,0.5004,no,no,no
+Customer service,Content writing,0.5003,no,no,no
+Content writing,SEO and web analytics,0.5,no,no,no
+Python programming,Communication,0.4999,no,no,no
+Problem solving,SEO and web analytics,0.4995,no,no,no
+Using AI tools,Version control (Git),0.4994,no,no,no
+Web development,Renewable energy system design,0.4994,no,no,no
+SEO and web analytics,Healthcare data and records,0.4982,no,no,no
+Networking basics,Customer service,0.4974,no,no,no
+Customer service,Project coordination,0.4972,no,no,no
+SQL and databases,Spreadsheets (Excel),0.4946,no,no,no
+Problem solving,Version control (Git),0.4932,no,no,no
+Network security,Business process analysis,0.4926,no,no,no
+Teamwork,Business process analysis,0.4912,no,no,no
+SQL and databases,Business process analysis,0.4902,no,no,no
+Network security,UX research and prototyping,0.4901,no,no,no
+UX research and prototyping,Energy auditing,0.4901,no,no,no
+Using AI tools,Electrical wiring,0.4881,no,no,no
+Communication,Business process analysis,0.4869,no,no,no
+Network security,SEO and web analytics,0.4868,no,no,no
+Statistics,Energy auditing,0.4862,no,no,no
+Communication,Energy auditing,0.4852,no,no,no
+Electrical wiring,UX research and prototyping,0.4848,no,no,no
+Spreadsheets (Excel),Problem solving,0.4846,no,no,no
+SQL and databases,Graphic design,0.4821,no,no,no
+Graphic design,SEO and web analytics,0.482,no,no,no
+Spreadsheets (Excel),Teamwork,0.481,no,no,no
+Data visualisation,Networking basics,0.4793,no,no,no
+Customer service,SEO and web analytics,0.4791,no,no,no
+Communication,Healthcare data and records,0.4756,no,no,no
+Data visualisation,Content writing,0.4733,no,no,no
+Statistics,Project coordination,0.471,no,no,no
+Renewable energy system design,Project coordination,0.4707,no,no,no
+Graphic design,Version control (Git),0.4698,no,no,no
+SQL and databases,Electrical wiring,0.4696,no,no,no
+Communication,SEO and web analytics,0.4696,no,no,no
+Spreadsheets (Excel),Healthcare data and records,0.4695,no,no,no
+Content writing,Business process analysis,0.4694,no,no,no
+Statistics,Business process analysis,0.4687,no,no,no
+Networking basics,Content writing,0.4667,no,no,no
+Web development,Energy auditing,0.4645,no,no,no
+Customer service,Version control (Git),0.4642,no,no,no
+SEO and web analytics,Project coordination,0.4642,no,no,no
+SQL and databases,Energy auditing,0.4639,no,no,no
+Problem solving,Healthcare data and records,0.4634,no,no,no
+Spreadsheets (Excel),Version control (Git),0.4632,no,no,no
+Data visualisation,Renewable energy system design,0.4628,no,no,no
+Energy auditing,Healthcare data and records,0.4601,no,no,no
+Spreadsheets (Excel),Statistics,0.4599,a_helps_b,no,a_helps_b
+UX research and prototyping,Healthcare data and records,0.4597,no,no,no
+Electrical wiring,Solar PV basics,0.4594,a_helps_b,no,a_helps_b
+Solar PV basics,Problem solving,0.4592,no,no,no
+Electrical wiring,Business process analysis,0.4589,no,no,no
+Data visualisation,Solar PV basics,0.4587,no,no,no
+Web development,Solar PV basics,0.4585,no,no,no
+Network security,Healthcare data and records,0.4584,no,no,no
+Problem solving,Renewable energy system design,0.4575,no,no,no
+Networking basics,Business process analysis,0.457,no,no,no
+SQL and databases,Version control (Git),0.4562,no,no,no
+UX research and prototyping,Version control (Git),0.4562,no,no,no
+Network security,Content writing,0.4549,no,no,no
+Healthcare data and records,Business process analysis,0.4539,no,no,no
+Statistics,Web development,0.4532,no,no,no
+Graphic design,Energy auditing,0.451,no,no,no
+Web development,Healthcare data and records,0.4506,no,no,no
+Content writing,Energy auditing,0.4501,no,no,no
+Teamwork,SEO and web analytics,0.4497,no,no,no
+Solar PV basics,Energy auditing,0.4493,no,no,no
+Networking basics,Renewable energy system design,0.4489,no,no,no
+Network security,Renewable energy system design,0.4484,no,no,no
+Teamwork,Healthcare data and records,0.4479,no,no,no
+Spreadsheets (Excel),Customer service,0.4473,no,no,no
+SQL and databases,Solar PV basics,0.4461,no,no,no
+Solar PV basics,SEO and web analytics,0.4447,no,no,no
+SQL and databases,Content writing,0.4444,no,no,no
+Renewable energy system design,Business process analysis,0.4441,no,no,no
+Python programming,SEO and web analytics,0.4439,no,no,no
+Networking basics,Energy auditing,0.4438,no,no,no
+Python programming,Spreadsheets (Excel),0.4397,no,no,no
+Python programming,Renewable energy system design,0.439,no,no,no
+Energy auditing,Version control (Git),0.4388,no,no,no
+Spreadsheets (Excel),Networking basics,0.4378,no,no,no
+Teamwork,Version control (Git),0.4375,no,no,no
+Statistics,SEO and web analytics,0.4373,no,no,no
+UX research and prototyping,Renewable energy system design,0.4349,no,no,no
+Network security,Version control (Git),0.4325,no,no,no
+Using AI tools,Solar PV basics,0.4323,no,no,no
+Python programming,Solar PV basics,0.4313,no,no,no
+Spreadsheets (Excel),Web development,0.4304,no,no,no
+Project coordination,Healthcare data and records,0.4294,no,no,no
+Spreadsheets (Excel),Project coordination,0.4289,no,no,no
+Spreadsheets (Excel),Business process analysis,0.4287,no,no,no
+Spreadsheets (Excel),Communication,0.4285,no,no,no
+Electrical wiring,SEO and web analytics,0.4273,no,no,no
+Solar PV basics,Project coordination,0.4248,no,no,no
+Spreadsheets (Excel),Network security,0.4223,no,no,no
+Electrical wiring,Healthcare data and records,0.4221,no,no,no
+Spreadsheets (Excel),Graphic design,0.4218,no,no,no
+Statistics,UX research and prototyping,0.4216,no,no,no
+Using AI tools,Renewable energy system design,0.4165,no,no,no
+Spreadsheets (Excel),UX research and prototyping,0.4154,no,no,no
+Content writing,Version control (Git),0.4145,no,no,no
+Spreadsheets (Excel),SEO and web analytics,0.4137,no,no,no
+Python programming,Healthcare data and records,0.4112,no,no,no
+Statistics,Version control (Git),0.4102,no,no,no
+SEO and web analytics,Version control (Git),0.4102,no,no,no
+Healthcare data and records,Version control (Git),0.4102,no,no,no
+Communication,Version control (Git),0.4094,no,no,no
+Networking basics,Version control (Git),0.4058,no,no,no
+Electrical wiring,Version control (Git),0.4052,no,no,no
+Teamwork,Renewable energy system design,0.4033,no,no,no
+Solar PV basics,Customer service,0.4028,no,no,no
+Communication,Renewable energy system design,0.4023,no,no,no
+Electrical wiring,Content writing,0.4007,no,no,no
+Customer service,Renewable energy system design,0.3987,no,no,no
+Statistics,Networking basics,0.3985,no,no,no
+Spreadsheets (Excel),Energy auditing,0.3959,no,no,no
+Solar PV basics,Graphic design,0.3952,no,no,no
+Spreadsheets (Excel),Electrical wiring,0.3936,no,no,no
+Content writing,Healthcare data and records,0.3929,no,no,no
+Statistics,Content writing,0.3922,no,no,no
+Solar PV basics,Version control (Git),0.3906,no,no,no
+Networking basics,Healthcare data and records,0.3903,no,no,no
+Graphic design,Healthcare data and records,0.3902,no,no,no
+Version control (Git),Business process analysis,0.3861,no,no,no
+Spreadsheets (Excel),Content writing,0.3823,no,no,no
+Solar PV basics,Content writing,0.3815,no,no,no
+Content writing,Renewable energy system design,0.3808,no,no,no
+Solar PV basics,UX research and prototyping,0.3807,no,no,no
+Network security,Solar PV basics,0.3781,no,no,no
+Spreadsheets (Excel),Solar PV basics,0.3769,no,no,no
+Solar PV basics,Business process analysis,0.3743,no,no,no
+Solar PV basics,Teamwork,0.3706,no,no,no
+Renewable energy system design,Healthcare data and records,0.3662,no,no,no
+SEO and web analytics,Renewable energy system design,0.361,no,no,no
+SQL and databases,Renewable energy system design,0.3586,no,no,no
+Solar PV basics,Communication,0.3554,no,no,no
+Spreadsheets (Excel),Renewable energy system design,0.3498,no,no,no
+Solar PV basics,Healthcare data and records,0.3431,no,no,no
+Renewable energy system design,Version control (Git),0.3315,no,no,no
+Statistics,Renewable energy system design,0.322,no,no,no
+Statistics,Solar PV basics,0.3185,no,no,no

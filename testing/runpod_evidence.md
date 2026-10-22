@@ -42,3 +42,23 @@ Save them in `testing/evidence/` (create the folder) so they go into the repo wi
 1. RunPod console, Pods page: the Pod running (name `embedding-compare`, GPU, price).
 2. JupyterLab terminal: the `nvidia-smi` output and the script's printed output to the end.
 3. RunPod console, Billing: the charge for this Pod after it is deleted.
+
+---
+
+# RunPod evidence: bge-m3 similar-skill suggestions (plan Task 3)
+
+Script: `pipeline/suggest_similar.py` (model `BAAI/bge-m3`, cutoff 0.70). Input: the 25 skills in `data/team/skill_labels.json` and today's `data/team/similar.json`. Output: `data/runpod/similar_review.csv`, `data/runpod/similar_run_info.json`. Screenshots: `testing/evidence/sim_*.png`.
+
+| Time (UTC) | Step | Evidence |
+|---|---|---|
+| 2026-10-22 05:32 (13:32 MYT) | GPU price and stock check (`list-gpu-types`, secure cloud) | A40 48 GB $0.59/hr stock HIGH (EU-SE-1); RTX A5000 24 GB $0.27/hr LOW; RTX 4000 Ada 20 GB $0.28/hr LOW; RTX A4500 20 GB $0.25/hr LOW |
+| 2026-10-22 05:32:56 (13:32 MYT) | Create Pod (user approved A40 secure at $0.59/hr) | Pod id `g6mra9m41qx47q`, name `similar-skills`, 1 × NVIDIA A40 (48 GB), Secure Cloud, EU-SE-1, cost $0.59/hr, host CUDA 13.2, image `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`, 20 GB `/workspace` |
+| 2026-10-22 05:32:59 (13:32 MYT) | Boot log (`stream-pod-logs`) | "CUDA Version 12.8.1", "Jupyter Lab started", "Start script(s) finished, Pod is ready to use." |
+| 2026-10-22 ~05:33 (13:33 MYT) | Read back (`get-pod`) | status RUNNING, port 8888 mapped, JupyterLab at https://g6mra9m41qx47q-8888.proxy.runpod.net |
+| 2026-10-22 05:37:09 | `data/runpod/similar_run_info.json` (written by the script) | model `BAAI/bge-m3`, device `cuda`, minScore 0.7, 25 skills, 300 pairs |
+| 2026-10-22 ~05:38 (13:38 MYT) | User downloaded `similar_review.csv` and `similar_run_info.json` into `data/runpod/` | 300 rows; 3 pairs reach 0.70, all 3 already in `similar.json` |
+| 2026-10-22 05:39 (13:39 MYT) | Delete Pod (`delete-pod g6mra9m41qx47q`) | HTTP 204 |
+| 2026-10-22 05:39:58 (13:39 MYT) | Check it is gone | `get-pod` → 404 "pod not found"; `list-pods` → no pods on the account |
+| 2026-10-22 05:40 (13:40 MYT) | Cost | Estimate: about 7 min × $0.59/hr ≈ $0.07. Confirm with the Billing screenshot before submission. |
+
+No screenshots for this run (user's choice: the first run's screenshots are enough). Proof for this run is this log (RunPod API replies) and `similar_run_info.json`.
