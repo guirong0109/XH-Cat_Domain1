@@ -82,5 +82,37 @@
     "targetSectors": [
       "Working with data"
     ]
+  },
+  {
+    "id": "farah",
+    "label": "Farah · Diploma in Accounting",
+    "skills": [
+      "Bookkeeping and reconciliation",
+      "Financial reporting",
+      "Accounting software (ERP)",
+      "Tax compliance",
+      "Communication",
+      "Attention to detail"
+    ],
+    "sdgs": [
+      8,
+      16
+    ],
+    "learn": [
+      "Auditing and internal control",
+      "Financial analysis"
+    ],
+    "who": "student",
+    "field": "m-business",
+    "levels": {
+      "Bookkeeping and reconciliation": "good",
+      "Financial reporting": "good",
+      "Accounting software (ERP)": "basic",
+      "Tax compliance": "basic",
+      "Communication": "good",
+      "Attention to detail": "good"
+    },
+    "goal": "upgrade",
+    "targetSectors": []
   }
 ]

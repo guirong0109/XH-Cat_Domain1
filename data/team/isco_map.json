@@ -59,5 +59,25 @@
   "2511-08": {
     "isco": "2511",
     "note": "Coordinates digital change and business requirements; closest to systems analysts (alternative: 2421; weak fit)."
+  },
+  "2411-01": {
+    "isco": "2411",
+    "note": "Keeps and prepares financial records and statements; direct fit with accountants."
+  },
+  "2411-02": {
+    "isco": "2411",
+    "note": "Advises on tax rules and prepares returns; closest to accountants (ISCO-08 has no separate tax unit)."
+  },
+  "2411-05": {
+    "isco": "2411",
+    "note": "Examines financial records and controls; closest to accountants (auditors are in ISCO 2411)."
+  },
+  "3313-02": {
+    "isco": "3313",
+    "note": "Supports audits by checking records and gathering evidence; closest to accounting associate professionals."
+  },
+  "3313-03": {
+    "isco": "3313",
+    "note": "Records transactions and prepares accounts at technician level; direct fit with accounting associate professionals."
   }
 }

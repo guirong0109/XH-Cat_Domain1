@@ -1505,7 +1505,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2411-01",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2411",
+      "iscoTitle": "Accountants",
+      "mean": 0.51,
+      "sd": 0.08,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "tax-consultant",
@@ -1605,7 +1615,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2411-02",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2411",
+      "iscoTitle": "Accountants",
+      "mean": 0.51,
+      "sd": 0.08,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "auditor",
@@ -1729,7 +1749,17 @@
       "url": "https://emasco.mohr.gov.my/masco/2411-05",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "2411",
+      "iscoTitle": "Accountants",
+      "mean": 0.51,
+      "sd": 0.08,
+      "category": "Gradient 3",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "audit-assistant",
@@ -1849,7 +1879,17 @@
       "url": "https://emasco.mohr.gov.my/masco/3313-02",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3313",
+      "iscoTitle": "Accounting Associate Professionals",
+      "mean": 0.49,
+      "sd": 0.13,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   },
   {
     "id": "accounting-technician",
@@ -1963,6 +2003,16 @@
       "url": "https://emasco.mohr.gov.my/masco/3313-03",
       "fetchedAt": "2026-10-21"
     },
-    "labelSource": "manual"
+    "labelSource": "manual",
+    "ilo": {
+      "isco": "3313",
+      "iscoTitle": "Accounting Associate Professionals",
+      "mean": 0.49,
+      "sd": 0.13,
+      "category": "Gradient 2",
+      "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
+      "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
+      "fetchedAt": "2026-10-21"
+    }
   }
 ]
