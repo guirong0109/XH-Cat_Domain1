@@ -41,3 +41,12 @@ describe('suggestField', () => {
     expect(suggestField(['a1', 'a2', 'a3'], null, roles, fields)?.majorId).toBe('a');
   });
 });
+
+import { cvFoundSkills } from '../src/lib/fieldCheck.js';
+describe('cvFoundSkills', () => {
+  it('keeps only picked skills that came from the CV', () => {
+    const cv = { evidence: { a1: 'x', gone: 'y' }, sources: { a2: 'ai' } };
+    expect(cvFoundSkills(cv, ['a1', 'a2', 'manual'])).toEqual(['a1', 'a2']);
+    expect(cvFoundSkills(null, ['a1'])).toEqual([]);
+  });
+});

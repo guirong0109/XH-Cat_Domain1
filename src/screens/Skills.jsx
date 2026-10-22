@@ -14,7 +14,7 @@ import {
 } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
-import { suggestField } from '../lib/fieldCheck.js';
+import { cvFoundSkills, suggestField } from '../lib/fieldCheck.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
 
@@ -74,7 +74,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   const [keptFor, setKeptFor] = useState(null);
   const pickedMajor = data.fields?.majors.find((major) => major.id === profile.field);
   const fieldSuggestion = useMemo(
-    () => (cv && data.fields ? suggestField(profile.skills, profile.field, data.roles, data.fields) : null),
+    () => (cv && data.fields ? suggestField(cvFoundSkills(cv, profile.skills), profile.field, data.roles, data.fields) : null),
     [cv, data.fields, data.roles, profile.skills, profile.field],
   );
   const showFieldNotice = fieldSuggestion && keptFor !== `${cv.fileName}|${profile.field}`;
@@ -205,8 +205,9 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </button>
           </div>
         )}
+        <div aria-live="polite">
         {showFieldNotice && (
-          <div aria-live="polite" className="flex flex-col gap-3 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
+          <div className="flex flex-col gap-3 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
             <p className="m-0">
               Your CV looks closer to <strong>{fieldSuggestion.label}</strong>.
               {pickedMajor ? ` You picked ${pickedMajor.label}.` : ''} Based on {fieldSuggestion.skills.length} skills in
@@ -230,6 +231,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </div>
           </div>
         )}
+        </div>
         <div aria-live="polite" className="flex flex-col gap-1">
           {reading && aiStatus !== 'checking' && <p className="m-0 text-sm text-slate-700">Reading your CV…</p>}
           {aiStatus === 'checking' && (

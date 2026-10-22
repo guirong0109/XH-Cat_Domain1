@@ -34,3 +34,10 @@ export function suggestField(foundSkills, pickedMajorId, roles, fields) {
   const { major, covered } = top[0];
   return { majorId: major.id, label: major.label, skills: covered };
 }
+
+// Skills found in the CV (keyword or AI) that the student still has picked.
+export function cvFoundSkills(cv, pickedSkills) {
+  if (!cv) return [];
+  const found = new Set([...Object.keys(cv.evidence ?? {}), ...Object.keys(cv.sources ?? {})]);
+  return pickedSkills.filter((label) => found.has(label));
+}
