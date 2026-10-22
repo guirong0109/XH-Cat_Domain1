@@ -39,6 +39,19 @@ A task the model cannot label after one retry is stored as `null`. The run **abo
 
 `build_data.py` fills each `null` from `data/team/manual_labels.json` (same role code, same task text). If no manual label exists for that task it stops with an error naming the role and task. A role with any filled task gets `labelSource: "manual"`, so it keeps the Sample badge. `automatablePct` and `assistedPct` are always recomputed from the final task labels; stored percentages are ignored.
 
+## 3. Embedding model comparison (skill-pair test)
+
+Compares 5 embedding models on `testing/skill_pair_test_set.csv` (30 pairs labelled similar, related or different) to choose the model for skill matching. The model list is `MODELS` at the top of `compare_embeddings.py`. The maths (cosine, Spearman, order errors) is in `embed_metrics.py` and is unit-tested. Expected spend: well under USD 1; any small GPU works (for example RTX A4000 or RTX 4090), and it also runs on CPU.
+
+1. Create a Pod with the PyTorch template.
+2. In the Pod terminal: `git clone <repo url>` and `cd` into it. The repo is private, so use a GitHub personal access token, or upload the `pipeline/` and `testing/` folders with the Pod's file upload.
+3. `pip install -r pipeline/requirements-runpod.txt`
+4. `python3 pipeline/compare_embeddings.py testing/skill_pair_test_set.csv testing/results`
+5. Download `testing/results/` (summary.csv, details.csv, dot_plot.svg, run_info.json), or commit and push it.
+6. **Stop and delete the Pod** so it stops billing.
+
+How to read it: a good model has `avg_similar` > `avg_related` > `avg_different`, a high `spearman` (closer to 1), few `order_errors`, a low `word_trap_avg` (ids 21–29: same word, different meaning) and a high `bm_pair_score` (id 10: Malay "perakaunan" vs "accounting"). If a model fails to load, the script prints the error, skips it, and lists it under `failed` in `run_info.json`.
+
 ### Fallback: manual labels
 
 If RunPod is not available, fill `data/team/manual_labels.json` by hand in the same shape as `exposure.json`. `build_data.py` uses it and sets `labelSource: "manual"`.

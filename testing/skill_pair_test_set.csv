@@ -1,0 +1,31 @@
+id,skill_a,skill_b,sector,expected,why
+1,Excel,spreadsheet software,Admin,similar,Same skill in different words
+2,bookkeeping,recording financial transactions,Finance,similar,Name vs plain description
+3,customer service,handling customer enquiries,Retail,similar,Name vs plain description
+4,social media marketing,managing Facebook and Instagram pages,Marketing,similar,Name vs everyday wording
+5,forklift operation,operating a forklift truck,Logistics,similar,Same skill reworded
+6,wound dressing,changing bandages on injuries,Healthcare,similar,Clinical vs everyday wording
+7,crop pest control,managing insects that damage plants,Agriculture,similar,Technical vs plain wording
+8,lesson planning,preparing teaching materials for classes,Education,similar,Name vs description
+9,menu planning,designing the dishes a restaurant serves,Hospitality,similar,Name vs description
+10,perakaunan,accounting,Language (BM),similar,Malay vs English for the same skill
+11,Excel,SQL,Data,related,Both handle tabular data; partial transfer
+12,Python,data analysis,Data,related,A tool commonly used for the task
+13,bookkeeping,auditing,Finance,related,Same field; auditing is a step further
+14,nursing,physiotherapy,Healthcare,related,Both patient care; different specialisms
+15,graphic design,video editing,Creative,related,Both visual content creation
+16,sales,negotiation,Sales,related,Negotiation is part of selling
+17,crop management,drone operation for farming,Agri-tech,related,New tech applied to the same work
+18,teaching,public speaking,Education,related,Overlapping communication skill
+19,inventory management,supply chain planning,Logistics,related,Inventory is one part of the supply chain
+20,AutoCAD,3D modelling,Engineering,related,Overlapping design tools
+21,Java,JavaScript,IT,different,Similar names; different languages
+22,Python programming,handling pythons at a reptile farm,Word trap,different,Same word; unrelated meaning
+23,marketing,market gardening,Word trap,different,Shared word; one is vegetable farming
+24,cell culture in a laboratory,cellular network maintenance,Word trap,different,Shared word 'cell'; biology vs telecoms
+25,financial auditing,audiology,Word trap,different,Similar spelling; hearing care vs finance
+26,driving a lorry,writing device driver software,Word trap,different,Shared word 'driver'
+27,operating a factory plant,cultivating plants,Word trap,different,Shared word 'plant'
+28,dressing a wound,dressing a shop mannequin,Word trap,different,Shared word 'dressing'; healthcare vs retail
+29,accounting,key account management,Word trap,different,Shared word 'account'; finance vs client sales
+30,Excel,cooking,Control,different,Clearly unrelated; sanity check
