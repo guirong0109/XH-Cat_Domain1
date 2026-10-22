@@ -1,29 +1,30 @@
 import { existsSync } from 'node:fs'
-import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createApp } from './app.js'
 import { createEmbedder } from './embed.js'
+import { chooseEmbedderConfig } from './embedConfig.js'
 
 const dataDirectory = fileURLToPath(new URL('../data', import.meta.url))
 const defaultModelsDirectory = fileURLToPath(new URL('../models', import.meta.url))
 
-// Local model folder: MODELS_DIR, else the repo's models/ folder when the model is there.
-function findModelsDirectory() {
-  if (process.env.MODELS_DIR) return process.env.MODELS_DIR
-  const model = path.join(defaultModelsDirectory, 'Xenova', 'bge-m3', 'onnx', 'model.onnx')
-  return existsSync(model) ? defaultModelsDirectory : undefined
+const config = chooseEmbedderConfig(process.env, existsSync, defaultModelsDirectory)
+const embedder = config ? createEmbedder({ url: config.url, modelsDir: config.modelsDir }) : null
+if (!embedder) {
+  console.log('AI CV check off: no local model (set MODELS_DIR, EMBED_URL or CV_AI_DOWNLOAD=on)')
 }
 
-const embedder = createEmbedder({
-  url: process.env.EMBED_URL || undefined,
-  modelsDir: findModelsDirectory(),
-})
-embedder.warmUp().then(
-  () => console.log('AI model ready'),
-  (error) => console.error(`AI model failed to load: ${error.message}`),
-)
+const app = createApp({ dataDir: dataDirectory, embedder })
+if (embedder) {
+  embedder
+    .warmUp()
+    .then(() => app.locals.warmCv())
+    .then(
+      () => console.log('AI model ready'),
+      (error) => console.error(`AI model failed to load: ${error.message}`),
+    )
+}
 
 const port = process.env.PORT || 3000
-createApp({ dataDir: dataDirectory, embedder }).listen(port, () => {
+app.listen(port, () => {
   console.log(`FutureReady MY listening on port ${port}`)
 })

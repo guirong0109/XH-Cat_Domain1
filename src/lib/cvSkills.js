@@ -119,12 +119,14 @@ export function mergeMatches(keywordFound, aiFound) {
   return merged;
 }
 
+export const MAX_CV_CHARS = 20000;
+
 export async function fetchCvSkills(text, fetchImpl = fetch) {
   try {
     const res = await fetchImpl('/api/cv-skills', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text: String(text).slice(0, MAX_CV_CHARS) }),
     });
     if (res.status !== 200) return { ok: false };
     const body = await res.json();

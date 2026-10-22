@@ -81,6 +81,8 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
     return skillVectorsLoad
   }
 
+  app.locals.warmCv = () => getSkillVectors()
+
   async function matchCv(lines) {
     if (!lines.length) return []
     const { skills, vectorSets } = await getSkillVectors()

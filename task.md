@@ -33,7 +33,7 @@ For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rule
 | Sharing | Temporary public link through a Cloudflare quick tunnel. |
 
 ### Session 3 (2026-10-21): simple-steps redesign (P-A to P-H) is done
-The journey is now five simple steps: About you, Your skills, Your goal, Matches, What to study. It adds a goal-based ordering, levels per skill, a PDF CV reader (browser only, nothing sent or saved) and clean-up of the old Profile, Radar, Roles, Pathway and CV preview screens. Drafts awaiting team review: `data/team/fields.json`, CV keywords in `data/team/skill_labels.json`, sample who/field/levels/goal.
+The journey is now five simple steps: About you, Your skills, Your goal, Matches, What to study. It adds a goal-based ordering, levels per skill, a PDF CV reader (browser only, nothing sent or saved) (prototype; Stage 2 sends the text to our server for an AI check) and clean-up of the old Profile, Radar, Roles, Pathway and CV preview screens. Drafts awaiting team review: `data/team/fields.json`, CV keywords in `data/team/skill_labels.json`, sample who/field/levels/goal.
 
 ### Session 3, continued (2026-10-22)
 | Step | What was done |

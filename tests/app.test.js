@@ -152,6 +152,24 @@ describe('POST /api/cv-skills', () => {
     expect(body.skills).toEqual([{ label: 'Spreadsheets (Excel)', score: 1, evidence: secretLine }])
   })
 
+  it('warmCv loads skill vectors once; a later request does not embed skills again', async () => {
+    const calls = []
+    const embedder = fakeEmbedder({
+      embed: async (texts) => {
+        calls.push(texts)
+        return texts.map((text) => (/Excel/.test(text) ? [1, 0] : [0, 1]))
+      },
+    })
+    const baseUrl = await startWith(embedder)
+    await server.listeners('request')[0].locals.warmCv()
+    const afterWarm = calls.length
+    expect(afterWarm).toBeGreaterThan(0)
+    const response = await post(baseUrl, { text: secretLine })
+    expect(response.status).toBe(200)
+    expect(calls.length).toBe(afterWarm + 1)
+    expect(calls.at(-1)).toEqual([secretLine])
+  })
+
   it('400 for missing, non-string or blank text', async () => {
     const baseUrl = await startWith(fakeEmbedder())
     for (const body of [{}, { text: 5 }, { text: '   ' }]) {

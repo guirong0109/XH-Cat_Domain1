@@ -187,6 +187,15 @@ describe('fetchCvSkills', () => {
     const r = await fetchCvSkills('x', reply(200, { skills: [{ label: 'A' }] }))
     expect(r).toEqual({ ok: true, skills: [{ label: 'A' }] })
   })
+  it('sends at most the first 20,000 characters', async () => {
+    let sent
+    const spy = async (url, options) => {
+      sent = JSON.parse(options.body).text
+      return { status: 200, json: async () => ({ skills: [] }) }
+    }
+    await fetchCvSkills('a'.repeat(25000), spy)
+    expect(sent).toHaveLength(20000)
+  })
   it('503 gives ok false', async () => {
     expect(await fetchCvSkills('x', reply(503, { fallback: true }))).toEqual({ ok: false })
   })

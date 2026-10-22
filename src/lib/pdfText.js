@@ -1,4 +1,4 @@
-// Reads the text of a PDF in the browser. Nothing is sent or saved.
+// Reads the text of a PDF in the browser. This module only reads the PDF; it sends nothing.
 
 async function defaultLoader() {
   return (await import('./pdfLoader.js')).default;

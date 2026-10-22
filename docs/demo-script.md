@@ -16,7 +16,7 @@ Pending (say so if asked):
 - Pick **Student**, major **IT**. (Same as the Aina sample.)
 
 ## 0:40 to 1:00 · Skills
-- Show the CV upload. Say: "The CV is read inside the browser. It never leaves your computer."
+- Show the CV upload. Say: "The PDF is read in your browser. Its text goes to our own server for an AI check, and it is not saved or logged."
 - Or press **I don't have a CV** and pick skills: Python programming (Good), SQL and databases (Strong), Spreadsheets (Good), Communication (Good).
 - Point at a level switch: "Your level counts in the fit score."
 
@@ -38,6 +38,6 @@ Pending (say so if asked):
 
 ## 2:45 to 3:00 · Close
 
-**Say this:** "We are honest about our limits. Scores are estimates. Every number shows its source and date. Role labels say 'Sample' until our RunPod labelling run is done. Our team's mappings are drafts until a teammate reviews them. Your CV never leaves your browser. The app supports your decision; it does not make it."
+**Say this:** "We are honest about our limits. Scores are estimates. Every number shows its source and date. Role labels say 'Sample' until our RunPod labelling run is done. Our team's mappings are drafts until a teammate reviews them. Your PDF is read in your browser; its text goes to our own server for an AI check and is not saved or logged. The app supports your decision; it does not make it."
 
 Backup: Ravi (Diploma E&E, upgrade, Moderate): Solar Cell Technician 87, Energy Audit Technician 69, Renewable Energy Engineer 66. His top score is already first, so no teal box.
