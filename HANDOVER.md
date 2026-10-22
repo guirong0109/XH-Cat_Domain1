@@ -30,7 +30,7 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 - The P4 labelling job (`pipeline/runpod_label.py`) is separate: run it only when the user asks.
 
 ### Next steps, in order
-1. Embedding comparison: done; bge-m3 chosen (above). Using bge-m3 in the app (skill search) needs a plan and the user's approval first.
+1. bge-m3 similar skills, plan `docs/superpowers/plans/2026-10-22-bge-m3-similar-skills.md` (approved, cutoff 0.70). **Tasks 1-2 done** (reviewed): `check_similar` in the build, `pipeline/suggest_similar.py` (RunPod) and `pipeline/apply_similar_review.py` (reads Excel "CSV UTF-8"), P4 job now uses bge-m3. **Next: Task 3**, the RunPod run (show GPU and price first, keep the evidence log), then Task 4, team review (the score changes only after the user approves). Steps in `pipeline/README.md` §4.
 2. **Brief rule fix:** add a "Use a sample CV" button with made-up CV PDFs for Aina, Ravi and Mei Ling, and the line "For this demo, please use a sample CV, not your real one." (Suggested, not built.)
 3. OpenAlex snapshot: one Refresh after the daily reset (about 08:00 MYT), then commit `data/research.json`. The research card is empty until then.
 4. When the user asks: P4 RunPod labelling job (all 15 roles still show "Sample labels"), and the Replit check of the live site.

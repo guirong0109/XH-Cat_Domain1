@@ -42,6 +42,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Demo script | `docs/demo-script.md`, 3 minutes, numbers checked on 22 Oct. |
 | Embedding test | `pipeline/compare_embeddings.py` + `pipeline/embed_metrics.py` (tested) compare 5 embedding models on `testing/skill_pair_test_set.csv`. **Run on RunPod (A40, about $0.18)**; results in `testing/results/`, proof in `testing/runpod_evidence.md` and `testing/evidence/`. |
 | Model decision | **bge-m3** chosen by the user: it matches Bahasa Malaysia ("perakaunan" = "accounting" 0.758) and is second best on English (Spearman 0.538, 71 order errors). all-mpnet-base-v2 was best on English (0.599, 59) but failed the BM pair. Not used in the app yet. |
+| bge-m3 similar skills | Plan approved (cutoff 0.70). Tasks 1-2 built and reviewed: similar.json check, RunPod review-sheet script, apply script. Next: Task 3 RunPod run, Task 4 team review + user approval. |
 | RunPod | Official Claude Code plugin installed; the RunPod MCP is connected (user signed in). |
 
 ---
