@@ -9,6 +9,8 @@ Python scripts that build the data files under `data/`. Everything except the Ru
 | `scrape_emasco.py` | Fetches eMASCO occupation pages into a JSON snapshot. |
 | `runpod_label.py` | Labels each task (automatable / ai_assisted / human_led) and matches skills. Needs a GPU. |
 | `build_data.py` | Combines the snapshot, RunPod output and team inputs into the app data. |
+| `suggest_similar.py` | Scores every skill pair with BAAI/bge-m3 and writes a review sheet (CSV). Needs a GPU. |
+| `apply_similar_review.py` | Turns the reviewed sheet into `data/team/similar.json`. Runs on your PC. |
 
 Run all tests: `python3 -m unittest discover pipeline/tests`
 
@@ -55,3 +57,25 @@ How to read it: a good model has `avg_similar` > `avg_related` > `avg_different`
 ### Fallback: manual labels
 
 If RunPod is not available, fill `data/team/manual_labels.json` by hand in the same shape as `exposure.json`. `build_data.py` uses it and sets `labelSource: "manual"`.
+
+## 4. Similar-skill suggestions
+
+`data/team/similar.json` says which skills give half credit for another skill. `suggest_similar.py` scores every pair of skills with BAAI/bge-m3 and writes a sheet for the teammate to review. The cutoff is `SIMILAR_CANDIDATE_MIN_SCORE` (0.70) in `runpod_label.py`. Any small GPU works.
+
+1. Create a Pod with the PyTorch template.
+2. Upload these 4 files to one folder in JupyterLab: `pipeline/suggest_similar.py`, `pipeline/runpod_label.py`, `data/team/skill_labels.json`, `data/team/similar.json`.
+3. `pip install sentence-transformers accelerate`
+4. `python3 suggest_similar.py skill_labels.json similar.json out`
+5. Download `out/similar_review.csv` and `out/similar_run_info.json`.
+6. **Stop and delete the Pod** so it stops billing.
+
+Review sheet: one row per pair, highest score first. Columns: `skill_a`, `skill_b`, `score`, `now_listed` (what `similar.json` says today), `suggested` (`yes` if the score reaches the cutoff) and `decision`. The teammate edits only `decision`:
+
+- `a_helps_b`: skill_a gives half credit for skill_b.
+- `b_helps_a`: skill_b gives half credit for skill_a.
+- `both`: each gives half credit for the other.
+- `no`: neither.
+
+`decision` starts as today's answer. New suggestions start as `?`: every `?` must be changed before the sheet can be applied.
+
+Then, on your PC, in the repo: `python pipeline/apply_similar_review.py data/team/similar_review.csv data/team/similar.json`. It prints the pairs added (`+ B <- A`) and removed (`- B <- A`, meaning A gives half credit for B), then rewrites `similar.json`.

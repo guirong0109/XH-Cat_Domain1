@@ -18,7 +18,7 @@ import sys
 LABELS = ("automatable", "ai_assisted", "human_led")
 
 CHAT_MODEL = "Qwen/Qwen2.5-7B-Instruct"
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "BAAI/bge-m3"
 
 ROLES_PATH = "data/emasco/roles_raw.json"
 SKILL_LABELS_PATH = "data/team/skill_labels.json"
@@ -27,7 +27,7 @@ OUTPUT_DIRECTORY = "data/runpod"
 
 MAX_CONSECUTIVE_FAILURES = 3
 SUGGESTIONS_PER_STATEMENT = 3
-SIMILAR_CANDIDATE_MIN_SCORE = 0.6
+SIMILAR_CANDIDATE_MIN_SCORE = 0.70
 DEFAULT_HOURLY_RATE = 0.69
 
 PROMPT_TEMPLATE = (

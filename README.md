@@ -78,7 +78,7 @@ Skill importance: base 0.8 (specific) or 0.6 (basic). In Fast AI, +0.2 if the li
 ## AI disclosure
 
 - **Qwen/Qwen2.5-7B-Instruct** labels each existing eMASCO task as automatable, AI-assisted or human-led.
-- **sentence-transformers/all-MiniLM-L6-v2** compares existing skill statements to suggest which are similar.
+- **BAAI/bge-m3** compares existing skill statements to suggest which are similar.
 - The models **never create roles, courses or numbers**. Roles, tasks and skills come only from the eMASCO snapshot. A person checks the skill mappings.
 - **ILO exposure index (second opinion).** The ILO built this index with AI-assisted scoring, a worker survey and expert review. It is global, not Malaysia-specific, and dated 2025. We show it beside our labels only. It is **not used in the score**.
 - The MASCO to ISCO-08 mapping (`data/team/isco_map.json`) was drafted by Claude from eMASCO descriptions and ISCO titles. It is **not an official table** and is awaiting team review. Weak fits are flagged: 3131-07 to 3113, 3512-05 to 3512, 2269-01 to 2120, 2511-08 to 2511.
