@@ -1,0 +1,13 @@
+{
+  "ranAt": "2026-10-22T04:54:36+00:00",
+  "device": "cuda",
+  "pairs": 30,
+  "models": [
+    "sentence-transformers/all-MiniLM-L6-v2",
+    "sentence-transformers/all-mpnet-base-v2",
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "intfloat/multilingual-e5-base",
+    "BAAI/bge-m3"
+  ],
+  "failed": {}
+}
