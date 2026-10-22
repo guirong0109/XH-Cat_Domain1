@@ -65,6 +65,26 @@ class MainTests(unittest.TestCase):
         self.write_sheet(["no", "no", "no"])
         self.assertEqual(len(read_review_csv(self.sheet)), 3)
 
+    def test_reads_sheet_with_excel_bom(self):
+        with open(self.sheet, "w", encoding="utf-8-sig", newline="") as sheet:
+            sheet.write("skill_a,skill_b,score,now_listed,suggested,decision\nA,B,0.9,no,yes,a_helps_b\n")
+        self.assertEqual(similar_from_review(read_review_csv(self.sheet)), {"B": ["A"]})
+        self.run_main()
+        with open(self.output, encoding="utf-8") as output:
+            self.assertEqual(json.load(output), {"B": ["A"]})
+
+    def test_missing_column_named(self):
+        with open(self.sheet, "w", encoding="utf-8", newline="") as sheet:
+            sheet.write("skill_a,skill_b,score\nA,B,0.9\n")
+        with self.assertRaisesRegex(ValueError, "now_listed.*suggested.*decision"):
+            read_review_csv(self.sheet)
+
+    def test_short_row_reports_empty_decision_with_row_number(self):
+        with open(self.sheet, "w", encoding="utf-8", newline="") as sheet:
+            sheet.write("skill_a,skill_b,score,now_listed,suggested,decision\nA,B,0.9\n")
+        with self.assertRaisesRegex(ValueError, "row 2"):
+            similar_from_review(read_review_csv(self.sheet))
+
     def test_writes_json_when_new(self):
         self.write_sheet(["a_helps_b", "no", "no"])
         self.run_main()

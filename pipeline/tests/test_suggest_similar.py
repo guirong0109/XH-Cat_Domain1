@@ -56,7 +56,7 @@ class WriteReviewCsvTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             path = os.path.join(folder, "sheet.csv")
             write_review_csv(path, rows)
-            with open(path, encoding="utf-8", newline="") as sheet:
+            with open(path, encoding="utf-8-sig", newline="") as sheet:
                 read = list(csv.DictReader(sheet))
         self.assertEqual(list(read[0]), COLUMNS)
         self.assertEqual(read[0]["skill_a"], "Café")

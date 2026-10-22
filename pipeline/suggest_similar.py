@@ -67,7 +67,7 @@ def write_review_csv(path, rows):
     folder = os.path.dirname(path)
     if folder:
         os.makedirs(folder, exist_ok=True)
-    with open(path, "w", encoding="utf-8", newline="") as output_file:
+    with open(path, "w", encoding="utf-8-sig", newline="") as output_file:
         writer = csv.DictWriter(output_file, fieldnames=COLUMNS)
         writer.writeheader()
         writer.writerows(rows)

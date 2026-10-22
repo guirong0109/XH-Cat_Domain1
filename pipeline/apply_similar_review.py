@@ -18,9 +18,17 @@ from runpod_label import write_json
 DECISIONS = ("a_helps_b", "b_helps_a", "both", "no")
 
 
+REQUIRED_COLUMNS = ("skill_a", "skill_b", "score", "now_listed", "suggested", "decision")
+
+
 def read_review_csv(path):
-    with open(path, encoding="utf-8", newline="") as input_file:
-        return list(csv.DictReader(input_file))
+    """Rows of the sheet; utf-8-sig accepts Excel's BOM, and an empty or missing cell reads as ''."""
+    with open(path, encoding="utf-8-sig", newline="") as input_file:
+        reader = csv.DictReader(input_file)
+        missing = [name for name in REQUIRED_COLUMNS if name not in (reader.fieldnames or [])]
+        if missing:
+            raise ValueError("The sheet is missing these columns: " + ", ".join(missing))
+        return [{name: (row.get(name) or "") for name in REQUIRED_COLUMNS} for row in reader]
 
 
 def similar_from_review(rows):

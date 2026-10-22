@@ -66,7 +66,7 @@ If RunPod is not available, fill `data/team/manual_labels.json` by hand in the s
 2. Upload these 4 files to one folder in JupyterLab: `pipeline/suggest_similar.py`, `pipeline/runpod_label.py`, `data/team/skill_labels.json`, `data/team/similar.json`.
 3. `pip install sentence-transformers accelerate`
 4. `python3 suggest_similar.py skill_labels.json similar.json out`
-5. Download `out/similar_review.csv` and `out/similar_run_info.json`.
+5. Download `out/similar_review.csv` and `out/similar_run_info.json`. Copy `similar_review.csv` to `data/team/similar_review.csv` before the teammate edits it.
 6. **Stop and delete the Pod** so it stops billing.
 
 Review sheet: one row per pair, highest score first. Columns: `skill_a`, `skill_b`, `score`, `now_listed` (what `similar.json` says today), `suggested` (`yes` if the score reaches the cutoff) and `decision`. The teammate edits only `decision`:
@@ -79,3 +79,5 @@ Review sheet: one row per pair, highest score first. Columns: `skill_a`, `skill_
 `decision` starts as today's answer. New suggestions start as `?`: every `?` must be changed before the sheet can be applied.
 
 Then, on your PC, in the repo: `python pipeline/apply_similar_review.py data/team/similar_review.csv data/team/similar.json`. It prints the pairs added (`+ B <- A`) and removed (`- B <- A`, meaning A gives half credit for B), then rewrites `similar.json`.
+
+The apply script rebuilds the whole `similar.json` from the sheet, so any hand edits to `similar.json` made after the RunPod run are dropped. Check the printed `+` / `-` list before committing.
