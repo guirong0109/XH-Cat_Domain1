@@ -41,3 +41,22 @@ export function cvFoundSkills(cv, pickedSkills) {
   const found = new Set([...Object.keys(cv.evidence ?? {}), ...Object.keys(cv.sources ?? {})]);
   return pickedSkills.filter((label) => found.has(label));
 }
+
+// Skills used by almost every major (e.g. Teamwork) say nothing about the field, so they are not counted.
+export const SHARED_SHARE = 0.85;
+
+// Weak-fit hint: few of the CV skills are used by roles of the picked major (e.g. an IT pick with a chef CV).
+// Pure. The rule (no field-specific skill fits, or under half fit) is a first guess and was not tuned on data.
+export function weakFit(foundSkills, pickedMajorId, roles, fields) {
+  if (!Array.isArray(foundSkills) || foundSkills.length === 0) return null;
+  const majors = (fields?.majors ?? []).filter((item) => item.groups.length > 0);
+  const major = majors.find((item) => item.id === pickedMajorId);
+  if (!major) return null;
+  const sets = majors.map((item) => majorSkillSet(item, roles));
+  const shared = (label) => sets.filter((set) => set.has(label)).length >= SHARED_SHARE * majors.length;
+  const specific = foundSkills.filter((label) => !shared(label));
+  const mine = majorSkillSet(major, roles);
+  const fit = specific.filter((label) => mine.has(label)).length;
+  if (fit !== 0 && fit * 2 >= specific.length) return null;
+  return { label: major.label, found: foundSkills.length, fit };
+}

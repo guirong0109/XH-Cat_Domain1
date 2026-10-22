@@ -14,7 +14,7 @@ import {
 } from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
-import { cvFoundSkills, suggestField } from '../lib/fieldCheck.js';
+import { cvFoundSkills, suggestField, weakFit } from '../lib/fieldCheck.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
 
@@ -77,6 +77,11 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     () => (cv && data.fields ? suggestField(cvFoundSkills(cv, profile.skills), profile.field, data.roles, data.fields) : null),
     [cv, data.fields, data.roles, profile.skills, profile.field],
   );
+  const weak = useMemo(
+    () => (cv && data.fields && !fieldSuggestion ? weakFit(cvFoundSkills(cv, profile.skills), profile.field, data.roles, data.fields) : null),
+    [cv, data.fields, data.roles, profile.skills, profile.field, fieldSuggestion],
+  );
+  const showWeak = weak && keptFor !== `${cv.fileName}|${profile.field}`;
   const showFieldNotice = fieldSuggestion && keptFor !== `${cv.fileName}|${profile.field}`;
 
   const goToPicker = () => {
@@ -232,6 +237,36 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </div>
           </div>
         )}
+        </div>
+        <div aria-live="polite">
+          {showWeak && (
+            <div className="flex flex-col gap-3 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
+              <p className="m-0">
+                Only {weak.fit} of the {weak.found} skills in your CV are used by {weak.label} roles. This app covers 20 roles in
+                tech, data, business, engineering, design, education and health, so your CV may be outside what we cover. Please
+                check your skills. This is a hint only. You decide.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setKeptFor(`${cv.fileName}|${profile.field}`)}
+                  className="fr-btn min-h-11 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700"
+                >
+                  Keep my picks
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setKeptFor(`${cv.fileName}|${profile.field}`);
+                    goToPicker();
+                  }}
+                  className="fr-btn min-h-11 cursor-pointer rounded-xl border border-[#C2410C] bg-white px-4 text-sm font-bold text-[#C2410C]"
+                >
+                  Choose skills myself
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <div aria-live="polite" className="flex flex-col gap-1">
           {reading && aiStatus !== 'checking' && <p className="m-0 text-sm text-slate-700">Reading your CV…</p>}

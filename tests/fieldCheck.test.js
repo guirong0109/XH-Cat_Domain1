@@ -50,3 +50,41 @@ describe('cvFoundSkills', () => {
     expect(cvFoundSkills(null, ['a1'])).toEqual([]);
   });
 });
+
+import { weakFit } from '../src/lib/fieldCheck.js';
+
+describe('weakFit', () => {
+  it('is null when nothing was found in the CV', () => {
+    expect(weakFit([], 'a', roles, fields)).toBeNull();
+  });
+  it('is null for Other, an unknown major or no major', () => {
+    expect(weakFit(['c1'], 'o', roles, fields)).toBeNull();
+    expect(weakFit(['c1'], 'zzz', roles, fields)).toBeNull();
+    expect(weakFit(['c1'], null, roles, fields)).toBeNull();
+  });
+  it('is null when most CV skills fit the picked major', () => {
+    expect(weakFit(['a1', 'a2'], 'a', roles, fields)).toBeNull();
+    expect(weakFit(['a1', 'c1'], 'a', roles, fields)).toBeNull();
+  });
+  it('flags a CV where no skill fits the picked major', () => {
+    expect(weakFit(['c1'], 'a', roles, fields)).toEqual({ label: 'Alpha', found: 1, fit: 0 });
+  });
+  it('flags a CV where fewer than half the skills fit', () => {
+    expect(weakFit(['a1', 'c1', 'b1'], 'a', roles, fields)).toEqual({ label: 'Alpha', found: 3, fit: 1 });
+  });
+});
+
+describe('weakFit with shared skills', () => {
+  const f2 = { majors: [{ id: 'a', label: 'Alpha', groups: ['GA'] }, { id: 'b', label: 'Beta', groups: ['GB'] }] };
+  const r2 = [
+    { interest: 'GA', skills: [{ label: 'a1' }, { label: 'team' }] },
+    { interest: 'GB', skills: [{ label: 'b1' }, { label: 'team' }] },
+  ];
+  it('flags a CV that has only shared skills', () => {
+    expect(weakFit(['team'], 'a', r2, f2)).toEqual({ label: 'Alpha', found: 1, fit: 0 });
+  });
+  it('does not count shared skills as a fit', () => {
+    expect(weakFit(['team', 'a1'], 'a', r2, f2)).toBeNull();
+    expect(weakFit(['team', 'b1'], 'a', r2, f2)).toEqual({ label: 'Alpha', found: 2, fit: 0 });
+  });
+});
