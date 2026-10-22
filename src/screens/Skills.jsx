@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import Chip from '../components/Chip.jsx';
 import LevelSwitch from '../components/LevelSwitch.jsx';
-import { CV_MESSAGES, checkCvFile, cvBannerText, extractSkills } from '../lib/cvSkills.js';
+import {
+  CV_AI_TEXT,
+  CV_MESSAGES,
+  checkCvFile,
+  cvBannerText,
+  extractSkills,
+  fetchCvSkills,
+  mergeMatches,
+  sourceBadge,
+} from '../lib/cvSkills.js';
 import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
@@ -37,6 +46,10 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   const [reading, setReading] = useState(false);
   const [cvError, setCvError] = useState(null);
   const [dragging, setDragging] = useState(false);
+  // null | 'checking' | 'done' | 'fallback'
+  const [aiStatus, setAiStatus] = useState(null);
+  // Counts uploads and "Change": an older AI reply is ignored.
+  const requestId = useRef(0);
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -72,16 +85,43 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       return;
     }
     setReading(true);
+    const id = ++requestId.current;
+    setAiStatus(null);
     try {
       const text = await readPdfText(file);
-      if (!mounted.current) return;
-      const found = extractSkills(text, data.skills.labels);
-      if (found.length === 0) setCvError('none-found');
-      else onCvFound(found, file.name);
+      if (!mounted.current || id !== requestId.current) return;
+      const keywordFound = extractSkills(text, data.skills.labels).map((item) => ({ ...item, source: 'keyword' }));
+      if (keywordFound.length > 0) {
+        onCvFound(keywordFound, file.name);
+        setReading(false);
+      }
+      setAiStatus('checking');
+      const ai = await fetchCvSkills(text);
+      if (!mounted.current || id !== requestId.current) return;
+      if (!ai.ok) {
+        if (keywordFound.length === 0) {
+          setCvError('none-found');
+          setAiStatus(null);
+        } else {
+          setAiStatus('fallback');
+        }
+        return;
+      }
+      const merged = mergeMatches(keywordFound, ai.skills);
+      if (merged.length === 0) {
+        setCvError('none-found');
+        setAiStatus(null);
+        return;
+      }
+      onCvFound(merged, file.name);
+      setAiStatus('done');
     } catch (error) {
-      if (mounted.current) setCvError(pdfErrorCode(error));
+      if (mounted.current && id === requestId.current) {
+        setCvError(pdfErrorCode(error));
+        setAiStatus(null);
+      }
     } finally {
-      if (mounted.current) setReading(false);
+      if (mounted.current && id === requestId.current) setReading(false);
     }
   };
 
@@ -92,6 +132,9 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   };
 
   const changeCv = () => {
+    requestId.current += 1;
+    setAiStatus(null);
+    setReading(false);
     onCvClear();
     setCvError(null);
   };
@@ -151,17 +194,30 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </button>
           </div>
         )}
-        {reading && (
-          <p role="status" className="m-0 text-sm text-slate-700">
-            Reading your CV…
-          </p>
-        )}
+        <div aria-live="polite" className="flex flex-col gap-1">
+          {reading && aiStatus !== 'checking' && <p className="m-0 text-sm text-slate-700">Reading your CV…</p>}
+          {aiStatus === 'checking' && (
+            <p className="m-0 flex items-center gap-2 text-sm text-slate-700">
+              <span
+                aria-hidden="true"
+                className="inline-block h-4 w-4 shrink-0 rounded-full border-2 border-[#0F766E] border-t-transparent motion-safe:animate-spin"
+              />
+              {CV_AI_TEXT.checking}
+            </p>
+          )}
+          {aiStatus === 'fallback' && <p className="m-0 text-sm text-[#C2410C]">{CV_AI_TEXT.fallback}</p>}
+          {aiStatus === 'done' && <p className="m-0 text-[13px] text-slate-600">{CV_AI_TEXT.privacy}</p>}
+        </div>
         {cvError && (
           <p role="alert" className="m-0 rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-900">
             {CV_MESSAGES[cvError]}
           </p>
         )}
-        <p className="m-0 text-[13px] text-slate-600">Your CV is read on this device only. It is never sent or saved.</p>
+        {aiStatus !== 'done' && (
+          <p className="m-0 text-[13px] text-slate-600">
+            Your CV is read on this device. Its text is then sent to our server to look for more skills with AI. It is not saved.
+          </p>
+        )}
       </Card>
 
       <Card aria-labelledby="your-skills-heading">
@@ -186,9 +242,16 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
                 <span className="flex min-w-0 flex-[1_1_160px] flex-col">
                   <span className="text-[15px] font-semibold">{label}</span>
                   {cv?.evidence[label] && (
-                    <span className="text-xs break-words text-slate-600">
-                      Found in your CV: “{cv.evidence[label]}” · level is our guess, please check
-                    </span>
+                    <>
+                      {cv.sources?.[label] && (
+                        <span className={`text-xs font-semibold ${cv.sources[label] === 'ai' ? 'text-[#C2410C]' : 'text-[#0F766E]'}`}>
+                          {sourceBadge(cv.sources[label])}
+                        </span>
+                      )}
+                      <span className="text-xs break-words text-slate-600">
+                        Found in your CV: “{cv.evidence[label]}” · level is our guess, please check
+                      </span>
+                    </>
                   )}
                 </span>
                 <LevelSwitch

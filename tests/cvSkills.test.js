@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import skills from '../data/skills.json'
-import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText } from '../src/lib/cvSkills.js'
+import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText, mergeMatches, sourceBadge, fetchCvSkills, CV_AI_TEXT } from '../src/lib/cvSkills.js'
 
 const labels = [
   { label: 'SQL and databases', keywords: ['sql', 'database'] },
@@ -151,5 +151,51 @@ describe('cvBannerText', () => {
   })
   it('merged 0', () => {
     expect(cvBannerText('merged', 0)).toBe('Your CV matched skills you already picked. We kept your picks. Please check each level.')
+  })
+})
+
+describe('mergeMatches', () => {
+  const kw = [{ label: 'SQL and databases', level: 'strong', evidence: 'Built MySQL reports for 3 years' }]
+  it('keyword wins, union, no duplicates, AI level from evidence', () => {
+    const ai = [
+      { label: 'SQL and databases', score: 0.9, evidence: 'Other SQL line' },
+      { label: 'Data visualisation', score: 0.8, evidence: 'Learning Power BI dashboards' },
+    ]
+    const out = mergeMatches(kw, ai)
+    expect(out).toEqual([
+      { label: 'SQL and databases', level: 'strong', evidence: 'Built MySQL reports for 3 years', source: 'keyword' },
+      { label: 'Data visualisation', level: 'basic', evidence: 'Learning Power BI dashboards', source: 'ai' },
+    ])
+  })
+  it('handles empty inputs', () => {
+    expect(mergeMatches([], [])).toEqual([])
+    expect(mergeMatches(kw, undefined)).toHaveLength(1)
+  })
+})
+
+describe('sourceBadge and CV_AI_TEXT', () => {
+  it('labels', () => {
+    expect(sourceBadge('keyword')).toBe('Found by keyword')
+    expect(sourceBadge('ai')).toBe('Found by AI · estimate')
+    expect(CV_AI_TEXT.checking).toContain('15 s')
+  })
+})
+
+describe('fetchCvSkills', () => {
+  const reply = (status, body) => async () => ({ status, json: async () => body })
+  it('200 gives skills', async () => {
+    const r = await fetchCvSkills('x', reply(200, { skills: [{ label: 'A' }] }))
+    expect(r).toEqual({ ok: true, skills: [{ label: 'A' }] })
+  })
+  it('503 gives ok false', async () => {
+    expect(await fetchCvSkills('x', reply(503, { fallback: true }))).toEqual({ ok: false })
+  })
+  it('network error gives ok false', async () => {
+    expect(await fetchCvSkills('x', async () => { throw new Error('down') })).toEqual({ ok: false })
+  })
+  it('bad JSON gives ok false', async () => {
+    const bad = async () => ({ status: 200, json: async () => { throw new Error('bad') } })
+    expect(await fetchCvSkills('x', bad)).toEqual({ ok: false })
+    expect(await fetchCvSkills('x', reply(200, {}))).toEqual({ ok: false })
   })
 })

@@ -96,3 +96,41 @@ export function cvBannerText(mode, count) {
   }
   return `We filled in the ${count} skills we found. Please check each one.`;
 }
+
+export const CV_AI_TEXT = {
+  checking: 'Looking for more skills with AI… (up to 15 s)',
+  fallback: 'AI check is not available right now. Your keyword results are kept.',
+  privacy: 'Your CV text was checked on our server and not saved.',
+};
+
+export function sourceBadge(source) {
+  return source === 'ai' ? 'Found by AI · estimate' : 'Found by keyword';
+}
+
+// Keyword results first (they win), then AI results for other skills.
+export function mergeMatches(keywordFound, aiFound) {
+  const merged = (keywordFound || []).map((item) => ({ ...item, source: 'keyword' }));
+  const seen = new Set(merged.map((item) => item.label));
+  for (const item of aiFound || []) {
+    if (seen.has(item.label)) continue;
+    seen.add(item.label);
+    merged.push({ label: item.label, level: guessLevel(item.evidence), evidence: cut(String(item.evidence || '')), source: 'ai' });
+  }
+  return merged;
+}
+
+export async function fetchCvSkills(text, fetchImpl = fetch) {
+  try {
+    const res = await fetchImpl('/api/cv-skills', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    if (res.status !== 200) return { ok: false };
+    const body = await res.json();
+    if (!body || !Array.isArray(body.skills)) return { ok: false };
+    return { ok: true, skills: body.skills };
+  } catch {
+    return { ok: false };
+  }
+}

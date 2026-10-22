@@ -211,6 +211,7 @@ export default function App() {
       mode,
       count: mode === 'merged' ? added : found.length,
       evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])),
+      sources: Object.fromEntries(found.map((item) => [item.label, item.source])),
     });
   };
 
