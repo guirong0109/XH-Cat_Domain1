@@ -4,6 +4,7 @@ import LevelSwitch from '../components/LevelSwitch.jsx';
 import {
   CV_AI_TEXT,
   CV_MESSAGES,
+  aiOnly,
   checkCvFile,
   cvBannerText,
   extractSkills,
@@ -113,7 +114,8 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         setAiStatus(null);
         return;
       }
-      onCvFound(merged, file.name);
+      if (keywordFound.length > 0) onCvFound(aiOnly(merged), file.name, true);
+      else onCvFound(merged, file.name);
       setAiStatus('done');
     } catch (error) {
       if (mounted.current && id === requestId.current) {

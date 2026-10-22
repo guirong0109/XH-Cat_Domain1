@@ -198,7 +198,8 @@ export default function App() {
   };
 
   // A sample or empty profile is replaced; otherwise the student's picks are kept.
-  const applyCvSkills = (found, fileName) => {
+  // `extra` is true for the AI step: it adds to the CV result already shown.
+  const applyCvSkills = (found, fileName, extra = false) => {
     const { mode } = mergeCvSkills(profile, found);
     const added = found.filter((item) => !profile.skills.includes(item.label)).length;
     changeProfile((current) => {
@@ -206,6 +207,19 @@ export default function App() {
       const learn = current.learn.filter((item) => !skills.includes(item));
       return { ...current, skills, levels, learn };
     });
+    if (extra) {
+      setCv((current) =>
+        current && current.fileName === fileName
+          ? {
+              ...current,
+              count: current.count + added,
+              evidence: { ...current.evidence, ...Object.fromEntries(found.map((item) => [item.label, item.evidence])) },
+              sources: { ...current.sources, ...Object.fromEntries(found.map((item) => [item.label, item.source])) },
+            }
+          : current,
+      );
+      return;
+    }
     setCv({
       fileName,
       mode,

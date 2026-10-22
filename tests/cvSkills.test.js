@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import skills from '../data/skills.json'
-import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText, mergeMatches, sourceBadge, fetchCvSkills, CV_AI_TEXT } from '../src/lib/cvSkills.js'
+import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText, mergeMatches, sourceBadge, fetchCvSkills, CV_AI_TEXT, aiOnly } from '../src/lib/cvSkills.js'
 
 const labels = [
   { label: 'SQL and databases', keywords: ['sql', 'database'] },
@@ -197,5 +197,21 @@ describe('fetchCvSkills', () => {
     const bad = async () => ({ status: 200, json: async () => { throw new Error('bad') } })
     expect(await fetchCvSkills('x', bad)).toEqual({ ok: false })
     expect(await fetchCvSkills('x', reply(200, {}))).toEqual({ ok: false })
+  })
+})
+
+describe('aiOnly', () => {
+  const merged = [
+    { label: 'SQL and databases', level: 'good', evidence: 'a', source: 'keyword' },
+    { label: 'Data visualisation', level: 'good', evidence: 'b', source: 'ai' },
+  ]
+  it('keeps only AI items, so a removed keyword skill is not re-added', () => {
+    const profile = { skills: ['Java'], levels: { Java: 'good' }, sampleId: null }
+    const out = mergeCvSkills(profile, aiOnly(merged))
+    expect(out.skills).toEqual(['Java', 'Data visualisation'])
+    expect(out.skills).not.toContain('SQL and databases')
+  })
+  it('handles empty', () => {
+    expect(aiOnly(undefined)).toEqual([])
   })
 })

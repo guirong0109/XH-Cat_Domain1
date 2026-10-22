@@ -11,7 +11,7 @@ Diploma and foundation students in Malaysia who are choosing a degree path or a 
 ## How it works (5 steps)
 
 1. **About you**: say whether you are a student or already working, then pick your major or sector. Or load a sample student (Aina, Ravi, Mei Ling).
-2. **Your skills**: tick your skills and set a level for each (Basic, Good, Strong). You can also read a PDF CV: it is read in your browser only, and is never sent or saved. It only suggests skills for you to confirm.
+2. **Your skills**: tick your skills and set a level for each (Basic, Good, Strong). You can also read a PDF CV: the PDF is read in your browser; its text is sent to our own server for an AI check and is not saved or logged. It only suggests skills for you to confirm.
 3. **Your goal**: upgrade in your field, move to a new field, or not sure yet. Pick target sectors, SDGs you care about and up to 3 skills to learn.
 4. **Matches**: roles ranked for you, each with a score range, sources and a "Why this score?" breakdown. It also shows the Future Skills Radar, the OpenDOSM trend, AI-exposure bars, the Moderate/Fast AI toggle and a Refresh data button.
 5. **What to study**: ordered learning steps with hour estimates, links to official portals, progress tick-boxes and an SDG contribution panel.
@@ -28,7 +28,7 @@ Demo tip: "Skills in demand" and "AI research momentum" sit on the Matches scree
 
 | Feature | How it is delivered |
 | --- | --- |
-| Skills profile intake | Who you are, major or sector, skills with levels, an optional PDF CV read in your browser only (never sent or saved), a goal, SDGs, up to 3 skills to learn, and 3 sample students. Skills to learn shape badges, tags and advice text but never the score. |
+| Skills profile intake | Who you are, major or sector, skills with levels, an optional PDF CV (read in your browser; its text goes to our own server for an AI check and is not saved or logged), a goal, SDGs, up to 3 skills to learn, and 3 sample students. Skills to learn shape badges, tags and advice text but never the score. |
 | AI-trend signal layer | Live OpenDOSM employment trend per MASCO major group (Refresh button, dated) plus AI-exposure labels on eMASCO tasks. |
 | Future-role matching | MASCO 2020 roles ranked by an explainable match score, with a skill-gap list and a "Why this score?" panel (Matches screen). |
 | Personalised reskilling pathway | Gap skills ordered by future importance, hour estimates, official portal links, progress tick-boxes. |

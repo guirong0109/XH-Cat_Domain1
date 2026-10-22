@@ -134,3 +134,9 @@ export async function fetchCvSkills(text, fetchImpl = fetch) {
     return { ok: false };
   }
 }
+
+// The AI step only adds skills the keyword step did not find, so a skill the
+// student removed meanwhile is not put back.
+export function aiOnly(merged) {
+  return (merged || []).filter((item) => item.source === 'ai');
+}
