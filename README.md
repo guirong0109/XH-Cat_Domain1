@@ -135,7 +135,7 @@ CV reading uses the bge-m3 model. The server loads it from `MODELS_DIR` (default
 
 ## Tech
 
-React 19, Vite, Tailwind, Express 5, Vitest. `pdfjs-dist` reads PDF CVs in the browser (no server upload). The Python pipeline uses the standard library only.
+React 19, Vite, Tailwind, Express 5, Vitest. `pdfjs-dist` reads PDF CVs in the browser (the PDF itself is never uploaded; for the AI check only its text goes to our server, not saved or logged). `@huggingface/transformers` runs bge-m3 in the server for the AI CV check. The Python pipeline uses the standard library only.
 
 ## Tests
 
