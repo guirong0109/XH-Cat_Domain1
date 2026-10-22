@@ -201,6 +201,18 @@ def check_keywords(skill_labels):
             owner[word] = label
 
 
+def check_similar(similar, known_labels):
+    """Every similar-skill key and value must be a known skill label; no skill is similar to itself."""
+    for label, others in similar.items():
+        if label not in known_labels:
+            raise ValueError(f"similar.json has unknown skill label {label!r}")
+        for other in others:
+            if other not in known_labels:
+                raise ValueError(f"similar.json lists unknown skill {other!r} for {label!r}")
+            if other == label:
+                raise ValueError(f"similar.json lists {label!r} as similar to itself")
+
+
 MAX_LEARN = 3
 
 
@@ -310,9 +322,12 @@ def build(paths):
         check_sample_potential(sample, known_labels)
         check_sample_profile(sample, fields, known_groups)
 
+    similar = read_json(paths["similar"])
+    check_similar(similar, known_labels)
+
     return {
         "roles": roles,
-        "skills": {"labels": skill_labels, "similar": read_json(paths["similar"])},
+        "skills": {"labels": skill_labels, "similar": similar},
         "sdg": sdg,
         "samples": samples,
         "fields": {"majors": fields["majors"], "sectors": fields["sectors"], "groups": groups},

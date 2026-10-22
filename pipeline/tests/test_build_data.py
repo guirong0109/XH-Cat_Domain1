@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from build_data import build, compute_importance, paths_for  # noqa: E402
+from build_data import build, check_similar, compute_importance, paths_for  # noqa: E402
 
 CODE = "2524-02"
 
@@ -403,6 +403,23 @@ class BuildTests(unittest.TestCase):
             inputs["team/samples.json"][0].update(who="working", field="s-data")
 
         self.assertEqual(self.build_with(change)["samples"][0]["field"], "s-data")
+
+
+class CheckSimilarTests(unittest.TestCase):
+    def test_check_similar_accepts_known_labels(self):
+        check_similar({"Statistics": ["Spreadsheets (Excel)"]}, {"Statistics", "Spreadsheets (Excel)"})
+
+    def test_check_similar_rejects_unknown_key(self):
+        with self.assertRaisesRegex(ValueError, "Statstics"):
+            check_similar({"Statstics": ["Spreadsheets (Excel)"]}, {"Statistics", "Spreadsheets (Excel)"})
+
+    def test_check_similar_rejects_unknown_value(self):
+        with self.assertRaisesRegex(ValueError, "Excell"):
+            check_similar({"Statistics": ["Excell"]}, {"Statistics", "Spreadsheets (Excel)"})
+
+    def test_check_similar_rejects_self_pair(self):
+        with self.assertRaisesRegex(ValueError, "Statistics"):
+            check_similar({"Statistics": ["Statistics"]}, {"Statistics"})
 
 
 if __name__ == "__main__":
