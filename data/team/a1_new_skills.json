@@ -1,0 +1,104 @@
+{
+  "_note": "Drafted by Claude, awaiting teammate review. One new skill per group of data/team/a1_skill_review.csv (decision 'new'): the label, keywords, notKeywords, SDGs, researchTerm and portal are drafts; the statements come verbatim from eMASCO. 'roles' holds the drafted interest and SDGs of the 5 accounting roles. Apply with: python pipeline/apply_statement_review.py",
+  "roles": {
+    "2411-01": { "id": "accountant", "interest": "Business", "sdgs": [8, 16] },
+    "2411-02": { "id": "tax-consultant", "interest": "Business", "sdgs": [8, 16] },
+    "2411-05": { "id": "auditor", "interest": "Business", "sdgs": [8, 16] },
+    "3313-02": { "id": "audit-assistant", "interest": "Business", "sdgs": [8, 16] },
+    "3313-03": { "id": "accounting-technician", "interest": "Business", "sdgs": [8, 16] }
+  },
+  "groups": {
+    "g03": {
+      "label": "Attention to detail",
+      "portal": "elatih",
+      "sdgs": [4],
+      "researchTerm": "attention to detail",
+      "keywords": ["attention to detail", "detail-oriented", "detail oriented", "meticulous", "eye for detail"]
+    },
+    "g04a": {
+      "label": "Financial reporting",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "financial reporting",
+      "keywords": ["financial reporting", "financial statement", "financial statements", "balance sheet", "income statement", "cash flow statement", "profit and loss", "management accounts"]
+    },
+    "g04b": {
+      "label": "Financial analysis",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "financial analysis",
+      "keywords": ["financial analysis", "financial analyst", "ratio analysis", "financial ratios", "cost analysis"]
+    },
+    "g04c": {
+      "label": "Budgeting and costing",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "management accounting",
+      "keywords": ["budgeting", "budget preparation", "financial forecasting", "financial modelling", "financial modeling", "cost accounting", "costing", "variance analysis", "cost control"]
+    },
+    "g04d": {
+      "label": "Auditing and internal control",
+      "portal": "elatih",
+      "sdgs": [4, 16],
+      "researchTerm": "auditing",
+      "keywords": ["internal audit", "external audit", "statutory audit", "financial audit", "audit working papers", "auditor", "audit assistant", "internal control", "internal controls", "corporate governance"],
+      "notKeywords": ["energy audit", "energy auditor", "energy auditing"]
+    },
+    "g04e": {
+      "label": "Accounting software (ERP)",
+      "portal": "elatih",
+      "sdgs": [4, 9],
+      "researchTerm": "accounting information system",
+      "keywords": ["accounting software", "sql account", "autocount", "ubs accounting", "quickbooks", "xero", "myob", "sap fico", "erp", "erp system"]
+    },
+    "g04f": {
+      "label": "Bookkeeping and reconciliation",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "bookkeeping",
+      "keywords": ["bookkeeping", "book-keeping", "bank reconciliation", "bank reconciliations", "account reconciliation", "general ledger", "journal entries", "month-end closing", "month end closing", "accounts payable", "accounts receivable", "full set of accounts"]
+    },
+    "g04g": {
+      "label": "Tax planning",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "tax planning",
+      "keywords": ["tax planning", "tax advisory", "tax incentives", "tax exemption", "tax exemptions", "tax relief", "tax reliefs"]
+    },
+    "g05": {
+      "label": "Fraud detection",
+      "portal": "elatih",
+      "sdgs": [4, 16],
+      "researchTerm": "forensic accounting",
+      "keywords": ["forensic accounting", "forensic audit", "fraud detection", "fraud investigation", "fraud risk"]
+    },
+    "g06": {
+      "label": "Payroll",
+      "portal": "elatih",
+      "sdgs": [4, 8],
+      "researchTerm": "payroll",
+      "keywords": ["payroll", "epf", "kwsp", "socso", "perkeso", "statutory contributions"]
+    },
+    "g07": {
+      "label": "Accounting and audit standards",
+      "portal": "elatih",
+      "sdgs": [4, 16],
+      "researchTerm": "accounting standards",
+      "keywords": ["mfrs", "ifrs", "mpers", "accounting standards", "accounting principles", "international standards on auditing", "gaap", "coso"]
+    },
+    "g09": {
+      "label": "Time management",
+      "portal": "elatih",
+      "sdgs": [4],
+      "researchTerm": "time management",
+      "keywords": ["time management", "organisational skills", "organizational skills", "meet deadlines", "meeting deadlines", "multitasking", "multi-tasking"]
+    },
+    "g10": {
+      "label": "Tax compliance",
+      "portal": "elatih",
+      "sdgs": [4, 16],
+      "researchTerm": "tax compliance",
+      "keywords": ["tax compliance", "tax computation", "tax computations", "tax return", "tax returns", "tax filing", "e-filing", "income tax", "corporate tax", "personal tax", "withholding tax", "sales and service tax", "sst", "lhdn", "inland revenue", "potongan cukai bulanan", "monthly tax deduction"]
+    }
+  }
+}

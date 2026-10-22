@@ -1380,5 +1380,589 @@
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
     }
+  },
+  {
+    "id": "accountant",
+    "code": "2411-01",
+    "title": "Accountant",
+    "group": "professionals",
+    "description": "Accountant plans, organises, and manages an accounting system to ensure financial records are accurate, complete, and compliant with applicable standards and regulations. They prepare and review financial statements, manage budgets, analyse costs and operational data, and support audits, taxation, and financial planning. Some may specialise in areas such as forensic accounting, project or drilling finances, cost estimation, or strategic financial technology, providing detailed analysis and advice to support organisational decision-making and operational efficiency.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Record and maintain accurate financial transactions, including journal entries, general ledger updates, and supporting documentation.",
+        "label": "automatable"
+      },
+      {
+        "text": "Prepare and review financial statements and management reports, including income statements, balance sheets, and cash flow statements.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Reconcile bank statements and accounts to ensure the accuracy and completeness of financial records.",
+        "label": "automatable"
+      },
+      {
+        "text": "Handle accounts payable and receivable processes, including monitoring payments, collections, and cash flow.",
+        "label": "automatable"
+      },
+      {
+        "text": "Prepare and submit tax returns and ensure compliance with relevant tax laws, accounting standards, and financial regulations.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Support the preparation of budgets, forecasts, and financial plans, including cost estimates, and monitor variances and financial performance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Analyse financial and cost data to identify trends, risks, and opportunities for cost control and operational improvement.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Support internal and external audit activities by preparing documentation, reviewing financial records, and addressing audit queries.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Evaluate financial controls and provide advice on financial management, risk mitigation, compliance, and process improvements.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 33,
+    "assistedPct": 56,
+    "sdgs": [
+      8,
+      16
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Budgeting and costing",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Fraud detection",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Payroll",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2411-01",
+      "fetchedAt": "2026-10-21"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "tax-consultant",
+    "code": "2411-02",
+    "title": "Tax Consultant",
+    "group": "professionals",
+    "description": "Tax Consultant provides expert advice on tax legislation to support an individual or business in meeting their tax obligations and optimising financial outcomes. They assess financial records, prepare and review tax returns, develop tax planning strategies, and ensure compliance with regulatory requirements. The role also involves assisting a client during audits, resolving disputes with tax authorities, and keeping them informed of relevant changes in tax laws.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Prepare and review personal and corporate tax computations and tax returns in compliance with tax regulations.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Advise clients on tax planning strategies to minimise tax liabilities within legal and regulatory requirements.",
+        "label": "human_led"
+      },
+      {
+        "text": "Research and interpret tax legislation, guidelines, and regulatory updates to ensure accurate tax advice and compliance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Liaise with tax authorities on tax audits and dispute resolution matters.",
+        "label": "human_led"
+      },
+      {
+        "text": "Identify tax risks and opportunities and recommend appropriate tax planning or compliance solutions.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Collaborate with auditors and finance teams to support tax compliance, reporting, and audit matters.",
+        "label": "human_led"
+      },
+      {
+        "text": "Maintain accurate tax records and supporting documentation for audits and regulatory reviews.",
+        "label": "automatable"
+      }
+    ],
+    "automatablePct": 14,
+    "assistedPct": 43,
+    "sdgs": [
+      8,
+      16
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Time management",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Financial analysis",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Tax compliance",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Tax planning",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2411-02",
+      "fetchedAt": "2026-10-21"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "auditor",
+    "code": "2411-05",
+    "title": "Auditor",
+    "group": "professionals",
+    "description": "Auditor examines, analyses, and interprets financial and operational records to ensure accuracy, integrity, and compliance with accounting standards, laws, and internal policies. They plan and conduct audits, assess internal controls, identify risks, and recommend improvements to strengthen governance, safeguard assets, and enhance operational efficiency. The role also involves preparing detailed reports, liaising with management and regulatory bodies, and supporting transparency and reliability in financial and operational reporting.",
+    "qualification": "Bachelor’s degree or equivalent",
+    "tasks": [
+      {
+        "text": "Plan and conduct financial, operational, and compliance audits based on organisational risk assessments.",
+        "label": "human_led"
+      },
+      {
+        "text": "Examine financial records, transactions, and supporting documents to verify accuracy, reliability, and compliance.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Evaluate internal control systems, accounting procedures, and risk management frameworks.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Assess compliance with relevant laws, regulations, standards, and organisational policies.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Prepare audit working papers and audit reports with findings, conclusions, and recommendations.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Identify control weaknesses, irregularities, and fraud risks, and recommend corrective actions.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Analyse financial statements, budgets, cost data, and operational information to support audit assessments.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Advise management on improvements to governance, risk management, internal controls, and operational efficiency.",
+        "label": "human_led"
+      },
+      {
+        "text": "Present audit findings and recommendations to management and relevant stakeholders.",
+        "label": "human_led"
+      },
+      {
+        "text": "Follow up on audit recommendations to monitor implementation of corrective actions and strengthened controls.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 0,
+    "assistedPct": 60,
+    "sdgs": [
+      8,
+      16
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "Attention to detail",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Time management",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Fraud detection",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/2411-05",
+      "fetchedAt": "2026-10-21"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "audit-assistant",
+    "code": "3313-02",
+    "title": "Audit Assistant Executive Officer",
+    "group": "technicians",
+    "description": "Audit Assistant Executive Officer assists in the examination and evaluation of an organisation’s financial records, accounting systems and internal controls to ensure accuracy, compliance and proper governance. The role involves performing audit fieldwork, reviewing transactions and financial statements, identifying discrepancies or control weaknesses, and preparing supporting documentation and reports. They may also support routine accounting functions and recommend improvements to financial procedures in line with statutory and regulatory requirements.",
+    "qualification": "Diploma or equivalent",
+    "tasks": [
+      {
+        "text": "Record and reconcile financial transactions accurately in accounting systems, including invoices, receipts, and other financial documents.",
+        "label": "automatable"
+      },
+      {
+        "text": "Maintain complete financial records according to accounting principles.",
+        "label": "automatable"
+      },
+      {
+        "text": "Prepare financial statements and periodic financial reports.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Assist in planning and conducting internal and external audits, including preparation of audit documentation and working papers.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Review accounting entries and documents for compliance and accuracy, and identify control weaknesses or process gaps, recommending corrective actions where necessary.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Liaise with clients, suppliers, and internal teams to resolve payment or billing queries.",
+        "label": "human_led"
+      }
+    ],
+    "automatablePct": 33,
+    "assistedPct": 50,
+    "sdgs": [
+      8,
+      16
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "Teamwork",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Time management",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Bookkeeping and reconciliation",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Payroll",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Tax compliance",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/3313-02",
+      "fetchedAt": "2026-10-21"
+    },
+    "labelSource": "manual"
+  },
+  {
+    "id": "accounting-technician",
+    "code": "3313-03",
+    "title": "Accounting Technician",
+    "group": "technicians",
+    "description": "Accounting Technician maintains and updates financial records to support the accurate reporting and control of an organisation’s finances. They process financial transactions, prepare reconciliations and accounting schedules, record revenues and expenditures, and assist in the preparation of budget and financial statements in accordance with relevant standards and regulations. Their work supports effective financial management across a range of sectors.",
+    "qualification": "Diploma or equivalent",
+    "tasks": [
+      {
+        "text": "Record and process financial transactions, including cash, bank, and invoice entries.",
+        "label": "automatable"
+      },
+      {
+        "text": "Maintain accurate financial records in accordance with accounting principles.",
+        "label": "automatable"
+      },
+      {
+        "text": "Prepare invoices, manage billing, and process payments.",
+        "label": "automatable"
+      },
+      {
+        "text": "Reconcile bank and ledger accounts.",
+        "label": "automatable"
+      },
+      {
+        "text": "Verify accuracy of financial documents and records.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Assist in the preparation of financial statements and reports.",
+        "label": "ai_assisted"
+      },
+      {
+        "text": "Manage payroll and employee reimbursements.",
+        "label": "automatable"
+      },
+      {
+        "text": "Liaise with auditors and tax agents.",
+        "label": "human_led"
+      },
+      {
+        "text": "Ensure compliance with Malaysian financial regulations, tax requirements, and accounting standards.",
+        "label": "ai_assisted"
+      }
+    ],
+    "automatablePct": 56,
+    "assistedPct": 33,
+    "sdgs": [
+      8,
+      16
+    ],
+    "interest": "Business",
+    "skills": [
+      {
+        "label": "Attention to detail",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Communication",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Time management",
+        "type": "basic",
+        "moderate": 0.6,
+        "fast": 0.6
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Bookkeeping and reconciliation",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific",
+        "moderate": 0.8,
+        "fast": 0.8
+      }
+    ],
+    "source": {
+      "url": "https://emasco.mohr.gov.my/masco/3313-03",
+      "fetchedAt": "2026-10-21"
+    },
+    "labelSource": "manual"
   }
 ]

@@ -428,5 +428,255 @@
         "type": "basic"
       }
     ]
+  },
+  "2411-01": {
+    "id": "accountant",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic"
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific"
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific"
+      },
+      {
+        "label": "Budgeting and costing",
+        "type": "specific"
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific"
+      },
+      {
+        "label": "Fraud detection",
+        "type": "specific"
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific"
+      },
+      {
+        "label": "Payroll",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific"
+      }
+    ]
+  },
+  "2411-02": {
+    "id": "tax-consultant",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Time management",
+        "type": "basic"
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic"
+      },
+      {
+        "label": "Financial analysis",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Tax compliance",
+        "type": "specific"
+      },
+      {
+        "label": "Tax planning",
+        "type": "specific"
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific"
+      }
+    ]
+  },
+  "2411-05": {
+    "id": "auditor",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Attention to detail",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Time management",
+        "type": "basic"
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific"
+      },
+      {
+        "label": "Fraud detection",
+        "type": "specific"
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific"
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific"
+      }
+    ]
+  },
+  "3313-02": {
+    "id": "audit-assistant",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Teamwork",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Attention to detail",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Time management",
+        "type": "basic"
+      },
+      {
+        "label": "Financial analysis",
+        "type": "specific"
+      },
+      {
+        "label": "Bookkeeping and reconciliation",
+        "type": "specific"
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific"
+      },
+      {
+        "label": "Payroll",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific"
+      },
+      {
+        "label": "Tax compliance",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific"
+      }
+    ]
+  },
+  "3313-03": {
+    "id": "accounting-technician",
+    "interest": "Business",
+    "sdgs": [
+      8,
+      16
+    ],
+    "skills": [
+      {
+        "label": "Attention to detail",
+        "type": "basic"
+      },
+      {
+        "label": "Communication",
+        "type": "basic"
+      },
+      {
+        "label": "Problem solving",
+        "type": "basic"
+      },
+      {
+        "label": "Time management",
+        "type": "basic"
+      },
+      {
+        "label": "Financial reporting",
+        "type": "specific"
+      },
+      {
+        "label": "Bookkeeping and reconciliation",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting and audit standards",
+        "type": "specific"
+      },
+      {
+        "label": "Auditing and internal control",
+        "type": "specific"
+      },
+      {
+        "label": "Accounting software (ERP)",
+        "type": "specific"
+      }
+    ]
   }
 }
