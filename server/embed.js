@@ -8,8 +8,12 @@
 
 export const MODEL_ID = 'Xenova/bge-m3'
 
-async function defaultLoadModel() {
-  const { pipeline } = await import('@huggingface/transformers')
+async function defaultLoadModel({ modelsDir } = {}) {
+  const { pipeline, env } = await import('@huggingface/transformers')
+  if (modelsDir) {
+    env.localModelPath = modelsDir
+    env.allowRemoteModels = false
+  }
   const extractor = await pipeline('feature-extraction', MODEL_ID, { dtype: 'fp32' })
   return async (texts) => {
     const tensor = await extractor(texts, { pooling: 'cls', normalize: true })
@@ -21,7 +25,8 @@ export function createEmbedder({
   url,
   fetchImpl = globalThis.fetch,
   loadModel = defaultLoadModel,
-  timeoutMs = 30000
+  timeoutMs = 30000,
+  modelsDir
 } = {}) {
   if (url) {
     return {
@@ -50,7 +55,7 @@ export function createEmbedder({
 
   function load() {
     if (!loading) {
-      loading = loadModel().then(
+      loading = loadModel({ modelsDir }).then(
         (fn) => {
           run = fn
           return fn

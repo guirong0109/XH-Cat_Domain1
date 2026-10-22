@@ -17,6 +17,8 @@ npm install
 npm test                                       # Vitest, all of tests/
 npm run build                                  # Vite → dist/
 npm start                                      # Express on PORT or 3000; serves dist/ + /api
+MODELS_DIR=<folder> npm start                  # local bge-m3 for CV reading (default: models/, needs Xenova/bge-m3/onnx/model.onnx; else hub). scripts/onnx-check.mjs reads ONNX_LOCAL_MODELS
+EMBED_URL=<url> npm start                      # use a remote embedding service instead of the local model
 npm run dev                                    # Vite on :5173 (proxies /api to :3000; run npm start too)
 python3 -m unittest discover pipeline/tests    # pipeline tests (stdlib only)
 python3 pipeline/build_data.py                 # rebuild data/*.json from data/team, data/emasco, data/ilo, data/runpod

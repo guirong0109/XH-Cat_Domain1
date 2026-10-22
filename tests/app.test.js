@@ -114,3 +114,119 @@ describe('api', () => {
     expect(Object.values(body.research.skills['Spreadsheets (Excel)'].counts)).toEqual([50, 50])
   })
 })
+
+describe('POST /api/cv-skills', () => {
+  const secretLine = 'Built Excel reports for the finance team'
+
+  function fakeEmbedder(overrides = {}) {
+    return {
+      modelId: 'fake-model',
+      isReady: () => true,
+      embed: async (texts) => texts.map((text) => (/Excel/.test(text) ? [1, 0] : [0, 1])),
+      ...overrides,
+    }
+  }
+
+  async function startWith(embedder, extra = {}) {
+    server = createApp({ dataDir: directory, fetchImpl: fakeFetch, embedder, ...extra }).listen(0)
+    await new Promise((resolve) => server.once('listening', resolve))
+    return `http://127.0.0.1:${server.address().port}`
+  }
+
+  const post = (baseUrl, body) =>
+    fetch(`${baseUrl}/api/cv-skills`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+
+  afterEach(() => vi.restoreAllMocks())
+
+  it('returns matches with label and evidence', async () => {
+    const baseUrl = await startWith(fakeEmbedder())
+    const response = await post(baseUrl, { text: `${secretLine}\nLoves hiking` })
+    expect(response.status).toBe(200)
+    const body = await response.json()
+    expect(body.model).toBe('fake-model')
+    expect(body.cutoff).toBe(0.6)
+    expect(body.skills).toEqual([{ label: 'Spreadsheets (Excel)', score: 1, evidence: secretLine }])
+  })
+
+  it('400 for missing, non-string or blank text', async () => {
+    const baseUrl = await startWith(fakeEmbedder())
+    for (const body of [{}, { text: 5 }, { text: '   ' }]) {
+      const response = await post(baseUrl, body)
+      expect(response.status).toBe(400)
+      expect(await response.json()).toEqual({ error: 'No CV text.' })
+    }
+  })
+
+  it('413 for text over 20,000 characters', async () => {
+    const baseUrl = await startWith(fakeEmbedder())
+    const response = await post(baseUrl, { text: 'a'.repeat(20001) })
+    expect(response.status).toBe(413)
+    expect(await response.json()).toEqual({ error: 'CV text is too long.' })
+  })
+
+  it('503 fallback when there is no embedder', async () => {
+    const baseUrl = await startWith(undefined)
+    const response = await post(baseUrl, { text: secretLine })
+    expect(response.status).toBe(503)
+    expect(await response.json()).toEqual({ fallback: true })
+  })
+
+  it('503 fallback fast when the model is not ready', async () => {
+    const baseUrl = await startWith(fakeEmbedder({ isReady: () => false }))
+    const started = Date.now()
+    const response = await post(baseUrl, { text: secretLine })
+    expect(response.status).toBe(503)
+    expect(await response.json()).toEqual({ fallback: true })
+    expect(Date.now() - started).toBeLessThan(1000)
+  })
+
+  it('503 fallback when embedding is slower than the timeout', async () => {
+    const slow = fakeEmbedder({ embed: () => new Promise((resolve) => setTimeout(() => resolve([]), 500)) })
+    const baseUrl = await startWith(slow, { cvTimeoutMs: 50 })
+    const response = await post(baseUrl, { text: secretLine })
+    expect(response.status).toBe(503)
+    expect(await response.json()).toEqual({ fallback: true })
+  })
+
+  it('503 fallback when embedding throws, and a later request can still work', async () => {
+    let fail = true
+    const embedder = fakeEmbedder({
+      embed: async (texts) => {
+        if (fail) throw new Error('boom')
+        return texts.map((text) => (/Excel/.test(text) ? [1, 0] : [0, 1]))
+      },
+    })
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const baseUrl = await startWith(embedder)
+    expect((await post(baseUrl, { text: secretLine })).status).toBe(503)
+    fail = false
+    expect((await post(baseUrl, { text: secretLine })).status).toBe(200)
+  })
+
+  it('loads skill vectors only once for two first requests at the same time', async () => {
+    const embed = vi.fn(async (texts) => texts.map((text) => (/Excel/.test(text) ? [1, 0] : [0, 1])))
+    const baseUrl = await startWith(fakeEmbedder({ embed }))
+    const replies = await Promise.all([post(baseUrl, { text: secretLine }), post(baseUrl, { text: secretLine })])
+    expect(replies.map((reply) => reply.status)).toEqual([200, 200])
+    const skillCalls = embed.mock.calls.filter(([texts]) => texts.includes('Spreadsheets (Excel)'))
+    expect(skillCalls).toHaveLength(1)
+  })
+
+  it('never logs the CV text', async () => {
+    const spies = ['log', 'error', 'warn'].map((name) => vi.spyOn(console, name).mockImplementation(() => {}))
+    const failing = fakeEmbedder({ embed: async () => { throw new Error('boom') } })
+    for (const embedder of [fakeEmbedder(), failing, fakeEmbedder({ isReady: () => false })]) {
+      const baseUrl = await startWith(embedder)
+      await post(baseUrl, { text: secretLine })
+      await new Promise((resolve) => server.close(resolve))
+    }
+    await post(await startWith(fakeEmbedder()), { text: 'x'.repeat(20001) })
+    const logged = JSON.stringify(spies.flatMap((spy) => spy.mock.calls))
+    expect(logged).not.toContain('Excel')
+    expect(logged).not.toContain('finance')
+  })
+})

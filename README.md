@@ -123,6 +123,8 @@ npm start
 
 Open http://localhost:3000. For development run `npm run dev` (Vite) in one terminal and `npm start` (API server) in another. The server reads `PORT` from the environment (default 3000).
 
+CV reading uses the bge-m3 model. The server loads it from `MODELS_DIR` (default: the git-ignored `models/` folder, which must contain `Xenova/bge-m3/onnx/model.onnx`); if that folder is missing it downloads the model from the Hugging Face hub. Set `EMBED_URL` to send texts to a remote embedding service instead. Until the model is ready (log line "AI model ready"), `POST /api/cv-skills` answers 503 and the app uses keyword matching. `scripts/onnx-check.mjs` reads `ONNX_LOCAL_MODELS` for the same folder.
+
 ## Deploy on Replit
 
 1. In Replit, choose Import from GitHub and select this repository.

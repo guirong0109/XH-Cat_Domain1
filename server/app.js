@@ -4,6 +4,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readTrends, refreshTrends } from './trends.js'
 import { readResearch, refreshResearch } from './research.js'
+import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from './cvMatch.js'
+import { loadSkillVectors } from './skillVectors.js'
 
 const distDirectory = fileURLToPath(new URL('../dist', import.meta.url))
 
@@ -20,7 +22,7 @@ async function readOptionalJson(filePath) {
   }
 }
 
-export function createApp({ dataDir, fetchImpl = fetch }) {
+export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeoutMs = 15000 }) {
   const app = express()
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
@@ -55,6 +57,65 @@ export function createApp({ dataDir, fetchImpl = fetch }) {
     } catch (error) {
       console.error('[research] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not refresh research data.' })
+    }
+  })
+
+  // One skill-vector load at a time; reset on failure so the next request retries.
+  let skillVectorsLoad = null
+  function getSkillVectors() {
+    if (!skillVectorsLoad) {
+      skillVectorsLoad = (async () => {
+        const skills = (await readJson(path.join(dataDir, 'skills.json'))).labels
+        const { vectorSets } = await loadSkillVectors({
+          skills,
+          embedder,
+          cachePath: path.join(dataDir, 'cache', 'skill_vectors.json'),
+          mode: SKILL_TEXT_MODE,
+        })
+        return { skills, vectorSets }
+      })()
+      skillVectorsLoad.catch(() => {
+        skillVectorsLoad = null
+      })
+    }
+    return skillVectorsLoad
+  }
+
+  async function matchCv(lines) {
+    if (!lines.length) return []
+    const { skills, vectorSets } = await getSkillVectors()
+    const lineVectors = await embedder.embed(lines)
+    return matchSkills(lines, lineVectors, skills, vectorSets, CUTOFF)
+  }
+
+  function parseCvBody(request, response, next) {
+    express.json({ limit: '100kb' })(request, response, (error) => {
+      if (!error) return next()
+      if (error.type === 'entity.too.large') return response.status(413).json({ error: 'CV text is too long.' })
+      response.status(400).json({ error: 'No CV text.' })
+    })
+  }
+
+  app.post('/api/cv-skills', parseCvBody, async (request, response) => {
+    const text = request.body?.text
+    if (typeof text !== 'string' || !text.trim()) return response.status(400).json({ error: 'No CV text.' })
+    if (text.length > MAX_CHARS) return response.status(413).json({ error: 'CV text is too long.' })
+    if (!embedder || !embedder.isReady()) return response.status(503).json({ fallback: true })
+    let timer
+    try {
+      const work = matchCv(splitCvLines(text))
+      work.catch(() => {})
+      const timeout = new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('timeout')), cvTimeoutMs)
+      })
+      const skills = await Promise.race([work, timeout])
+      response.json({ skills, model: embedder.modelId, cutoff: CUTOFF })
+    } catch (error) {
+      // Never log the CV text; the message of our own errors does not contain it.
+      console.error('[cv-skills] failed:', error.message)
+      response.status(503).json({ fallback: true })
+    } finally {
+      clearTimeout(timer)
     }
   })
 

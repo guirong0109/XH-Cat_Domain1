@@ -56,3 +56,12 @@ describe('embedder local mode', () => {
     expect(createEmbedder({ loadModel: async () => async () => [] }).modelId).toBe(MODEL_ID)
   })
 })
+
+describe('embedder modelsDir', () => {
+  it('passes modelsDir to the loader', async () => {
+    const loadModel = vi.fn(async () => async (texts) => texts.map(() => [1]))
+    const e = createEmbedder({ loadModel, modelsDir: '/some/models' })
+    await e.embed(['a'])
+    expect(loadModel).toHaveBeenCalledWith({ modelsDir: '/some/models' })
+  })
+})
