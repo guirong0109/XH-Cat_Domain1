@@ -6,7 +6,7 @@ import {
   CV_MESSAGES,
   aiOnly,
   checkCvFile,
-  cvBannerText,
+  cvReviewLine,
   extractSkills,
   fetchCvSkills,
   mergeMatches,
@@ -28,7 +28,7 @@ function Card({ children, ...rest }) {
   );
 }
 
-export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvClear, onChooseField }) {
+export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvSuggest, onAcceptSuggestion, onDismissSuggestion, onCvClear, onChooseField }) {
   const pickerRef = useRef(null);
   const headingRef = useRef(null);
   const removeRefs = useRef(new Map());
@@ -117,14 +117,15 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         }
         return;
       }
-      const merged = mergeMatches(keywordFound, ai.skills);
-      if (merged.length === 0) {
+      const suggestions = aiOnly(mergeMatches(keywordFound, ai.skills));
+      if (keywordFound.length === 0 && suggestions.length === 0) {
         setCvError('none-found');
         setAiStatus(null);
         return;
       }
-      if (keywordFound.length > 0) onCvFound(aiOnly(merged), file.name, true);
-      else onCvFound(merged, file.name);
+      // AI matches wait for the student's yes; keyword matches were added above.
+      if (keywordFound.length === 0) onCvFound([], file.name);
+      onCvSuggest(suggestions, file.name);
       setAiStatus('done');
     } catch (error) {
       if (mounted.current && id === requestId.current) {
@@ -162,7 +163,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           <div className="flex flex-wrap items-center gap-3">
             <p className="m-0 min-w-0 flex-[1_1_200px] text-[15px]">
               Read <strong className="break-all">{cv.fileName}</strong>.{' '}
-              {cvBannerText(cv.mode, cv.count)}
+              {cvReviewLine(cv.mode, cv.added.length, cv.suggestions.length)} Please check each level.
             </p>
             <button
               type="button"
@@ -253,10 +254,45 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         )}
         {aiStatus !== 'done' && (
           <p className="m-0 text-[13px] text-slate-600">
-            Your CV is read on this device. Its text is then sent to our server to look for more skills with AI. It is not saved.
+            Your CV is read on this device. Its text is then sent to our server to look for more skills with AI. It is not saved. For the demo, please use a sample CV, not your real one.
           </p>
         )}
       </Card>
+
+      {cv && cv.suggestions.length > 0 && (
+        <Card aria-labelledby="ai-check-heading" style={{ borderColor: '#C2410C' }}>
+          <h2 id="ai-check-heading" className="m-0 text-lg font-bold text-[#C2410C]">
+            Check these, found by AI · estimate
+          </h2>
+          <p className="m-0 text-sm text-slate-600">The AI matched these lines. A skill is added only when you say yes.</p>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {cv.suggestions.map((item) => (
+              <li key={item.label} className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-slate-200 px-3 py-2">
+                <span className="flex min-w-0 flex-[1_1_160px] flex-col">
+                  <span className="text-[15px] font-semibold">{item.label}</span>
+                  <span className="text-xs break-words text-slate-600">Found in your CV: “{item.evidence}”</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onAcceptSuggestion(item.label)}
+                  aria-label={`Add ${item.label}`}
+                  className="fr-btn min-h-11 cursor-pointer rounded-[10px] border border-[#0F766E] bg-white px-3 text-[13px] font-bold text-[#0F766E]"
+                >
+                  Add skill
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onDismissSuggestion(item.label)}
+                  aria-label={`${item.label} is not mine`}
+                  className="fr-btn min-h-11 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-3 text-[13px] text-slate-700"
+                >
+                  Not mine
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       <Card aria-labelledby="your-skills-heading">
         <div className="flex flex-wrap items-baseline justify-between gap-2">

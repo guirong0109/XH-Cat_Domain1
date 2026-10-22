@@ -145,3 +145,18 @@ export async function fetchCvSkills(text, fetchImpl = fetch) {
 export function aiOnly(merged) {
   return (merged || []).filter((item) => item.source === 'ai');
 }
+
+// Takes the skills of an earlier CV out of the profile, with their levels.
+export function removeCvSkills(profile, labels) {
+  const drop = new Set(labels ?? []);
+  const levels = { ...(profile.levels ?? {}) };
+  for (const label of drop) delete levels[label];
+  return { skills: (profile.skills ?? []).filter((label) => !drop.has(label)), levels };
+}
+
+// Summary line above the CV review: sure = added now, check = AI matches waiting for a yes.
+export function cvReviewLine(mode, sure, check) {
+  const total = sure + check;
+  const line = `We found ${total} ${total === 1 ? 'skill' : 'skills'}: ${sure} sure, ${check} to check.`;
+  return mode === 'merged' ? `${line} We kept your picks.` : line;
+}

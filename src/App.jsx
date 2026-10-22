@@ -11,7 +11,7 @@ import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
-import { mergeCvSkills } from './lib/cvSkills.js';
+import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
@@ -186,6 +186,8 @@ export default function App() {
 
   const toggleSkill = (label) => {
     dropCvEvidence(label);
+    // A skill the student picks or removes by hand is no longer the CV's.
+    setCv((current) => (current?.added.includes(label) ? { ...current, added: current.added.filter((item) => item !== label) } : current));
     changeProfile((current) => {
       const skills = toggleIn(current.skills, label);
       const levels = { ...current.levels };
@@ -198,35 +200,69 @@ export default function App() {
   };
 
   // A sample or empty profile is replaced; otherwise the student's picks are kept.
-  // `extra` is true for the AI step: it adds to the CV result already shown.
-  const applyCvSkills = (found, fileName, extra = false) => {
+  // `added` lists the skills this CV put in the profile, so a new CV can take them out again.
+  const applyCvSkills = (found, fileName) => {
     const { mode } = mergeCvSkills(profile, found);
-    const added = found.filter((item) => !profile.skills.includes(item.label)).length;
+    const fresh = found.filter((item) => !profile.skills.includes(item.label));
     changeProfile((current) => {
       const { skills, levels } = mergeCvSkills(current, found);
       const learn = current.learn.filter((item) => !skills.includes(item));
       return { ...current, skills, levels, learn };
     });
-    if (extra) {
-      setCv((current) =>
-        current && current.fileName === fileName
-          ? {
-              ...current,
-              count: current.count + added,
-              evidence: { ...current.evidence, ...Object.fromEntries(found.map((item) => [item.label, item.evidence])) },
-              sources: { ...current.sources, ...Object.fromEntries(found.map((item) => [item.label, item.source])) },
-            }
-          : current,
-      );
-      return;
-    }
     setCv({
       fileName,
       mode,
-      count: mode === 'merged' ? added : found.length,
+      count: mode === 'merged' ? fresh.length : found.length,
+      added: (mode === 'merged' ? fresh : found).map((item) => item.label),
+      suggestions: [],
       evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])),
       sources: Object.fromEntries(found.map((item) => [item.label, item.source])),
     });
+  };
+
+  // AI matches wait for the student's yes; they are not in the profile yet.
+  const suggestCv = (items, fileName) =>
+    setCv((current) =>
+      current && current.fileName === fileName
+        ? { ...current, suggestions: items.filter((item) => !profile.skills.includes(item.label)) }
+        : current,
+    );
+
+  const acceptSuggestion = (label) => {
+    const item = cv?.suggestions.find((entry) => entry.label === label);
+    if (!item) return;
+    changeProfile((current) => {
+      if (current.skills.includes(label)) return current;
+      const skills = [...current.skills, label];
+      const learn = current.learn.filter((entry) => !skills.includes(entry));
+      return { ...current, skills, levels: { ...current.levels, [label]: item.level }, learn };
+    });
+    setCv((current) =>
+      current
+        ? {
+            ...current,
+            count: current.count + 1,
+            added: [...current.added, label],
+            suggestions: current.suggestions.filter((entry) => entry.label !== label),
+            evidence: { ...current.evidence, [label]: item.evidence },
+            sources: { ...current.sources, [label]: item.source },
+          }
+        : current,
+    );
+  };
+
+  const dismissSuggestion = (label) =>
+    setCv((current) =>
+      current ? { ...current, suggestions: current.suggestions.filter((entry) => entry.label !== label) } : current,
+    );
+
+  // A new CV starts clean: skills the old CV added leave the profile and the checks.
+  const clearCv = () => {
+    const labels = cv?.added ?? [];
+    if (labels.length > 0) {
+      changeProfile((current) => ({ ...current, ...removeCvSkills(current, labels) }));
+    }
+    setCv(null);
   };
 
   const setLevel = (label, level) => {
@@ -360,7 +396,10 @@ export default function App() {
         onToggleSkill={toggleSkill}
         onSetLevel={setLevel}
         onCvFound={applyCvSkills}
-        onCvClear={() => setCv(null)}
+        onCvSuggest={suggestCv}
+        onAcceptSuggestion={acceptSuggestion}
+        onDismissSuggestion={dismissSuggestion}
+        onCvClear={clearCv}
         onChooseField={chooseField}
       />
     );

@@ -259,3 +259,44 @@ describe('extractSkills with the real accounting keywords (precision first)', ()
       ['Auditing and internal control', 'Bookkeeping and reconciliation'])
   })
 })
+
+import { removeCvSkills, cvReviewLine } from '../src/lib/cvSkills.js'
+
+describe('removeCvSkills', () => {
+  const profile = {
+    skills: ['Excel', 'Bookkeeping', 'Teamwork'],
+    levels: { Excel: 'good', Bookkeeping: 'strong', Teamwork: 'basic' },
+  }
+
+  it('removes the CV skills and their levels, keeps the rest', () => {
+    const next = removeCvSkills(profile, ['Excel', 'Bookkeeping'])
+    expect(next.skills).toEqual(['Teamwork'])
+    expect(next.levels).toEqual({ Teamwork: 'basic' })
+  })
+
+  it('does nothing for an empty or missing list', () => {
+    expect(removeCvSkills(profile, [])).toEqual({ skills: profile.skills, levels: profile.levels })
+    expect(removeCvSkills(profile, undefined).skills).toEqual(profile.skills)
+  })
+
+  it('ignores labels the profile no longer has', () => {
+    expect(removeCvSkills(profile, ['Java']).skills).toEqual(profile.skills)
+  })
+
+  it('does not change the input', () => {
+    removeCvSkills(profile, ['Excel'])
+    expect(profile.skills).toHaveLength(3)
+  })
+})
+
+describe('cvReviewLine', () => {
+  it('counts sure and to-check skills', () => {
+    expect(cvReviewLine('replaced', 4, 2)).toBe('We found 6 skills: 4 sure, 2 to check.')
+  })
+  it('handles one skill and none to check', () => {
+    expect(cvReviewLine('replaced', 1, 0)).toBe('We found 1 skill: 1 sure, 0 to check.')
+  })
+  it('says picks were kept when merged', () => {
+    expect(cvReviewLine('merged', 2, 1)).toBe('We found 3 skills: 2 sure, 1 to check. We kept your picks.')
+  })
+})
