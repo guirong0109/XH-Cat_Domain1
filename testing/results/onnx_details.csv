@@ -1,0 +1,31 @@
+id,skill_a,skill_b,expected,onnx_bge_m3
+1,Excel,spreadsheet software,similar,0.5750
+2,bookkeeping,recording financial transactions,similar,0.6221
+3,customer service,handling customer enquiries,similar,0.8037
+4,social media marketing,managing Facebook and Instagram pages,similar,0.6199
+5,forklift operation,operating a forklift truck,similar,0.8934
+6,wound dressing,changing bandages on injuries,similar,0.7114
+7,crop pest control,managing insects that damage plants,similar,0.7075
+8,lesson planning,preparing teaching materials for classes,similar,0.7813
+9,menu planning,designing the dishes a restaurant serves,similar,0.7503
+10,perakaunan,accounting,similar,0.7583
+11,Excel,SQL,related,0.6634
+12,Python,data analysis,related,0.5961
+13,bookkeeping,auditing,related,0.6821
+14,nursing,physiotherapy,related,0.5727
+15,graphic design,video editing,related,0.6255
+16,sales,negotiation,related,0.6295
+17,crop management,drone operation for farming,related,0.6555
+18,teaching,public speaking,related,0.7235
+19,inventory management,supply chain planning,related,0.6839
+20,AutoCAD,3D modelling,related,0.5585
+21,Java,JavaScript,different,0.6295
+22,Python programming,handling pythons at a reptile farm,different,0.5425
+23,marketing,market gardening,different,0.6503
+24,cell culture in a laboratory,cellular network maintenance,different,0.5010
+25,financial auditing,audiology,different,0.5272
+26,driving a lorry,writing device driver software,different,0.5143
+27,operating a factory plant,cultivating plants,different,0.6934
+28,dressing a wound,dressing a shop mannequin,different,0.6774
+29,accounting,key account management,different,0.6666
+30,Excel,cooking,different,0.4959

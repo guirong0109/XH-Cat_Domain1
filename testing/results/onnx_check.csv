@@ -1,0 +1,2 @@
+model,avg_similar,avg_related,avg_different,spearman,order_errors,word_trap_avg,bm_pair_score
+onnx_bge_m3,0.7223,0.6391,0.5898,0.5354,71,0.6002,0.7583
