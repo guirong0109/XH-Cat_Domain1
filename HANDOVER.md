@@ -17,6 +17,13 @@ Read §000 first. It is the current snapshot. §00 is the snapshot from the end 
 - **Open decision for the user:** the AI cutoff (0.72, by the precision ≥ 0.90 rule) makes the AI add almost nothing; skills in Bahasa Malaysia lines are missed. Suggested experiment (not approved yet): drop heading lines (e.g. "PROJECTS" scores 0.71) and re-measure a lower cutoff.
 
 
+### Up-to-date references (2026-10-22, merged to `main`)
+- `server/references.js` (Node eMASCO reader, 2 s between pages, one run at a time, last good result kept) + `POST /api/refresh-references`; `GET /api/data` now has `references` (from `data/references.json`, committed, dated).
+- It re-reads the 20 eMASCO pages and checks the 3 HRD Corp / MyTVET portal links and the ILO link. **It never edits roles.json:** a role whose tasks, skills or description changed is flagged ("eMASCO changed... team needs to review") and the saved version stays in use.
+- UI: "eMASCO page: Checked D, link works" on each Matches role card; "Check our references" card with a Refresh button on Matches; checked date next to each portal link on Study. Helpers: `src/lib/referenceView.js`.
+- First real run (22 Oct 2026): 20 of 20 roles read, 0 changed, 4 of 4 links ok. Takes about 1 minute. Not done on purpose: live course lists from the portals (no API, JavaScript pages, scraping risk).
+- Tests: `npm test` 343 pass. Replit may lose a refresh on a cold start (same as trends). Restart the port-3000 server after `server/` changes.
+
 ### CV review on the Skills screen (2026-10-22, merged to `main`; later commits above, `main` = `efb39e2`)
 - Keyword matches are added at once ("sure"). AI (bge-m3) matches go to an orange "Check these" card with the CV line; a skill is added only on **Add skill** (**Not mine** dismisses). One label "AI estimate" (no invented close/possible threshold).
 - **A new CV starts clean:** **Change** removes every skill the old CV added (`cv.added`), with levels, evidence, AI checks and the field notice. Skills picked by hand stay. Logic: `removeCvSkills`, `cvReviewLine` in `src/lib/cvSkills.js`; state in `src/App.jsx` (`applyCvSkills`, `suggestCv`, `acceptSuggestion`, `dismissSuggestion`, `clearCv`).
