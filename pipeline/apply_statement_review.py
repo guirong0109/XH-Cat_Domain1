@@ -11,6 +11,7 @@ Each sheet row is one eMASCO skill statement of a role. Its decision must be:
 New skills get hours null (no estimate yet) and their statements verbatim with the role code.
 The roles in the sheet get role_skills entries from the drafted role data; other roles and
 skills are kept as they are. Running it again replaces the entries it wrote before.
+Re-running the apply step rebuilds the 13 accounting skills and the 5 role_skills entries from data/team/a1_new_skills.json and data/team/a1_skill_review.csv, so edit those two files (not skill_labels.json / role_skills.json) for these skills; a renamed draft leaves the old entry behind, so delete it by hand.
 """
 import csv
 import json

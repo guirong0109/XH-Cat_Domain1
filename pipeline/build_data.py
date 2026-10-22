@@ -343,7 +343,8 @@ def build(paths):
         if code not in raw_by_code:
             raise ValueError(f"Role {code} is in role_skills.json but not in roles_raw.json")
         entry, label_source = choose_exposure(code, runpod_exposure, manual_labels)
-        raw = {**raw_by_code[code], "fetchedAt": snapshot["fetchedAt"]}
+        raw = {**raw_by_code[code],
+               "fetchedAt": raw_by_code[code].get("scrapedAt") or snapshot["fetchedAt"]}
         roles.append(build_role(code, raw, team, entry, label_source,
                                 all_links.get(code, {}), known_labels, sdg,
                                 ilo_for_role(code, isco_map, ilo_file)))

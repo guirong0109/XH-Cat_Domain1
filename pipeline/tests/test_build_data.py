@@ -97,6 +97,17 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(role["ilo"]["fetchedAt"], "2026-10-21")
         self.assertEqual(role["ilo"]["url"], "https://example.org/ilo")
 
+    def test_role_source_date_uses_own_scraped_at(self):
+        def change(inputs):
+            inputs["emasco/roles_raw.json"]["roles"][0]["scrapedAt"] = "2026-10-22"
+
+        roles = self.build_with(change)["roles"]
+        self.assertEqual(roles[0]["source"]["fetchedAt"], "2026-10-22")
+
+    def test_role_source_date_defaults_to_snapshot(self):
+        roles = self.build_with()["roles"]
+        self.assertEqual(roles[0]["source"]["fetchedAt"], "2026-10-20")
+
     def test_ilo_absent_when_unmapped(self):
         def change(inputs):
             inputs["team/isco_map.json"] = {"_note": "draft"}
