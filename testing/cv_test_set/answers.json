@@ -8,5 +8,7 @@
   "cv07": { "set": "tune", "person": "Lim Wei Jie", "skills": ["Solar PV basics", "Energy auditing", "Renewable energy system design", "Electrical wiring"] },
   "cv08": { "set": "holdout", "person": "Nurul Ain", "skills": ["Content writing", "SEO and web analytics", "Customer service"] },
   "cv09": { "set": "tune", "person": "Kavitha", "skills": ["Networking basics", "Network security", "Problem solving"] },
-  "cv10": { "set": "holdout", "person": "Ahmad Hafiz", "skills": ["Project coordination", "Business process analysis", "Data visualisation", "Statistics"] }
+  "cv10": { "set": "holdout", "person": "Ahmad Hafiz", "skills": ["Project coordination", "Business process analysis", "Data visualisation", "Statistics"] },
+  "cv11": { "set": "tune", "person": "Nur Syafiqah", "skills": ["Accounting software (ERP)", "Bookkeeping and reconciliation", "Payroll", "Tax compliance", "Financial analysis", "Spreadsheets (Excel)"] },
+  "cv12": { "set": "holdout", "person": "Chong Pei Shan", "skills": ["Auditing and internal control", "Accounting and audit standards", "Financial reporting", "Accounting software (ERP)", "Budgeting and costing", "Teamwork"] }
 }

@@ -51,13 +51,13 @@ async function main() {
 
   const cutoffs = parseCutoffs(process.argv)
   const skills = JSON.parse(readFileSync(path.join(ROOT, 'data', 'skills.json'), 'utf8')).labels
-  const teamLabels = new Set(JSON.parse(readFileSync(path.join(ROOT, 'data', 'team', 'skill_labels.json'), 'utf8')).map((s) => s.label))
+  const appLabels = new Set(skills.map((s) => s.label))
   const answers = JSON.parse(readFileSync(path.join(SET_DIR, 'answers.json'), 'utf8'))
 
-  // Step 1 check: every answer skill is one of the 25 labels.
+  // Step 1 check: every answer skill is one of the app's skill labels (data/skills.json).
   for (const [id, answer] of Object.entries(answers)) {
     for (const label of answer.skills) {
-      if (!teamLabels.has(label)) throw new Error(`${id}: "${label}" is not in skill_labels.json`)
+      if (!appLabels.has(label)) throw new Error(`${id}: "${label}" is not in data/skills.json`)
     }
     if (!['tune', 'holdout'].includes(answer.set)) throw new Error(`${id}: bad set ${answer.set}`)
   }
@@ -116,7 +116,8 @@ async function main() {
   const row = (mode, set, method, cutoff, s) =>
     rows.push([date, embedder.modelId, mode, set, method, cutoff === '' ? '' : cutoff.toFixed(2), fmt(s.precision), fmt(s.recall), s.tp, s.fp, s.fn])
 
-  console.log('\nTuning set (cv01, cv02, cv04, cv05, cv07, cv09)')
+  const setIds = (set) => cvs.filter((cv) => cv.set === set).map((cv) => cv.id).join(', ')
+  console.log(`\nTuning set (${setIds('tune')})`)
   const best = []
   for (const mode of MODES) {
     console.log(`\nmode=${mode}`)
@@ -162,7 +163,7 @@ async function main() {
   row(chosen.mode, 'holdout', 'keyword', '', h.keyword)
   row(chosen.mode, 'holdout', 'ai', chosen.cutoff, h.ai)
   row(chosen.mode, 'holdout', 'combined', chosen.cutoff, h.combined)
-  console.log('\nHeld-out set (cv03, cv06, cv08, cv10), chosen mode and cutoff')
+  console.log(`\nHeld-out set (${setIds('holdout')}), chosen mode and cutoff`)
   for (const method of ['keyword', 'ai', 'combined']) {
     const s = h[method]
     console.log(`${method.padEnd(8)} P=${fmt(s.precision)} R=${fmt(s.recall)} tp=${s.tp} fp=${s.fp} fn=${s.fn}`)

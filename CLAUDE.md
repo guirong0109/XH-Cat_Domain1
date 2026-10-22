@@ -23,6 +23,10 @@ npm run dev                                    # Vite on :5173 (proxies /api to 
 python3 -m unittest discover pipeline/tests    # pipeline tests (stdlib only)
 python3 pipeline/build_data.py                 # rebuild data/*.json from data/team, data/emasco, data/ilo, data/runpod
 python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json
+python pipeline/scrape_emasco.py --add CODE [CODE ...] data/emasco/roles_raw.json   # add new roles only; old roles untouched
+node scripts/map-statements.mjs                # eMASCO statements of the new roles → data/team/a1_skill_review.csv (local bge-m3)
+python pipeline/apply_statement_review.py data/team/a1_skill_review.csv data/team/a1_new_skills.json data/team/skill_labels.json data/team/role_skills.json
+node scripts/eval-cv.mjs                       # CV accuracy and the AI cutoff → testing/results/cv_eval.csv
 python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_scores.json   # ILO WP140 Table A1
 ```
 - Runtime: Node ≥ 22.12, Python 3.10+.
@@ -42,11 +46,13 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - `src/screens/`: Home, About, Skills, Goal, Matches, Study, and the Stage 2 previews PreviewLang, PreviewUsers (orange "not working yet" banner).
 - `src/components/`: presentational parts, incl. `Sidebar`, `MobileBar`, `StepBar` (navigation), `SkillsDemand`, `ResearchMomentum`, `ReplanNotice`, `Stage2Section`, `PreviewBanner`.
 - `pipeline/`:
-  - `scrape_emasco.py`: one-time snapshot of eMASCO role pages.
+  - `scrape_emasco.py`: one-time snapshot of eMASCO role pages (`--add` appends new roles).
+  - `apply_statement_review.py`: turns the reviewed statement sheet into new skills (`hours: null`) and role skills.
   - `import_ilo.py`: parses ILO WP140 Table A1 (official ILO HTML) into `data/ilo/ilo_2025_scores.json`.
   - `runpod_label.py`: GPU job the user runs on RunPod; see `pipeline/README.md`.
   - `build_data.py`: merges the inputs into the app's data files and validates them (skills, SDGs, ISCO map, research terms, sample profiles).
   - `compare_embeddings.py`: RunPod job comparing embedding models on `testing/skill_pair_test_set.csv` → `testing/results/`; the maths is in `embed_metrics.py` (stdlib, tested). See `pipeline/README.md` §3.
+- `scripts/`: `eval-cv.mjs` (CV accuracy, sets the cutoff), `map-statements.mjs` with `scripts/lib/statementMap.js` (link or group eMASCO statements, tested), `onnx-check.mjs`.
 - `testing/`: the skill-pair test set (30 pairs: similar / related / different) and the embedding results.
 - `data/team/*.json`: team-written inputs (drafts awaiting team review are listed in HANDOVER). `data/*.json`: generated app data; do not hand-edit it, rebuild it. `data/ilo/`: official ILO PDF + HTML and the parsed scores. `data/research.json`: written only by the OpenAlex refresh.
 - Docs: approved specs and plans in `docs/superpowers/specs/` and `docs/superpowers/plans/` (MVP, Stage 2, research momentum, simple steps); `docs/demo-script.md` (3-minute demo); `docs/arxiv-investigation.md` (open arXiv problem).
@@ -66,7 +72,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
   - Python pipeline: stdlib only.
 - Express 5: no `'*'` routes (path-to-regexp v8).
 - UI: touch targets ≥ 44px, honour `prefers-reduced-motion`, works at 360px width, colours teal `#0F766E` and orange `#C2410C`, font Plus Jakarta Sans.
-- Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours, majors and sectors map `fields.json`, CV keywords, similar-skill decisions in `data/team/similar_review.csv`, the CV test set `testing/cv_test_set/`) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, skills to learn) must say so.
+- Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours, majors and sectors map `fields.json`, CV keywords, similar-skill decisions in `data/team/similar_review.csv`, the CV test set `testing/cv_test_set/` incl. the finance CVs cv11-cv12, the accounting skill names `data/team/a1_new_skills.json`, the statement sheet `data/team/a1_skill_review.csv`, the sample student Farah) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, skills to learn) must say so.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 

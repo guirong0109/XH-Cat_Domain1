@@ -49,6 +49,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Step | What was done |
 |---|---|
 | CV reading with bge-m3 | Server embeds CV lines (text only, not stored) and suggests skills marked "Found by AI · estimate". Cutoff 0.72 set on 6 made-up tuning CVs. Held-out precision / recall: keyword 0.80 / 0.57, AI 1.00 / 0.07, combined 0.82 / 0.64 (**below the 0.90 target**). Open: team review of `testing/cv_test_set/`; hosting needs ~2-3 GB RAM. |
+| Stage 2 · A1 accounting roles | 5 eMASCO accounting roles, 13 new skills from eMASCO statements (names drafted by Claude, awaiting review; "Hours not estimated"), sample student Farah. Re-measured with finance CVs cv11 (tune) and cv12 (holdout): cutoff stays 0.72; held-out keyword 0.85 / 0.55, AI 1.00 / 0.05, combined 0.86 / 0.60. The AI adds no finance skill at 0.72. Open: teammate review of `a1_skill_review.csv`, `a1_new_skills.json`, Farah, cv11-cv12; Kaggle labelling job is the user's decision. |
 
 ---
 
