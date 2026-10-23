@@ -5,6 +5,20 @@ Read §0000 (crawl in progress), then §000 first. It is the current snapshot. �
 
 ---
 
+## 00000. Admin console (started 23 Oct 2026; backend DONE, UI waits for the user's OK on a mockup)
+
+The user asked for a backend where a system admin can see the behind-the-scenes log and run an eMASCO check with one click. Chosen (23 Oct): both a quick check and a full re-check, one secret token, **report only** (a check never changes saved data). Spec `docs/superpowers/specs/2026-10-23-admin-console-design.md`, plan `docs/superpowers/plans/2026-10-23-admin-console.md`.
+- **Sign-in:** off unless `ADMIN_TOKEN` is set (env var or Replit Secret; never committed). `Authorization: Bearer <token>`, constant-time compare, 5 wrong tries lock that address for 60 s. `GET /api/admin/status` is public and only says enabled or not. The token is never logged or returned.
+- **Log:** `data/logs/admin.jsonl` (git-ignored, 5 MB cap, one `.1` backup); runs of type `quick-check`, `full-check`, `trends`, `research`, `references`; keys named like token/password/secret/text are never written. The public Refresh buttons on Matches stay public (the demo uses them) and now write a run. Runs cut off by a restart show as `interrupted`.
+- **Quick check** (about 2 to 4 min): data health (files, crawl age, vectors in sync, trends, research, references, AI model), the 4 portal and ILO links, and 40 random roles re-read from eMASCO and compared field by field with `occupations.json`. **Full re-check** (about 3 h, background, resumable via `data/logs/full-check-state.json`): walks the whole code tree and reports new, gone and changed roles; a role is called gone only when the page that lists it was read; pages that cannot be read are listed, never counted as gone. One job at a time (409 if busy), cancel, 2 s between pages, robots.txt checked, no email.
+- **Routes** (all behind the token except status): `GET /api/admin/overview`, `POST /api/admin/checks/quick`, `POST /api/admin/checks/full` `{resume?}`, `POST /api/admin/checks/cancel`, `GET /api/admin/job`, `GET /api/admin/runs?limit=`, `GET /api/admin/runs/:id`, `GET /api/admin/runs/:id/report` (reports in `data/logs/reports/`).
+- **Code:** `server/adminLog.js`, `adminAuth.js`, `emascoPage.js` (Node page reader; matches the Python-built saved data on all 1,812 roles), `adminChecks.js`, `adminJobs.js`, `adminFull.js`, routes in `server/app.js`. Tests: 526 app tests pass.
+- **Real run (23 Oct, localhost, throwaway token):** quick check read 40 of 40 random roles in about 2 minutes, 0 changed, 0 unreadable, 4 of 4 links OK; only warning: no OpenAlex snapshot yet.
+- **Not built yet:** the admin screen (`#admin`). A mockup was shown on 23 Oct; build it only after the user approves it. Also not built: scheduled automatic runs, several admin accounts, and applying an update (stays manual). On Replit the log and reports are files and can be lost on a restart or redeploy.
+- **Another session** left an untracked draft plan, `docs/superpowers/plans/2026-10-23-emerging-trends-feed.md`, in this folder. It is not mine and is not committed.
+
+---
+
 ## 0000. Option B: crawl ALL of eMASCO (started 2026-10-23, IN PROGRESS)
 
 **Why:** the user gave `C:\Users\guiro\Downloads\PLAN.md` (not in the repo): an "eMASCO Job Matcher" that matches a CV or free text to every Malaysian occupation, with match %, skills the user has and skills missing. The user chose "B": cover all roles, not only our 20. Estimate was 20-28 h of work plus 3-6 h of background crawling; Claude advised against finishing it before 25 Oct and suggested a smaller version, but the user said go ahead. The user approved **Phase 1 only (crawler)**. On 23 Oct the user decided **English only; Malay will be handled later by translation** (the Malay crawl was cancelled). Every later phase needs a plan and the user's approval first.

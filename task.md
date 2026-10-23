@@ -149,6 +149,12 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
+### 4b. Admin console (23 Oct)
+- [x] Backend: token sign-in, log, quick check, full re-check, job manager, routes; real quick check passed (40 of 40 roles read, 0 changed).
+- [ ] Admin screen `#admin`: the user must approve the mockup first, then build.
+- [ ] Set `ADMIN_TOKEN` on the PC (and as a Replit Secret) before using the console.
+- [ ] Optional later: scheduled runs; first real full re-check (about 3 h).
+
 ### 5. Option B: all-eMASCO matcher (started 23 Oct; Phase 1 only approved)
 - [x] Phase 1 crawler written, tested, committed (`558a3ee`, `e36fad4`).
 - [x] **English crawl finished** (23 Oct, about 3 h): 1,706 roles in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures (pages with no skills/tasks section on eMASCO). Not committed yet.
