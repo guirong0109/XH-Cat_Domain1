@@ -5,3 +5,5 @@ __pycache__
 data/cache/
 data/emasco/raw/
 models/
+
+data/emasco/all_roles.json

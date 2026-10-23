@@ -41,13 +41,12 @@ export function createSkillSearch(skills) {
     if (words.length === 0) return []
     const wanted = Math.min(Math.max(1, Number(limit) || MAX_SEARCH_RESULTS), MAX_SEARCH_RESULTS)
     const phrase = words.join(' ')
+    // Whole words first ("excel" before "excellent"), then texts that start with the query, then shorter texts.
+    const wholeWords = words.map((word) => new RegExp(`(^|[^\\p{L}\\p{N}])${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^\\p{L}\\p{N}])`, 'u'))
+    const rank = (entry) => (wholeWords.every((pattern) => pattern.test(entry.lower)) ? 0 : 2) + (entry.lower.startsWith(phrase) ? 0 : 1)
     return entries
       .filter((entry) => words.every((word) => entry.lower.includes(word)))
-      .sort((left, right) => {
-        const leftStarts = left.lower.startsWith(phrase) ? 0 : 1
-        const rightStarts = right.lower.startsWith(phrase) ? 0 : 1
-        return leftStarts - rightStarts || left.lower.length - right.lower.length
-      })
+      .sort((left, right) => rank(left) - rank(right) || left.lower.length - right.lower.length)
       .slice(0, wanted)
       .map(({ skill }) => ({ id: skill.id, text: skill.text, roles: skill.roles.length }))
   }

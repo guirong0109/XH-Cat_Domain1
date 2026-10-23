@@ -67,6 +67,18 @@ describe('createSkillSearch', () => {
     expect(search('EXCEL').map((item) => item.id)).toEqual(['s2', 's4', 's1'])
     expect(search('excel reports').map((item) => item.id)).toEqual(['s4', 's1'])
   })
+  it('puts whole-word matches before longer words that merely contain the query', () => {
+    const find = createSkillSearch([
+      { id: 'a', text: 'Excellent attention to detail', roles: [] },
+      { id: 'b', text: 'Proficiency in the use of the Microsoft Excel application', roles: [] }
+    ])
+    expect(find('excel').map((item) => item.id)).toEqual(['b', 'a'])
+  })
+  it('treats punctuation in the query as plain text', () => {
+    const find = createSkillSearch([{ id: 'a', text: 'C++ programming (basic)', roles: [] }])
+    expect(find('c++').map((item) => item.id)).toEqual(['a'])
+    expect(find('(basic)').map((item) => item.id)).toEqual(['a'])
+  })
   it('returns the id, text and how many roles use the skill', () => {
     expect(search('welding')).toEqual([{ id: 's3', text: 'Basic welding', roles: 0 }])
   })

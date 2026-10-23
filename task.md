@@ -156,7 +156,8 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [x] Phase 2 done in JSON (user chose JSON): tolerant parser rescued 106 roles; `data/emasco/occupations.json` = 1,766 roles with skills, 46 tasks-only, 2 unparsed, 18,161 distinct skills (`pipeline/build_all_roles.py`, 197 pipeline tests pass). Not committed yet.
 - [x] Phase 3 done: 18,161 skill and 1,812 role vectors in git-ignored `data/cache/emasco/` (`node scripts/embed-emasco.mjs`, about 31 min); sanity report `testing/results/emasco_embed_check.md` (own role in top 5 for 24 of 30; Malay pair 0.758 vs median 0.598). Open for Phase 4: Replit has no model. with bge-m3 (slow on CPU; RunPod only if the user asks).
 - [x] Phase 4 engine built (`server/emascoMatch.js`, `scripts/match-cv.mjs`), cutoff 0.69 from a Claude-judged sheet. **Result: no role ranked for any of the 12 made-up CVs** (details `testing/results/emasco_match_eval.md`). Option 2 (role-vector ranking) built and improved (round 2): 40 of 60 top-5 roles in the CV's family on a draft key (35 before); still weak for cv08, cv10 and at pinpointing exact roles. Next: user decides to accept it for the demo or improve it.
-- [ ] Phase 7 UI (mockup first).
+- [x] Phase 7 stage 1 (engine + API): level filter, grade merge, skill search, packed vectors, `POST /api/emasco/match`. Details in HANDOVER 0000.
+- [ ] Phase 7 stage 2: UI screen "Explore all roles" (mockup first), pathway hand-off. Replit check on hold until the user asks.
 - [ ] Decide with the user: do new roles show "not scored" until labelled; is `all_roles*.json` committed to git.
 - Dropped for now: job-ad "emerging skills" (no allowed source), Claude API, new Python/JS dependencies from PLAN.md.
 - Risk: deadline 25 Oct 8 am MYT; the full B is probably not finishable before then.

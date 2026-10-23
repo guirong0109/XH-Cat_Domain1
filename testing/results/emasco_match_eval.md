@@ -69,6 +69,11 @@ Per CV with the built variant (cv01..cv12): 1, 5, 5, 5, 4, 4, 5, 0, 3, 0, 4, 4. 
 
 **Not measured:** agreement of real students with the roles; any key written independently of the outputs.
 
+## Stage 1 of "Explore all roles" (2026-10-23): packed vectors and real-data check
+- **Packed vectors** (`node scripts/pack-emasco-vectors.mjs`, int8 with one scale per vector): 20 MB instead of 82 MB. Float vs packed on the 12 CVs (`node scripts/eval-packed.mjs`): 59 of 60 top-5 roles shared, identical lists for 8 of 12 CVs, in-family roles 40 of 60 (float) vs 39 of 60 (packed). Loss is small; the packed files are what the server loads.
+- **Level filter and grade merge** on the real server (diploma level, 10 cards): cv11 (accounting) gets Billing Clerk, Debt Collector, Accounting Technician, Adjustment Clerk...; cv02 (electrical) gets Electrical Equipment Assembler, Electrician, Motors and Dynamos Fitter, Electrical Engineering Technician...; cv01 (data/IT) gets Information Clerk, Shopkeeper, Index Clerk (low confidence); cv08 (content/SEO) gets Designer, E-Commerce Assistant and handicraft roles (low confidence). Picked eMASCO accounting skills (bank reconciliation, payroll, tax, invoice, financial statements) give Billing Clerk, Tax Clerk, Accounting Technician, Finance Clerk at diploma level and add Billing Specialist, Accountant (+3 grades), Auditor (+1 grade) when higher levels are included.
+- The level filter hid 0 to 10 higher-level roles per CV. Not measured: whether students prefer these results.
+
 ## Round 3: task statements (2026-10-23) - no gain, code removed
 Idea: CV experience lines read like eMASCO duty statements, so match them to each role's 14,562 distinct task statements (embedded with the same model, about 10 minutes). Score per role = mean of the k CV lines closest to any task of the role. Same draft key and metric as round 2 (in-family top-5 roles of 60):
 
