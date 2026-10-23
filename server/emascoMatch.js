@@ -3,7 +3,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { cut } from '../src/lib/cvSkills.js'
-import { inputHash, skillInputs } from '../scripts/lib/emascoEmbed.js'
+import { inputHash, roleInputs, skillInputs } from '../scripts/lib/emascoEmbed.js'
 import { splitCvLines } from './cvMatch.js'
 
 // Lowest cutoff with precision >= 0.90 on the tuning CVs (testing/results/emasco_match_review.csv, judged by Claude,
@@ -11,10 +11,15 @@ import { splitCvLines } from './cvMatch.js'
 export const EMASCO_CUTOFF = 0.69
 export const MIN_MATCHED = 3
 export const TYPE_WEIGHT = { basic: 1, specific: 1.5 }
+// Ranking by role vectors (phase 4b). Not tuned: 0.50 is just below the lowest top score seen on real made-up CVs
+// (0.46-0.55); text that is not a CV scored 0.39-0.46, so there is no clean floor. See testing/results/emasco_match_eval.md.
+export const MIN_LINES = 3
+export const TOP_LINES = 3
+export const LOW_CONFIDENCE_BELOW = 0.5
 
 const skillKey = (text) => text.split(/\s+/).filter(Boolean).join(' ').toLowerCase()
 
-export function buildIndex({ occupations, skillVectors, dimension }) {
+export function buildIndex({ occupations, skillVectors, dimension, roleVectors = null, roleCodes = [] }) {
   const rowOfKey = new Map()
   occupations.skills.forEach((skill, row) => rowOfKey.set(skillKey(skill.text), row))
   const roles = occupations.roles.map((role) => ({
@@ -29,16 +34,21 @@ export function buildIndex({ occupations, skillVectors, dimension }) {
       return { row, text: skill.text, type: skill.type }
     })
   }))
-  return { dimension, skillCount: occupations.skills.length, skillVectors, roles }
+  const roleRow = new Map(roleCodes.map((code, row) => [code, row]))
+  return { dimension, skillCount: occupations.skills.length, skillVectors, roleVectors, roleRow, roles }
 }
 
 export async function loadEmascoIndex({ cacheDirectory, occupations }) {
   const rebuild = (reason) => new Error(`${reason}. Rebuild the vectors: node scripts/embed-emasco.mjs`)
   let meta
   let buffer
+  let roleBuffer
+  let roleCodes
   try {
     meta = JSON.parse(await readFile(path.join(cacheDirectory, 'meta.json'), 'utf8'))
     buffer = await readFile(path.join(cacheDirectory, 'skills.f32'))
+    roleBuffer = await readFile(path.join(cacheDirectory, 'roles.f32'))
+    roleCodes = JSON.parse(await readFile(path.join(cacheDirectory, 'roles_ids.json'), 'utf8'))
   } catch {
     throw rebuild('The eMASCO vectors are missing')
   }
@@ -47,8 +57,14 @@ export async function loadEmascoIndex({ cacheDirectory, occupations }) {
     throw rebuild('The eMASCO vectors do not match data/emasco/occupations.json')
   }
   if (buffer.length !== texts.length * meta.dimension * 4) throw rebuild('The skills vector file has the wrong size')
+  const roleTexts = roleInputs(occupations).texts
+  if (meta.rolesHash !== inputHash(roleTexts, meta.modelId) || roleCodes.length !== roleTexts.length) {
+    throw rebuild('The eMASCO role vectors do not match data/emasco/occupations.json')
+  }
+  if (roleBuffer.length !== roleTexts.length * meta.dimension * 4) throw rebuild('The roles vector file has the wrong size')
   const skillVectors = new Float32Array(new Uint8Array(buffer).buffer)
-  return buildIndex({ occupations, skillVectors, dimension: meta.dimension })
+  const roleVectors = new Float32Array(new Uint8Array(roleBuffer).buffer)
+  return buildIndex({ occupations, skillVectors, dimension: meta.dimension, roleVectors, roleCodes })
 }
 
 export function skillScores(lineVectors, index) {
@@ -127,4 +143,71 @@ export async function matchCv({ text, embedder, index, cutoff = EMASCO_CUTOFF, t
   const lineVectors = await embedder.embed(cvLines)
   const { scores, lines } = skillScores(lineVectors, index)
   return rankRoles({ scores, lines, cvLines, index, cutoff, top })
+}
+
+// Phase 4b: rank roles by how close the CV lines are to each role's whole profile vector.
+// similarity = mean of the TOP_LINES best CV lines against the role vector (0-1, not a percentage).
+export function rankByProfile({ lineVectors, cvLines, index, scores, lines, cutoff = EMASCO_CUTOFF, top = 5 }) {
+  if (!index.roleVectors) throw new Error('This index has no role vectors')
+  const { dimension, roleVectors, roleRow } = index
+  const ranked = []
+  for (const role of index.roles) {
+    const row = roleRow.get(role.code)
+    if (row === undefined) throw new Error(`Role ${role.code} has no vector`)
+    const offset = row * dimension
+    const lineScores = lineVectors.map((lineVector, lineNumber) => {
+      let sum = 0
+      for (let position = 0; position < dimension; position += 1) sum += roleVectors[offset + position] * lineVector[position]
+      return { lineNumber, similarity: sum }
+    })
+    lineScores.sort((left, right) => right.similarity - left.similarity)
+    const best = lineScores.slice(0, TOP_LINES)
+    ranked.push({
+      role,
+      similarity: best.reduce((sum, item) => sum + item.similarity, 0) / best.length,
+      bestLines: best
+    })
+  }
+  ranked.sort((left, right) => right.similarity - left.similarity || left.role.code.localeCompare(right.role.code))
+
+  const roles = ranked.slice(0, top).map(({ role, similarity, bestLines }) => {
+    let requiredWeight = 0
+    let matchedWeight = 0
+    const skills = role.entries.map((entry) => {
+      const weight = TYPE_WEIGHT[entry.type] ?? 1
+      const score = scores[entry.row]
+      const matched = score >= cutoff
+      requiredWeight += weight
+      if (matched) matchedWeight += weight
+      return {
+        text: entry.text,
+        type: entry.type,
+        score: Math.round(score * 10000) / 10000,
+        matched,
+        evidence: matched ? cut(cvLines[lines[entry.row]]) : null
+      }
+    })
+    skills.sort((left, right) => right.score - left.score)
+    return {
+      code: role.code,
+      title: role.title,
+      url: role.url,
+      qualification: role.qualification,
+      tags: role.tags,
+      similarity: Math.round(similarity * 10000) / 10000,
+      bestLines: bestLines.map((item) => ({ line: cut(cvLines[item.lineNumber]), similarity: Math.round(item.similarity * 10000) / 10000 })),
+      skillCoverage: Math.round((100 * matchedWeight) / requiredWeight),
+      skills
+    }
+  })
+  const confidence = roles[0] && roles[0].similarity >= LOW_CONFIDENCE_BELOW ? 'ok' : 'low'
+  return { status: 'ok', confidence, lineCount: cvLines.length, roles }
+}
+
+export async function matchCvByProfile({ text, embedder, index, cutoff = EMASCO_CUTOFF, top = 5 }) {
+  const cvLines = splitCvLines(text)
+  if (cvLines.length < MIN_LINES) return { status: 'not-enough-skills', lineCount: cvLines.length, roles: [] }
+  const lineVectors = await embedder.embed(cvLines)
+  const { scores, lines } = skillScores(lineVectors, index)
+  return rankByProfile({ lineVectors, cvLines, index, scores, lines, cutoff, top })
 }

@@ -9,9 +9,12 @@ import {
   loadEmascoIndex,
   skillScores,
   rankRoles,
-  matchCv
+  rankByProfile,
+  matchCv,
+  matchCvByProfile,
+  LOW_CONFIDENCE_BELOW
 } from '../server/emascoMatch.js'
-import { inputHash, packVectors } from '../scripts/lib/emascoEmbed.js'
+import { inputHash, packVectors, roleInputs } from '../scripts/lib/emascoEmbed.js'
 import { MODEL_ID } from '../server/embed.js'
 
 // Four skills, one unit vector each (dimension 4).
@@ -163,9 +166,18 @@ describe('loadEmascoIndex', () => {
 
   async function writeCache(texts) {
     await writeFile(path.join(directory, 'skills.f32'), packVectors([unit(0), unit(1), unit(2), unit(3)]))
+    const roleCodes = [...occupations.roles, ...occupations.tasksOnly].map((item) => item.code)
+    await writeFile(path.join(directory, 'roles.f32'), packVectors(roleCodes.map((code, row) => unit(row % 4))))
+    await writeFile(path.join(directory, 'roles_ids.json'), JSON.stringify(roleCodes))
     await writeFile(
       path.join(directory, 'meta.json'),
-      JSON.stringify({ modelId: MODEL_ID, dimension: 4, skillsHash: inputHash(texts, MODEL_ID), skillCount: 4 })
+      JSON.stringify({
+        modelId: MODEL_ID,
+        dimension: 4,
+        skillsHash: inputHash(texts, MODEL_ID),
+        rolesHash: inputHash(roleInputs(occupations).texts, MODEL_ID),
+        skillCount: 4
+      })
     )
   }
 
@@ -176,6 +188,12 @@ describe('loadEmascoIndex', () => {
     expect(loaded.roles).toHaveLength(5)
   })
 
+  it('refuses role vectors that do not match the occupations file', async () => {
+    await writeCache(skillList.map((skill) => skill.text))
+    const changed = { ...occupations, roles: [{ ...occupations.roles[0], title: 'Changed title' }, ...occupations.roles.slice(1)] }
+    await expect(loadEmascoIndex({ cacheDirectory: directory, occupations: changed })).rejects.toThrow(/Rebuild/)
+  })
+
   it('refuses a missing cache with a rebuild message', async () => {
     await expect(loadEmascoIndex({ cacheDirectory: path.join(directory, 'nope'), occupations })).rejects.toThrow(/Rebuild/)
   })
@@ -183,6 +201,72 @@ describe('loadEmascoIndex', () => {
   it('refuses a cache built from different skill texts', async () => {
     await writeCache(['x', 'y', 'z', 'w'])
     await expect(loadEmascoIndex({ cacheDirectory: directory, occupations })).rejects.toThrow(/Rebuild/)
+  })
+})
+
+describe('rankByProfile and matchCvByProfile', () => {
+  const half = Math.SQRT1_2
+  const roleCodes = ['1111-01', '1111-02', '2222-01', '3333-01', '4444-01', '9999-01']
+  const roleVectors = Float32Array.from([unit(0), unit(1), unit(2), unit(3), [half, half, 0, 0], unit(0)].flat())
+  const profileIndex = buildIndex({ occupations, skillVectors, dimension: 4, roleVectors, roleCodes })
+  const run = (vectors, lines = ['a', 'b', 'c'], extra = {}) => {
+    const { scores, lines: winning } = skillScores(vectors, profileIndex)
+    return rankByProfile({ lineVectors: vectors, cvLines: lines, index: profileIndex, scores, lines: winning, cutoff: 0.9, ...extra })
+  }
+
+  it('ranks by the mean of the 3 best lines against the role vector, ties by code', () => {
+    const result = run([unit(0), unit(0), unit(0)])
+    expect(codes(result)).toEqual(['1111-01', '4444-01', '1111-02', '2222-01', '3333-01'])
+    expect(result.roles[0].similarity).toBe(1)
+    expect(result.roles[1].similarity).toBeCloseTo(half, 4)
+    expect(result.roles[0].bestLines).toHaveLength(3)
+  })
+
+  it('uses only the best 3 of many lines', () => {
+    const result = run([unit(0), unit(0), unit(0), unit(3), unit(3)], ['a', 'b', 'c', 'd', 'e'])
+    expect(result.roles[0]).toMatchObject({ code: '1111-01', similarity: 1 })
+  })
+
+  it('never returns tasks-only roles', () => {
+    expect(codes(run([unit(0), unit(0), unit(0)], undefined, { top: 10 }))).not.toContain('9999-01')
+  })
+
+  it('lists the role skills closest first with a matched flag, evidence and the strict coverage', () => {
+    const result = run([unit(0), unit(1), unit(2)], ['I know A', 'I know B', 'I know C'], { top: 10 })
+    const role = result.roles.find((item) => item.code === '2222-01')
+    expect(role.skills.map((item) => [item.text, item.matched])).toEqual([
+      ['Skill A', true], ['Skill B', true], ['Skill C', true], ['Skill D', false]
+    ])
+    expect(role.skills[0].evidence).toBe('I know A')
+    expect(role.skills[3].evidence).toBeNull()
+    expect(role.skillCoverage).toBe(70)
+  })
+
+  it('marks the result low confidence when the best similarity is under the limit', () => {
+    expect(LOW_CONFIDENCE_BELOW).toBe(0.5)
+    const faint = [0.3, 0.3, 0.3, 0.3]
+    expect(run([faint, faint, faint]).confidence).toBe('low')
+    expect(run([unit(0), unit(0), unit(0)]).confidence).toBe('ok')
+  })
+
+  it('throws when the index has no role vectors', () => {
+    const { scores, lines } = skillScores(lineVectors, index)
+    expect(() => rankByProfile({ lineVectors, cvLines, index, scores, lines })).toThrow(/role vectors/)
+  })
+
+  it('asks for more lines when there are fewer than 3, without calling the embedder', async () => {
+    let calls = 0
+    const embedder = { embed: async () => { calls += 1; return [] } }
+    const result = await matchCvByProfile({ text: 'digital transformation\nSQL', embedder, index: profileIndex })
+    expect(result).toMatchObject({ status: 'not-enough-skills', lineCount: 2, roles: [] })
+    expect(calls).toBe(0)
+  })
+
+  it('embeds the lines and ranks when there are 3 or more', async () => {
+    const embedder = { embed: async (lines) => lines.map(() => unit(0)) }
+    const result = await matchCvByProfile({ text: 'one skill\ntwo skill\nthree skill', embedder, index: profileIndex, cutoff: 0.9 })
+    expect(result.status).toBe('ok')
+    expect(codes(result)[0]).toBe('1111-01')
   })
 })
 
