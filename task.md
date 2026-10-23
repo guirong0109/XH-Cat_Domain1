@@ -150,9 +150,9 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
 ### 4b. Admin console (23 Oct)
-- [x] Backend: token sign-in, log, quick check, full re-check, job manager, routes; real quick check passed (40 of 40 roles read, 0 changed).
-- [ ] Admin screen `#admin`: the user must approve the mockup first, then build.
-- [ ] Set `ADMIN_TOKEN` on the PC (and as a Replit Secret) before using the console.
+- [x] Backend: log, this-PC-only access (no token, per the user), quick check, full re-check, job manager, routes; real quick check passed (40 of 40 roles read, 0 changed).
+- [x] Admin page: plain HTML at `http://localhost:3000/admin` (this PC only). Checked in the browser.
+- [ ] User's own click-through; first real full re-check (about 3 h).
 - [ ] Optional later: scheduled runs; first real full re-check (about 3 h).
 
 ### 5. Option B: all-eMASCO matcher (started 23 Oct; Phase 1 only approved)

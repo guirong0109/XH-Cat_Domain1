@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin console · FutureReady MY</title>
+<style>
+  :root { --teal:#0F766E; --orange:#C2410C; --ink:#0F172A; --muted:#475569; --line:#E2E8F0; --bg:#F6F7F9; --card:#fff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif; font-size:15px; line-height:1.5; }
+  main { max-width:1000px; margin:0 auto; padding:20px 16px 64px; display:flex; flex-direction:column; gap:16px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:0 0 8px; }
+  h3 { font-size:15px; margin:12px 0 4px; }
+  p { margin:0; }
+  .muted { color:var(--muted); font-size:13px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; }
+  .note { background:#F0FDFA; border:1px solid #99F6E4; border-radius:12px; padding:10px 14px; font-size:14px; }
+  .warnbox { background:#FFF7ED; border:1px solid #FED7AA; color:#9A3412; border-radius:12px; padding:10px 14px; font-size:14px; }
+  button { font:inherit; min-height:44px; padding:0 16px; border-radius:10px; border:1px solid var(--teal); background:#fff; color:var(--teal); font-weight:700; cursor:pointer; }
+  button.primary { background:var(--teal); color:#fff; }
+  button.danger { border-color:var(--orange); color:var(--orange); }
+  button:focus-visible, a:focus-visible, tr[tabindex]:focus-visible { outline:3px solid var(--teal); outline-offset:2px; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .spread { justify-content:space-between; }
+  .pill { display:inline-block; font-size:12px; font-weight:700; padding:1px 9px; border-radius:999px; border:1px solid var(--line); background:#F1F5F9; color:var(--muted); white-space:nowrap; }
+  .pill.ok { background:#ECFDF5; border-color:#A7F3D0; color:#065F46; }
+  .pill.warn { background:#FFF7ED; border-color:#FED7AA; color:#9A3412; }
+  .pill.bad { background:#FEF2F2; border-color:#FECACA; color:#991B1B; }
+  .pill.run { background:#F0FDFA; border-color:#99F6E4; color:#115E59; }
+  .health { display:grid; grid-template-columns:minmax(0,190px) 64px minmax(0,1fr); gap:8px; padding:8px 0; border-top:1px solid var(--line); align-items:start; font-size:14px; }
+  .health:first-of-type { border-top:0; }
+  .bar { height:10px; border-radius:5px; background:#E2E8F0; overflow:hidden; margin:8px 0 4px; }
+  .bar > div { height:100%; width:0; background:var(--teal); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-size:12px; color:var(--muted); padding:6px 6px; border-bottom:1px solid var(--line); }
+  td { padding:10px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr[tabindex] { cursor:pointer; }
+  tr.selected td { background:#F0FDFA; }
+  .events { margin:0; padding:0; list-style:none; font-family:ui-monospace, "Cascadia Mono", Consolas, monospace; font-size:13px; }
+  .events li { display:grid; grid-template-columns:70px 52px minmax(0,1fr); gap:8px; padding:5px 0; border-top:1px solid var(--line); overflow-wrap:anywhere; }
+  .events li:first-child { border-top:0; }
+  .seg { display:flex; flex-wrap:wrap; gap:6px; }
+  .seg button { font-weight:600; }
+  .seg button[aria-pressed="true"] { background:var(--teal); color:#fff; }
+  dl { display:grid; grid-template-columns:max-content 1fr; gap:2px 14px; margin:8px 0 0; font-size:14px; }
+  dt { color:var(--muted); }
+  dd { margin:0; }
+  ul.plain { margin:4px 0 0; padding-left:18px; font-size:14px; }
+  a { color:var(--teal); }
+  @media (max-width:560px) { .health { grid-template-columns:1fr; gap:2px; } th:nth-child(3), td:nth-child(3) { display:none; } }
+  @media (prefers-reduced-motion: no-preference) { .bar > div { transition:width .3s ease; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="row spread">
+    <div>
+      <h1>Admin console</h1>
+      <p class="muted">FutureReady MY · what the system does behind the scenes</p>
+    </div>
+    <button type="button" id="refresh">Refresh</button>
+  </div>
+
+  <p class="note">This page works only on this PC, opened at <strong>localhost</strong>. A check only reads eMASCO and reports. It never changes your saved roles, skills or vectors.</p>
+  <div id="problem" class="warnbox" role="alert" hidden></div>
+
+  <section class="card" aria-labelledby="h-health">
+    <h2 id="h-health">System health</h2>
+    <div id="health"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-run">
+    <h2 id="h-run">Run a check</h2>
+    <div class="row">
+      <button type="button" class="primary" id="quick">Run quick check (about 4 minutes)</button>
+      <button type="button" id="full">Run full re-check (about 3 hours)</button>
+      <button type="button" id="resume" hidden>Resume full re-check</button>
+      <button type="button" class="danger" id="cancel" hidden>Cancel the check</button>
+    </div>
+    <p class="muted" style="margin-top:8px">Quick: data health, the portal links, and 40 random roles re-read from eMASCO. Full: every eMASCO role, to find new, removed and changed roles.</p>
+    <div id="job" aria-live="polite" style="margin-top:8px"></div>
+    <div class="bar" role="progressbar" aria-label="Check progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="barBox" hidden><div id="bar"></div></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-runs">
+    <h2 id="h-runs">Recent runs</h2>
+    <div id="runs"><p class="muted">Loading…</p></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-log">
+    <div class="row spread">
+      <h2 id="h-log" style="margin:0">Log of the selected run</h2>
+      <a id="download" href="#" hidden>Download report (JSON)</a>
+    </div>
+    <div id="runInfo" class="muted" style="margin-top:6px">Pick a run above to see its log.</div>
+    <div class="seg" role="group" aria-label="Show events" style="margin-top:10px" id="filters" hidden>
+      <button type="button" data-level="all" aria-pressed="true">All</button>
+      <button type="button" data-level="warn" aria-pressed="false">Warnings and errors</button>
+      <button type="button" data-level="error" aria-pressed="false">Errors</button>
+    </div>
+    <ul class="events" id="events" style="margin-top:8px"></ul>
+    <div id="findings"></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var TYPE = { 'quick-check': 'Quick check', 'full-check': 'Full re-check', trends: 'Trends refresh', research: 'AI research refresh', references: 'Reference check' };
+  var STATUS = { ok: ['OK', 'ok'], partial: ['Partial', 'warn'], failed: ['Failed', 'bad'], cancelled: ['Cancelled', ''], interrupted: ['Interrupted', 'warn'], running: ['Running', 'run'] };
+  var HEALTH = { ok: ['OK', 'ok'], warn: ['Warning', 'warn'], fail: ['Problem', 'bad'] };
+  var state = { selected: null, events: [], level: 'all', timer: null, running: false };
+
+  function $(id) { return document.getElementById(id); }
+  // Text is always inserted with textContent: log lines can contain text copied from the eMASCO website.
+  function h(tag, props) {
+    var node = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (key) {
+      if (key === 'text') node.textContent = props[key];
+      else if (key === 'class') node.className = props[key];
+      else node.setAttribute(key, props[key]);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var child = arguments[i];
+      if (child != null) node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
+    }
+    return node;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+  function pill(pair) { return h('span', { class: 'pill ' + (pair[1] || ''), text: pair[0] }); }
+  function when(iso) {
+    if (!iso) return '';
+    var date = new Date(iso);
+    return isNaN(date) ? '' : date.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+  function timeOnly(iso) {
+    var date = new Date(iso);
+    return isNaN(date) ? '' : date.toLocaleTimeString('en-GB');
+  }
+  function problem(message) {
+    var box = $('problem');
+    box.hidden = !message;
+    box.textContent = message || '';
+  }
+
+  function api(path, method) {
+    var options = { method: method || 'GET', headers: {}, cache: 'no-store' };
+    if (options.method === 'POST') { options.headers['Content-Type'] = 'application/json'; options.body = '{}'; }
+    return fetch('/api/admin' + path, options).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (body) {
+        if (response.status === 403) throw new Error('This page only works when it is opened directly at http://localhost:3000/admin on the same PC.');
+        return { status: response.status, ok: response.ok, body: body };
+      });
+    });
+  }
+  function fail(error) { problem(error && error.message ? error.message : 'Could not reach the server.'); }
+
+  function renderHealth(items) {
+    var box = clear($('health'));
+    items.forEach(function (item) {
+      box.appendChild(h('div', { class: 'health' }, h('span', { text: item.name }), pill(HEALTH[item.status] || ['?', '']), h('span', { class: 'muted', text: item.detail })));
+    });
+  }
+
+  function summaryText(run) {
+    var s = run.summary;
+    if (!s) return run.status === 'running' ? 'Still running…' : '';
+    if (s.message) return s.message;
+    var parts = [];
+    if (s.rolesRead != null) parts.push(s.rolesRead + ' read');
+    if (s.pagesRead != null) parts.push(s.pagesRead + ' pages read');
+    if (s.added) parts.push(s.added + ' new');
+    if (s.removed) parts.push(s.removed + ' gone');
+    if (s.changed) parts.push(s.changed + ' changed');
+    if (s.unreadable) parts.push(s.unreadable + ' unreadable');
+    if (s.linksFailed) parts.push(s.linksFailed + ' link problems');
+    return parts.join(', ');
+  }
+
+  function renderRuns(runs) {
+    var box = clear($('runs'));
+    if (!runs.length) { box.appendChild(h('p', { class: 'muted', text: 'Nothing has run yet. Press a check button above.' })); return; }
+    var head = h('tr', {}, h('th', { scope: 'col', text: 'Started' }), h('th', { scope: 'col', text: 'Type' }), h('th', { scope: 'col', text: 'Result' }));
+    var table = h('table', {}, h('thead', {}, head));
+    var body = h('tbody');
+    runs.forEach(function (run) {
+      var row = h('tr', { tabindex: '0', 'data-id': run.id, 'aria-label': (TYPE[run.type] || run.type) + ' at ' + when(run.startedAt) },
+        h('td', { text: when(run.startedAt) }),
+        h('td', { text: TYPE[run.type] || run.type }),
+        h('td', {}, pill(STATUS[run.status] || [run.status, '']), h('div', { class: 'muted', text: summaryText(run) })));
+      if (run.id === state.selected) row.className = 'selected';
+      var open = function () { selectRun(run.id); };
+      row.addEventListener('click', open);
+      row.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
+      body.appendChild(row);
+    });
+    table.appendChild(body);
+    box.appendChild(table);
+  }
+
+  function renderEvents() {
+    var list = clear($('events'));
+    var rank = { info: 0, warn: 1, error: 2 };
+    var min = state.level === 'all' ? 0 : state.level === 'warn' ? 1 : 2;
+    var shown = state.events.filter(function (event) { return (rank[event.level] || 0) >= min; });
+    if (!shown.length) list.appendChild(h('li', {}, h('span'), h('span'), h('span', { class: 'muted', text: 'No events to show.' })));
+    shown.forEach(function (event) {
+      var kind = event.level === 'error' ? 'bad' : event.level === 'warn' ? 'warn' : '';
+      list.appendChild(h('li', {}, h('span', { class: 'muted', text: timeOnly(event.time) }), h('span', { class: 'pill ' + kind, text: event.level }), h('span', { text: event.message })));
+    });
+  }
+
+  var FIELD_NAMES = { sampleSize: 'Roles sampled', rolesRead: 'Roles read', pagesRead: 'Pages read', siteRoles: 'Roles on eMASCO', savedRoles: 'Roles we saved', added: 'New on eMASCO', removed: 'Gone from eMASCO', changed: 'Changed', unreadable: 'Unreadable', treeUnreadable: 'Unreadable list pages', unverified: 'Not verified', linksFailed: 'Link problems', healthWarnings: 'Health warnings', healthFailures: 'Health problems', message: 'Message', resumable: 'Can be resumed' };
+
+  function codeLink(code) {
+    if (!/^\d{4}(-\d{2})?$/.test(String(code))) return h('span', { text: String(code) });
+    return h('a', { href: 'https://emasco.mohr.gov.my/masco/' + code + '?lang=en', target: '_blank', rel: 'noopener noreferrer', text: code });
+  }
+  function findingList(title, items, describe) {
+    if (!items || !items.length) return null;
+    var list = h('ul', { class: 'plain' });
+    items.slice(0, 60).forEach(function (item) { list.appendChild(describe(item)); });
+    if (items.length > 60) list.appendChild(h('li', { class: 'muted', text: 'And ' + (items.length - 60) + ' more in the downloaded report.' }));
+    return h('div', {}, h('h3', { text: title + ' (' + items.length + ')' }), list);
+  }
+  function renderFindings(report) {
+    var box = clear($('findings'));
+    if (!report) return;
+    var sample = report.sample || {};
+    var parts = [
+      findingList('New on eMASCO', report.addedRoles, function (item) { return h('li', {}, codeLink(item.code), ' ' + (item.title || '')); }),
+      findingList('Gone from eMASCO', report.removedRoles, function (item) { return h('li', {}, codeLink(item.code), ' ' + (item.title || '')); }),
+      findingList('Changed on eMASCO', report.changedRoles || sample.changed, function (item) { return h('li', {}, codeLink(item.code), ' ' + (item.title || '') + ' — ' + (item.fields || []).join(', ')); }),
+      findingList('Could not be read', report.unreadableRoles || sample.unreadable, function (item) { return h('li', {}, codeLink(item.code), ' ' + (item.error || '')); }),
+      findingList('Links', (report.links || []).filter(function (link) { return !link.ok; }), function (item) { return h('li', { text: item.url + ' did not work' }); })
+    ];
+    var any = false;
+    parts.forEach(function (part) { if (part) { box.appendChild(part); any = true; } });
+    if (any) box.insertBefore(h('p', { class: 'muted', style: 'margin-top:12px', text: 'A change is only a flag for the team. Nothing was changed in our saved data.' }), box.firstChild);
+  }
+
+  function selectRun(id) {
+    state.selected = id;
+    return api('/runs/' + encodeURIComponent(id)).then(function (result) {
+      if (!result.ok) { problem('That run was not found.'); return; }
+      problem('');
+      var run = result.body.run;
+      state.events = result.body.events || [];
+      var info = clear($('runInfo'));
+      info.appendChild(h('div', {}, h('strong', { text: TYPE[run.type] || run.type }), ' · started ' + when(run.startedAt) + (run.finishedAt ? ', finished ' + when(run.finishedAt) : ''), ' ', pill(STATUS[run.status] || [run.status, ''])));
+      if (run.summary) {
+        var list = h('dl');
+        Object.keys(run.summary).forEach(function (key) {
+          var value = run.summary[key];
+          if (value === null || value === undefined || value === 0 || value === false) return;
+          list.appendChild(h('dt', { text: FIELD_NAMES[key] || key }));
+          list.appendChild(h('dd', { text: String(value) }));
+        });
+        info.appendChild(list);
+      }
+      $('filters').hidden = false;
+      renderEvents();
+      var link = $('download');
+      link.hidden = true;
+      clear($('findings'));
+      document.querySelectorAll('#runs tr[data-id]').forEach(function (row) { row.className = row.getAttribute('data-id') === id ? 'selected' : ''; });
+      return api('/runs/' + encodeURIComponent(id) + '/report').then(function (report) {
+        if (state.selected !== id || !report.ok) return;
+        link.href = '/api/admin/runs/' + encodeURIComponent(id) + '/report';
+        link.hidden = false;
+        renderFindings(report.body);
+      });
+    }).catch(fail);
+  }
+
+  function renderJob(job) {
+    state.running = Boolean(job);
+    $('cancel').hidden = !job;
+    var bar = $('barBox');
+    bar.hidden = !job;
+    if (!job) { clear($('job')); return; }
+    var p = job.progress || {};
+    var percent = p.total ? Math.min(100, Math.round((100 * p.done) / p.total)) : 0;
+    $('bar').style.width = percent + '%';
+    bar.setAttribute('aria-valuenow', String(percent));
+    $('job').textContent = (job.state === 'cancelling' ? 'Cancelling… ' : 'Running: ' + (TYPE[job.type] || job.type) + '. ') + (p.message || 'Starting…');
+  }
+
+  function loadOverview() {
+    return api('/overview').then(function (result) {
+      if (!result.ok) { problem('Could not load the overview.'); return; }
+      problem('');
+      renderHealth(result.body.health || []);
+      renderRuns(result.body.runs || []);
+      renderJob(result.body.job);
+      $('resume').hidden = !result.body.resumable;
+      if (result.body.job) startPolling();
+      if (!state.selected && result.body.runs && result.body.runs[0]) selectRun(result.body.runs[0].id);
+    }).catch(fail);
+  }
+
+  function startPolling() {
+    if (state.timer) return;
+    state.timer = setInterval(function () {
+      api('/job').then(function (result) {
+        renderJob(result.body.job);
+        if (!result.body.job) {
+          clearInterval(state.timer);
+          state.timer = null;
+          var keep = state.selected;
+          state.selected = null;
+          loadOverview().then(function () { if (keep) selectRun(keep); });
+        }
+      }).catch(fail);
+    }, 2000);
+  }
+
+  function start(path, label) {
+    problem('');
+    api(path, 'POST').then(function (result) {
+      if (result.status === 409) { problem('A check is already running. Wait for it to finish, or cancel it.'); return; }
+      if (result.status === 503) { problem('The eMASCO data file is missing on this PC, so a check cannot run.'); return; }
+      if (!result.ok) { problem('Could not start the ' + label + '.'); return; }
+      state.selected = result.body.runId;
+      return loadOverview().then(function () { selectRun(result.body.runId); });
+    }).catch(fail);
+  }
+
+  $('refresh').addEventListener('click', function () { var keep = state.selected; state.selected = null; loadOverview().then(function () { if (keep) selectRun(keep); }); });
+  $('quick').addEventListener('click', function () { start('/checks/quick', 'quick check'); });
+  $('full').addEventListener('click', function () {
+    if (window.confirm('A full re-check reads about 2,500 pages and takes about 3 hours. Keep this server running until it ends. Start it?')) start('/checks/full', 'full re-check');
+  });
+  $('resume').addEventListener('click', function () {
+    problem('');
+    fetch('/api/admin/checks/full', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ resume: true }) })
+      .then(function (response) {
+        if (response.status === 409) { problem('A check is already running.'); return; }
+        if (!response.ok) { problem('Could not resume the full re-check.'); return; }
+        return loadOverview();
+      }).catch(fail);
+  });
+  $('cancel').addEventListener('click', function () { api('/checks/cancel', 'POST').then(loadOverview).catch(fail); });
+  $('filters').addEventListener('click', function (event) {
+    var level = event.target.getAttribute && event.target.getAttribute('data-level');
+    if (!level) return;
+    state.level = level;
+    Array.prototype.forEach.call($('filters').querySelectorAll('button'), function (button) { button.setAttribute('aria-pressed', String(button.getAttribute('data-level') === level)); });
+    renderEvents();
+  });
+
+  loadOverview();
+})();
+</script>
+</body>
+</html>

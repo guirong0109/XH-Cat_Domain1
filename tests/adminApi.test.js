@@ -5,7 +5,6 @@ import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { createApp } from '../server/app.js'
 
-const TOKEN = 'test-token-123'
 const wageRows = JSON.parse(readFileSync(new URL('./fixtures/wages_occupation.json', import.meta.url), 'utf8'))
 const youthRows = JSON.parse(readFileSync(new URL('./fixtures/lfs_month_youth.json', import.meta.url), 'utf8'))
 
@@ -48,14 +47,13 @@ function siteFetch(url) {
   return Promise.resolve(reply(200))
 }
 
-async function start({ token = TOKEN } = {}) {
-  server = createApp({ dataDir: directory, fetchImpl: siteFetch, adminToken: token, adminSleep: async () => {}, adminSampleSize: 3 }).listen(0)
+async function start() {
+  server = createApp({ dataDir: directory, fetchImpl: siteFetch, adminSleep: async () => {}, adminSampleSize: 3 }).listen(0)
   await new Promise((resolve) => server.once('listening', resolve))
   return `http://127.0.0.1:${server.address().port}`
 }
-const auth = { Authorization: `Bearer ${TOKEN}` }
-const get = (base, route, headers = auth) => fetch(`${base}/api/admin${route}`, { headers })
-const post = (base, route, body = {}, headers = auth) =>
+const get = (base, route, headers = {}) => fetch(`${base}/api/admin${route}`, { headers })
+const post = (base, route, body = {}, headers = {}) =>
   fetch(`${base}/api/admin${route}`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) })
 
 async function untilIdle(base) {
@@ -81,36 +79,45 @@ afterEach(async () => {
   await rm(directory, { recursive: true, force: true })
 })
 
-describe('sign-in', () => {
-  it('status says whether the console is on, without a token', async () => {
-    expect(await (await fetch(`${await start()}/api/admin/status`)).json()).toEqual({ enabled: true })
+describe('access: this PC only, no password', () => {
+  it('serves the admin page to a browser opened at localhost, without caching it and without any token', async () => {
+    const response = await fetch(`${await start()}/admin`)
+    expect(response.status).toBe(200)
+    expect(response.headers.get('content-type')).toMatch(/text\/html/)
+    expect(response.headers.get('cache-control')).toBe('no-store')
+    const page = await response.text()
+    expect(page).toContain('Admin console')
+    expect(page).not.toMatch(/ADMIN_TOKEN|Bearer|password/i)
   })
-  it('is off, and every admin route answers 404, when no token is set', async () => {
-    const base = await start({ token: '' })
-    expect(await (await fetch(`${base}/api/admin/status`)).json()).toEqual({ enabled: false })
-    expect((await get(base, '/overview')).status).toBe(404)
-    expect((await post(base, '/checks/quick')).status).toBe(404)
-  })
-  it('answers 401 without the token or with a wrong one, for every protected route', async () => {
-    const routes = [
-      ['get', '/overview'], ['get', '/job'], ['get', '/runs'], ['get', '/runs/20261023060000-abcd'], ['get', '/runs/20261023060000-abcd/report'],
-      ['post', '/checks/quick'], ['post', '/checks/full'], ['post', '/checks/cancel']
-    ]
-    for (const [method, route] of routes) {
-      // A fresh app for each route, so the wrong tries of the earlier routes do not lock this address.
-      if (server) await new Promise((resolve) => server.close(resolve))
-      const base = await start()
-      const send = (headers) => (method === 'get' ? get(base, route, headers) : post(base, route, {}, headers))
-      expect((await send({})).status).toBe(401)
-      expect((await send({ Authorization: 'Bearer nope' })).status).toBe(401)
+
+  it('refuses the page and every admin route when the request came through a tunnel or proxy', async () => {
+    const base = await start()
+    for (const via of [{ 'X-Forwarded-For': '203.0.113.9' }, { 'CF-Connecting-IP': '203.0.113.9' }, { 'X-Real-IP': '203.0.113.9' }]) {
+      const page = await fetch(`${base}/admin`, { headers: via })
+      expect(page.status).toBe(403)
+      expect(await page.json()).toEqual({ error: 'local-only' })
+      for (const route of ['/overview', '/job', '/runs', '/runs/20261023060000-abcd']) expect((await get(base, route, via)).status).toBe(403)
+      for (const route of ['/checks/quick', '/checks/full', '/checks/cancel']) expect((await post(base, route, {}, via)).status).toBe(403)
     }
   })
-  it('locks out after five wrong tries and never shows the token', async () => {
+
+  it('does not start a check when the request came through a tunnel', async () => {
     const base = await start()
-    for (let attempt = 0; attempt < 5; attempt += 1) await get(base, '/overview', { Authorization: 'Bearer nope' })
-    const locked = await get(base, '/overview')
-    expect(locked.status).toBe(429)
-    expect(JSON.stringify(await locked.json())).not.toContain(TOKEN)
+    await post(base, '/checks/quick', {}, { 'X-Forwarded-For': '203.0.113.9' })
+    expect((await (await get(base, '/runs')).json()).runs).toEqual([])
+  })
+
+  it('refuses a post that is not JSON, so another website cannot start a check by posting a form', async () => {
+    const base = await start()
+    for (const route of ['/checks/quick', '/checks/full', '/checks/cancel']) {
+      const response = await fetch(`${base}/api/admin${route}`, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: 'x' })
+      expect(response.status).toBe(415)
+    }
+    expect((await (await get(base, '/runs')).json()).runs).toEqual([])
+  })
+
+  it('has no sign-in route any more', async () => {
+    expect((await fetch(`${await start()}/api/admin/status`)).status).toBe(404)
   })
 })
 
@@ -164,7 +171,6 @@ describe('quick check', () => {
     const body = await (await get(base, '/overview')).json()
     expect(body.health.map((check) => check.name)).toContain('eMASCO data')
     expect(body).toMatchObject({ job: null, runs: [], resumable: false })
-    expect(JSON.stringify(body)).not.toContain(TOKEN)
   })
 })
 
@@ -188,7 +194,7 @@ describe('log access', () => {
 })
 
 describe('data refreshes are logged', () => {
-  it('the public trends refresh writes a run, and the button still works without a token', async () => {
+  it('the public trends refresh writes a run, and the button still works for everyone', async () => {
     const base = await start()
     const response = await fetch(`${base}/api/refresh-trends`, { method: 'POST' })
     expect(response.status).toBe(200)

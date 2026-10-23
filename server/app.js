@@ -12,7 +12,7 @@ import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
 import { createSkillSearch } from './emascoRoles.js'
 import { createLogStore } from './adminLog.js'
-import { createAdminAuth } from './adminAuth.js'
+import { jsonOnly, localOnly } from './adminAccess.js'
 import { createJobManager } from './adminJobs.js'
 import { healthChecks, runQuickCheck } from './adminChecks.js'
 import { runFullCheck } from './adminFull.js'
@@ -36,6 +36,7 @@ async function readOptionalJson(filePath) {
   }
 }
 
+const adminPage = fileURLToPath(new URL('./adminPage.html', import.meta.url))
 const RUN_ID = /^\d{14}-[0-9a-f]{4}$/
 
 export function createApp({
@@ -44,7 +45,6 @@ export function createApp({
   embedder = null,
   cvTimeoutMs = 15000,
   emascoLoader = null,
-  adminToken = null,
   logDir = path.join(dataDir, 'logs'),
   adminSleep = undefined,
   adminSampleSize = 40,
@@ -184,9 +184,9 @@ export function createApp({
     }
   })
 
-  // Admin console: token sign-in, the log, and the checks. A check only reports; it never changes saved data.
+  // Admin console: a plain HTML page at /admin plus /api/admin/*. No password: it only answers a browser opened
+  // directly at localhost on this PC (see adminAccess.js). A check only reports; it never changes saved data.
   // Spec: docs/superpowers/specs/2026-10-23-admin-console-design.md
-  const adminAuth = createAdminAuth({ token: adminToken })
   const stateFile = path.join(logDir, 'full-check-state.json')
   const jobs = createJobManager({
     logStore,
@@ -196,10 +196,14 @@ export function createApp({
     },
   })
 
-  app.get('/api/admin/status', (request, response) => response.json({ enabled: adminAuth.enabled }))
+  app.get('/admin', localOnly, (request, response) => {
+    response.set('Cache-Control', 'no-store')
+    response.sendFile(adminPage)
+  })
 
   const admin = express.Router()
-  admin.use(adminAuth.middleware)
+  admin.use(localOnly)
+  admin.use(jsonOnly)
   admin.use(express.json({ limit: '2kb' }))
 
   const embedderReady = () => Boolean(embedder?.isReady?.())

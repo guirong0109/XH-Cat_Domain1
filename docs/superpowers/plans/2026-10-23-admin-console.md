@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans. Steps use checkbox (`- [ ]`) syntax.
 
-**Goal:** Log store, token sign-in, quick and full eMASCO checks, API and an admin screen.
+**Goal:** Log store, this-PC-only access, quick and full eMASCO checks, API and a plain HTML admin page. (Changed 23 Oct: the token in Task 2 was replaced by `server/adminAccess.js`, and the screen is `server/adminPage.html`.)
 
 **Architecture:** Small server modules with injected fetch, clock and sleep, so every check is tested without the network: `adminLog`, `adminAuth`, `emascoPage`, `adminChecks`, `adminJobs`, `adminFull`; routes in `server/app.js`; screen `src/screens/Admin.jsx` after a mockup.
 
@@ -11,13 +11,13 @@
 **Spec:** `docs/superpowers/specs/2026-10-23-admin-console-design.md`
 
 ## Global Constraints
-- No new dependency. The token is only read from `process.env.ADMIN_TOKEN`; never logged, never in a response, never committed.
+- No new dependency. No password or token (user decision, 23 Oct): the page and API answer only a browser opened directly at localhost on this PC.
 - A check never writes `occupations.json`, `roles.json`, vectors or any saved data. It writes only under `data/logs/`.
 - Express 5: no `'*'` routes. 2 s between eMASCO requests. CV text never logged.
 - UI: touch targets >= 44 px, `prefers-reduced-motion`, 360 px width, teal `#0F766E` / orange `#C2410C`, Plus Jakarta Sans. Mockup first.
 
 ## Review Focus
-1. Missing or empty `ADMIN_TOKEN`: console answers off, never accepts an empty bearer.
+1. A request through a tunnel or proxy, from another computer, with another Host name, or a non-JSON POST (another website's form): refused (403 or 415), no check started.
 2. Two clicks at once: second answers 409, only one job runs.
 3. eMASCO down or slow during a check: pages listed as unreadable, run ends `failed` or `partial`, nothing marked removed.
 4. Log file missing, empty, corrupt line or over the cap: reading still works.
@@ -29,9 +29,9 @@
 - [ ] Tests: start/finish a run and list it newest first; events keep order and level; corrupt line skipped; missing file lists nothing; file over the cap rotates to `.1` and keeps writing; `markInterrupted` closes runs without an end event; data with a `token` or `text` key is not accepted into the log (dropped keys).
 - [ ] Implement, run tests, commit.
 
-### Task 2: `server/adminAuth.js`
-**Produces:** `createAdminAuth({ token, now, maxFailures = 5, lockMs = 60000 })` -> `{ enabled, middleware }`; the middleware answers 404 `{error:'admin-off'}` when disabled, 401 for a missing or wrong bearer, 429 `{error:'locked'}` after repeated failures from one address, otherwise calls `next()`.
-- [ ] Tests: disabled without token or with an empty one; right token passes; wrong or missing 401; five failures then 429 even with the right token until the lock ends; lock ends after `lockMs`; comparison does not throw for tokens of other lengths.
+### Task 2: `server/adminAccess.js` (was a token in the first plan)
+**Produces:** `isLocalRequest(request)`, `localOnly` (403 `{error:'local-only'}` unless the connection is loopback, the Host is localhost, and no proxy or tunnel header is present), `jsonOnly` (415 for a POST that is not JSON).
+- [x] Tests: direct IPv4 and IPv6 visits pass; other computers, proxy and tunnel headers, other Host names (DNS rebinding) and look-alike names are refused; non-JSON POST refused.
 - [ ] Implement, run tests, commit.
 
 ### Task 3: `server/emascoPage.js`
@@ -55,12 +55,12 @@
 - [ ] Implement, run tests, commit.
 
 ### Task 7: Routes and log wrapping in `server/app.js`
-**Produces:** `GET /api/admin/status` (public), then behind the auth middleware: `GET /api/admin/overview`, `POST /api/admin/checks/quick`, `POST /api/admin/checks/full` (body `{ resume? }`), `POST /api/admin/checks/cancel`, `GET /api/admin/job`, `GET /api/admin/runs?limit=`, `GET /api/admin/runs/:id`, `GET /api/admin/runs/:id/report`. `createApp` options: `adminToken`, `logDir`, `adminFetch`, `adminSleep`. `server/index.js` passes `process.env.ADMIN_TOKEN`. The three public refresh routes log a run each.
-- [ ] Tests: status shows enabled or not; every protected route 401 without token; quick check start, poll, report; busy 409; unknown run 404; refresh routes write runs; no route responds with the token.
+**Produces:** `GET /admin` (the plain HTML page, `server/adminPage.html`) and, all behind `localOnly` and `jsonOnly`: `GET /api/admin/overview`, `POST /api/admin/checks/quick`, `POST /api/admin/checks/full` (body `{ resume? }`), `POST /api/admin/checks/cancel`, `GET /api/admin/job`, `GET /api/admin/runs?limit=`, `GET /api/admin/runs/:id`, `GET /api/admin/runs/:id/report`. `createApp` options: `logDir`, `adminSleep`, `adminSampleSize`. The three public refresh routes log a run each.
+- [x] Tests: the page is served without caching and mentions no token; every route 403 through a tunnel header; non-JSON POST 415; quick check start, poll, report; busy 409; unknown run 404; refresh routes write runs.
 - [ ] Implement, `npm test`, commit.
 
-### Task 8: UI (after the user approves a mockup)
-- [ ] Show a mockup, wait for approval, then build `src/screens/Admin.jsx`, route `admin` (not in the student menu), helpers with tests, check in the browser at 360 px and with a real token.
+### Task 8: The admin page (changed: a plain HTML page, built after "just build")
+- [x] `server/adminPage.html` served at `/admin` (local only): health, buttons, progress, cancel, run history, log with level filter, findings, report download. Checked in the browser at phone width.
 
 ### Task 9: Real run and docs
-- [ ] Run a real quick check against eMASCO with a test token on a spare port; record the result. Update `HANDOVER.md`, `task.md`, `CLAUDE.md`; commit.
+- [x] A real quick check against eMASCO from the page's button: 40 of 40 roles read, 0 changed, 4 of 4 links OK. `HANDOVER.md`, `task.md`, `CLAUDE.md` updated.
