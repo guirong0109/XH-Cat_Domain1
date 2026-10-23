@@ -1,0 +1,281 @@
+{
+  "source": {
+    "name": "OpenAlex",
+    "url": "https://openalex.org",
+    "licence": "CC0",
+    "query": "\"<search term>\" AND (\"artificial intelligence\" OR \"machine learning\" OR \"large language model\")",
+    "years": [
+      2024,
+      2025
+    ],
+    "fetchedAt": "2026-10-23T09:33:31.118Z"
+  },
+  "skills": {
+    "Python programming": {
+      "term": "Python programming",
+      "counts": {
+        "2024": 640,
+        "2025": 595
+      }
+    },
+    "SQL and databases": {
+      "term": "SQL database",
+      "counts": {
+        "2024": 32,
+        "2025": 55
+      }
+    },
+    "Spreadsheets (Excel)": {
+      "term": "spreadsheet",
+      "counts": {
+        "2024": 124,
+        "2025": 230
+      }
+    },
+    "Data visualisation": {
+      "term": "data visualization",
+      "counts": {
+        "2024": 756,
+        "2025": 1058
+      }
+    },
+    "Statistics": {
+      "term": "statistical analysis",
+      "counts": {
+        "2024": 2365,
+        "2025": 3720
+      }
+    },
+    "Using AI tools": {
+      "term": "AI literacy",
+      "counts": {
+        "2024": 676,
+        "2025": 2996
+      }
+    },
+    "Web development": {
+      "term": "web development",
+      "counts": {
+        "2024": 105,
+        "2025": 173
+      }
+    },
+    "Networking basics": {
+      "term": "computer network",
+      "counts": {
+        "2024": 453,
+        "2025": 399
+      }
+    },
+    "Network security": {
+      "term": "network security",
+      "counts": {
+        "2024": 1376,
+        "2025": 1637
+      }
+    },
+    "Electrical wiring": {
+      "term": "electrical wiring",
+      "counts": {
+        "2024": 6,
+        "2025": 3
+      }
+    },
+    "Solar PV basics": {
+      "term": "solar photovoltaic",
+      "counts": {
+        "2024": 236,
+        "2025": 368
+      }
+    },
+    "Graphic design": {
+      "term": "graphic design",
+      "counts": {
+        "2024": 111,
+        "2025": 200
+      }
+    },
+    "Communication": {
+      "term": "communication skills",
+      "counts": {
+        "2024": 300,
+        "2025": 612
+      }
+    },
+    "Teamwork": {
+      "term": "teamwork",
+      "counts": {
+        "2024": 360,
+        "2025": 644
+      }
+    },
+    "Problem solving": {
+      "term": "problem solving",
+      "counts": {
+        "2024": 2341,
+        "2025": 4196
+      }
+    },
+    "Customer service": {
+      "term": "customer service",
+      "counts": {
+        "2024": 1363,
+        "2025": 1984
+      }
+    },
+    "UX research and prototyping": {
+      "term": "user experience design",
+      "counts": {
+        "2024": 56,
+        "2025": 80
+      }
+    },
+    "Content writing": {
+      "term": "content writing",
+      "counts": {
+        "2024": 11,
+        "2025": 15
+      }
+    },
+    "SEO and web analytics": {
+      "term": "search engine optimization",
+      "counts": {
+        "2024": 76,
+        "2025": 104
+      }
+    },
+    "Energy auditing": {
+      "term": "energy audit",
+      "counts": {
+        "2024": 12,
+        "2025": 27
+      }
+    },
+    "Renewable energy system design": {
+      "term": "renewable energy system",
+      "counts": {
+        "2024": 303,
+        "2025": 652
+      }
+    },
+    "Project coordination": {
+      "term": "project management",
+      "counts": {
+        "2024": 647,
+        "2025": 1204
+      }
+    },
+    "Healthcare data and records": {
+      "term": "electronic health records",
+      "counts": {
+        "2024": 2279,
+        "2025": 3816
+      }
+    },
+    "Version control (Git)": {
+      "term": "version control",
+      "counts": {
+        "2024": 65,
+        "2025": 192
+      }
+    },
+    "Business process analysis": {
+      "term": "business process",
+      "counts": {
+        "2024": 1137,
+        "2025": 1798
+      }
+    },
+    "Attention to detail": {
+      "term": "attention to detail",
+      "counts": {
+        "2024": 35,
+        "2025": 31
+      }
+    },
+    "Financial reporting": {
+      "term": "financial reporting",
+      "counts": {
+        "2024": 333,
+        "2025": 780
+      }
+    },
+    "Financial analysis": {
+      "term": "financial analysis",
+      "counts": {
+        "2024": 233,
+        "2025": 413
+      }
+    },
+    "Budgeting and costing": {
+      "term": "management accounting",
+      "counts": {
+        "2024": 79,
+        "2025": 130
+      }
+    },
+    "Auditing and internal control": {
+      "term": "auditing",
+      "counts": {
+        "2024": 1830,
+        "2025": 5884
+      }
+    },
+    "Accounting software (ERP)": {
+      "term": "accounting information system",
+      "counts": {
+        "2024": 64,
+        "2025": 91
+      }
+    },
+    "Bookkeeping and reconciliation": {
+      "term": "bookkeeping",
+      "counts": {
+        "2024": 29,
+        "2025": 75
+      }
+    },
+    "Tax planning": {
+      "term": "tax planning",
+      "counts": {
+        "2024": 14,
+        "2025": 26
+      }
+    },
+    "Fraud detection": {
+      "term": "forensic accounting",
+      "counts": {
+        "2024": 32,
+        "2025": 68
+      }
+    },
+    "Payroll": {
+      "term": "payroll",
+      "counts": {
+        "2024": 42,
+        "2025": 100
+      }
+    },
+    "Accounting and audit standards": {
+      "term": "accounting standards",
+      "counts": {
+        "2024": 35,
+        "2025": 70
+      }
+    },
+    "Time management": {
+      "term": "time management",
+      "counts": {
+        "2024": 136,
+        "2025": 335
+      }
+    },
+    "Tax compliance": {
+      "term": "tax compliance",
+      "counts": {
+        "2024": 62,
+        "2025": 154
+      }
+    }
+  }
+}
