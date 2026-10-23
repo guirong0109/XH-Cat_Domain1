@@ -1,7 +1,7 @@
 # task.md — FutureReady MY: overall progress
 
 Last updated: 2026-10-23 (evening). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
-Code state (23 Oct): `main` = `claude/stage2-cv-all-fields` = `b784590`, pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The Emerging feed was built by another session and pushed to `main` at 18:22, after the user had said not to merge it yet: confirm it was wanted. Tests: 527 app on `a4cd832`, 577 on the Emerging branch, 197 pipeline; re-run on `main`; `npm run build` works.
+Code state (23 Oct): `main` = `claude/stage2-cv-all-fields` = `973b9b7` (code as of `b784590`, plus docs), pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The Emerging feed was built by another session and pushed to `main` at 18:22; the user approved it being on `main` (23 Oct evening). Tests: 527 app on `a4cd832`, 577 on the Emerging branch, 197 pipeline; re-run on `main`; `npm run build` works.
 **23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
 For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
@@ -72,7 +72,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Explore all roles | New screen: skill search or CV, diploma-level filter, merged civil-service grades, "AI estimate" similarity bar, "AI risk: not scored". Link under the Matches heading, in the left menu and at the bottom. |
 | Admin console | Plain HTML page at `/admin`, this PC only, no token: health, log of every run, one-click quick check and full re-check, cancel/resume, report download. Real quick check passed. |
 | Sharing | `npm start` on 3000 plus a Cloudflare quick tunnel for the group; `/admin` is refused through the tunnel. |
-| Emerging feed | Built by another session ("Emerging this week" card, feed server, Malay/Chinese filter, admin section). On `main` since 18:22. Its to-do list is in HANDOVER §000000. |
+| Emerging feed | Built by another session ("Emerging this week" card, feed server, Malay/Chinese filter, admin section). On `main` since 18:22, approved by the user. Its to-do list is in HANDOVER §000000. |
 | Docs | Specs and plans for each phase in `docs/superpowers/`; demo script has the Explore step. |
 
 ---
@@ -161,7 +161,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
 - [ ] **Confirm the deadline** with the user (25 Oct 8:00 am vs Sunday 11:59 PM MYT).
 - [ ] **User's click-through** of Explore (CV upload not yet clicked through by Claude) and of `/admin`.
-- [ ] **Emerging feed on `main`:** the user said not to merge it yet, but it was pushed at 18:22 by its own session. Confirm it was wanted; its own to-do (keys, first forced refresh, check each link, provider terms) is in HANDOVER §000000.
+- [x] **Emerging feed on `main`:** approved by the user (23 Oct evening). Still open: its own to-do (keys, first forced refresh, check each link, provider terms), in HANDOVER §000000.
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
 ### 4b. Admin console (23 Oct)
