@@ -12,6 +12,7 @@ import {
   rankByProfile,
   matchCv,
   matchCvByProfile,
+  matchPickedSkills,
   isUsefulLine,
   LOW_CONFIDENCE_BELOW
 } from '../server/emascoMatch.js'
@@ -270,6 +271,73 @@ describe('rankByProfile and matchCvByProfile', () => {
     const result = await matchCvByProfile({ text: 'one skill\ntwo skill\nthree skill', embedder, index: profileIndex, cutoff: 0.9 })
     expect(result.status).toBe('ok')
     expect(codes(result)[0]).toBe('1111-01')
+  })
+})
+
+describe('level filter, grade merge and picked skills', () => {
+  const abc = [entry('Skill A', 'basic'), entry('Skill B', 'basic'), entry('Skill C', 'basic')]
+  const levelOccupations = {
+    skills: skillList,
+    roles: [
+      role('2262-02', abc, { title: 'Pharmacist Grade UF9', qualification: 'Bachelor’s degree or equivalent' }),
+      role('2262-03', abc, { title: 'Pharmacist Grade UF10', qualification: 'Bachelor’s degree or equivalent' }),
+      role('3333-01', abc, { title: 'Technician', qualification: 'Diploma or equivalent' }),
+      role('4444-01', abc, { title: 'Clerk', qualification: 'Sijil Pelajaran Malaysia (SPM) or Equivalent' })
+    ],
+    tasksOnly: []
+  }
+  const levelCodes = ['2262-02', '2262-03', '3333-01', '4444-01']
+  const levelRoleVectors = Float32Array.from([unit(0), [0.9, Math.sqrt(1 - 0.81), 0, 0], [0.5, Math.sqrt(0.75), 0, 0], unit(1)].flat())
+  const levelIndex = buildIndex({ occupations: levelOccupations, skillVectors, dimension: 4, roleVectors: levelRoleVectors, roleCodes: levelCodes })
+  const same = [unit(0), unit(0), unit(0)]
+  const rank = (options = {}) => rankByProfile({ lineVectors: same, cvLines: ['a', 'b', 'c'], index: levelIndex, cutoff: 0.9, ...options })
+
+  it('keeps every role by default and says nothing was hidden', () => {
+    const result = rank()
+    expect(codes(result)).toEqual(['2262-02', '2262-03', '3333-01', '4444-01'])
+    expect(result.hiddenByLevel).toBe(0)
+    expect(result.roles[2]).toMatchObject({ qualificationLevel: 'diploma', baseTitle: 'Technician' })
+  })
+
+  it('hides roles above maxLevel and counts them', () => {
+    const result = rank({ maxLevel: 'diploma' })
+    expect(codes(result)).toEqual(['3333-01', '4444-01'])
+    expect(result.hiddenByLevel).toBe(2)
+  })
+
+  it('returns an empty list, not an error, when the filter hides everything', () => {
+    const result = rank({ maxLevel: 'none' })
+    expect(result).toMatchObject({ status: 'ok', roles: [], hiddenByLevel: 4 })
+  })
+
+  it('merges grades of one job in one unit group into the best-scoring card', () => {
+    const result = rank({ groupGrades: true })
+    expect(codes(result)).toEqual(['2262-02', '3333-01', '4444-01'])
+    expect(result.roles[0].grades).toEqual([
+      { code: '2262-02', grade: 'UF9', url: 'https://emasco.mohr.gov.my/masco/2262-02' },
+      { code: '2262-03', grade: 'UF10', url: 'https://emasco.mohr.gov.my/masco/2262-03' }
+    ])
+    expect(result.roles[1].grades).toBeUndefined()
+  })
+
+  it('does not merge when grouping is off', () => {
+    expect(codes(rank())).toContain('2262-03')
+  })
+
+  it('matchPickedSkills uses the skills own vectors as the lines and their texts as evidence', () => {
+    const result = matchPickedSkills({ skillIds: ['s00001', 's00002', 's00003'], index: levelIndex, cutoff: 0.9, top: 2 })
+    expect(result.status).toBe('ok')
+    expect(result.roles).toHaveLength(2)
+    expect(result.roles[0].skills.find((item) => item.matched).evidence).toMatch(/^Skill [ABC]$/)
+  })
+
+  it('matchPickedSkills counts a repeated id once and asks for 3 different skills', () => {
+    const result = matchPickedSkills({ skillIds: ['s00001', 's00001', 's00002'], index: levelIndex })
+    expect(result).toMatchObject({ status: 'not-enough-skills', lineCount: 2, roles: [] })
+  })
+
+  it('matchPickedSkills throws on an unknown skill id', () => {
+    expect(() => matchPickedSkills({ skillIds: ['s00001', 's00002', 'nope'], index: levelIndex })).toThrow(/nope/)
   })
 })
 
