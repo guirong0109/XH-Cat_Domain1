@@ -182,6 +182,21 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
         <span className="text-[13px] text-slate-700">{nextHint(screen)}</span>
       </section>
 
+      <nav aria-label="More roles" className="flex flex-col gap-1">
+        <span className="px-2 pb-1 text-xs font-bold text-slate-600">MORE ROLES</span>
+        <button
+          type="button"
+          aria-current={screen === 'explore' ? 'page' : undefined}
+          onClick={() => onNavigate('explore')}
+          className={`flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-[10px] border-0 px-2.5 text-left text-sm ${
+            screen === 'explore' ? 'bg-teal-50 font-bold text-[#0F766E]' : 'bg-transparent text-slate-700 hover:bg-slate-100'
+          }`}
+        >
+          Explore all roles
+          {screen === 'explore' && <span className="ml-auto text-[11px]">You are here</span>}
+        </button>
+      </nav>
+
       <nav aria-label="Coming in Stage 2" className="flex flex-col gap-1">
         <span className="px-2 pb-1 text-xs font-bold text-slate-600">COMING IN STAGE 2</span>
         {PREVIEW_LINKS.map((link) => {

@@ -132,6 +132,16 @@ export default function Matches({
           <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Roles that match you</h1>
           <p className="m-0 text-slate-600">{goalLine(profile, data.fields)} This changes the order only, not the score.</p>
           <p className="m-0 mt-1 text-sm text-slate-600">Estimates. {SCENARIO_NOTE}</p>
+          <p className="m-0 mt-1 text-sm text-slate-700">
+            Looking at other fields?{' '}
+            <button
+              type="button"
+              onClick={onExplore}
+              className="min-h-11 cursor-pointer border-0 bg-transparent p-0 text-sm font-semibold text-[#0F766E] underline"
+            >
+              Explore all roles
+            </button>
+          </p>
         </div>
         <ScenarioToggle value={scenario} onChange={onScenarioChange} />
       </div>
