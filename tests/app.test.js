@@ -59,6 +59,7 @@ describe('api', () => {
       research: null,
       fields: null,
       references: null,
+      emerging: null,
     })
   })
 

@@ -1,5 +1,6 @@
 import express from 'express'
 import { existsSync } from 'node:fs'
+import { timingSafeEqual } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -8,6 +9,7 @@ import { readResearch, refreshResearch } from './research.js'
 import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from './cvMatch.js'
 import { loadSkillVectors } from './skillVectors.js'
 import { readReferences, refreshReferences } from './references.js'
+import { modelFromEnv, readEmerging, refreshEmerging } from './emerging.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
 import { createSkillSearch } from './emascoRoles.js'
@@ -48,8 +50,18 @@ export function createApp({
   logDir = path.join(dataDir, 'logs'),
   adminSleep = undefined,
   adminSampleSize = 40,
+  emergingOptions = {},
 }) {
   const app = express()
+  // The emerging-feed settings come from env vars; tests pass emergingOptions instead.
+  const emergingConfig = {
+    adminToken: process.env.EMERGING_ADMIN_TOKEN,
+    interval: process.env.EMERGING_INTERVAL,
+    primary: modelFromEnv(process.env, 'EMERGING_API'),
+    backup: modelFromEnv(process.env, 'EMERGING_BACKUP'),
+    ...emergingOptions,
+  }
+  const emergingPath = path.join(dataDir, 'emerging.json')
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
   const referencesPath = path.join(dataDir, 'references.json')
@@ -75,7 +87,7 @@ export function createApp({
 
   app.get('/api/data', async (request, response) => {
     try {
-      const [roles, skills, sdg, samples, trends, research, fields, references] = await Promise.all([
+      const [roles, skills, sdg, samples, trends, research, fields, references, emerging] = await Promise.all([
         readJson(path.join(dataDir, 'roles.json')),
         readJson(path.join(dataDir, 'skills.json')),
         readJson(path.join(dataDir, 'sdg.json')),
@@ -84,8 +96,9 @@ export function createApp({
         readResearch(researchPath),
         readOptionalJson(path.join(dataDir, 'fields.json')),
         readReferences(referencesPath),
+        readEmerging(emergingPath),
       ])
-      response.json({ roles, skills, sdg, samples, trends, research, fields, references })
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })
@@ -104,6 +117,38 @@ export function createApp({
     } catch (error) {
       console.error('[research] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not refresh research data.' })
+    }
+  })
+
+  // "Emerging this week": needs the admin token so students cannot spend the model quota.
+  // Add ?force=1 to refresh before the weekly (or daily) gap has passed.
+  app.post('/api/refresh-emerging', async (request, response) => {
+    const { adminToken } = emergingConfig
+    if (!adminToken) return response.status(503).json({ error: 'admin-token-not-set' })
+    const sent = Buffer.from(request.get('x-admin-token') ?? '')
+    const expected = Buffer.from(adminToken)
+    if (sent.length !== expected.length || !timingSafeEqual(sent, expected)) {
+      return response.status(401).json({ error: 'wrong-admin-token' })
+    }
+    try {
+      const [skills, fields] = await Promise.all([readJson(path.join(dataDir, 'skills.json')), readJson(path.join(dataDir, 'fields.json'))])
+      response.json(
+        await logged('emerging', () =>
+          refreshEmerging({
+            filePath: emergingPath,
+            skills: skills.labels,
+            groups: fields.groups,
+            fetchImpl,
+            primary: emergingConfig.primary,
+            backup: emergingConfig.backup,
+            interval: emergingConfig.interval,
+            force: request.query.force === '1',
+          }),
+        ),
+      )
+    } catch (error) {
+      console.error('[emerging] refresh failed:', error.message)
+      response.status(500).json({ error: 'Could not refresh the emerging feed.' })
     }
   })
 
