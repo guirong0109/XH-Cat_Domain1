@@ -68,3 +68,21 @@ Per CV with the built variant (cv01..cv12): 1, 5, 5, 5, 4, 4, 5, 0, 3, 0, 4, 4. 
 **Still failing:** the exact skill list of 1121-01 is not in the top 5 (generic management roles outrank it); the Malay version of the same list shares 1 of 5 roles with the English run. Roles with many generic skills (managers, lecturers, "Grade" posts) still appear for unrelated CVs.
 
 **Not measured:** agreement of real students with the roles; any key written independently of the outputs.
+
+## Round 3: task statements (2026-10-23) - no gain, code removed
+Idea: CV experience lines read like eMASCO duty statements, so match them to each role's 14,562 distinct task statements (embedded with the same model, about 10 minutes). Score per role = mean of the k CV lines closest to any task of the role. Same draft key and metric as round 2 (in-family top-5 roles of 60):
+
+| Variant | Score |
+|---|---|
+| profile 5 best lines (built, round 2) | 40 |
+| tasks alone, 3 / 5 / 8 best lines | 23 / 27 / 21 |
+| profile + tasks | 39 |
+| profile + 2 x tasks | 38 |
+| profile + tasks + line-centric skills | 39 |
+| profile 8 + tasks 8 | 38 |
+
+Tasks did not help, so the task embedding code and vectors were removed again (nothing from this round is in the repo except these numbers).
+
+**Why the weak CVs stay weak (not proven):** some CV lines literally mention things the person did not train for (cv08 writes a blog about local handicrafts, so handicraft roles score high), and eMASCO has few roles for web content, SEO and project coordination. That is a limit of the data and of the 12 made-up CVs, not something another scoring formula is likely to fix.
+
+**Stopping point.** Four ideas (soft skill coverage, line voting, more lines, tasks) gave 19 to 41 of 60 against 40 for the simplest. Further gains probably need a better answer key and real student CVs (not allowed by the brief), not more formulas.
