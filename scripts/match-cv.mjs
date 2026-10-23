@@ -12,6 +12,10 @@ import { EMASCO_CUTOFF, loadEmascoIndex, matchCv } from '../server/emascoMatch.j
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 
 function printResult(result) {
+  if (result.status === 'no-role-match') {
+    console.log(`${result.matchedSkillCount} skills matched, but no single role has at least 3 of its skills matched.`)
+    return
+  }
   if (result.status !== 'ok') {
     console.log(`Not enough skills found (${result.matchedSkillCount} matched, at least 3 needed).`)
     return

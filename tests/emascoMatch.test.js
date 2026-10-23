@@ -109,6 +109,25 @@ describe('rankRoles', () => {
     expect(rank({ top: 2 }).roles).toHaveLength(2)
   })
 
+  it('says no-role-match when skills match but no role reaches the minimum', () => {
+    // A, B, C match, but each of these roles has only 1-2 of them
+    const sparse = buildIndex({
+      occupations: {
+        skills: skillList,
+        roles: [role('5555-01', [entry('Skill A', 'basic'), entry('Skill D', 'basic')]),
+          role('5555-02', [entry('Skill B', 'basic'), entry('Skill D', 'basic')]),
+          role('5555-03', [entry('Skill C', 'basic'), entry('Skill D', 'basic')])],
+        tasksOnly: []
+      },
+      skillVectors,
+      dimension: 4
+    })
+    const { scores, lines } = skillScores(lineVectors, sparse)
+    expect(rankRoles({ scores, lines, cvLines, index: sparse, cutoff: 0.9 })).toMatchObject({
+      status: 'no-role-match', matchedSkillCount: 3, roles: []
+    })
+  })
+
   it('says not-enough-skills when fewer than 3 skills match in total', () => {
     const { scores, lines } = skillScores([unit(0), unit(1)], index)
     const result = rankRoles({ scores, lines, cvLines: ['a', 'b'], index, cutoff: 0.9 })
@@ -167,6 +186,6 @@ describe('loadEmascoIndex', () => {
   })
 })
 
-it('keeps the starting cutoff from the spec', () => {
-  expect(EMASCO_CUTOFF).toBe(0.72)
+it('keeps the cutoff chosen by the evaluation', () => {
+  expect(EMASCO_CUTOFF).toBe(0.69)
 })

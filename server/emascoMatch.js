@@ -6,8 +6,9 @@ import { cut } from '../src/lib/cvSkills.js'
 import { inputHash, skillInputs } from '../scripts/lib/emascoEmbed.js'
 import { splitCvLines } from './cvMatch.js'
 
-// Starting value = the CV-step cutoff; to be set from testing/results/emasco_match_eval.md.
-export const EMASCO_CUTOFF = 0.72
+// Lowest cutoff with precision >= 0.90 on the tuning CVs (testing/results/emasco_match_review.csv, judged by Claude,
+// 2026-10-23; see testing/results/emasco_match_eval.md). Held-out precision at 0.69 is only 0.71 (5 of 7).
+export const EMASCO_CUTOFF = 0.69
 export const MIN_MATCHED = 3
 export const TYPE_WEIGHT = { basic: 1, specific: 1.5 }
 
@@ -115,7 +116,8 @@ export function rankRoles({ scores, lines, cvLines, index, cutoff = EMASCO_CUTOF
       right.matchedCount - left.matchedCount ||
       left.code.localeCompare(right.code)
   )
-  if (ranked.length === 0) return { status: 'not-enough-skills', matchedSkillCount, roles: [] }
+  // Skills matched, but no single role has enough of them.
+  if (ranked.length === 0) return { status: 'no-role-match', matchedSkillCount, roles: [] }
   return { status: 'ok', matchedSkillCount, roles: ranked.slice(0, top) }
 }
 
