@@ -12,6 +12,7 @@ import {
   rankByProfile,
   matchCv,
   matchCvByProfile,
+  isUsefulLine,
   LOW_CONFIDENCE_BELOW
 } from '../server/emascoMatch.js'
 import { inputHash, packVectors, roleInputs } from '../scripts/lib/emascoEmbed.js'
@@ -222,9 +223,11 @@ describe('rankByProfile and matchCvByProfile', () => {
     expect(result.roles[0].bestLines).toHaveLength(3)
   })
 
-  it('uses only the best 3 of many lines', () => {
-    const result = run([unit(0), unit(0), unit(0), unit(3), unit(3)], ['a', 'b', 'c', 'd', 'e'])
+  it('uses only the best 5 of many lines', () => {
+    const many = [unit(0), unit(0), unit(0), unit(0), unit(0), unit(3), unit(3), unit(3)]
+    const result = run(many, many.map((item, position) => `line ${position}`))
     expect(result.roles[0]).toMatchObject({ code: '1111-01', similarity: 1 })
+    expect(result.roles[0].bestLines).toHaveLength(5)
   })
 
   it('never returns tasks-only roles', () => {
@@ -243,7 +246,7 @@ describe('rankByProfile and matchCvByProfile', () => {
   })
 
   it('marks the result low confidence when the best similarity is under the limit', () => {
-    expect(LOW_CONFIDENCE_BELOW).toBe(0.5)
+    expect(LOW_CONFIDENCE_BELOW).toBe(0.45)
     const faint = [0.3, 0.3, 0.3, 0.3]
     expect(run([faint, faint, faint]).confidence).toBe('low')
     expect(run([unit(0), unit(0), unit(0)]).confidence).toBe('ok')
@@ -267,6 +270,24 @@ describe('rankByProfile and matchCvByProfile', () => {
     const result = await matchCvByProfile({ text: 'one skill\ntwo skill\nthree skill', embedder, index: profileIndex, cutoff: 0.9 })
     expect(result.status).toBe('ok')
     expect(codes(result)[0]).toBe('1111-01')
+  })
+})
+
+describe('isUsefulLine', () => {
+  it('drops CV headings and filler, in English and Malay, ignoring case and a trailing colon', () => {
+    for (const line of ['EXPERIENCE', 'Projects:', 'OTHER', 'About Me', 'Pengalaman', 'Hobbies: reading novels', 'Referee: Encik Wan, lecturer']) {
+      expect(isUsefulLine(line)).toBe(false)
+    }
+  })
+  it('keeps real lines and short typed skills, including all-capital ones', () => {
+    for (const line of ['SQL', 'HTML', 'Python programming', 'Built MySQL sales reports', 'Skills in welding']) {
+      expect(isUsefulLine(line)).toBe(true)
+    }
+  })
+  it('matchCvByProfile ignores filler lines when counting the minimum', async () => {
+    const embedder = { embed: async () => { throw new Error('should not be called') } }
+    const result = await matchCvByProfile({ text: 'EXPERIENCE\nOTHER\nHobbies: cycling\nSQL\nPython', embedder, index })
+    expect(result).toMatchObject({ status: 'not-enough-skills', lineCount: 2 })
   })
 })
 

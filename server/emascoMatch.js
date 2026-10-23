@@ -11,11 +11,26 @@ import { splitCvLines } from './cvMatch.js'
 export const EMASCO_CUTOFF = 0.69
 export const MIN_MATCHED = 3
 export const TYPE_WEIGHT = { basic: 1, specific: 1.5 }
-// Ranking by role vectors (phase 4b). Not tuned: 0.50 is just below the lowest top score seen on real made-up CVs
-// (0.46-0.55); text that is not a CV scored 0.39-0.46, so there is no clean floor. See testing/results/emasco_match_eval.md.
+// Ranking by role vectors (phase 4b). TOP_LINES = 5 chosen on the draft family key (scripts/eval-family.mjs).
+// LOW_CONFIDENCE_BELOW is only a warning, not a test: the top similarity was 0.43-0.52 for the 12 made-up CVs and
+// 0.39-0.52 for non-CV text, so no threshold separates them. 0.45 flags cv01, cv05, cv08 (the weakest) and junk text.
+// See testing/results/emasco_match_eval.md.
 export const MIN_LINES = 3
-export const TOP_LINES = 3
-export const LOW_CONFIDENCE_BELOW = 0.5
+export const TOP_LINES = 5
+export const LOW_CONFIDENCE_BELOW = 0.45
+
+// Lines that are CV section headings or personal filler, not skills (English and Malay). Exact match, case-insensitive.
+const FILLER_LINES = new Set([
+  'experience', 'work experience', 'education', 'projects', 'skills', 'other', 'internship', 'practical training',
+  'about me', 'summary', 'profile', 'objective', 'languages', 'achievements', 'awards', 'references', 'referee',
+  'hobbies', 'interests', 'pengalaman', 'pendidikan', 'projek', 'kemahiran', 'lain-lain', 'ringkasan', 'rujukan', 'hobi'
+])
+const FILLER_START = /^(hobbies|hobi|referee|references)\b/i
+
+export function isUsefulLine(line) {
+  const plain = line.trim().replace(/:$/, '').toLowerCase()
+  return plain.length > 0 && !FILLER_LINES.has(plain) && !FILLER_START.test(plain)
+}
 
 const skillKey = (text) => text.split(/\s+/).filter(Boolean).join(' ').toLowerCase()
 
@@ -35,7 +50,9 @@ export function buildIndex({ occupations, skillVectors, dimension, roleVectors =
     })
   }))
   const roleRow = new Map(roleCodes.map((code, row) => [code, row]))
-  return { dimension, skillCount: occupations.skills.length, skillVectors, roleVectors, roleRow, roles }
+  // Skills used by many roles say little about one role: weight = ln(roles / roles using the skill).
+  const idf = Float64Array.from(occupations.skills, (skill) => Math.log(roles.length / Math.max(1, skill.roles?.length ?? 1)))
+  return { dimension, skillCount: occupations.skills.length, skillVectors, roleVectors, roleRow, roles, idf }
 }
 
 export async function loadEmascoIndex({ cacheDirectory, occupations }) {
@@ -205,9 +222,74 @@ export function rankByProfile({ lineVectors, cvLines, index, scores, lines, cuto
 }
 
 export async function matchCvByProfile({ text, embedder, index, cutoff = EMASCO_CUTOFF, top = 5 }) {
-  const cvLines = splitCvLines(text)
+  const cvLines = splitCvLines(text).filter(isUsefulLine)
   if (cvLines.length < MIN_LINES) return { status: 'not-enough-skills', lineCount: cvLines.length, roles: [] }
   const lineVectors = await embedder.embed(cvLines)
   const { scores, lines } = skillScores(lineVectors, index)
   return rankByProfile({ lineVectors, cvLines, index, scores, lines, cutoff, top })
+}
+
+// Scores for every role in index.roles order (not ranked yet).
+export function profileRoleScores(lineVectors, index, topLines = TOP_LINES) {
+  const { dimension, roleVectors, roleRow } = index
+  return Float64Array.from(index.roles, (role) => {
+    const offset = roleRow.get(role.code) * dimension
+    const best = lineVectors
+      .map((line) => {
+        let sum = 0
+        for (let position = 0; position < dimension; position += 1) sum += roleVectors[offset + position] * line[position]
+        return sum
+      })
+      .sort((left, right) => right - left)
+      .slice(0, topLines)
+    return best.reduce((sum, value) => sum + value, 0) / best.length
+  })
+}
+
+// Soft coverage: IDF- and type-weighted mean of how far each role skill's best CV-line score is above `floor`.
+export function softRoleScores(scores, index, floor) {
+  return Float64Array.from(index.roles, (role) => {
+    let top = 0
+    let bottom = 0
+    for (const entry of role.entries) {
+      const weight = index.idf[entry.row] * (TYPE_WEIGHT[entry.type] ?? 1)
+      top += weight * Math.max(0, scores[entry.row] - floor)
+      bottom += weight
+    }
+    return bottom > 0 ? top / bottom : 0
+  })
+}
+
+export function zScores(values) {
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length
+  const spread = Math.sqrt(values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length) || 1
+  return Float64Array.from(values, (value) => (value - mean) / spread)
+}
+
+// Line-centric score: for each CV line, how close is the nearest skill of the role? Then the mean of the
+// `topLines` best lines. No division by the number of role skills, so big and small roles compete fairly.
+export function lineRoleScores(lineVectors, index, topLines = TOP_LINES) {
+  const { dimension, skillCount, skillVectors } = index
+  const lineCount = lineVectors.length
+  const similarity = new Float32Array(lineCount * skillCount)
+  for (let row = 0; row < skillCount; row += 1) {
+    const offset = row * dimension
+    for (let lineNumber = 0; lineNumber < lineCount; lineNumber += 1) {
+      const lineVector = lineVectors[lineNumber]
+      let sum = 0
+      for (let position = 0; position < dimension; position += 1) sum += skillVectors[offset + position] * lineVector[position]
+      similarity[lineNumber * skillCount + row] = sum
+    }
+  }
+  return Float64Array.from(index.roles, (role) => {
+    const best = []
+    for (let lineNumber = 0; lineNumber < lineCount; lineNumber += 1) {
+      let top = -Infinity
+      for (const entry of role.entries) top = Math.max(top, similarity[lineNumber * skillCount + entry.row])
+      best.push(top)
+    }
+    best.sort((left, right) => right - left)
+    const used = best.slice(0, topLines)
+    return used.reduce((sum, value) => sum + value, 0) / used.length
+  })
 }

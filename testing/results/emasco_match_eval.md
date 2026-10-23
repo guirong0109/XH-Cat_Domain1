@@ -40,3 +40,31 @@ Score = mean of the 3 CV lines that are closest to the role's whole-profile vect
 
 ## Where this leaves Phase 4
 Strict skills method: precise but ranks nothing for the 12 CVs. Role-vector method: always ranks, about two thirds plausible by my judgment, weak at exact roles. A combination (rank by role-vector similarity, show the skill evidence from the strict method) is what `node scripts/match-cv.mjs` prints now. Next decision for the user: accept this as the matching for the demo (with "estimate" wording), or spend more time improving it.
+
+## Round 2: improving the role-vector ranking (2026-10-23)
+Reproduce: `node scripts/eval-family.mjs` (uses the draft key `testing/cv_test_set/families.json`), `node scripts/eval-retrieval.mjs`, `node scripts/try-confidence.mjs`.
+
+**Draft answer key.** For each CV I listed the MASCO codes a person with that CV could reasonably apply for (`families.json`). Claude wrote it after having seen earlier outputs, so it is partly contaminated and awaits teammate review. Metric: how many of the top 5 roles are in the CV's list (12 CVs x 5 = 60).
+
+| Variant | In-family top-5 roles (of 60) |
+|---|---|
+| mean of 3 best lines (round 1) | 35 |
+| 1 best line | 29 |
+| **5 best lines + headings/hobbies removed (built)** | **40** |
+| 8 best lines | 35 to 37 |
+| each CV line votes for the nearest skill of a role (line-centric) | 21 to 24 |
+| soft skill coverage with IDF weights | 19 |
+| profile + soft coverage (two weights) | 28 and 37 |
+| profile + line-centric | 41 (not used: one point more, much slower) |
+
+Per CV with the built variant (cv01..cv12): 1, 5, 5, 5, 4, 4, 5, 0, 3, 0, 4, 4. Still 0 for cv08 (content / SEO) and cv10 (project coordination, statistics), 1 for cv01 (data / IT diploma).
+
+**A synthetic test misled.** `eval-retrieval.mjs` gives each eMASCO role's own skill vectors as the "CV". There soft skill coverage found the role in the top 5 for 98% of queries and the role-vector profile only 78%. On the real CVs the order was the opposite (soft coverage returned Musicians for accountants). Exact eMASCO vectors are not like CV lines, so this test must not be used to choose the method.
+
+**Changes built:** 5 best lines instead of 3; section headings and hobby/referee lines are dropped before ranking (`isUsefulLine`; typed skills such as "SQL" are kept); low-confidence warning below 0.45.
+
+**Low-confidence warning is weak.** Top similarity: real CVs 0.43 to 0.52, non-CV text 0.39 to 0.52 (lorem ipsum 0.45, "I like cats..." 0.39, a typed data-skills list 0.52). 0.45 flags cv01, cv05, cv08 (among the weakest) and the junk texts, and none of the good CVs, but it is a warning, not a test.
+
+**Still failing:** the exact skill list of 1121-01 is not in the top 5 (generic management roles outrank it); the Malay version of the same list shares 1 of 5 roles with the English run. Roles with many generic skills (managers, lecturers, "Grade" posts) still appear for unrelated CVs.
+
+**Not measured:** agreement of real students with the roles; any key written independently of the outputs.
