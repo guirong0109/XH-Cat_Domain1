@@ -1,7 +1,7 @@
 # task.md — FutureReady MY: overall progress
 
-Last updated: 2026-10-23 (evening). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
-Code state (23 Oct): `main` = `claude/stage2-cv-all-fields` = `973b9b7` (code as of `b784590`, plus docs), pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The Emerging feed was built by another session and pushed to `main` at 18:22; the user approved it being on `main` (23 Oct evening). Tests: 527 app on `a4cd832`, 577 on the Emerging branch, 197 pipeline; re-run on `main`; `npm run build` works.
+Last updated: 2026-10-23 (late evening; Emerging feed finished). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
+Code state (23 Oct): `main` (code as of `b784590`, plus later docs), pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The user approved the Emerging feed being on `main` (23 Oct evening). It was built in its own session; the user said "Merge to main" and "push main" there (another session had noted an earlier "don't merge it first"; ask if unsure). Tests on `b784590`: 644 app (49 files) and 197 pipeline pass; `npm run build` works. Re-run before relying on the numbers.
 **23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
 For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
@@ -72,7 +72,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Explore all roles | New screen: skill search or CV, diploma-level filter, merged civil-service grades, "AI estimate" similarity bar, "AI risk: not scored". Link under the Matches heading, in the left menu and at the bottom. |
 | Admin console | Plain HTML page at `/admin`, this PC only, no token: health, log of every run, one-click quick check and full re-check, cancel/resume, report download. Real quick check passed. |
 | Sharing | `npm start` on 3000 plus a Cloudflare quick tunnel for the group; `/admin` is refused through the tunnel. |
-| Emerging feed | Built by another session ("Emerging this week" card, feed server, Malay/Chinese filter, admin section). On `main` since 18:22, approved by the user. Its to-do list is in HANDOVER §000000. |
+| Emerging feed | "Emerging this week" card on Matches; feed server with OpenAlex plus 9 RSS feeds (English, Malay, Chinese only); confidence by source type; tagging by a model with a backup and a keyword fallback; admin section in `/admin` to refresh, add sources (feed test + terms box) and review or delete items; helper scripts `scripts/start-emerging.ps1` and `refresh-emerging.ps1`. A real DeepSeek run gave `tagging: ai`, 40 items. On `main` (`b784590`), approved by the user. State and limits: HANDOVER §000000. |
 | Docs | Specs and plans for each phase in `docs/superpowers/`; demo script has the Explore step. |
 
 ---
@@ -161,7 +161,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
 - [ ] **Confirm the deadline** with the user (25 Oct 8:00 am vs Sunday 11:59 PM MYT).
 - [ ] **User's click-through** of Explore (CV upload not yet clicked through by Claude) and of `/admin`.
-- [x] **Emerging feed on `main`:** approved by the user (23 Oct evening). Still open: its own to-do (keys, first forced refresh, check each link, provider terms), in HANDOVER §000000.
+- [x] **Emerging feed on `main`:** approved by the user (23 Oct evening). Its open items are in section 4c.
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
 ### 4b. Admin console (23 Oct)
@@ -169,6 +169,16 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [x] Admin page: plain HTML at `http://localhost:3000/admin` (this PC only). Checked in the browser.
 - [ ] First real full re-check (about 3 h, the server must stay up).
 - [ ] Optional later: scheduled runs; admin access for other computers (would need a password).
+
+### 4c. Emerging feed (23 Oct)
+- [x] Plan and the user's five decisions (sources, provider with backup, weekly with daily option, role-group tags, admin reviews) in `docs/superpowers/plans/2026-10-23-emerging-trends-feed.md`.
+- [x] Server, card on Matches, Malay and Chinese sources, English/Malay/Chinese filter, admin section (refresh, sources, review), helper scripts. On `main`; 644 app tests pass.
+- [x] First real run with a model: DeepSeek direct, `tagging: ai`, 40 items. OpenRouter free models failed (429 and 404).
+- [ ] **Review the 40 items** in `http://localhost:3000/admin` (open each link, check summary and tags, delete irrelevant ones, press Reviewed). Restart port 3000 first so it runs the new code.
+- [ ] **Publisher terms** for the 9 RSS feeds: someone on the team reads them before submission.
+- [ ] **Decide** whether to commit a reviewed `data/emerging.json` (and `data/emerging_sources.json`). Until then the card is hidden on Replit.
+- [ ] **Delete the DeepSeek key** on their platform after the demo; confirm the old OpenRouter key was deleted.
+- [ ] Optional: free weekly pinger; fix the file-level "keywords only" label; look for a Malaysian Chinese source with a public feed; add the Emerging step to `docs/demo-script.md` and a line in the README.
 
 ### 5. Option B: all-eMASCO matcher (DONE 23 Oct: data, vectors, engine, screen; all on `main`)
 - [x] Phase 1 crawler written, tested, committed (`558a3ee`, `e36fad4`).
