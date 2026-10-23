@@ -85,6 +85,7 @@ export default function ExploreCard({ card }) {
 
       <div className="flex flex-wrap items-center gap-3">
         <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700">AI risk: not scored</span>
+        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700">SDG: not tagged yet</span>
         <a
           href={card.url}
           target="_blank"
