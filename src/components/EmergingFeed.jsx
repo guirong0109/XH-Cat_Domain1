@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Chip from './Chip.jsx';
 import SourceNote from './SourceNote.jsx';
-import { confidenceBadge, feedState, filterItems, groupFilters, itemMeta, reviewBadge, skillTags, summaryLine } from '../lib/emergingView.js';
+import { confidenceBadge, feedState, filterItems, groupFilters, itemMeta, languageLabel, reviewBadge, skillTags, summaryLine } from '../lib/emergingView.js';
 
 const TONE = {
   high: 'bg-[#CCFBF1] text-[#115E59]',
@@ -19,11 +19,13 @@ function Item({ item }) {
   const confidence = confidenceBadge(item.confidence);
   const review = reviewBadge(item.review);
   const summary = summaryLine(item);
+  const language = languageLabel(item);
   return (
     <li className="flex flex-col gap-1.5 border-t border-slate-200 py-3">
       <div className="flex flex-wrap gap-1.5">
         <Badge tone={confidence.tone}>{confidence.text}</Badge>
         <Badge tone={review.tone}>{review.text}</Badge>
+        {language && <Badge tone="low">{language}</Badge>}
       </div>
       <p className="m-0 text-[15px] font-semibold break-words">{item.title}</p>
       {summary && <p className="m-0 text-[13px] text-slate-700">{summary}</p>}
@@ -78,7 +80,7 @@ export default function EmergingFeed({ emerging, now }) {
       ) : (
         <>
           <p className="m-0 text-sm text-slate-600">
-            {state.checkedLine} Headlines from public sources. Summaries are AI-written estimates.
+            {state.checkedLine} Headlines from public sources.{state.taggingNote ? '' : ' Summaries are AI-written estimates.'}
           </p>
           {state.stale && <p role="status" className="m-0 rounded-[10px] bg-orange-50 px-3 py-2 text-[13px] text-orange-900">{state.stale}</p>}
           {state.taggingNote && <p className="m-0 text-xs text-slate-600">{state.taggingNote}</p>}

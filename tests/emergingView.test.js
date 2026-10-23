@@ -5,6 +5,7 @@ import {
   filterItems,
   groupFilters,
   itemMeta,
+  languageLabel,
   reviewBadge,
   skillTags,
   summaryLine,
@@ -106,5 +107,14 @@ describe('feedState', () => {
   it('treats a bad date as stale-free but still shows items', () => {
     const state = feedState({ checkedOn: 'nonsense', items: [item()] }, now);
     expect(state.kind).toBe('items');
+  });
+});
+
+describe('languageLabel', () => {
+  it('names Malay and Chinese and says nothing for English or unknown', () => {
+    expect(languageLabel({ language: 'ms' })).toBe('Malay');
+    expect(languageLabel({ language: 'zh' })).toBe('Chinese');
+    expect(languageLabel({ language: 'en' })).toBeNull();
+    expect(languageLabel({})).toBeNull();
   });
 });

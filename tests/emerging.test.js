@@ -221,7 +221,7 @@ describe('refreshEmerging', () => {
   it('keeps the old file when every source fails', async () => {
     const old = { checkedOn: '2026-10-10', checkedAt: '2026-10-10T00:00:00.000Z', items: [] }
     await writeFile(filePath, JSON.stringify(old))
-    const failHosts = ['api.openalex.org', 'news.mit.edu', 'www.technologyreview.com', 'www.freemalaysiatoday.com', 'www.malaymail.com']
+    const failHosts = ['api.openalex.org', 'news.mit.edu', 'www.technologyreview.com', 'www.freemalaysiatoday.com', 'www.malaymail.com', 'www.bharian.com.my', 'www.astroawani.com', 'feeds.bbci.co.uk', 'rss.dw.com']
     const result = await run({ fetchImpl: makeFetch({ modelHandler: goodModel, failHosts }) })
     expect(result.status).toBe('failed')
     expect(result.emerging.checkedOn).toBe('2026-10-10')
@@ -320,6 +320,69 @@ describe('refreshEmerging', () => {
     const url = fetchImpl.calls.find((u) => u.includes('api.openalex.org'))
     expect(url).toContain('primary_location.source.type:journal')
     expect(url).toContain('type:article')
+  })
+
+  it('keeps only English, Malay and Chinese papers from OpenAlex', async () => {
+    const fetchImpl = makeFetch({
+      modelHandler: goodModel,
+      openalexBody: { results: [
+        { id: 'https://openalex.org/W1', title: 'AI jobs in English', language: 'en', publication_date: '2026-10-20', primary_location: { landing_page_url: 'https://journal.test/en' } },
+        { id: 'https://openalex.org/W2', title: 'AI pekerjaan dalam Bahasa Melayu', language: 'ms', publication_date: '2026-10-20', primary_location: { landing_page_url: 'https://journal.test/ms' } },
+        { id: 'https://openalex.org/W3', title: 'AI 就业 中文', language: 'zh', publication_date: '2026-10-20', primary_location: { landing_page_url: 'https://journal.test/zh' } },
+        { id: 'https://openalex.org/W4', title: 'KI und Arbeit', language: 'de', publication_date: '2026-10-20', primary_location: { landing_page_url: 'https://journal.test/de' } },
+      ] },
+    })
+    await run({ fetchImpl })
+    const urls = JSON.parse(await readFile(filePath, 'utf8')).items.map((i) => i.url).sort()
+    expect(urls).toEqual(['https://journal.test/en', 'https://journal.test/ms', 'https://journal.test/zh'])
+    expect(fetchImpl.calls.find((u) => u.includes('api.openalex.org'))).toContain('language:en|ms|zh')
+  })
+
+  it('reads Malay and Chinese feeds, keeps the original title, labels the language', async () => {
+    const feeds = {
+      'www.bharian.com.my': [
+        { title: 'Pekerja kilang dilatih kemahiran AI', url: 'https://bh.test/1', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+        { title: 'Pasukan bola sepak menang final', url: 'https://bh.test/2', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+      ],
+      'feeds.bbci.co.uk': [
+        { title: '人工智能导致裁员 年轻人就业受冲击', url: 'https://bbc.test/1', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+        { title: '股市今日收盘上涨', url: 'https://bbc.test/2', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+        { title: '德国工人罢工要求加薪 工资谈判', url: 'https://bbc.test/3', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+      ],
+      'rss.dw.com': [{ title: '中国毕业生求职 技能培训增加', url: 'https://dw.test/1', date: 'Wed, 22 Oct 2026 09:00:00 GMT' }],
+    }
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, feeds, openalexBody: { results: [] } }) })
+    const items = JSON.parse(await readFile(filePath, 'utf8')).items
+    const byUrl = Object.fromEntries(items.map((i) => [i.url, i]))
+    expect(Object.keys(byUrl).sort()).toEqual(['https://bbc.test/1', 'https://bbc.test/3', 'https://bh.test/1', 'https://dw.test/1'])
+    expect(byUrl['https://bh.test/1']).toMatchObject({ language: 'ms', title: 'Pekerja kilang dilatih kemahiran AI', confidence: 'medium', review: 'pending' })
+    expect(byUrl['https://bbc.test/1'].language).toBe('zh')
+    expect(byUrl['https://dw.test/1'].source).toBe('DW Chinese')
+  })
+
+  it('does not treat different Chinese titles as duplicates', async () => {
+    const feeds = { 'rss.dw.com': [
+      { title: '就业市场出现新技能需求', url: 'https://dw.test/a', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+      { title: '裁员潮影响毕业生求职', url: 'https://dw.test/b', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+    ] }
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, feeds, openalexBody: { results: [] } }) })
+    expect(JSON.parse(await readFile(filePath, 'utf8')).items).toHaveLength(2)
+  })
+
+  it('still removes the same Chinese title twice', async () => {
+    const feeds = {
+      'rss.dw.com': [{ title: '就业市场出现新技能需求', url: 'https://dw.test/a', date: 'Wed, 22 Oct 2026 09:00:00 GMT' }],
+      'feeds.bbci.co.uk': [{ title: '就业市场出现新技能需求！', url: 'https://bbc.test/a', date: 'Wed, 22 Oct 2026 09:00:00 GMT' }],
+    }
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, feeds, openalexBody: { results: [] } }) })
+    expect(JSON.parse(await readFile(filePath, 'utf8')).items).toHaveLength(1)
+  })
+
+  it('tells the model to write summaries in English', async () => {
+    const fetchImpl = makeFetch({ modelHandler: goodModel, feeds: defaultFeeds })
+    await run({ fetchImpl })
+    const [, options] = fetchImpl.mock.calls.find(([url]) => url.startsWith('https://primary.test'))
+    expect(JSON.parse(options.body).messages[0].content).toContain('in English')
   })
 
   it('reads a missing file as null', async () => {

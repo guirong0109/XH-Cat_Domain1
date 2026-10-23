@@ -31,6 +31,13 @@ export function summaryLine(item) {
   return item.summary ? `AI estimate: ${item.summary}` : null;
 }
 
+const LANGUAGES = { ms: 'Malay', zh: 'Chinese' };
+
+// English is the default, so only Malay and Chinese items get a label.
+export function languageLabel(item) {
+  return LANGUAGES[item.language] ?? null;
+}
+
 export function itemMeta(item) {
   return `${item.source} · published ${formatDate(item.publishedAt)} · checked ${formatDate(item.checkedOn)}`;
 }
