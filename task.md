@@ -2,6 +2,7 @@
 
 Last updated: 2026-10-22 (night). Deadline: **25 Oct 2026, 8:00 am (MYT)**.
 Code state (22 Oct evening): `main` = `claude/stage2-cv-all-fields` = `6f57713` (Stage 2 merged at the user's request; Replit deploys `main`, CV AI off there). New work goes on `claude/stage2-cv-all-fields`. Tests: 343 app tests and 165 pipeline tests pass; `npm run build` works.
+**23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
 For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
 ---
@@ -54,6 +55,13 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | CV outside our fields | Weak-fit note (few CV skills fit the picked major) and, when nothing matches, a message plus up to 5 unmatched CV lines. Merged `efb39e2`. Idea left: bge-m3 whole-CV field check (not built). |
 | Up-to-date references | Refresh button re-reads the 20 eMASCO pages and checks portal and ILO links; every link shows a checked date; changed roles are flagged, never overwritten. First run: 20 of 20 read, 0 changed. Live portal course lists not built (no API). |
 | Stage 2 · A1 accounting roles | 5 eMASCO accounting roles, 13 new skills from eMASCO statements (names drafted by Claude, awaiting review; "Hours not estimated"), sample student Farah. Re-measured with finance CVs cv11 (tune) and cv12 (holdout): cutoff stays 0.72; held-out keyword 0.85 / 0.55, AI 1.00 / 0.05, combined 0.86 / 0.60. The AI adds no finance skill at 0.72. Open: teammate review of `a1_skill_review.csv`, `a1_new_skills.json`, Farah, cv11-cv12; Kaggle labelling job is the user's decision. |
+
+### Session 6 (2026-10-23): option B, full eMASCO crawl (Phase 1 only)
+| Step | What was done |
+|---|---|
+| Plan | User gave `PLAN.md` (eMASCO job matcher over all occupations). Claude compared it with our rules; the user chose B and approved Phase 1 (crawler), English first, then Malay. |
+| Crawler | `pipeline/crawl_emasco_all.py`: stdlib only, tree walk, 2 s delay, robots.txt check, raw HTML saved so it resumes, parse and fetch failures listed, `--lang en|bm`. 14 new tests. Smoke run on subtree 1121 OK. |
+| Waiting | English crawl running in the background on the user's PC (about 8 h at 12 pages a minute). The Malay crawl was cancelled by the user; Malay will be handled by translation later. Purpose: get every MASCO 6-digit role (skills, tasks, qualification) in both languages as the base data for matching beyond our 20 roles. |
 
 ---
 
@@ -140,6 +148,17 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Team names** in the README.
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
 - [ ] **Make the GitHub repo public** on submission day, then submit.
+
+### 5. Option B: all-eMASCO matcher (started 23 Oct; Phase 1 only approved)
+- [x] Phase 1 crawler written, tested, committed (`558a3ee`, `e36fad4`).
+- [x] **English crawl finished** (23 Oct, about 3 h): 1,706 roles in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures (pages with no skills/tasks section on eMASCO). Not committed yet.
+- [x] Malay crawl cancelled (user decision, 23 Oct): English only. Malay later by translation (bge-m3 already reads Malay; test that first). If the PC sleeps or the session restarts, re-run `python -u pipeline/crawl_emasco_all.py`; saved pages are reused.
+- [x] Phase 2 done in JSON (user chose JSON): tolerant parser rescued 106 roles; `data/emasco/occupations.json` = 1,766 roles with skills, 46 tasks-only, 2 unparsed, 18,161 distinct skills (`pipeline/build_all_roles.py`, 197 pipeline tests pass). Not committed yet.
+- [ ] Phase 3 plan + approval, then embeddings with bge-m3 (slow on CPU; RunPod only if the user asks).
+- [ ] Phase 4 matching engine + senior-role filter, Phase 7 UI (mockup first).
+- [ ] Decide with the user: do new roles show "not scored" until labelled; is `all_roles*.json` committed to git.
+- Dropped for now: job-ad "emerging skills" (no allowed source), Claude API, new Python/JS dependencies from PLAN.md.
+- Risk: deadline 25 Oct 8 am MYT; the full B is probably not finishable before then.
 
 ### Later / future plan
 - [ ] A3: skill-level AI trends from the RunPod skill-to-task links.

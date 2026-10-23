@@ -1,7 +1,34 @@
 # HANDOVER — FutureReady MY (Aiversecity Domain 1 hackathon)
 
-Last updated: 2026-10-22 night (fifth session: CV review, weak-fit hint, reference checks, all merged to main). Written for a new session that has no earlier context.
-Read §000 first. It is the current snapshot. §00 is the snapshot from the end of the second session and §0 its detailed log; §1–§6 are from the first session. Newer sections win where they conflict.
+Last updated: 2026-10-23 (sixth session: full eMASCO crawl for option B started; see §0000). Before that, 2026-10-22 night (fifth session: CV review, weak-fit hint, reference checks, all merged to main). Written for a new session that has no earlier context.
+Read §0000 (crawl in progress), then §000 first. It is the current snapshot. §00 is the snapshot from the end of the second session and §0 its detailed log; §1–§6 are from the first session. Newer sections win where they conflict.
+
+---
+
+## 0000. Option B: crawl ALL of eMASCO (started 2026-10-23, IN PROGRESS)
+
+**Why:** the user gave `C:\Users\guiro\Downloads\PLAN.md` (not in the repo): an "eMASCO Job Matcher" that matches a CV or free text to every Malaysian occupation, with match %, skills the user has and skills missing. The user chose "B": cover all roles, not only our 20. Estimate was 20-28 h of work plus 3-6 h of background crawling; Claude advised against finishing it before 25 Oct and suggested a smaller version, but the user said go ahead. The user approved **Phase 1 only (crawler)**. On 23 Oct the user decided **English only; Malay will be handled later by translation** (the Malay crawl was cancelled). Every later phase needs a plan and the user's approval first.
+
+**What is built (committed on `claude/stage2-cv-all-fields`, not pushed):**
+- `558a3ee` `pipeline/crawl_emasco_all.py` + `pipeline/tests/test_crawl_emasco_all.py` (+ `data/emasco/raw/` in `.gitignore`).
+- `e36fad4` `--lang bm`: `scrape_emasco.py` now has `ENGLISH_HEADINGS` / `MALAY_HEADINGS`, `parse_role_page(html, headings)` and `fetch_page(opener, code, language)`; test fixture `pipeline/tests/fixtures/emasco_1121-01_bm.html`.
+- How it works: stdlib only (no new dependency). It walks the code tree (1 → 11 → 111 → 1111 → 1111-01) by the child links on each page, 2 s between requests, 3 retries, checks robots.txt, User-Agent `FutureReadyMY-hackathon/0.1` (no email). Raw HTML is saved first (`data/emasco/raw/` for English, `data/emasco/raw_bm/` for Malay, both git-ignored), so a stopped run **resumes** and parsing can be re-run. A page that fails goes to `parseFailed` / `fetchFailed`; nothing is invented. The app's 20 roles (`data/emasco/roles_raw.json`) are not touched.
+- Tests: `python -m unittest discover pipeline/tests` = 179 pass. Real-site smoke run on subtree 1121: 9 roles, 0 failures; `1121-01` has 5 basic + 9 specific skills (English) and the same counts in Malay.
+
+**Result:** **English crawl DONE (23 Oct, 03:12, about 3 h, 2,484 pages fetched): 1,706 roles saved in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures** (page has no Skills / Basic / Specific / Tasks section on eMASCO itself, e.g. 1111-01 Legislator has tasks but no skills; mostly groups 2 and 3). Those 108 are listed in `parseFailed` and are not in `roles`; nothing was invented. Roles per group: professionals 532, technicians 437, craft 179, managers 144, clerical 120, operators 107, service_sales 84, elementary 68, agriculture 35. Every saved role has at least one skill.
+
+**Phase 2 DONE (23 Oct, JSON not SQLite, user's choice):** my first parser wrongly rejected 106 pages that have only a Basic or only a Specific skill list, or no Tasks. Fixed with `parse_role_page_tolerant` in `pipeline/scrape_emasco.py` (the strict `parse_role_page` stays for the 20 app roles; checked: the 1,706 roles parsed before are identical). Re-parse from the saved pages (no new requests) gave 1,812 roles, 2 unparsed (1113-01 and 3118-07: no tasks and no skills on eMASCO). `python pipeline/build_all_roles.py` writes `data/emasco/occupations.json`: **1,766 roles with skills, 46 tasks-only (kept separate, no invented skills), 2 unparsed, 18,161 distinct skills** (index with the roles using each, for Phase 3 embedding). It also reads tags (STEM/TVET/GREEN/GIG). NOSS/NEC lists are NOT read (the page shows them in one run; cannot split safely). The build refuses invalid data and refuses fewer roles than the existing file unless `--force`. Pipeline tests: 197 pass. **Not committed yet.** Next: Phase 3 (embeddings), needs a plan and approval.
+
+**Earlier note (job now finished):**
+1. **English crawl**: `python -u pipeline/crawl_emasco_all.py` — goal: write `data/emasco/all_roles.json`. Measured speed on 23 Oct: about 12 pages a minute (about 5 s a page: 2 s delay plus download), 177 pages saved at 00:12. If eMASCO has about 5,000 roles this takes **about 8 hours**; the real total is unknown until it ends. Keep the PC awake.
+2. **Malay crawl: cancelled by the user (23 Oct).** The `--lang bm` code and tests stay in the repo and still work, but nothing is queued. Plan for Malay: translate later (note: bge-m3 already reads Bahasa Malaysia, so a Malay CV may match English skills without translation; check this before adding a translation step). Ask the user before crawling Malay.
+- The job dies if the PC sleeps or the Claude app session restarts. To continue, run the same command again; saved pages are reused, nothing is fetched twice. Use `SSL_CERT_FILE="C:\Program Files\Git\mingw64\etc\ssl\certs\ca-bundle.crt"` on Windows.
+- Output files are written **only at the end** of a run. Check `data/emasco/raw/` (count of files) for progress.
+- When a crawl ends: read the printed counts and the `parseFailed` / `fetchFailed` lists, tell the user, and do not hand-edit the JSON. Then commit nothing large without asking (raw HTML is ignored; decide with the user whether `all_roles*.json` goes in git).
+
+**Next phases from PLAN.md (none approved yet, plan and ask first):** 2 parser + SQLite (stdlib `sqlite3` is enough), 3 bge-m3 embeddings of all skills (slow on CPU, maybe RunPod; RunPod waits for the user), 4 matching engine with a sanity filter for senior roles, 5 emerging skills from job ads (**no allowed Malaysian job-ad source; dropped for now**), 6 link health and re-crawl (partly done by `server/references.js`), 7 UI.
+**Not accepted from PLAN.md:** `requests`, `beautifulsoup4`, `fastapi`, `uvicorn`, `numpy`, `pypdf`, `sentence-transformers`, the Claude API (CV text must stay on our server) and a contact email in the User-Agent. Use stdlib, Express and the approved bge-m3 instead; ask before any new dependency.
+**Known risks:** new roles have no AI-exposure labels, SDG tags or course hours, so they would show "not scored" until a labelling run (on hold); Replit has no model, so CV AI stays off there; all new data is an unreviewed draft; the deadline is 25 Oct 8 am MYT.
 
 ---
 

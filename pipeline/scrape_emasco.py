@@ -148,6 +148,90 @@ def parse_role_page(page_html, headings=ENGLISH_HEADINGS):
     }
 
 
+TAG_NAMES = {"STEM", "TVET", "GREEN", "GIG"}
+
+
+def parse_role_page_tolerant(page_html, headings=ENGLISH_HEADINGS):
+    """Like parse_role_page, but a section that eMASCO does not show stays empty.
+
+    A page needs a code and a title, and at least tasks or skills. Skill lists must end at
+    'Additional Info'; if that heading is missing the end of the list cannot be known, so the
+    page is refused rather than guessed. Also reads the tags (STEM/TVET/GREEN/GIG).
+    The NOSS / NEC lists are not read: the page shows their items in one run, so they cannot be split safely.
+    """
+    blocks = _visible_blocks(page_html)
+    end = len(blocks)
+
+    def first(heading, start, stop=end):
+        for position in range(start, stop):
+            if blocks[position] == heading:
+                return position
+        return None
+
+    code_label = _index_after(blocks, headings["code"], 0, "role header")
+    code = blocks[code_label + 1]
+    compare_label = _index_after(blocks, headings["compare"], code_label, "role header")
+    title = blocks[compare_label + 1]
+
+    tasks_heading = first(headings["tasks"], compare_label)
+    skills_heading = first(headings["skills"], tasks_heading or compare_label)
+    additional_heading = first(headings["additional"], compare_label)
+    header_end = min(position for position in (tasks_heading, skills_heading, additional_heading, end)
+                     if position is not None)
+    tags = [block for block in blocks[compare_label + 2:header_end] if block in TAG_NAMES]
+    description = ""
+    if tasks_heading is not None:
+        description = blocks[tasks_heading - 1]
+    elif compare_label + 2 < header_end and blocks[compare_label + 2] not in TAG_NAMES | {"MSIC", "NOSS", "NEC", headings["skills"]}:
+        description = blocks[compare_label + 2]
+
+    tasks = []
+    if tasks_heading is not None:
+        section_starts = [position for position in (skills_heading, additional_heading) if position is not None]
+        tasks_end = min(section_starts + [end])
+        after_tasks = [position for position in (first(name, tasks_heading, tasks_end)
+                                                 for name in ("MSIC", "NOSS", "NEC")) if position is not None]
+        tasks = blocks[tasks_heading + 1:min(after_tasks + [tasks_end])]
+
+    basic_skills, specific_skills = [], []
+    if skills_heading is not None:
+        if additional_heading is None:
+            raise ValueError(f"Cannot find where the skills end ('Additional Info' missing) for role {code}")
+        basic_heading = first(headings["basic"], skills_heading, additional_heading)
+        specific_heading = first(headings["specific"], skills_heading, additional_heading)
+        starts = sorted(position for position in (basic_heading, specific_heading) if position is not None)
+        for heading_position in starts:
+            next_stop = min([position for position in starts + [additional_heading] if position > heading_position])
+            skills = blocks[heading_position + 1:next_stop]
+            if heading_position == basic_heading:
+                basic_skills = skills
+            else:
+                specific_skills = skills
+
+    qualification = ""
+    if additional_heading is not None:
+        qualification_heading = first(headings["qualification"], additional_heading)
+        if qualification_heading is not None:
+            qualification_end = first(headings["courses"], qualification_heading)
+            if qualification_end is None:
+                qualification_end = qualification_heading + 2
+            qualification = " ".join(blocks[qualification_heading + 1:qualification_end])
+
+    if not tasks and not basic_skills and not specific_skills:
+        raise ValueError(f"No tasks and no skills on the page for role {code}")
+
+    return {
+        "code": code,
+        "title": title,
+        "description": description,
+        "tags": tags,
+        "tasks": tasks,
+        "basic_skills": basic_skills,
+        "specific_skills": specific_skills,
+        "qualification": qualification,
+    }
+
+
 def group_for_code(code):
     first_digit = code[:1]
     if first_digit not in GROUP_BY_FIRST_DIGIT:

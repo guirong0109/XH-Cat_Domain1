@@ -19,7 +19,7 @@ import urllib.request
 import urllib.robotparser
 
 from scrape_emasco import (ENGLISH_HEADINGS, MALAY_HEADINGS, SECONDS_BETWEEN_REQUESTS, USER_AGENT, fetch_page,
-                           group_for_code, make_opener, parse_role_page, write_json)
+                           group_for_code, make_opener, parse_role_page_tolerant, write_json)
 
 SITE_URL = "https://emasco.mohr.gov.my"
 LANGUAGES = {
@@ -102,7 +102,7 @@ def crawl(store, start_codes, log=print, headings=ENGLISH_HEADINGS):
             continue
         if is_occupation_code(code):
             try:
-                role = parse_role_page(page_html, headings)
+                role = parse_role_page_tolerant(page_html, headings)
                 if role["code"] != code:
                     raise ValueError(f"page returned code {role['code']}")
                 role["group"] = group_for_code(code)

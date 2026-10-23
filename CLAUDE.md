@@ -24,6 +24,8 @@ python3 -m unittest discover pipeline/tests    # pipeline tests (stdlib only)
 python3 pipeline/build_data.py                 # rebuild data/*.json from data/team, data/emasco, data/ilo, data/runpod
 python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_raw.json
 python pipeline/scrape_emasco.py --add CODE [CODE ...] data/emasco/roles_raw.json   # add new roles only; old roles untouched
+python pipeline/crawl_emasco_all.py [--only PREFIX]   # option B: crawl ALL eMASCO roles (English) → data/emasco/all_roles.json; resumable, raw HTML in git-ignored data/emasco/raw; about 3 h. --lang bm exists but the user chose English only
+python pipeline/build_all_roles.py   # option B phase 2: all_roles.json → data/emasco/occupations.json (roles with skills, tasks-only, unparsed, distinct skills); refuses fewer roles unless --force
 node scripts/map-statements.mjs                # eMASCO statements of the new roles → data/team/a1_skill_review.csv (local bge-m3)
 python pipeline/apply_statement_review.py data/team/a1_skill_review.csv data/team/a1_new_skills.json data/team/skill_labels.json data/team/role_skills.json
 node scripts/eval-cv.mjs                       # CV accuracy and the AI cutoff → testing/results/cv_eval.csv
@@ -48,6 +50,8 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - `src/components/`: presentational parts, incl. `Sidebar`, `MobileBar`, `StepBar` (navigation), `SkillsDemand`, `ResearchMomentum`, `ReplanNotice`, `Stage2Section`, `PreviewBanner`.
 - `pipeline/`:
   - `scrape_emasco.py`: one-time snapshot of eMASCO role pages (`--add` appends new roles).
+  - `build_all_roles.py`: cleans the crawl into `data/emasco/occupations.json` (validated; 108 pages first failed only because the strict parser needed every section, now handled by `parse_role_page_tolerant`).
+  - `crawl_emasco_all.py`: option B crawler for every eMASCO occupation (English or Malay, stdlib, resumable). It does not touch `roles_raw.json` or the app's 20 roles.
   - `apply_statement_review.py`: turns the reviewed statement sheet into new skills (`hours: null`) and role skills.
   - `import_ilo.py`: parses ILO WP140 Table A1 (official ILO HTML) into `data/ilo/ilo_2025_scores.json`.
   - `runpod_label.py`: GPU job the user runs on RunPod; see `pipeline/README.md`.
@@ -78,6 +82,11 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - References: every reference link shows a "checked on" date. A role that eMASCO changed is flagged for the team and the saved version stays; never overwrite roles, skills or labels automatically. Do not scrape the course portals (no API); links to them only.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
+
+## Option B in progress (23 Oct 2026)
+- The user chose to crawl **all** of eMASCO (plan file `C:\Users\guiro\Downloads\PLAN.md`, not in the repo). **Only Phase 1 (the crawler) is approved**; plan and get approval before each later phase.
+- **Done 23 Oct:** English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages without skills/tasks sections listed in `parseFailed`). Nothing is waiting now. Goal of the crawl: the full role/skill base for matching beyond our 20 roles. **English only; the user cancelled the Malay crawl and will handle Malay by translation later** (do not crawl Malay without asking). If the crawl stopped, run the command again (resume). Details and next phases: `HANDOVER.md` §0000, `task.md` §5.
+- Do not take PLAN.md's extra dependencies (`requests`, `beautifulsoup4`, `fastapi`, `numpy`, `pypdf`, `sentence-transformers`), the Claude API or a contact email in the User-Agent. Use stdlib, Express and bge-m3.
 
 ## Decisions the user has set
 - Local demo: `npm start` on port 3000 plus a Cloudflare quick tunnel (`"C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3000`); the link changes each restart. On Replit the CV AI step is off (no `models/`).
