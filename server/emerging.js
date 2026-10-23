@@ -7,11 +7,15 @@ const OPENALEX_QUERY = '("artificial intelligence" OR "generative AI" OR "machin
 // Confidence comes from the kind of source, never from the model: open data = high, public news feeds = medium.
 const FEEDS = [
   { name: 'MIT News', url: 'https://news.mit.edu/rss/topic/artificial-intelligence2', filter: false },
-  { name: 'MIT Technology Review', url: 'https://www.technologyreview.com/feed/', filter: true },
-  { name: 'Free Malaysia Today', url: 'https://www.freemalaysiatoday.com/feed/', filter: true },
-  { name: 'Malay Mail Money', url: 'https://www.malaymail.com/feed/rss/money', filter: true },
+  { name: 'MIT Technology Review', url: 'https://www.technologyreview.com/feed/', filter: 'topic' },
+  { name: 'Free Malaysia Today', url: 'https://www.freemalaysiatoday.com/feed/', filter: 'work' },
+  { name: 'Malay Mail Money', url: 'https://www.malaymail.com/feed/rss/money', filter: 'work' },
 ]
-const TOPIC_WORDS = /\b(ai|artificial intelligence|machine learning|automation|automate\w*|robot\w*|digital|jobs?|skills?|workforce|talent|employ\w*|hiring|upskill\w*|reskill\w*|graduates?|apprentice\w*|chatbots?|algorithms?)\b/i
+// 'topic' feeds are already about technology, so AI words or work words pass. General news ('work') needs a work word:
+// "AI" alone lets stock-market stories through.
+const WORK_WORDS = /\b(jobs?|skills?|workforce|workers?|talent|employ\w*|hiring|hires?|layoffs?|retrench\w*|upskill\w*|reskill\w*|graduates?|apprentice\w*|careers?|salary|salaries|wages?|automation|automate\w*)\b/i
+const TOPIC_WORDS = /\b(ai|artificial intelligence|machine learning|chatbots?|algorithms?|robot\w*|digital)\b/i
+const MAX_PER_SOURCE = 10
 
 const MAX_AGE_DAYS = 30
 const MAX_NEW_ITEMS = 40
@@ -103,7 +107,7 @@ export function parseFeed(xml) {
 
 function openAlexUrl(now) {
   const from = new Date(now.getTime() - MAX_AGE_DAYS * DAY_MS).toISOString().slice(0, 10)
-  const filter = `from_publication_date:${from},title_and_abstract.search:${encodeURIComponent(OPENALEX_QUERY)}`
+  const filter = `from_publication_date:${from},type:article,primary_location.source.type:journal,title_and_abstract.search:${encodeURIComponent(OPENALEX_QUERY)}`
   return `${OPENALEX_URL}?filter=${filter}&sort=publication_date:desc&per-page=20&select=id,title,doi,publication_date,primary_location`
 }
 
@@ -128,7 +132,12 @@ async function fetchFeed(feed, fetchImpl) {
   if (!response.ok) throw new Error(`${feed.name} returned HTTP ${response.status}`)
   const items = parseFeed(await response.text())
   return items
-    .filter((item) => !feed.filter || TOPIC_WORDS.test(`${item.title} ${item.snippet}`))
+    .filter((item) => {
+      const text = `${item.title} ${item.snippet}`
+      if (feed.filter === 'work') return WORK_WORDS.test(text)
+      if (feed.filter === 'topic') return WORK_WORDS.test(text) || TOPIC_WORDS.test(text)
+      return true
+    })
     .map((item) => ({ ...item, source: feed.name, confidence: 'medium' }))
 }
 
@@ -249,17 +258,29 @@ async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = n
     if (sources.every((source) => !source.ok)) throw new Error('Every source failed')
 
     const cutoff = now.getTime() - MAX_AGE_DAYS * DAY_MS
-    const isFresh = (item) => new Date(item.publishedAt).getTime() >= cutoff
+    // Some sources carry wrong dates in the future; a day of slack covers time zones.
+    const latest = now.getTime() + DAY_MS
+    const isFresh = (item) => {
+      const time = new Date(item.publishedAt).getTime()
+      return time >= cutoff && time <= latest
+    }
     const kept = (existing?.items ?? []).filter(isFresh)
     const seenUrls = new Set(kept.map((item) => item.url))
     const seenTitles = new Set(kept.map((item) => normalizeTitle(item.title)))
     const fresh = []
-    for (const item of settled.flatMap((result) => (result.status === 'fulfilled' ? result.value : []))) {
-      const title = normalizeTitle(item.title)
-      if (!isFresh(item) || seenUrls.has(item.url) || seenTitles.has(title)) continue
-      seenUrls.add(item.url)
-      seenTitles.add(title)
-      fresh.push({ ...item, id: itemId(item.url) })
+    // Newest first inside each source, at most MAX_PER_SOURCE from each, so one source cannot crowd out the others.
+    for (const result of settled) {
+      if (result.status !== 'fulfilled') continue
+      let taken = 0
+      for (const item of [...result.value].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))) {
+        const title = normalizeTitle(item.title)
+        if (taken >= MAX_PER_SOURCE) break
+        if (!isFresh(item) || seenUrls.has(item.url) || seenTitles.has(title)) continue
+        seenUrls.add(item.url)
+        seenTitles.add(title)
+        taken += 1
+        fresh.push({ ...item, id: itemId(item.url) })
+      }
     }
     fresh.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
     const batch = fresh.slice(0, MAX_NEW_ITEMS)

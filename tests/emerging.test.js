@@ -288,6 +288,40 @@ describe('refreshEmerging', () => {
     expect(fetchImpl.calls.filter((u) => u.startsWith('https://primary.test'))).toHaveLength(1)
   })
 
+  it('drops items dated in the future', async () => {
+    const body = { results: [
+      { id: 'https://openalex.org/W9', title: 'AI jobs preprint from the future', publication_date: '2045-12-10', primary_location: { landing_page_url: 'https://journal.test/future' } },
+      ...openalex.results,
+    ] }
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, openalexBody: body }) })
+    const titles = JSON.parse(await readFile(filePath, 'utf8')).items.map((i) => i.title)
+    expect(titles).toEqual(['AI and clerical jobs'])
+  })
+
+  it('needs a work word in Malaysian news, not just the word AI', async () => {
+    const feeds = { 'www.freemalaysiatoday.com': [
+      { title: 'Yen shines as AI jitters spur safe-haven rush', url: 'https://fmt.test/s1', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+      { title: 'Bank to axe 5,000 jobs in push to use AI', url: 'https://fmt.test/s2', date: 'Wed, 22 Oct 2026 09:00:00 GMT' },
+    ] }
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, feeds, openalexBody: { results: [] } }) })
+    const titles = JSON.parse(await readFile(filePath, 'utf8')).items.map((i) => i.title)
+    expect(titles).toEqual(['Bank to axe 5,000 jobs in push to use AI'])
+  })
+
+  it('takes at most 10 new items from one source', async () => {
+    const results = Array.from({ length: 15 }, (_, n) => ({ id: `https://openalex.org/W${n}`, title: `AI jobs paper ${n}`, publication_date: '2026-10-20', primary_location: { landing_page_url: `https://journal.test/p${n}` } }))
+    await run({ fetchImpl: makeFetch({ modelHandler: goodModel, openalexBody: { results } }) })
+    expect(JSON.parse(await readFile(filePath, 'utf8')).items).toHaveLength(10)
+  })
+
+  it('asks OpenAlex for journal articles only', async () => {
+    const fetchImpl = makeFetch({ modelHandler: goodModel })
+    await run({ fetchImpl })
+    const url = fetchImpl.calls.find((u) => u.includes('api.openalex.org'))
+    expect(url).toContain('primary_location.source.type:journal')
+    expect(url).toContain('type:article')
+  })
+
   it('reads a missing file as null', async () => {
     expect(await readEmerging(filePath)).toBeNull()
   })

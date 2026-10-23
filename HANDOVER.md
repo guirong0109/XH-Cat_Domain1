@@ -5,6 +5,17 @@ Read §0000 (crawl in progress), then §000 first. It is the current snapshot. �
 
 ---
 
+## 000000. "Emerging this week" feed (23 Oct 2026; branch `claude/emerging-trends-feed`, NOT merged, NOT pushed)
+
+Plan and the user's five decisions: `docs/superpowers/plans/2026-10-23-emerging-trends-feed.md`.
+- **Built:** `server/emerging.js` (sources, filters, tagging, backup model, atomic write), route `POST /api/refresh-emerging` (needs header `x-admin-token`; `?force=1` skips the weekly gap), `emerging` in `GET /api/data`, `src/lib/emergingView.js`, `src/components/EmergingFeed.jsx` (on Matches under Skills in demand). Never changes a score, role or skill.
+- **Sources:** OpenAlex (confidence high); MIT News AI, MIT Technology Review, Free Malaysia Today, Malay Mail Money (RSS, medium). Confidence comes from the source type only. ILO held back. Publisher terms for the RSS feeds are NOT yet read by the team.
+- **Env vars (never commit):** `EMERGING_API_URL/KEY/MODEL` (main), `EMERGING_BACKUP_URL/KEY/MODEL` (used only if the main one fails), `EMERGING_ADMIN_TOKEN`, `EMERGING_INTERVAL=weekly|daily` (default weekly). No key set: keyword tags and no AI summary.
+- **First real run (23 Oct, no model key, temp folder, not saved in the repo):** all 5 sources answered. Found and fixed: OpenAlex future dates (now dropped), loose Malaysian filter (now needs a work word), one source crowding out the others (max 10 per source). Honest limit: OpenAlex papers and MIT stories are often not about jobs; the admin must delete irrelevant items when reviewing.
+- **Still to do (user):** make the keys, run one forced refresh on port 3000, open every link, mark checked items `"review": "reviewed"` in `data/emerging.json`, check provider terms and prices, set up a free weekly pinger if wanted. The admin page for the interval was not built.
+
+---
+
 ## 00000. Admin console (23 Oct 2026; DONE: backend and plain HTML page at /admin)
 
 The user asked for a backend where a system admin can see the behind-the-scenes log and run an eMASCO check with one click. Chosen (23 Oct): both a quick check and a full re-check, **report only** (a check never changes saved data). The user then said: build a plain HTML admin and **do not use ADMIN_TOKEN**. Spec `docs/superpowers/specs/2026-10-23-admin-console-design.md`, plan `docs/superpowers/plans/2026-10-23-admin-console.md`.
