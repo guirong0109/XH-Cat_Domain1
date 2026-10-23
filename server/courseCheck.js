@@ -66,7 +66,7 @@ export async function checkCourse(course, { fetchImpl = fetch, timeoutMs = 20000
   try {
     const response = await fetchImpl(course.url, { signal: controller.signal, headers: { 'User-Agent': USER_AGENT } })
     if (response.status === 404 || response.status === 410) return { status: 'gone', changed: [], checkedAt }
-    if (response.status !== 200) return { status: 'unreadable', changed: [], checkedAt }
+    if (response.status !== 200) return { status: 'unreadable', changed: [], checkedAt, httpStatus: response.status }
     const html = await response.text()
     if (course.portal === 'tvet') {
       const found = squash(html).includes(squash(course.title))
@@ -150,7 +150,9 @@ async function runRefresh({
       checks: existing,
     }
   }
-  const checks = { checkedAt, counts, courses: results }
+  // checkedAt is the OLDEST per-course check, so a run that could read only some pages does not make the rest look fresh.
+  const oldest = Object.values(results).map((result) => result.checkedAt).sort()[0] ?? checkedAt
+  const checks = { checkedAt: oldest, lastRunAt: checkedAt, counts, courses: results }
   await writeAtomically(filePath, `${JSON.stringify(checks, null, 2)}\n`)
   const message = `${courses.length} course pages: ${counts.ok} ok, ${counts.changed} changed, ${counts.gone} gone, ${counts.unreadable} not read.`
   return { status: counts.unreadable > 0 ? 'partial' : 'updated', message, checks }

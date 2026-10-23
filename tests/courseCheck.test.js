@@ -134,6 +134,12 @@ describe('refreshCourseChecks', () => {
     expect(file.courses[saved.url].status).toBe('ok')
     expect(file.courses[saved.url].checkedAt).toBe('2026-10-24T10:00:00.000Z')
     expect(file.counts.unreadable).toBe(1)
+    expect(file.lastRunAt).toBe('2026-10-31T10:00:00.000Z')
+    expect(file.checkedAt).toBe('2026-10-24T10:00:00.000Z')
+  })
+
+  it('records the HTTP status when a page is refused, so the cause can be seen', async () => {
+    expect(await checkCourse(saved, { fetchImpl: reply(403) })).toMatchObject({ status: 'unreadable', httpStatus: 403 })
   })
 
   it('keeps the saved file when nothing could be read', async () => {
