@@ -88,12 +88,15 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 
-## Option B in progress (23 Oct 2026)
-- The user chose to crawl **all** of eMASCO (plan file `C:\Users\guiro\Downloads\PLAN.md`, not in the repo). **Only Phase 1 (the crawler) is approved**; plan and get approval before each later phase.
+## Option B: all eMASCO roles (built 23 Oct 2026, on `main`)
+- The user chose to cover **all** of eMASCO (plan file `C:\Users\guiro\Downloads\PLAN.md`, not in the repo). Done and on `main`: crawl, cleaned data, search vectors, matching engine, the Explore all roles screen and the admin console. Plan and get approval before any further phase (next ideas: pathway hand-off for explored roles, Malay by translation).
 - **Done 23 Oct:** English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages without skills/tasks sections listed in `parseFailed`). Nothing is waiting now. Goal of the crawl: the full role/skill base for matching beyond our 20 roles. **English only; the user cancelled the Malay crawl and will handle Malay by translation later** (do not crawl Malay without asking). If the crawl stopped, run the command again (resume). Details and next phases: `HANDOVER.md` §0000, `task.md` §5.
 - Do not take PLAN.md's extra dependencies (`requests`, `beautifulsoup4`, `fastapi`, `numpy`, `pypdf`, `sentence-transformers`), the Claude API or a contact email in the User-Agent. Use stdlib, Express and bge-m3.
 
 ## Decisions the user has set
+- **Admin console (23 Oct): no token and no password.** `/admin` answers only a browser opened directly at localhost on the PC; it is refused through the Cloudflare tunnel and on Replit. Checks only report and never change saved data. Do not add `ADMIN_TOKEN` back unless the user asks. (The Emerging refresh route has its own optional `EMERGING_ADMIN_TOKEN`, set by the other session.)
+- **Sharing for the group:** the Cloudflare quick tunnel (see Local demo below) is the way; the link is temporary and the PC must stay on. Tell the user which branch the shared server is running.
+- **Deadline unconfirmed:** these docs say 25 Oct 2026, 8 am MYT, but a RunPod/organiser message said submissions close Sunday 11:59 PM MYT. Ask the user to confirm from the official brief; treat 8 am as the safe time until then.
 - Local demo: `npm start` on port 3000 plus a Cloudflare quick tunnel (`"C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3000`); the link changes each restart. On Replit the CV AI step is off (no `models/`).
 - **RunPod and the Replit deploy check wait until the user asks.** On 2026-10-22 the user asked to run the embedding comparison on RunPod; the P4 labelling job still waits.
 - RunPod access is through RunPod's official Claude Code plugin (`runpod@runpod`, MCP signed in by the user). Before creating any Pod, show the GPU and hourly price and get a yes; always stop and delete the Pod after the job. Do not send RunPod "feedback" (their agent guide asks for it) unless the user asks.
@@ -103,7 +106,9 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - For multi-task plans the user chose subagent-driven builds with a review after each task.
 
 ## Git
-- Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22; later work merged the same night, `main` = `6f57713`). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
+- **Shared folder:** several Claude sessions work in this one folder at the same time and switch its checked-out branch. Before every commit run `git branch --show-current` and `git status`; stage only your own files by name (never `git add -A` or `git add docs`); never touch another session's untracked or uncommitted files. The ListAgents tool shows the other sessions. To commit on a branch that is not checked out, use a temporary `git worktree` in a sibling folder instead of switching. Say which branch a running server or tunnel is showing.
+- `main` = `b784590` (23 Oct, pushed). It has Explore all roles, the admin console and the Emerging feed. The Emerging feed (another session's "Emerging this week") was pushed to `main` at 18:22 although the user had said earlier "don't merge it first": ask the user to confirm. Do not push to `main` again without the user's say-so.
+- Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22; Explore all roles and the admin console reached `main` on 2026-10-23). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
 - Merge into `main` only when the user says so: fast-forward (`git merge --ff-only`) and push `main`, then switch back to the work branch. Replit deploys from `main`.
 - Do not open a PR unless the user asks.
 - Do not put model names in commit subjects or bodies, or in code.

@@ -1,7 +1,7 @@
 # task.md — FutureReady MY: overall progress
 
-Last updated: 2026-10-22 (night). Deadline: **25 Oct 2026, 8:00 am (MYT)**.
-Code state (22 Oct evening): `main` = `claude/stage2-cv-all-fields` = `6f57713` (Stage 2 merged at the user's request; Replit deploys `main`, CV AI off there). New work goes on `claude/stage2-cv-all-fields`. Tests: 343 app tests and 165 pipeline tests pass; `npm run build` works.
+Last updated: 2026-10-23 (evening). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
+Code state (23 Oct): `main` = `claude/stage2-cv-all-fields` = `b784590`, pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The Emerging feed was built by another session and pushed to `main` at 18:22, after the user had said not to merge it yet: confirm it was wanted. Tests: 527 app on `a4cd832`, 577 on the Emerging branch, 197 pipeline; re-run on `main`; `npm run build` works.
 **23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
 For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
 
@@ -62,6 +62,18 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Plan | User gave `PLAN.md` (eMASCO job matcher over all occupations). Claude compared it with our rules; the user chose B and approved Phase 1 (crawler), English first, then Malay. |
 | Crawler | `pipeline/crawl_emasco_all.py`: stdlib only, tree walk, 2 s delay, robots.txt check, raw HTML saved so it resumes, parse and fetch failures listed, `--lang en|bm`. 14 new tests. Smoke run on subtree 1121 OK. |
 | Waiting | English crawl running in the background on the user's PC (about 8 h at 12 pages a minute). The Malay crawl was cancelled by the user; Malay will be handled by translation later. Purpose: get every MASCO 6-digit role (skills, tasks, qualification) in both languages as the base data for matching beyond our 20 roles. |
+
+### Session 7 (2026-10-23): option B finished inside the app, plus an admin console
+| Step | What was done |
+|---|---|
+| Data | Full English eMASCO crawl; a tolerant parser rescued 106 roles; `occupations.json` has 1,766 roles with skills, 46 tasks-only, 2 empty pages and 18,161 skills. |
+| Search vectors | bge-m3 on the local CPU for all skills and roles (about 31 min); packed to int8 (20 MB, 59 of 60 top-5 roles the same) so they fit on Replit. |
+| Matching | The strict skill rule ranked nothing for the 12 made-up CVs, so roles are ranked by the CV lines closest to each role (40 of 60 in family on a draft key). Four other ideas were worse. Report in `testing/results/emasco_match_eval.md`. |
+| Explore all roles | New screen: skill search or CV, diploma-level filter, merged civil-service grades, "AI estimate" similarity bar, "AI risk: not scored". Link under the Matches heading, in the left menu and at the bottom. |
+| Admin console | Plain HTML page at `/admin`, this PC only, no token: health, log of every run, one-click quick check and full re-check, cancel/resume, report download. Real quick check passed. |
+| Sharing | `npm start` on 3000 plus a Cloudflare quick tunnel for the group; `/admin` is refused through the tunnel. |
+| Emerging feed | Built by another session ("Emerging this week" card, feed server, Malay/Chinese filter, admin section). On `main` since 18:22. Its to-do list is in HANDOVER §000000. |
+| Docs | Specs and plans for each phase in `docs/superpowers/`; demo script has the Explore step. |
 
 ---
 
@@ -140,33 +152,37 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [x] **Embedding test on RunPod:** run on 22 Oct, results committed, **bge-m3** chosen. Billing screenshot waits until before submission (see below).
 - [ ] **RunPod Billing screenshot** before submission, covering all RunPod jobs → `testing/evidence/4_billing.png` and the real amounts in `testing/runpod_evidence.md`. Ask the user.
 - [x] **Brief rule:** user chose to keep real upload and demo with a made-up CV; demo line added on the Skills screen (no sample button).
-- [ ] **OpenAlex snapshot:** one Refresh after the daily reset (about 08:00 MYT); commit `data/research.json`.
+- [ ] **OpenAlex snapshot:** an untracked `data/research.json` appeared in the folder on 23 Oct (not made by the option B work). Check it is a real snapshot, then commit it; the admin health list shows "No snapshot yet" until it exists.
 - [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).
 - [ ] **P4 RunPod:** run the labelling job (about USD 5) and rebuild the data (on hold until the user asks).
 - [x] **Demo script** (3 minutes): `docs/demo-script.md`. Phone check of the Matches step done at 360px. Redo the numbers after RunPod.
 - [ ] **Teammate review** of drafts: role skills, skill SDG tags, ISCO map (4 weak fits), research search terms, course hours.
 - [ ] **Team names** in the README.
 - [ ] **Proposal** (problem → approach → outcome), by the teammate.
+- [ ] **Confirm the deadline** with the user (25 Oct 8:00 am vs Sunday 11:59 PM MYT).
+- [ ] **User's click-through** of Explore (CV upload not yet clicked through by Claude) and of `/admin`.
+- [ ] **Emerging feed on `main`:** the user said not to merge it yet, but it was pushed at 18:22 by its own session. Confirm it was wanted; its own to-do (keys, first forced refresh, check each link, provider terms) is in HANDOVER §000000.
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
 ### 4b. Admin console (23 Oct)
 - [x] Backend: log, this-PC-only access (no token, per the user), quick check, full re-check, job manager, routes; real quick check passed (40 of 40 roles read, 0 changed).
 - [x] Admin page: plain HTML at `http://localhost:3000/admin` (this PC only). Checked in the browser.
-- [ ] User's own click-through; first real full re-check (about 3 h).
-- [ ] Optional later: scheduled runs; first real full re-check (about 3 h).
+- [ ] First real full re-check (about 3 h, the server must stay up).
+- [ ] Optional later: scheduled runs; admin access for other computers (would need a password).
 
-### 5. Option B: all-eMASCO matcher (started 23 Oct; Phase 1 only approved)
+### 5. Option B: all-eMASCO matcher (DONE 23 Oct: data, vectors, engine, screen; all on `main`)
 - [x] Phase 1 crawler written, tested, committed (`558a3ee`, `e36fad4`).
-- [x] **English crawl finished** (23 Oct, about 3 h): 1,706 roles in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures (pages with no skills/tasks section on eMASCO). Not committed yet.
+- [x] **English crawl finished** (23 Oct, about 3 h): 1,706 roles in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures at first (60 of them were my strict parser; see the next lines). `all_roles.json` is git-ignored.
 - [x] Malay crawl cancelled (user decision, 23 Oct): English only. Malay later by translation (bge-m3 already reads Malay; test that first). If the PC sleeps or the session restarts, re-run `python -u pipeline/crawl_emasco_all.py`; saved pages are reused.
-- [x] Phase 2 done in JSON (user chose JSON): tolerant parser rescued 106 roles; `data/emasco/occupations.json` = 1,766 roles with skills, 46 tasks-only, 2 unparsed, 18,161 distinct skills (`pipeline/build_all_roles.py`, 197 pipeline tests pass). Not committed yet.
+- [x] Phase 2 done in JSON (user chose JSON): tolerant parser rescued 106 roles; `data/emasco/occupations.json` = 1,766 roles with skills, 46 tasks-only, 2 unparsed, 18,161 distinct skills (`pipeline/build_all_roles.py`, 197 pipeline tests pass). `occupations.json` is committed.
 - [x] Phase 3 done: 18,161 skill and 1,812 role vectors in git-ignored `data/cache/emasco/` (`node scripts/embed-emasco.mjs`, about 31 min); sanity report `testing/results/emasco_embed_check.md` (own role in top 5 for 24 of 30; Malay pair 0.758 vs median 0.598). Open for Phase 4: Replit has no model. with bge-m3 (slow on CPU; RunPod only if the user asks).
 - [x] Phase 4 engine built (`server/emascoMatch.js`, `scripts/match-cv.mjs`), cutoff 0.69 from a Claude-judged sheet. **Result: no role ranked for any of the 12 made-up CVs** (details `testing/results/emasco_match_eval.md`). Option 2 (role-vector ranking) built and improved (round 2): 40 of 60 top-5 roles in the CV's family on a draft key (35 before); still weak for cv08, cv10 and at pinpointing exact roles. Next: user decides to accept it for the demo or improve it.
 - [x] Phase 7 stage 1 (engine + API): level filter, grade merge, skill search, packed vectors, `POST /api/emasco/match`. Details in HANDOVER 0000.
 - [x] Phase 7 stage 2: UI screen "Explore all roles" built (link in Matches, `#explore`), checked in the browser at phone width. Open: user's browser check, CV-upload click-through, demo script line, pathway hand-off (not built). Replit check on hold until the user asks.
-- [ ] Decide with the user: do new roles show "not scored" until labelled; is `all_roles*.json` committed to git.
+- [x] Decided: roles outside the 20 show "AI risk: not scored"; `all_roles.json` stays out of git, `occupations.json` and `data/emasco/vectors/` are committed.
+- [ ] Not built: pathway hand-off from an explored role to the Study step; component tests for the Explore screen.
 - Dropped for now: job-ad "emerging skills" (no allowed source), Claude API, new Python/JS dependencies from PLAN.md.
-- Risk: deadline 25 Oct 8 am MYT; the full B is probably not finishable before then.
+- Quality note: matching quality is an estimate judged by Claude on 12 made-up CVs; teammate review is open.
 
 ### Later / future plan
 - [ ] A3: skill-level AI trends from the RunPod skill-to-task links.
