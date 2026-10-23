@@ -15,6 +15,7 @@ import SdgTag from '../components/SdgTag.jsx';
 import { startingPoint } from '../lib/potential.js';
 import { orderForGoal } from '../lib/goalView.js';
 import SourceNote from '../components/SourceNote.jsx';
+import SkillsVsAi from '../components/SkillsVsAi.jsx';
 
 export default function Study({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
   // No role picked yet: the top role in the student's goal order.
@@ -137,6 +138,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
             );
           })}
         </ol>
+        <SkillsVsAi role={role} profile={profile} ctx={ctx} data={data} />
         <SourceNote>
           Order: skill with the highest future importance first. Links go to official portals (HRD Corp e-Latih, HRD
           Corp claimable courses, MyTVET). The app does not invent course names. Skill-to-SDG tags: our team's
