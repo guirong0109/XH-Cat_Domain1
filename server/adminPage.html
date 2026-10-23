@@ -48,6 +48,18 @@
   dd { margin:0; }
   ul.plain { margin:4px 0 0; padding-left:18px; font-size:14px; }
   a { color:var(--teal); }
+  label { display:block; font-size:13px; font-weight:700; margin:10px 0 4px; }
+  input[type="text"], input[type="url"], select { font:inherit; min-height:44px; width:100%; padding:0 12px; border:1px solid #94A3B8; border-radius:10px; background:#fff; color:var(--ink); }
+  input:focus-visible, select:focus-visible { outline:3px solid var(--teal); outline-offset:2px; }
+  .em-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; }
+  .em-check { display:flex; gap:10px; align-items:flex-start; font-weight:400; font-size:14px; }
+  .em-check input { width:22px; height:22px; margin-top:2px; }
+  .em-sample { background:#F8FAFC; border:1px dashed #94A3B8; border-radius:10px; padding:10px 12px; font-size:13px; margin-top:10px; }
+  .em-item { border-top:1px solid var(--line); padding:14px 0; display:flex; flex-direction:column; gap:6px; }
+  .em-item:first-child { border-top:0; }
+  .em-item a { display:inline-flex; align-items:center; min-height:44px; }
+  .url { overflow-wrap:anywhere; color:var(--muted); font-size:12px; }
+  button[disabled] { border-style:dashed; color:#64748B; border-color:#94A3B8; cursor:not-allowed; }
   @media (max-width:560px) { .health { grid-template-columns:1fr; gap:2px; } th:nth-child(3), td:nth-child(3) { display:none; } }
   @media (prefers-reduced-motion: no-preference) { .bar > div { transition:width .3s ease; } }
 </style>
@@ -64,6 +76,46 @@
 
   <p class="note">This page works only on this PC, opened at <strong>localhost</strong>. A check only reads eMASCO and reports. It never changes your saved roles, skills or vectors.</p>
   <div id="problem" class="warnbox" role="alert" hidden></div>
+
+  <section class="card" aria-labelledby="h-em" id="emerging">
+    <div class="row spread">
+      <div>
+        <h2 id="h-em" style="margin:0">Emerging feed</h2>
+        <p class="muted" id="em-status">Loading…</p>
+      </div>
+      <button type="button" class="primary" id="em-refresh">Refresh now</button>
+    </div>
+    <p class="muted" style="margin-top:6px">A refresh takes about 1 minute. It adds new items only and never changes an item you already reviewed. Students see the items on the Matches screen.</p>
+    <div id="em-msg" class="note" role="status" aria-live="polite" style="margin-top:10px" hidden></div>
+
+    <h3 style="margin-top:18px">Sources</h3>
+    <div id="em-sources"><p class="muted">Loading…</p></div>
+
+    <h3 style="margin-top:18px">Add a source</h3>
+    <p class="muted">Public feeds (RSS) only. No scraping. The feed is read, not saved, until you add it.</p>
+    <div class="em-grid">
+      <div><label for="em-name">Name</label><input id="em-name" type="text" maxlength="60" autocomplete="off"></div>
+      <div><label for="em-url">Feed address (https)</label><input id="em-url" type="url" placeholder="https://example.com/feed/" autocomplete="off"></div>
+      <div><label for="em-lang">Language</label><select id="em-lang"><option value="ms">Malay</option><option value="en">English</option><option value="zh">Chinese</option></select></div>
+      <div><label for="em-filter">Which stories</label><select id="em-filter"><option value="work">Only job and work stories</option><option value="all">All stories (the feed is already about AI or work)</option></select></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button type="button" id="em-test">Test this feed</button></div>
+    <div id="em-test-result" class="em-sample" role="status" aria-live="polite" hidden></div>
+    <label class="em-check" style="margin-top:12px"><input type="checkbox" id="em-terms"> I read the publisher's terms and they allow showing headlines and links.</label>
+    <div class="row" style="margin-top:12px"><button type="button" class="primary" id="em-add" disabled>Add source (test it and tick the box first)</button></div>
+
+    <div class="row spread" style="margin-top:22px">
+      <h3 style="margin:0">Review items</h3>
+      <div class="seg" role="group" aria-label="Show items" id="em-filters">
+        <button type="button" data-show="pending" aria-pressed="true">Pending</button>
+        <button type="button" data-show="reviewed" aria-pressed="false">Reviewed</button>
+        <button type="button" data-show="all" aria-pressed="false">All</button>
+      </div>
+    </div>
+    <p class="note" style="margin-top:8px">Check four things before you press Reviewed: <strong>1</strong> the link opens and the headline matches, <strong>2</strong> the summary says only what the article says, <strong>3</strong> the tags fit, <strong>4</strong> it is useful for Malaysian diploma or foundation students.</p>
+    <div id="em-items"><p class="muted">Loading…</p></div>
+    <p class="muted" style="margin-top:8px">Delete hides an item for good: its address is remembered, so a refresh does not bring it back. Reviewed items show the teal "Reviewed by the team" badge to students.</p>
+  </section>
 
   <section class="card" aria-labelledby="h-health">
     <h2 id="h-health">System health</h2>
@@ -352,6 +404,225 @@
   });
 
   loadOverview();
+})();
+</script>
+<script>
+// Emerging feed: refresh, sources, review. Text is inserted with textContent only: titles and summaries come from other websites.
+(function () {
+  'use strict';
+  var LANG = { en: 'English', ms: 'Malay', zh: 'Chinese' };
+  var em = { data: null, show: 'pending', tested: null, busy: false };
+
+  function $(id) { return document.getElementById(id); }
+  function h(tag, props) {
+    var node = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (key) {
+      if (key === 'text') node.textContent = props[key];
+      else if (key === 'class') node.className = props[key];
+      else node.setAttribute(key, props[key]);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var child = arguments[i];
+      if (child != null) node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
+    }
+    return node;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+  function pill(text, tone) { return h('span', { class: 'pill ' + (tone || ''), text: text }); }
+  function day(iso) {
+    var date = new Date(iso);
+    return isNaN(date) ? '' : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function say(text, bad) {
+    var box = $('em-msg');
+    box.hidden = !text;
+    box.textContent = text || '';
+    box.className = bad ? 'warnbox' : 'note';
+    box.setAttribute('role', bad ? 'alert' : 'status');
+  }
+  function call(path, method, body) {
+    var options = { method: method || 'GET', headers: {}, cache: 'no-store' };
+    if (options.method === 'POST') { options.headers['Content-Type'] = 'application/json'; options.body = JSON.stringify(body || {}); }
+    return fetch('/api/admin/emerging' + path, options).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (response.status === 403) throw new Error('This page only works when it is opened directly at http://localhost:3000/admin on the same PC.');
+        return { ok: response.ok, status: response.status, body: data };
+      });
+    });
+  }
+  function fail(error) { say(error && error.message ? error.message : 'Could not reach the server.', true); }
+  function setBusy(busy) {
+    em.busy = busy;
+    $('em-refresh').disabled = busy;
+    $('em-refresh').textContent = busy ? 'Refreshing… (about 1 minute)' : 'Refresh now';
+  }
+
+  function renderStatus() {
+    var d = em.data;
+    var parts = [];
+    parts.push(d.checkedOn ? 'Last checked ' + day(d.checkedOn) : 'Not refreshed yet');
+    parts.push(d.interval === 'daily' ? 'daily' : 'weekly');
+    parts.push(d.tagging === 'ai' ? 'tagging: AI' : d.tagging === 'keywords' ? 'tagging: keywords only (no AI summaries)' : 'tagging: not run yet');
+    parts.push(d.counts.total + ' items, ' + d.counts.pending + ' pending, ' + d.counts.reviewed + ' reviewed');
+    if (!d.modelConfigured) parts.push('no AI key set on this server');
+    $('em-status').textContent = parts.join(' · ');
+  }
+
+  function renderSources() {
+    var box = clear($('em-sources'));
+    var head = h('tr', {}, h('th', { scope: 'col', text: 'Source' }), h('th', { scope: 'col', text: 'Language' }), h('th', { scope: 'col', text: 'Confidence' }), h('th', { scope: 'col', text: 'Last run' }), h('th', { scope: 'col', text: 'Switch' }));
+    var body = h('tbody');
+    em.data.sources.forEach(function (source) {
+      var run = source.lastRun;
+      var runCell = !run ? pill('Not run yet') : run.ok ? h('span', {}, pill('OK', 'ok'), ' ' + (run.count != null ? run.count + ' items' : '')) : h('span', {}, pill('Failed', 'bad'), ' ' + (run.error || ''));
+      var buttons = h('div', { class: 'row' });
+      if (!source.fixed) {
+        var toggle = h('button', { type: 'button', text: source.enabled ? 'Switch off' : 'Switch on', 'aria-label': (source.enabled ? 'Switch off ' : 'Switch on ') + source.name });
+        toggle.addEventListener('click', function () { act('/sources/' + source.id + '/toggle', { enabled: !source.enabled }); });
+        buttons.appendChild(toggle);
+        if (!source.builtIn) {
+          var remove = h('button', { type: 'button', class: 'danger', text: 'Remove', 'aria-label': 'Remove ' + source.name });
+          remove.addEventListener('click', function () { if (window.confirm('Remove ' + source.name + '? Items already saved stay.')) act('/sources/' + source.id + '/remove', {}); });
+          buttons.appendChild(remove);
+        }
+      } else {
+        buttons.appendChild(h('span', { class: 'muted', text: 'Always on' }));
+      }
+      body.appendChild(h('tr', {},
+        h('td', {}, h('div', { text: source.name }), h('div', { class: 'url', text: source.url + (source.builtIn ? ' · built in' : ' · added by you') })),
+        h('td', { text: LANG[source.language] || source.language }),
+        h('td', {}, pill(source.fixed ? 'High' : 'Medium', source.fixed ? 'ok' : 'warn')),
+        h('td', {}, runCell),
+        h('td', {}, source.enabled ? buttons : h('div', {}, pill('Off'), buttons))));
+    });
+    box.appendChild(h('table', {}, h('thead', {}, head), body));
+  }
+
+  function renderItems() {
+    var box = clear($('em-items'));
+    var counts = em.data.counts;
+    Array.prototype.forEach.call($('em-filters').querySelectorAll('button'), function (button) {
+      var key = button.getAttribute('data-show');
+      var number = key === 'pending' ? counts.pending : key === 'reviewed' ? counts.reviewed : counts.total;
+      button.textContent = key.charAt(0).toUpperCase() + key.slice(1) + ' ' + number;
+      button.setAttribute('aria-pressed', String(key === em.show));
+    });
+    var items = em.data.items.filter(function (item) {
+      var reviewed = item.review === 'reviewed';
+      return em.show === 'all' || (em.show === 'reviewed' ? reviewed : !reviewed);
+    });
+    if (!items.length) { box.appendChild(h('p', { class: 'muted', text: 'Nothing to show here.' })); return; }
+    items.forEach(function (item) {
+      var reviewed = item.review === 'reviewed';
+      var tags = (item.fields || []).concat((item.skills || []).map(function (skill) { return skill.name + (skill.inEmasco ? '' : ' (not in eMASCO)'); }));
+      var link = h('a', { href: item.url, target: '_blank', rel: 'noopener noreferrer', text: 'Open source' });
+      var mark = h('button', { type: 'button', class: reviewed ? '' : 'primary', text: reviewed ? 'Back to pending' : 'Reviewed', 'aria-label': (reviewed ? 'Set back to pending: ' : 'Mark reviewed: ') + item.title });
+      mark.addEventListener('click', function () { act('/items/' + item.id, { action: reviewed ? 'pending' : 'reviewed' }); });
+      var del = h('button', { type: 'button', class: 'danger', text: 'Delete', 'aria-label': 'Delete: ' + item.title });
+      del.addEventListener('click', function () { if (window.confirm('Delete this item for good?')) act('/items/' + item.id, { action: 'delete' }); });
+      box.appendChild(h('div', { class: 'em-item' },
+        h('div', { class: 'row' },
+          pill(item.confidence === 'high' ? 'High' : 'Medium', item.confidence === 'high' ? 'ok' : 'warn'),
+          item.language && item.language !== 'en' ? pill(LANG[item.language] || item.language) : null,
+          pill(reviewed ? 'Reviewed' : 'Pending review', reviewed ? 'ok' : ''),
+          h('span', { class: 'muted', text: item.source + ' · published ' + day(item.publishedAt) })),
+        h('h3', { text: item.title, style: 'margin:0' }),
+        item.summary ? h('p', { class: 'muted', text: 'AI estimate: ' + item.summary }) : null,
+        h('p', { class: 'muted', text: 'Tags: ' + (tags.length ? tags.join(', ') : 'none') }),
+        h('div', { class: 'row' }, link, mark, del)));
+    });
+  }
+
+  function render() { renderStatus(); renderSources(); renderItems(); }
+
+  function load() {
+    return call('').then(function (result) {
+      if (!result.ok) throw new Error('Could not load the emerging feed.');
+      em.data = result.body;
+      render();
+    }).catch(fail);
+  }
+
+  // Changes something, then shows the fresh list that the server sends back.
+  function act(path, body) {
+    say('');
+    return call(path, 'POST', body).then(function (result) {
+      if (!result.ok) { say(result.body.error || 'That did not work.', true); return; }
+      em.data = result.body;
+      render();
+    }).catch(fail);
+  }
+
+  function formValues() {
+    return { name: $('em-name').value.trim(), url: $('em-url').value.trim(), language: $('em-lang').value, filter: $('em-filter').value };
+  }
+  function fingerprint(values) { return [values.url, values.language, values.filter].join('|'); }
+  function updateAdd() {
+    var ok = em.tested && em.tested === fingerprint(formValues()) && $('em-terms').checked && $('em-name').value.trim() !== '';
+    $('em-add').disabled = !ok;
+  }
+  function formChanged() { em.tested = null; $('em-test-result').hidden = true; updateAdd(); }
+
+  $('em-refresh').addEventListener('click', function () {
+    say('');
+    setBusy(true);
+    call('/refresh', 'POST', {}).then(function (result) {
+      if (!result.ok) { say(result.body.error || 'The refresh did not work.', true); return; }
+      say(result.body.message + (result.body.status === 'failed' ? ' The old items stay.' : ''), result.body.status === 'failed');
+    }).catch(fail).then(function () { setBusy(false); return load(); });
+  });
+
+  $('em-test').addEventListener('click', function () {
+    var values = formValues();
+    var box = clear($('em-test-result'));
+    box.hidden = false;
+    box.appendChild(h('p', { text: 'Testing…' }));
+    em.tested = null;
+    updateAdd();
+    call('/test', 'POST', values).then(function (result) {
+      clear(box);
+      if (result.status === 400) { box.appendChild(h('p', {}, pill('Cannot test', 'bad'), ' ' + (result.body.error || ''))); return; }
+      var r = result.body;
+      if (!r.ok) { box.appendChild(h('p', {}, pill('Not usable', 'bad'), ' ' + (r.error || ''))); return; }
+      box.appendChild(h('p', {}, pill('Feed works', 'ok'), ' ', pill(r.robots === 'allowed' ? 'robots.txt allows it' : 'no robots.txt', 'ok'), ' ', pill(r.total + ' items read', 'ok')));
+      var list = h('ul', { class: 'plain' });
+      r.sample.forEach(function (entry) { list.appendChild(h('li', { text: entry.title + ' · ' + day(entry.publishedAt) })); });
+      list.appendChild(h('li', { text: r.passed + ' of ' + r.total + ' would pass the story filter' }));
+      box.appendChild(list);
+      em.tested = fingerprint(values);
+      updateAdd();
+    }).catch(function (error) { clear(box); box.appendChild(h('p', { text: error.message })); });
+  });
+
+  ['em-url', 'em-lang', 'em-filter'].forEach(function (id) { $(id).addEventListener('input', formChanged); $(id).addEventListener('change', formChanged); });
+  $('em-name').addEventListener('input', updateAdd);
+  $('em-terms').addEventListener('change', updateAdd);
+
+  $('em-add').addEventListener('click', function () {
+    var values = formValues();
+    values.termsChecked = $('em-terms').checked;
+    say('');
+    call('/sources', 'POST', values).then(function (result) {
+      if (!result.ok) { say(result.body.error || 'Could not add the source.', true); return; }
+      em.data = result.body;
+      render();
+      say('Source added. It is used from the next refresh.');
+      $('em-name').value = '';
+      $('em-url').value = '';
+      $('em-terms').checked = false;
+      formChanged();
+    }).catch(fail);
+  });
+
+  $('em-filters').addEventListener('click', function (event) {
+    var show = event.target.getAttribute && event.target.getAttribute('data-show');
+    if (!show || !em.data) return;
+    em.show = show;
+    renderItems();
+  });
+
+  load();
 })();
 </script>
 </body>

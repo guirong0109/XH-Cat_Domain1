@@ -9,7 +9,8 @@ import { readResearch, refreshResearch } from './research.js'
 import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from './cvMatch.js'
 import { loadSkillVectors } from './skillVectors.js'
 import { readReferences, refreshReferences } from './references.js'
-import { modelFromEnv, readEmerging, refreshEmerging } from './emerging.js'
+import { modelFromEnv, readEmerging, refreshEmerging, reviewItem } from './emerging.js'
+import { activeFeeds, allFeeds, checkFeed, readSourceConfig, validateNewSource, writeSourceConfig } from './emergingSources.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
 import { createSkillSearch } from './emascoRoles.js'
@@ -120,6 +121,28 @@ export function createApp({
     }
   })
 
+  const emergingSourcesPath = path.join(dataDir, 'emerging_sources.json')
+  async function runEmergingRefresh(force) {
+    const [skills, fields, sourceConfig] = await Promise.all([
+      readJson(path.join(dataDir, 'skills.json')),
+      readJson(path.join(dataDir, 'fields.json')),
+      readSourceConfig(emergingSourcesPath),
+    ])
+    return logged('emerging', () =>
+      refreshEmerging({
+        filePath: emergingPath,
+        skills: skills.labels,
+        groups: fields.groups,
+        feeds: activeFeeds(sourceConfig),
+        fetchImpl,
+        primary: emergingConfig.primary,
+        backup: emergingConfig.backup,
+        interval: emergingConfig.interval,
+        force,
+      }),
+    )
+  }
+
   // "Emerging this week": needs the admin token so students cannot spend the model quota.
   // Add ?force=1 to refresh before the weekly (or daily) gap has passed.
   app.post('/api/refresh-emerging', async (request, response) => {
@@ -131,21 +154,7 @@ export function createApp({
       return response.status(401).json({ error: 'wrong-admin-token' })
     }
     try {
-      const [skills, fields] = await Promise.all([readJson(path.join(dataDir, 'skills.json')), readJson(path.join(dataDir, 'fields.json'))])
-      response.json(
-        await logged('emerging', () =>
-          refreshEmerging({
-            filePath: emergingPath,
-            skills: skills.labels,
-            groups: fields.groups,
-            fetchImpl,
-            primary: emergingConfig.primary,
-            backup: emergingConfig.backup,
-            interval: emergingConfig.interval,
-            force: request.query.force === '1',
-          }),
-        ),
-      )
+      response.json(await runEmergingRefresh(request.query.force === '1'))
     } catch (error) {
       console.error('[emerging] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not refresh the emerging feed.' })
@@ -302,6 +311,91 @@ export function createApp({
     if (!report) return response.status(404).json({ error: 'not-found' })
     response.set('Content-Disposition', `attachment; filename="report-${id}.json"`)
     response.json(report)
+  })
+
+  // Emerging feed admin: refresh, sources and review. Same local-only rule as the rest of /admin.
+  const MAX_CUSTOM_SOURCES = 20
+
+  async function emergingSnapshot() {
+    const [config, saved] = await Promise.all([readSourceConfig(emergingSourcesPath), readEmerging(emergingPath)])
+    const lastRuns = new Map((saved?.sources ?? []).map((source) => [source.name, source]))
+    const items = saved?.items ?? []
+    const reviewed = items.filter((item) => item.review === 'reviewed').length
+    const openAlex = { id: 'openalex', name: 'OpenAlex', url: 'https://api.openalex.org', language: 'en', builtIn: true, fixed: true, enabled: true }
+    return {
+      checkedOn: saved?.checkedOn ?? null,
+      checkedAt: saved?.checkedAt ?? null,
+      tagging: saved?.tagging ?? null,
+      interval: emergingConfig.interval === 'daily' ? 'daily' : 'weekly',
+      modelConfigured: Boolean(emergingConfig.primary),
+      counts: { total: items.length, pending: items.length - reviewed, reviewed },
+      sources: [openAlex, ...allFeeds(config)].map((source) => ({ ...source, lastRun: lastRuns.get(source.name) ?? null })),
+      items,
+    }
+  }
+
+  admin.get('/emerging', async (request, response) => {
+    response.json(await emergingSnapshot())
+  })
+
+  admin.post('/emerging/refresh', async (request, response) => {
+    try {
+      response.json(await runEmergingRefresh(true))
+    } catch (error) {
+      console.error('[emerging] admin refresh failed:', error.message)
+      response.status(500).json({ error: 'Could not refresh the emerging feed.' })
+    }
+  })
+
+  const knownUrls = (config) => allFeeds(config).map((feed) => feed.url)
+
+  admin.post('/emerging/test', async (request, response) => {
+    const config = await readSourceConfig(emergingSourcesPath)
+    const checked = validateNewSource({ name: 'test', ...request.body }, knownUrls(config))
+    if (!checked.ok) return response.status(400).json({ error: checked.error })
+    response.json(await checkFeed(checked.source, fetchImpl))
+  })
+
+  admin.post('/emerging/sources', async (request, response) => {
+    if (request.body?.termsChecked !== true) return response.status(400).json({ error: 'Tick the box to say you read the publisher terms.' })
+    const config = await readSourceConfig(emergingSourcesPath)
+    if (config.custom.length >= MAX_CUSTOM_SOURCES) return response.status(400).json({ error: `At most ${MAX_CUSTOM_SOURCES} added sources.` })
+    const checked = validateNewSource(request.body, knownUrls(config))
+    if (!checked.ok) return response.status(400).json({ error: checked.error })
+    const result = await checkFeed(checked.source, fetchImpl)
+    if (!result.ok) return response.status(422).json({ error: result.error })
+    await writeSourceConfig(emergingSourcesPath, { ...config, custom: [...config.custom, checked.source] })
+    response.json(await emergingSnapshot())
+  })
+
+  admin.post('/emerging/sources/:id/toggle', async (request, response) => {
+    if (typeof request.body?.enabled !== 'boolean') return response.status(400).json({ error: 'Send enabled as true or false.' })
+    if (request.params.id === 'openalex') return response.status(400).json({ error: 'OpenAlex is always on.' })
+    const config = await readSourceConfig(emergingSourcesPath)
+    const feed = allFeeds(config).find((entry) => entry.id === request.params.id)
+    if (!feed) return response.status(404).json({ error: 'not-found' })
+    const off = request.body.enabled ? config.off.filter((url) => url !== feed.url) : [...new Set([...config.off, feed.url])]
+    await writeSourceConfig(emergingSourcesPath, { ...config, off })
+    response.json(await emergingSnapshot())
+  })
+
+  admin.post('/emerging/sources/:id/remove', async (request, response) => {
+    const config = await readSourceConfig(emergingSourcesPath)
+    const feed = allFeeds(config).find((entry) => entry.id === request.params.id)
+    if (!feed) return response.status(404).json({ error: 'not-found' })
+    if (feed.builtIn) return response.status(400).json({ error: 'Built-in sources can be switched off, not removed.' })
+    await writeSourceConfig(emergingSourcesPath, {
+      custom: config.custom.filter((entry) => entry.url !== feed.url),
+      off: config.off.filter((url) => url !== feed.url),
+    })
+    response.json(await emergingSnapshot())
+  })
+
+  admin.post('/emerging/items/:id', async (request, response) => {
+    const result = await reviewItem({ filePath: emergingPath, id: request.params.id, action: request.body?.action })
+    if (result.status === 'bad-action') return response.status(400).json({ error: 'The action must be reviewed, pending or delete.' })
+    if (result.status === 'not-found') return response.status(404).json({ error: 'not-found' })
+    response.json(await emergingSnapshot())
   })
 
   app.use('/api/admin', admin)

@@ -16,6 +16,7 @@ const FEEDS = [
   { name: 'BBC Chinese', url: 'https://feeds.bbci.co.uk/zhongwen/simp/rss.xml', filter: 'work', language: 'zh' },
   { name: 'DW Chinese', url: 'https://rss.dw.com/xml/rss-chi-all', filter: 'work', language: 'zh' },
 ]
+export const BUILT_IN_FEEDS = FEEDS
 // 'topic' feeds are already about technology, so AI words or work words pass. General news ('work') needs a work word:
 // "AI" alone lets stock-market stories through.
 const WORK_WORDS = /\b(jobs?|skills?|workforce|workers?|talent|employ\w*|hiring|hires?|layoffs?|retrench\w*|upskill\w*|reskill\w*|graduates?|apprentice\w*|careers?|salary|salaries|wages?|automation|automate\w*)\b/i
@@ -137,18 +138,21 @@ async function fetchOpenAlex(fetchImpl, now) {
     .map((item) => ({ ...item, source: 'OpenAlex', confidence: 'high' }))
 }
 
+// The same story filter for the refresh and for the admin's "Test this feed".
+export function passesFilter(filter, item) {
+  const text = `${item.title} ${item.snippet ?? ''}`
+  const hasWork = WORK_WORDS.test(text) || WORK_WORDS_MS.test(text) || WORK_WORDS_ZH.test(text)
+  if (filter === 'work') return hasWork
+  if (filter === 'topic') return hasWork || TOPIC_WORDS.test(text)
+  return true
+}
+
 async function fetchFeed(feed, fetchImpl) {
   const response = await fetchImpl(feed.url, { headers: { 'User-Agent': 'FutureReadyMY/1.0' }, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
   if (!response.ok) throw new Error(`${feed.name} returned HTTP ${response.status}`)
   const items = parseFeed(await response.text())
   return items
-    .filter((item) => {
-      const text = `${item.title} ${item.snippet}`
-      const hasWork = WORK_WORDS.test(text) || WORK_WORDS_MS.test(text) || WORK_WORDS_ZH.test(text)
-      if (feed.filter === 'work') return hasWork
-      if (feed.filter === 'topic') return hasWork || TOPIC_WORDS.test(text)
-      return true
-    })
+    .filter((item) => passesFilter(feed.filter, item))
     .map((item) => ({ ...item, source: feed.name, confidence: 'medium', language: feed.language ?? 'en' }))
 }
 
@@ -248,7 +252,41 @@ export function refreshEmerging(options) {
   return refresh
 }
 
-async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = new Date(), primary = null, backup = null, interval = 'weekly', force = false }) {
+const MAX_REMOVED_URLS = 500
+const locks = new Map()
+
+// One writer at a time per file, so an admin review and a refresh cannot overwrite each other.
+function withLock(filePath, work) {
+  const previous = locks.get(filePath) ?? Promise.resolve()
+  const next = previous.catch(() => {}).then(work)
+  locks.set(filePath, next)
+  next.then(
+    () => locks.get(filePath) === next && locks.delete(filePath),
+    () => locks.get(filePath) === next && locks.delete(filePath),
+  )
+  return next
+}
+
+// action: 'reviewed' | 'pending' | 'delete'. A deleted item's address is remembered so a refresh does not bring it back.
+export function reviewItem({ filePath, id, action }) {
+  if (!['reviewed', 'pending', 'delete'].includes(action)) return Promise.resolve({ status: 'bad-action' })
+  return withLock(filePath, async () => {
+    const existing = await readExistingSafely(filePath)
+    const target = existing?.items?.find((entry) => entry.id === id)
+    if (!target) return { status: 'not-found' }
+    let next
+    if (action === 'delete') {
+      const removedUrls = [...(existing.removedUrls ?? []).filter((url) => url !== target.url), target.url].slice(-MAX_REMOVED_URLS)
+      next = { ...existing, items: existing.items.filter((entry) => entry.id !== id), removedUrls }
+    } else {
+      next = { ...existing, items: existing.items.map((entry) => (entry.id === id ? { ...entry, review: action } : entry)) }
+    }
+    await writeAtomically(filePath, `${JSON.stringify(next, null, 2)}\n`)
+    return { status: 'ok', emerging: next }
+  })
+}
+
+async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = new Date(), primary = null, backup = null, interval = 'weekly', force = false, feeds = FEEDS }) {
   const existing = await readExistingSafely(filePath)
   const gap = MIN_GAP_MS[interval] ?? MIN_GAP_MS.weekly
   if (!force && existing?.checkedAt && now.getTime() - new Date(existing.checkedAt).getTime() < gap) {
@@ -257,12 +295,13 @@ async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = n
   try {
     const sourceJobs = [
       { name: 'OpenAlex', run: () => fetchOpenAlex(fetchImpl, now) },
-      ...FEEDS.map((feed) => ({ name: feed.name, run: () => fetchFeed(feed, fetchImpl) })),
+      ...feeds.map((feed) => ({ name: feed.name, run: () => fetchFeed(feed, fetchImpl) })),
     ]
     const settled = await Promise.allSettled(sourceJobs.map((job) => job.run()))
     const sources = settled.map((result, index) => ({
       name: sourceJobs[index].name,
       ok: result.status === 'fulfilled',
+      ...(result.status === 'fulfilled' ? { count: result.value.length } : {}),
       ...(result.status === 'rejected' ? { error: String(result.reason?.message ?? 'failed').slice(0, 120) } : {}),
     }))
     sources.filter((source) => !source.ok).forEach((source) => console.error(`[emerging] source ${source.name} failed: ${source.error}`))
@@ -276,7 +315,7 @@ async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = n
       return time >= cutoff && time <= latest
     }
     const kept = (existing?.items ?? []).filter(isFresh)
-    const seenUrls = new Set(kept.map((item) => item.url))
+    const seenUrls = new Set([...kept.map((item) => item.url), ...(existing?.removedUrls ?? [])])
     const seenTitles = new Set(kept.map((item) => normalizeTitle(item.title)))
     const fresh = []
     // Newest first inside each source, at most MAX_PER_SOURCE from each, so one source cannot crowd out the others.
@@ -308,9 +347,17 @@ async function runRefresh({ filePath, skills, groups, fetchImpl = fetch, now = n
         return { id: item.id, title: item.title, url: item.url, source: item.source, confidence: item.confidence, language: item.language ?? null, publishedAt: item.publishedAt, checkedOn: today, ...tags, review: 'pending' }
       })
     }
-    const items = [...kept, ...added].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    const emerging = { checkedOn: today, checkedAt: now.toISOString(), tagging, sources, items }
-    await writeAtomically(filePath, `${JSON.stringify(emerging, null, 2)}\n`)
+    // Re-read under the lock: an admin may have reviewed or deleted an item while the sources were being read.
+    const emerging = await withLock(filePath, async () => {
+      const latest = await readExistingSafely(filePath)
+      const removedUrls = latest?.removedUrls ?? []
+      const current = (latest?.items ?? []).filter(isFresh)
+      const taken = new Set([...current.map((item) => item.url), ...removedUrls])
+      const items = [...current, ...added.filter((item) => !taken.has(item.url))].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+      const saved = { checkedOn: today, checkedAt: now.toISOString(), tagging, sources, ...(removedUrls.length ? { removedUrls } : {}), items }
+      await writeAtomically(filePath, `${JSON.stringify(saved, null, 2)}\n`)
+      return saved
+    })
     const message = added.length ? `Updated: ${added.length} new item${added.length === 1 ? '' : 's'} checked ${today}.` : `Updated: no new items, checked ${today}.`
     return { status: 'updated', message, emerging }
   } catch (error) {
