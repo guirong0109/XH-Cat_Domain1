@@ -74,7 +74,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 ## Rules that must hold
 - **Never invent** roles, tasks, skills, courses or statistics.
   - Roles, tasks and skills come only from the eMASCO snapshot.
-  - Course links go only to the HRD Corp e-Latih, HRD Corp claimable-course and MyTVET portals.
+  - Course links go only to the HRD Corp e-Latih, HRD Corp claimable-course and MyTVET portals. Since 24 Oct 2026 each skill points to the exact course page when one was found (`data/team/skill_courses.json`: title, price, duration copied from the course page, with a checked date; draft until the team reviews it). A skill with no found course shows the portal link and says so.
 - **Every number on screen shows its source and date.**
 - AI-made labels are disclosed and called estimates. Placeholder labels (`labelSource: "manual"`) show a "Sample" badge and must not be described as team-made.
 - The app **supports** the student's decision; it never decides.
@@ -87,7 +87,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - UI: touch targets ≥ 44px, honour `prefers-reduced-motion`, works at 360px width, colours teal `#0F766E` and orange `#C2410C`, font Plus Jakarta Sans.
 - Team mappings drafted by Claude (ISCO map, skill SDG tags, research terms, role skills, course hours, majors and sectors map `fields.json`, CV keywords, similar-skill decisions in `data/team/similar_review.csv`, the CV test set `testing/cv_test_set/` incl. the finance CVs cv11-cv12, the accounting skill names `data/team/a1_new_skills.json`, the statement sheet `data/team/a1_skill_review.csv`, the sample student Farah) are labelled drafts until the teammate reviews them. Signals that never change the score (ILO view, research momentum, skills to learn) must say so.
 - CV review: keyword matches are added at once; AI (bge-m3) matches wait for the student's Add skill; a new CV (Change) removes the old CV's skills. Hints (field notice, weak fit) only suggest; the student decides. CV text is never stored or logged.
-- References: every reference link shows a "checked on" date. A role that eMASCO changed is flagged for the team and the saved version stays; never overwrite roles, skills or labels automatically. Do not scrape the course portals (no API); links to them only.
+- References: every reference link shows a "checked on" date. A role that eMASCO changed is flagged for the team and the saved version stays; never overwrite roles, skills or labels automatically. Do not bulk-scrape the course portals (no API). On 24 Oct the user asked for exact course links, so a short, polite, by-hand search (2 s between requests, one search per skill) was run to fill `skill_courses.json`; repeat only when the user asks.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 

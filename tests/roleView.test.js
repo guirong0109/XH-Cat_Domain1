@@ -259,6 +259,14 @@ describe('roleSources', () => {
     ]);
   });
 
+  it('links the ILO source to the occupation row when the ISCO title is known', () => {
+    const withTitle = { ...role, ilo: { isco: '2120', iscoTitle: 'Mathematicians, Actuaries and Statisticians' } };
+    expect(roleSources(withTitle, null).at(-1)).toEqual({
+      label: 'ILO 2025 AI exposure (WP140): ISCO 2120 Mathematicians, Actuaries and Statisticians',
+      url: 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html#:~:text=Mathematicians%2C%20Actuaries%20and%20Statisticians',
+    });
+  });
+
   it('omits OpenDOSM when there are no trends', () => {
     expect(roleSources(role, null).map((s) => s.label)).toEqual([
       'eMASCO role page 2524-02 (snapshot 21 Oct 2026)',

@@ -5,6 +5,22 @@
 import { skillLevel, skillStatus } from './scoring.js';
 import { skillTrends } from './skillTrends.js';
 import { momentum } from './research.js';
+import { iloRowUrl } from './roleView.js';
+
+export const ILO_ROWS_SHOWN = 3;
+
+// The ILO Table A1 rows behind a skill's type: one per distinct ISCO occupation among the roles
+// that use it, most exposed first, each with its own link.
+function iloRowsFor(label, roles) {
+  const byIsco = new Map();
+  for (const item of roles) {
+    if (!item.ilo?.iscoTitle || byIsco.has(item.ilo.isco)) continue;
+    if (item.skills.some((skill) => skill.label === label)) byIsco.set(item.ilo.isco, item.ilo);
+  }
+  return [...byIsco.values()]
+    .sort((a, b) => b.mean - a.mean || a.isco.localeCompare(b.isco))
+    .map((ilo) => ({ isco: ilo.isco, title: ilo.iscoTitle, url: iloRowUrl(ilo) }));
+}
 
 export const TYPE_LABEL = { aiExposed: 'AI-exposed', mixed: 'Mixed', humanLed: 'Human-led', unrated: 'Not rated' };
 
@@ -48,6 +64,7 @@ export function skillsVsAi({ role, profile, similar, roles, trendGroups, researc
       index,
       ...statusFor(skill.label, profile, similar),
       type: info ? info.type : 'unrated',
+      iloRows: iloRowsFor(skill.label, roles),
       exposure: info ? { roleCount: info.roleCount, exposedCount: info.exposedCount, iloMean: info.iloMean } : null,
       papers: papers && (papers.earlier > 0 || papers.later > 0) ? { earlier: papers.earlier, later: papers.later, years } : null,
       portal: label ? label.portal : null,

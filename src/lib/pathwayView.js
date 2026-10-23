@@ -17,6 +17,30 @@ export function linksForPortal(portal, who) {
   return who === 'working' ? [PORTAL_LINKS.claimable, own] : [own, PORTAL_LINKS.claimable];
 }
 
+const COURSE_PORTAL_NAME = { elatih: 'HRD Corp e-Latih', tvet: 'MyTVET' };
+
+// One line under a course title, copied from the portal's own page (nothing computed or invented).
+export function courseMeta(course) {
+  const parts = course.portal === 'tvet' ? [course.institution, course.level] : [course.price, course.duration, course.level];
+  return parts.filter(Boolean).join(' · ');
+}
+
+// What the pathway shows for one skill: the exact course pages we listed, or, when none was
+// found on the portals, the portal's own link (so the student can still look).
+export function courseOptions(skillInfo, who) {
+  const courses = (skillInfo?.courses || []).map((course) => ({
+    title: course.title,
+    url: course.url,
+    meta: courseMeta(course),
+    portalName: COURSE_PORTAL_NAME[course.portal] || '',
+  }));
+  return {
+    courses,
+    checkedAt: courses.length ? skillInfo.coursesCheckedAt || null : null,
+    fallback: courses.length ? [] : linksForPortal(skillInfo?.portal, who),
+  };
+}
+
 export function whyText(step) {
   const leads = {
     similar: 'You have a similar skill, so this step is shorter. ',

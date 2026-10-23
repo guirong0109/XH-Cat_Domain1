@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { ILO_WP140_URL } from '../lib/roleView.js';
-import { linksForPortal } from '../lib/pathwayView.js';
+import CourseLinks from './CourseLinks.jsx';
 import {
+  ILO_ROWS_SHOWN,
   STATUS_LABEL,
   TYPE_ADVICE,
   TYPE_LABEL,
@@ -93,35 +93,35 @@ export default function SkillsVsAi({ role, profile, ctx, data }) {
               </div>
               <div className="text-sm text-slate-700">
                 Why: {TYPE_ADVICE[row.type]}
-                {row.exposure && (
-                  <>
-                    {' '}
-                    <a href={ILO_WP140_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#0F766E]">
-                      Source: ILO Working Paper 140, 2025
-                    </a>
-                  </>
-                )}
               </div>
+              {row.iloRows.length > 0 && (
+                <div className="flex flex-wrap items-center gap-x-3 text-[13px] text-slate-600">
+                  <span>ILO 2025, Table A1:</span>
+                  {row.iloRows.slice(0, ILO_ROWS_SHOWN).map((ilo) => (
+                    <a
+                      key={ilo.isco}
+                      href={ilo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-11 items-center font-semibold text-[#0F766E]"
+                    >
+                      ISCO {ilo.isco} {ilo.title}
+                    </a>
+                  ))}
+                  {row.iloRows.length > ILO_ROWS_SHOWN && <span>and {row.iloRows.length - ILO_ROWS_SHOWN} more occupations</span>}
+                </div>
+              )}
               {evidence.map((line) => (
                 <div key={line} className="text-[13px] text-slate-600">
                   {line}
                 </div>
               ))}
-              {row.status !== 'onTrack' && row.portal && (
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                  <span className="text-slate-600">Courses:</span>
-                  {linksForPortal(row.portal, profile.who).map((link) => (
-                    <a
-                      key={link.url}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center font-semibold text-[#0F766E]"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
+              {row.status !== 'onTrack' && (
+                <CourseLinks
+                  skillInfo={data.skills.labels.find((item) => item.label === row.label)}
+                  who={profile.who}
+                  references={data.references}
+                />
               )}
             </li>
           );
@@ -130,8 +130,8 @@ export default function SkillsVsAi({ role, profile, ctx, data }) {
       <SourceNote>
         Type = how many of our roles that use the skill sit in ILO exposed groups (ILO Working Paper 140, 2025
         {iloDate ? `, fetched ${iloDate}` : ''}; the MASCO-to-ISCO link is our team's draft mapping). Paper counts: OpenAlex
-        {researchDate ? `, fetched ${researchDate}` : ''}. These are estimates, not predictions for one person. Course links
-        go to official portals only.
+        {researchDate ? `, fetched ${researchDate}` : ''}. These are estimates, not predictions for one person. Courses are
+        real pages on the official portals.
       </SourceNote>
     </section>
   );

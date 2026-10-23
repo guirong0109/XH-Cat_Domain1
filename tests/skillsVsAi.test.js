@@ -60,6 +60,24 @@ describe('skillsVsAi', () => {
     expect(row(rows, 'Orphan')).toMatchObject({ portal: null, hours: null });
   });
 
+  it('lists the ILO rows behind a skill, most exposed first, one per occupation, each with its own link', () => {
+    const withTitles = [
+      { id: 'a', group: 'professionals', skills: [{ label: 'Python' }], ilo: { category: 'Gradient 3', mean: 0.56, isco: '2120', iscoTitle: 'Mathematicians, Actuaries and Statisticians' } },
+      { id: 'b', group: 'professionals', skills: [{ label: 'Python' }], ilo: { category: 'Gradient 2', mean: 0.48, isco: '2511', iscoTitle: 'Systems Analysts' } },
+      { id: 'c', group: 'professionals', skills: [{ label: 'Python' }], ilo: { category: 'Gradient 2', mean: 0.48, isco: '2511', iscoTitle: 'Systems Analysts' } },
+      { id: 'd', group: 'professionals', skills: [{ label: 'Other' }], ilo: { category: 'Gradient 3', mean: 0.6, isco: '9999', iscoTitle: 'Not used' } },
+    ];
+    const rows = skillsVsAi({ role: mk('t', ['Python'], undefined), profile: { skills: [] }, similar: {}, roles: withTitles, trendGroups, research, skillLabels });
+    expect(rows[0].iloRows.map((r) => r.isco)).toEqual(['2120', '2511']);
+    expect(rows[0].iloRows[0].url).toBe(
+      'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html#:~:text=Mathematicians%2C%20Actuaries%20and%20Statisticians',
+    );
+  });
+
+  it('has no ILO rows when no role has an ISCO title', () => {
+    expect(row(run({ skills: [], levels: {} }), 'Python').iloRows).toEqual([]);
+  });
+
   it('works with no research file', () => {
     const rows = skillsVsAi({ role: target, profile: { skills: [] }, similar: {}, roles, trendGroups, research: null, skillLabels });
     expect(rows.every((r) => r.papers === null)).toBe(true);

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   PORTAL_LINKS,
+  courseMeta,
+  courseOptions,
   disclosureText,
   linksForPortal,
   pathwaySdgs,
@@ -121,5 +123,48 @@ describe('linksForPortal by who', () => {
   });
   it('keeps the skill portal first for students', () => {
     expect(linksForPortal('tvet', 'student').map((l) => l.url)).toEqual([PORTAL_LINKS.tvet.url, PORTAL_LINKS.claimable.url]);
+  });
+});
+
+describe('courseOptions', () => {
+  const elatihCourse = {
+    portal: 'elatih',
+    title: 'Time Management',
+    url: 'https://elatih.hrdcorp.gov.my/courses-details/time-management',
+    price: 'Free',
+    duration: '2 Hours 50 Min',
+    level: 'Beginner',
+  };
+  const tvetCourse = {
+    portal: 'tvet',
+    title: 'AUDIT TENAGA AWAL',
+    url: 'https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=48887',
+    institution: 'UMPSA Advanced TVET Centre',
+    level: 'Diploma Tahap 4',
+  };
+
+  it('lists the exact course pages with the details copied from the portal', () => {
+    const result = courseOptions({ portal: 'elatih', courses: [elatihCourse, tvetCourse], coursesCheckedAt: '2026-10-24' }, 'student');
+    expect(result.courses).toEqual([
+      { title: 'Time Management', url: elatihCourse.url, meta: 'Free · 2 Hours 50 Min · Beginner', portalName: 'HRD Corp e-Latih' },
+      { title: 'AUDIT TENAGA AWAL', url: tvetCourse.url, meta: 'UMPSA Advanced TVET Centre · Diploma Tahap 4', portalName: 'MyTVET' },
+    ]);
+    expect(result.checkedAt).toBe('2026-10-24');
+    expect(result.fallback).toEqual([]);
+  });
+
+  it('falls back to the portal links when no course was found for the skill', () => {
+    const result = courseOptions({ portal: 'tvet' }, 'student');
+    expect(result.courses).toEqual([]);
+    expect(result.checkedAt).toBeNull();
+    expect(result.fallback.map((l) => l.url)).toEqual([PORTAL_LINKS.tvet.url, PORTAL_LINKS.claimable.url]);
+  });
+
+  it('copes with an unknown skill', () => {
+    expect(courseOptions(undefined, 'working').courses).toEqual([]);
+  });
+
+  it('skips missing detail fields instead of printing blanks', () => {
+    expect(courseMeta({ portal: 'elatih', title: 'x', price: 'Free' })).toBe('Free');
   });
 });

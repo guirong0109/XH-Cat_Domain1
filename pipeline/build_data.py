@@ -33,6 +33,7 @@ def paths_for(data_directory):
         "skill_labels": join("team", "skill_labels.json"),
         "role_skills": join("team", "role_skills.json"),
         "similar": join("team", "similar.json"),
+        "skill_courses": join("team", "skill_courses.json"),
         "sdg_source": join("team", "sdg.json"),
         "samples_source": join("team", "samples.json"),
         "manual_labels": join("team", "manual_labels.json"),
@@ -189,6 +190,46 @@ def check_hours(skill_labels):
             raise ValueError(f"Skill {entry['label']!r} needs hours as a positive number or null, got {hours!r}")
 
 
+COURSE_URL_PREFIX = {
+    "elatih": "https://elatih.hrdcorp.gov.my/courses-details/",
+    "tvet": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=",
+}
+
+
+def check_courses(courses, known_labels):
+    """Each skill lists real course pages on the two official portals (exact title, own URL)."""
+    for label, items in courses.items():
+        if label not in known_labels:
+            raise ValueError(f"skill_courses.json has unknown skill {label!r}")
+        if not isinstance(items, list) or not items:
+            raise ValueError(f"Skill {label!r} needs a non-empty list of courses")
+        for course in items:
+            title = course.get("title")
+            if not isinstance(title, str) or not title.strip():
+                raise ValueError(f"Skill {label!r} has a course without a title")
+            prefix = COURSE_URL_PREFIX.get(course.get("portal"))
+            url = course.get("url")
+            if prefix is None:
+                raise ValueError(f"Course {title!r} has unknown portal {course.get('portal')!r}")
+            if not isinstance(url, str) or not url.startswith(prefix) or len(url) == len(prefix):
+                raise ValueError(f"Course {title!r} must link to its own page under {prefix}")
+
+
+def attach_courses(skill_labels, course_file):
+    """Copy the checked course list onto each skill; skills without one keep the portal link only."""
+    if course_file is None:
+        return
+    courses = course_file.get("courses", {})
+    checked_at = course_file.get("checkedAt")
+    if courses and not checked_at:
+        raise ValueError("skill_courses.json needs checkedAt (the date the pages were read)")
+    check_courses(courses, {entry["label"] for entry in skill_labels})
+    for entry in skill_labels:
+        if entry["label"] in courses:
+            entry["courses"] = courses[entry["label"]]
+            entry["coursesCheckedAt"] = checked_at
+
+
 def check_statements(skill_labels, known_codes):
     """Optional statements are {text, code}: non-blank eMASCO text and a role code in the snapshot."""
     for entry in skill_labels:
@@ -327,6 +368,7 @@ def build(paths):
     check_keywords(skill_labels)
     check_hours(skill_labels)
     check_statements(skill_labels, set(raw_by_code))
+    attach_courses(skill_labels, read_json(paths["skill_courses"], required=False))
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)
