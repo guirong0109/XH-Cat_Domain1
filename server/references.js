@@ -103,7 +103,7 @@ export function changedFields(saved, fresh) {
 }
 
 // Follows redirects by hand: the site redirects ?lang=en to http:// and keeps the language in a cookie.
-async function fetchWithCookie(url, { fetchImpl, timeoutMs }) {
+export async function fetchWithCookie(url, { fetchImpl, timeoutMs }) {
   let cookie = ''
   let target = url
   for (let hop = 0; hop < 6; hop++) {
