@@ -13,7 +13,11 @@ if (!embedder) {
   console.log('AI CV check off: no local model (set MODELS_DIR, EMBED_URL or CV_AI_DOWNLOAD=on)')
 }
 
-const app = createApp({ dataDir: dataDirectory, embedder })
+// The admin console is off unless ADMIN_TOKEN is set. The token is never printed.
+const adminToken = process.env.ADMIN_TOKEN
+console.log(adminToken?.trim() ? 'Admin console on (ADMIN_TOKEN is set)' : 'Admin console off (set ADMIN_TOKEN to turn it on)')
+
+const app = createApp({ dataDir: dataDirectory, embedder, adminToken })
 if (embedder) {
   embedder
     .warmUp()

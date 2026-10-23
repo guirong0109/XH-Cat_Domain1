@@ -1,5 +1,6 @@
 import express from 'express'
-import { readFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readTrends, refreshTrends } from './trends.js'
@@ -10,6 +11,11 @@ import { readReferences, refreshReferences } from './references.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
 import { createSkillSearch } from './emascoRoles.js'
+import { createLogStore } from './adminLog.js'
+import { createAdminAuth } from './adminAuth.js'
+import { createJobManager } from './adminJobs.js'
+import { healthChecks, runQuickCheck } from './adminChecks.js'
+import { runFullCheck } from './adminFull.js'
 
 const EMASCO_SKILL_LIMIT = 50
 const EMASCO_DEFAULT_TOP = 10
@@ -30,11 +36,42 @@ async function readOptionalJson(filePath) {
   }
 }
 
-export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeoutMs = 15000, emascoLoader = null }) {
+const RUN_ID = /^\d{14}-[0-9a-f]{4}$/
+
+export function createApp({
+  dataDir,
+  fetchImpl = fetch,
+  embedder = null,
+  cvTimeoutMs = 15000,
+  emascoLoader = null,
+  adminToken = null,
+  logDir = path.join(dataDir, 'logs'),
+  adminSleep = undefined,
+  adminSampleSize = 40,
+}) {
   const app = express()
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
   const referencesPath = path.join(dataDir, 'references.json')
+
+  // The log of what the system does behind the scenes (see the admin console below).
+  const logStore = createLogStore({ filePath: path.join(logDir, 'admin.jsonl') })
+  logStore.markInterrupted().catch(() => {})
+
+  // Runs a data refresh and records it in the log; the refresh result is returned unchanged.
+  async function logged(type, work) {
+    const run = await logStore.startRun({ type })
+    try {
+      const result = await work()
+      await run.log(result.status === 'failed' ? 'error' : 'info', result.message ?? `${type} refresh finished`)
+      await run.finish(result.status === 'updated' ? 'ok' : result.status === 'failed' ? 'failed' : 'partial', { message: result.message })
+      return result
+    } catch (error) {
+      await run.log('error', `${type} refresh failed: ${error.message}`)
+      await run.finish('failed', { message: error.message })
+      throw error
+    }
+  }
 
   app.get('/api/data', async (request, response) => {
     try {
@@ -56,14 +93,14 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
   })
 
   app.post('/api/refresh-trends', async (request, response) => {
-    response.json(await refreshTrends({ filePath: trendsPath, fetchImpl }))
+    response.json(await logged('trends', () => refreshTrends({ filePath: trendsPath, fetchImpl })))
   })
 
   app.post('/api/refresh-research', async (request, response) => {
     try {
       const skills = await readJson(path.join(dataDir, 'skills.json'))
       const terms = skills.labels.map(({ label, researchTerm }) => ({ label, researchTerm }))
-      response.json(await refreshResearch({ filePath: researchPath, terms, fetchImpl }))
+      response.json(await logged('research', () => refreshResearch({ filePath: researchPath, terms, fetchImpl })))
     } catch (error) {
       console.error('[research] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not refresh research data.' })
@@ -79,7 +116,7 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
         readJson(path.join(dataDir, 'emasco', 'roles_raw.json')),
       ])
       const links = [...new Set([...Object.values(PORTAL_LINKS).map((item) => item.url), ...roles.map((role) => role.ilo?.url).filter(Boolean)])]
-      response.json(await refreshReferences({ filePath: referencesPath, savedRoles: snapshot.roles, links, fetchImpl }))
+      response.json(await logged('references', () => refreshReferences({ filePath: referencesPath, savedRoles: snapshot.roles, links, fetchImpl })))
     } catch (error) {
       console.error('[references] refresh failed:', error.message)
       response.status(500).json({ error: 'Could not check the references.' })
@@ -146,6 +183,79 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
       clearTimeout(timer)
     }
   })
+
+  // Admin console: token sign-in, the log, and the checks. A check only reports; it never changes saved data.
+  // Spec: docs/superpowers/specs/2026-10-23-admin-console-design.md
+  const adminAuth = createAdminAuth({ token: adminToken })
+  const stateFile = path.join(logDir, 'full-check-state.json')
+  const jobs = createJobManager({
+    logStore,
+    writeReport: async (id, report) => {
+      await mkdir(path.join(logDir, 'reports'), { recursive: true })
+      await writeFile(path.join(logDir, 'reports', `${id}.json`), JSON.stringify(report, null, 2))
+    },
+  })
+
+  app.get('/api/admin/status', (request, response) => response.json({ enabled: adminAuth.enabled }))
+
+  const admin = express.Router()
+  admin.use(adminAuth.middleware)
+  admin.use(express.json({ limit: '2kb' }))
+
+  const embedderReady = () => Boolean(embedder?.isReady?.())
+
+  admin.get('/overview', async (request, response) => {
+    const [health, runs] = await Promise.all([healthChecks({ dataDir, embedderReady: embedderReady() }), logStore.listRuns(10)])
+    response.json({ health, job: jobs.current(), runs, resumable: existsSync(stateFile) })
+  })
+
+  async function startCheck(response, type, makeWork) {
+    const occupations = await readOptionalJson(path.join(dataDir, 'emasco', 'occupations.json'))
+    if (!occupations) return response.status(503).json({ error: 'emasco-data-missing' })
+    const started = await jobs.start(type, makeWork(occupations))
+    if (started.busy) return response.status(409).json({ error: 'busy', job: jobs.current() })
+    return response.status(202).json({ runId: started.runId })
+  }
+
+  admin.post('/checks/quick', async (request, response) => {
+    const roles = (await readOptionalJson(path.join(dataDir, 'roles.json'))) ?? []
+    const links = [...new Set([...Object.values(PORTAL_LINKS).map((item) => item.url), ...roles.map((role) => role.ilo?.url).filter(Boolean)])]
+    await startCheck(response, 'quick-check', (occupations) => ({ run, progress, isCancelled }) =>
+      runQuickCheck({
+        run, occupations, dataDir, links, fetchImpl, progress, isCancelled,
+        sampleSize: adminSampleSize, embedderReady: embedderReady(), ...(adminSleep ? { sleep: adminSleep } : {}),
+      }))
+  })
+
+  admin.post('/checks/full', async (request, response) => {
+    const resume = request.body?.resume === true
+    await startCheck(response, 'full-check', (occupations) => ({ run, progress, isCancelled }) =>
+      runFullCheck({ run, occupations, stateFile, fetchImpl, progress, isCancelled, resume, ...(adminSleep ? { sleep: adminSleep } : {}) }))
+  })
+
+  admin.post('/checks/cancel', (request, response) => response.json({ cancelled: jobs.cancel() }))
+  admin.get('/job', (request, response) => response.json({ job: jobs.current() }))
+
+  admin.get('/runs', async (request, response) => {
+    const limit = Math.min(Math.max(1, Math.floor(Number(request.query.limit)) || 20), 100)
+    response.json({ runs: await logStore.listRuns(limit) })
+  })
+
+  admin.get('/runs/:id', async (request, response) => {
+    const found = RUN_ID.test(request.params.id) ? await logStore.readRun(request.params.id) : null
+    if (!found) return response.status(404).json({ error: 'not-found' })
+    response.json(found)
+  })
+
+  admin.get('/runs/:id/report', async (request, response) => {
+    const { id } = request.params
+    const report = RUN_ID.test(id) ? await readOptionalJson(path.join(logDir, 'reports', `${id}.json`)) : null
+    if (!report) return response.status(404).json({ error: 'not-found' })
+    response.set('Content-Disposition', `attachment; filename="report-${id}.json"`)
+    response.json(report)
+  })
+
+  app.use('/api/admin', admin)
 
   // "Explore all roles": every eMASCO role, from picked skills (no model needed) or CV text (needs the model).
   // Loaded lazily; if the data files are missing or stale only these two routes answer 503.
