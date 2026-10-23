@@ -4,8 +4,8 @@ import { formatDate } from '../lib/roleView.js';
 
 // The exact course pages for one skill (title, price, duration copied from the portal).
 // With none listed, the portal's own link is shown and the text says so.
-export default function CourseLinks({ skillInfo, who, references }) {
-  const { courses, checkedAt, fallback } = courseOptions(skillInfo, who);
+export default function CourseLinks({ skillInfo, who, references, checks }) {
+  const { courses, checkedAt, fallback, goneCount } = courseOptions(skillInfo, who, checks);
 
   if (courses.length > 0) {
     return (
@@ -20,10 +20,11 @@ export default function CourseLinks({ skillInfo, who, references }) {
           >
             <span className="text-sm font-semibold text-[#0F766E]">{course.title}</span>
             <span className="text-xs text-slate-600">{[course.portalName, course.meta].filter(Boolean).join(' · ')}</span>
+            {course.changed && <span className="text-xs text-[#C2410C]">The course page changed since we saved it. Check the details there.</span>}
           </a>
         ))}
         <span className="text-xs text-slate-600">
-          Course pages found on the portals{checkedAt ? ` on ${formatDate(checkedAt)}` : ''}. Title, price and length are copied from the course page.
+          Title, price and length are copied from the course page{checkedAt ? `, last checked ${formatDate(checkedAt)}` : ''}.
         </span>
       </div>
     );
@@ -31,7 +32,11 @@ export default function CourseLinks({ skillInfo, who, references }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs text-slate-600">No matching course is listed for this skill yet. You can search the portal:</span>
+      <span className="text-xs text-slate-600">
+        {goneCount > 0
+          ? 'The course we listed is no longer on the portal. You can search the portal:'
+          : 'No matching course is listed for this skill yet. You can search the portal:'}
+      </span>
       {fallback.map((link) => {
         const status = linkStatus(references, link.url);
         return (

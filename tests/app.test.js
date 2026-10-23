@@ -60,7 +60,15 @@ describe('api', () => {
       fields: null,
       references: null,
       emerging: null,
+      courseChecks: null,
     })
+  })
+
+  it('GET /api/data returns the saved course check when there is one', async () => {
+    const checks = { checkedAt: '2026-10-31T10:00:00.000Z', counts: { ok: 1, changed: 0, gone: 0, unreadable: 0 }, courses: {} }
+    await writeFile(path.join(directory, 'course_checks.json'), JSON.stringify(checks))
+    const baseUrl = await start()
+    expect((await (await fetch(`${baseUrl}/api/data`)).json()).courseChecks).toEqual(checks)
   })
 
   it('GET /api/data without trends file returns trends null', async () => {

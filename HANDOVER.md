@@ -5,6 +5,17 @@ Read §0000000 first (where everything stands), then §00000 (admin console), §
 
 ---
 
+## 00000000. 24 Oct 2026 (newest; read this first)
+
+- **On `main` (`4e1901f`, pushed):** committed OpenAlex snapshot; "SDG: not tagged yet" on Explore roles; **Your skills vs AI today** panel on Study (`src/lib/skillsVsAi.js`, `SkillsVsAi.jsx`; type = ILO exposure of the roles using the skill; not scored; 33 of 38 skills come out AI-exposed, so it separates weakly); **exact course pages** per skill (`data/team/skill_courses.json`, 31 of 38 skills, 50 courses, read from the portals' own pages on 24 Oct; `CourseLinks.jsx`); ILO links point to the occupation row (`iloRowUrl`, text fragment; not verified in the in-app browser, check in Chrome).
+- **On branch `claude/emerging-trends-feed`, NOT on main yet (user was asleep, so no push):** **Use AI in your job** card on Study (`data/team/ai_courses.json`, `src/lib/aiForRole.js`, `AiForRole.jsx`; real e-Latih AI courses, general plus tied to the role's skills; mapping is a Claude draft); **course check** (`server/courseCheck.js`, `scripts/refresh-courses.mjs` -> `data/course_checks.json`; a gone course page is hidden and the portal link shows; a changed one is flagged; never edits team files); `/api/data` now has `courseChecks`; **Data freshness** card on Matches (`src/lib/freshness.js`, `DataFreshness.jsx`; limits in `SOURCES`). Tests 701 app, 204 pipeline.
+- **Not built (user approved the plan up to step 4 only):** weekly GitHub Actions job that runs the refreshes and `scripts/refresh-courses.mjs` and commits changed data; re-running the saved course searches to suggest new courses; proposal step is done in `docs/proposal-draft.md`.
+- **Rule change (CLAUDE.md):** the user asked for exact course links, so a short polite by-hand search of e-Latih (`/courses?course=<term>`) and MyTVET (`/awam-kursus/carian?nama_kursus=`) was run. e-Latih robots.txt returned 403. Repeat only when the user asks. No "AI in big data" course exists on e-Latih; the card says the closest ones are listed.
+- **Known flake:** `tests/emergingReview.test.js` sometimes fails with EPERM on a Windows temp rename; passes on re-run.
+- **Untracked, not mine:** `data/emerging.json`, `docs/superpowers/mockups/`, modified `data/references.json` and `data/trends.json` (other sessions). Proposal draft: `docs/proposal-draft.md` / `.docx` (not committed).
+
+---
+
 ## 0000000. Where everything stands (23 Oct 2026, evening)
 
 - **`main` = `973b9b7` (code as of `b784590`, plus these docs), pushed to GitHub (Replit can deploy it).** It has: the full eMASCO data (`data/emasco/occupations.json`: 1,766 roles with skills, 46 tasks-only, 18,161 skills), packed search vectors (`data/emasco/vectors/`, 20 MB), the matching engine, the **Explore all roles** screen (link under the Matches heading, in the left menu and at the bottom of Matches; `#explore`), the **admin console** (plain HTML page `http://localhost:3000/admin`, this PC only, no token), the demo script with the Explore step, and the **Emerging feed** (see below). Details: §00000 (admin), §000000 (Emerging), §0000 (option B phases 1-7).

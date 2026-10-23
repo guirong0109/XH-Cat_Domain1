@@ -61,6 +61,27 @@ describe('aiForRole', () => {
   });
 });
 
+describe('aiForRole with the weekly course check', () => {
+  const checks = {
+    checkedAt: '2026-10-31T10:00:00Z',
+    courses: {
+      'https://elatih.hrdcorp.gov.my/courses-details/ml-fundamentals': { status: 'gone' },
+      'https://elatih.hrdcorp.gov.my/courses-details/chatgpt-data': { status: 'changed' },
+    },
+  };
+
+  it('hides gone courses, flags changed ones and shows the live check date', () => {
+    const view = aiForRole(role, aiCourses, checks);
+    expect(view.specific.map((c) => [c.title, c.changed])).toEqual([['chatgpt-data', true]]);
+    expect(view.checkedAt).toBe('2026-10-31');
+  });
+
+  it('hides a gone general course too', () => {
+    const goneGeneral = { courses: { 'https://elatih.hrdcorp.gov.my/courses-details/ai-fluency': { status: 'gone' } } };
+    expect(aiForRole(role, aiCourses, goneGeneral).general).toEqual([]);
+  });
+});
+
 describe('iloStrip', () => {
   it('says AI matters when the occupation is in an exposed gradient, and links to its row', () => {
     const strip = iloStrip(role);

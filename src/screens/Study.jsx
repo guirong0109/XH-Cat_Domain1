@@ -58,7 +58,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
           <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.who)}</p>
         )}
 
-        <AiForRole role={role} aiCourses={data.skills.aiCourses} />
+        <AiForRole role={role} aiCourses={data.skills.aiCourses} checks={data.courseChecks} />
 
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">
@@ -112,6 +112,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                     skillInfo={data.skills.labels.find((item) => item.label === step.label)}
                     who={profile.who}
                     references={data.references}
+                    checks={data.courseChecks}
                   />
                   <label className="fr-noprint inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-sm">
                     <input

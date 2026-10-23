@@ -146,8 +146,8 @@ describe('courseOptions', () => {
   it('lists the exact course pages with the details copied from the portal', () => {
     const result = courseOptions({ portal: 'elatih', courses: [elatihCourse, tvetCourse], coursesCheckedAt: '2026-10-24' }, 'student');
     expect(result.courses).toEqual([
-      { title: 'Time Management', url: elatihCourse.url, meta: 'Free · 2 Hours 50 Min · Beginner', portalName: 'HRD Corp e-Latih' },
-      { title: 'AUDIT TENAGA AWAL', url: tvetCourse.url, meta: 'UMPSA Advanced TVET Centre · Diploma Tahap 4', portalName: 'MyTVET' },
+      { title: 'Time Management', url: elatihCourse.url, meta: 'Free · 2 Hours 50 Min · Beginner', portalName: 'HRD Corp e-Latih', changed: false },
+      { title: 'AUDIT TENAGA AWAL', url: tvetCourse.url, meta: 'UMPSA Advanced TVET Centre · Diploma Tahap 4', portalName: 'MyTVET', changed: false },
     ]);
     expect(result.checkedAt).toBe('2026-10-24');
     expect(result.fallback).toEqual([]);
@@ -166,5 +166,29 @@ describe('courseOptions', () => {
 
   it('skips missing detail fields instead of printing blanks', () => {
     expect(courseMeta({ portal: 'elatih', title: 'x', price: 'Free' })).toBe('Free');
+  });
+
+  it('hides a course whose page is gone and falls back to the portal link', () => {
+    const checks = { checkedAt: '2026-10-31T10:00:00Z', courses: { [elatihCourse.url]: { status: 'gone' } } };
+    const result = courseOptions({ portal: 'elatih', courses: [elatihCourse], coursesCheckedAt: '2026-10-24' }, 'student', checks);
+    expect(result.courses).toEqual([]);
+    expect(result.goneCount).toBe(1);
+    expect(result.fallback.length).toBeGreaterThan(0);
+  });
+
+  it('keeps a course the check could not read, and flags one whose page changed', () => {
+    const checks = {
+      checkedAt: '2026-10-31T10:00:00Z',
+      courses: { [elatihCourse.url]: { status: 'unreadable' }, [tvetCourse.url]: { status: 'changed' } },
+    };
+    const result = courseOptions({ portal: 'elatih', courses: [elatihCourse, tvetCourse], coursesCheckedAt: '2026-10-24' }, 'student', checks);
+    expect(result.courses.map((c) => [c.title, c.changed])).toEqual([['Time Management', false], ['AUDIT TENAGA AWAL', true]]);
+    expect(result.goneCount).toBe(0);
+  });
+
+  it('shows the live check date when there is one, else the saved date', () => {
+    const skillInfo = { portal: 'elatih', courses: [elatihCourse], coursesCheckedAt: '2026-10-24' };
+    expect(courseOptions(skillInfo, 'student', { checkedAt: '2026-10-31T10:00:00Z', courses: {} }).checkedAt).toBe('2026-10-31');
+    expect(courseOptions(skillInfo, 'student').checkedAt).toBe('2026-10-24');
   });
 });

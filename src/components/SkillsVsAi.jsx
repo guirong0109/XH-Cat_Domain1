@@ -121,6 +121,7 @@ export default function SkillsVsAi({ role, profile, ctx, data }) {
                   skillInfo={data.skills.labels.find((item) => item.label === row.label)}
                   who={profile.who}
                   references={data.references}
+                  checks={data.courseChecks}
                 />
               )}
             </li>

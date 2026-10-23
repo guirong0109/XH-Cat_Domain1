@@ -1,15 +1,16 @@
 // "Use AI in your job": for the chosen role, real AI courses from the team's draft list plus the
 // ILO exposure of the role's closest occupation. Pure helpers. Information only: never changes a score.
-import { courseMeta } from './pathwayView.js';
+import { courseMeta, courseStatus, visibleCourses } from './pathwayView.js';
 import { iloRowUrl } from './roleView.js';
 
 const PORTAL_NAME = { elatih: 'HRD Corp e-Latih', tvet: 'MyTVET' };
 
-const courseView = (course) => ({
+const courseViewFor = (checks) => (course) => ({
   title: course.title,
   url: course.url,
   meta: courseMeta(course),
   portalName: PORTAL_NAME[course.portal] || '',
+  changed: courseStatus(checks, course.url) === 'changed',
 });
 
 export function iloStrip(role) {
@@ -28,17 +29,23 @@ export function iloStrip(role) {
 
 // general: for every role. specific: courses tied to this role's own skills, each with the skills it
 // helps with. A role with no matching AI course simply has an empty specific list.
-export function aiForRole(role, aiCourses) {
+export function aiForRole(role, aiCourses, checks) {
   if (!aiCourses) return null;
-  const general = (aiCourses.general || []).map(courseView);
+  const courseView = courseViewFor(checks);
+  const general = visibleCourses(aiCourses.general, checks).map(courseView);
   const generalUrls = new Set(general.map((course) => course.url));
   const byUrl = new Map();
   for (const skill of role.skills) {
-    for (const course of aiCourses.bySkill?.[skill.label] || []) {
+    for (const course of visibleCourses(aiCourses.bySkill?.[skill.label], checks)) {
       if (generalUrls.has(course.url)) continue;
       if (!byUrl.has(course.url)) byUrl.set(course.url, { ...courseView(course), helpsWith: [] });
       byUrl.get(course.url).helpsWith.push(skill.label);
     }
   }
-  return { general, specific: [...byUrl.values()], checkedAt: aiCourses.checkedAt || null, ilo: iloStrip(role) };
+  return {
+    general,
+    specific: [...byUrl.values()],
+    checkedAt: checks?.checkedAt?.slice(0, 10) || aiCourses.checkedAt || null,
+    ilo: iloStrip(role),
+  };
 }
