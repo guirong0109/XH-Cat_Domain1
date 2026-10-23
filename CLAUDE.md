@@ -26,6 +26,7 @@ python3 pipeline/scrape_emasco.py data/team/role_codes.json data/emasco/roles_ra
 python pipeline/scrape_emasco.py --add CODE [CODE ...] data/emasco/roles_raw.json   # add new roles only; old roles untouched
 python pipeline/crawl_emasco_all.py [--only PREFIX]   # option B: crawl ALL eMASCO roles (English) → data/emasco/all_roles.json; resumable, raw HTML in git-ignored data/emasco/raw; about 3 h. --lang bm exists but the user chose English only
 python pipeline/build_all_roles.py   # option B phase 2: all_roles.json → data/emasco/occupations.json (roles with skills, tasks-only, unparsed, distinct skills); refuses fewer roles unless --force
+node scripts/embed-emasco.mjs     # option B phase 3: bge-m3 vectors for all eMASCO skills and roles → data/cache/emasco/ (git-ignored, resumable, ~31 min; --benchmark 200 only times it); node scripts/check-emasco-embeddings.mjs writes the sanity report
 node scripts/map-statements.mjs                # eMASCO statements of the new roles → data/team/a1_skill_review.csv (local bge-m3)
 python pipeline/apply_statement_review.py data/team/a1_skill_review.csv data/team/a1_new_skills.json data/team/skill_labels.json data/team/role_skills.json
 node scripts/eval-cv.mjs                       # CV accuracy and the AI cutoff → testing/results/cv_eval.csv

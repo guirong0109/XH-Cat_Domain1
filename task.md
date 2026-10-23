@@ -154,7 +154,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [x] **English crawl finished** (23 Oct, about 3 h): 1,706 roles in `data/emasco/all_roles.json`, 0 fetch failures, 108 parse failures (pages with no skills/tasks section on eMASCO). Not committed yet.
 - [x] Malay crawl cancelled (user decision, 23 Oct): English only. Malay later by translation (bge-m3 already reads Malay; test that first). If the PC sleeps or the session restarts, re-run `python -u pipeline/crawl_emasco_all.py`; saved pages are reused.
 - [x] Phase 2 done in JSON (user chose JSON): tolerant parser rescued 106 roles; `data/emasco/occupations.json` = 1,766 roles with skills, 46 tasks-only, 2 unparsed, 18,161 distinct skills (`pipeline/build_all_roles.py`, 197 pipeline tests pass). Not committed yet.
-- [ ] Phase 3 plan + approval, then embeddings with bge-m3 (slow on CPU; RunPod only if the user asks).
+- [x] Phase 3 done: 18,161 skill and 1,812 role vectors in git-ignored `data/cache/emasco/` (`node scripts/embed-emasco.mjs`, about 31 min); sanity report `testing/results/emasco_embed_check.md` (own role in top 5 for 24 of 30; Malay pair 0.758 vs median 0.598). Open for Phase 4: Replit has no model. with bge-m3 (slow on CPU; RunPod only if the user asks).
 - [ ] Phase 4 matching engine + senior-role filter, Phase 7 UI (mockup first).
 - [ ] Decide with the user: do new roles show "not scored" until labelled; is `all_roles*.json` committed to git.
 - Dropped for now: job-ad "emerging skills" (no allowed source), Claude API, new Python/JS dependencies from PLAN.md.
