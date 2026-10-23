@@ -91,6 +91,12 @@ describe('resolveScreen', () => {
   it('always allows previews', () => {
     for (const screen of PREVIEW_SCREENS) expect(resolveScreen(screen, empty, f)).toBe(screen);
   });
+  it('opens Explore all roles without a profile, and it is not a numbered step or a preview', () => {
+    expect(resolveScreen('explore', empty, f)).toBe('explore');
+    expect(SCREENS).toContain('explore');
+    expect(STEP_SCREENS).not.toContain('explore');
+    expect(isPreview('explore')).toBe(false);
+  });
   it('a full sample profile unlocks all screens', () => {
     for (const sample of samples) {
       for (const screen of STEP_SCREENS) expect(resolveScreen(screen, sample, fields)).toBe(screen);

@@ -9,6 +9,7 @@ import Skills from './screens/Skills.jsx';
 import Goal from './screens/Goal.jsx';
 import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
+import Explore from './screens/Explore.jsx';
 import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
@@ -393,6 +394,8 @@ export default function App() {
     content = <PreviewLang />;
   } else if (shownScreen === 'preview-users') {
     content = <PreviewUsers data={data} />;
+  } else if (shownScreen === 'explore') {
+    content = <Explore onBack={() => navigate('matches')} />;
   } else if (shownScreen === 'about') {
     content = (
       <About
@@ -451,6 +454,7 @@ export default function App() {
         referencesRefresh={referencesRefresh}
         onRefreshReferences={refreshReferences}
         onStudy={openStudy}
+        onExplore={() => navigate('explore')}
       />
     );
   } else {

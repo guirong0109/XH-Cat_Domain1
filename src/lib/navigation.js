@@ -6,7 +6,9 @@ import { findField } from './goalView.js';
 export const STEP_SCREENS = ['about', 'skills', 'goal', 'matches', 'study'];
 // Stage 2 ideas shown as previews only. They are not working features.
 export const PREVIEW_SCREENS = ['preview-lang', 'preview-users'];
-export const SCREENS = ['home', ...STEP_SCREENS, ...PREVIEW_SCREENS];
+// Reached from a link in Matches (or #explore); it is not one of the five steps and needs no profile.
+export const EXTRA_SCREENS = ['explore'];
+export const SCREENS = ['home', ...STEP_SCREENS, ...EXTRA_SCREENS, ...PREVIEW_SCREENS];
 export const MIN_SKILLS = 3;
 // Links and bookmarks from the old journey still work.
 export const OLD_ROUTES = {

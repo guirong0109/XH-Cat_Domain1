@@ -20,6 +20,7 @@ const HINTS = {
   goal: 'Pick your goal, then see your matches.',
   matches: 'Pick a role, then plan what to study.',
   study: 'Tick off steps as you learn. You can go back and try another role.',
+  explore: 'Pick skills or upload a CV to see roles from every field. Go back to Matches any time.',
 };
 
 function labelOf(screen) {

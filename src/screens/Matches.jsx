@@ -102,6 +102,7 @@ export default function Matches({
   referencesRefresh,
   onRefreshReferences,
   onStudy,
+  onExplore,
 }) {
   const { entries, note } = orderForGoal(ranked, profile, data.fields);
   const best = bestScoreNote(entries, ranked);
@@ -194,6 +195,22 @@ export default function Matches({
           );
         })}
       </div>
+
+      <section
+        aria-label="Explore all roles"
+        className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]"
+      >
+        <p className="m-0 min-w-0 flex-[1_1_320px] text-sm text-slate-700">
+          These are the 20 roles we score. Want to see roles from every field in eMASCO? They are not scored for AI risk.
+        </p>
+        <button
+          type="button"
+          onClick={onExplore}
+          className="fr-btn min-h-11 cursor-pointer rounded-[10px] border border-[#0F766E] bg-white px-4 font-semibold text-[#0F766E]"
+        >
+          Explore all roles
+        </button>
+      </section>
 
       <div className="flex flex-wrap gap-4 text-[13px] text-slate-700">
         {LEGEND.map((item) => (
