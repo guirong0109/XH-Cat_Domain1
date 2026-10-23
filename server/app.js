@@ -8,6 +8,12 @@ import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from '.
 import { loadSkillVectors } from './skillVectors.js'
 import { readReferences, refreshReferences } from './references.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
+import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
+import { createSkillSearch } from './emascoRoles.js'
+
+const EMASCO_SKILL_LIMIT = 50
+const EMASCO_DEFAULT_TOP = 10
+const EMASCO_MAX_TOP = 20
 
 const distDirectory = fileURLToPath(new URL('../dist', import.meta.url))
 
@@ -24,7 +30,7 @@ async function readOptionalJson(filePath) {
   }
 }
 
-export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeoutMs = 15000 }) {
+export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeoutMs = 15000, emascoLoader = null }) {
   const app = express()
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
@@ -136,6 +142,90 @@ export function createApp({ dataDir, fetchImpl = fetch, embedder = null, cvTimeo
       // Never log the CV text; the message of our own errors does not contain it.
       console.error('[cv-skills] failed:', error.message)
       response.status(503).json({ fallback: true })
+    } finally {
+      clearTimeout(timer)
+    }
+  })
+
+  // "Explore all roles": every eMASCO role, from picked skills (no model needed) or CV text (needs the model).
+  // Loaded lazily; if the data files are missing or stale only these two routes answer 503.
+  let emascoData = null
+  async function getEmascoData() {
+    if (emascoData) return emascoData
+    const loader = emascoLoader ?? (async () => {
+      const occupations = await readJson(path.join(dataDir, 'emasco', 'occupations.json'))
+      const index = await loadPackedIndex({ directory: path.join(dataDir, 'emasco', 'vectors'), occupations })
+      return { occupations, index }
+    })
+    const { occupations, index } = await loader()
+    emascoData = { occupations, index, search: createSkillSearch(occupations.skills) }
+    return emascoData
+  }
+
+  app.get('/api/emasco/skills', async (request, response) => {
+    let data
+    try {
+      data = await getEmascoData()
+    } catch (error) {
+      console.error('[emasco] data not available:', error.message)
+      return response.status(503).json({ error: 'emasco-data-missing' })
+    }
+    const query = typeof request.query.q === 'string' ? request.query.q : ''
+    response.json({ skills: data.search(query, Number(request.query.limit)) })
+  })
+
+  app.post('/api/emasco/match', parseCvBody, async (request, response) => {
+    const { skillIds, text, includeHigher, top } = request.body ?? {}
+    const haveSkills = Array.isArray(skillIds)
+    const haveText = typeof text === 'string'
+    if (haveSkills === haveText) return response.status(400).json({ error: 'Send either skillIds or text.' })
+    if (haveSkills && (skillIds.length > EMASCO_SKILL_LIMIT || skillIds.some((id) => typeof id !== 'string'))) {
+      return response.status(400).json({ error: 'skillIds must be a list of at most 50 ids.' })
+    }
+    if (haveText && !text.trim()) return response.status(400).json({ error: 'No CV text.' })
+    if (haveText && text.length > MAX_CHARS) return response.status(413).json({ error: 'CV text is too long.' })
+    if (haveText && (!embedder || !embedder.isReady())) return response.status(503).json({ error: 'cv-ai-off' })
+    let data
+    try {
+      data = await getEmascoData()
+    } catch (error) {
+      console.error('[emasco] data not available:', error.message)
+      return response.status(503).json({ error: 'emasco-data-missing' })
+    }
+    const maxLevel = includeHigher === true ? 'phd' : 'diploma'
+    const options = {
+      maxLevel,
+      groupGrades: true,
+      top: Math.min(Math.max(1, Math.floor(Number(top)) || EMASCO_DEFAULT_TOP), EMASCO_MAX_TOP)
+    }
+    let timer
+    try {
+      let result
+      if (haveSkills) {
+        result = matchPickedSkills({ skillIds, index: data.index, ...options })
+      } else {
+        const work = matchCvByProfile({ text, embedder, index: data.index, ...options })
+        work.catch(() => {})
+        const timeout = new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error('timeout')), cvTimeoutMs)
+        })
+        result = await Promise.race([work, timeout])
+      }
+      response.json({
+        ...result,
+        maxLevel,
+        source: {
+          occupations: data.occupations.source,
+          crawledOn: data.occupations.fetchedAt,
+          model: 'BAAI/bge-m3',
+          note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
+        }
+      })
+    } catch (error) {
+      // Never log the CV text; the message of our own errors does not contain it.
+      if (/^Unknown skill id/.test(error.message)) return response.status(400).json({ error: error.message })
+      console.error('[emasco-match] failed:', error.message)
+      response.status(503).json({ error: 'match-failed' })
     } finally {
       clearTimeout(timer)
     }
