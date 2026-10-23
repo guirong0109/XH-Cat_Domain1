@@ -78,7 +78,8 @@ Output visibly changes when trend data changes: Refresh data re-ranks roles and 
 - **Built:** a course check script opens every saved course page (2 seconds apart) and records whether it is unchanged, changed or gone. A gone course is hidden and the portal link shows instead; a changed page is flagged. It never edits any team file.
 - **Built:** the OpenDOSM, OpenAlex and portal-link refreshes (Refresh data button).
 - **Human step, on purpose:** adding or changing a course, role or skill is approved by a person.
-- **Planned:** a weekly scheduled job that runs the refreshes and the course check and saves the results (GitHub Actions); re-running the saved course searches to suggest new courses.
+- **Built (24 Oct):** a weekly GitHub Actions job (Mondays 02:00 UTC) runs the trend, research, reference-link and course-page refreshes and saves any changed data files to the repo, so Replit gets them when it redeploys. It never changes team-written files and skips the Emerging feed (needs a model key). It starts after the file is on `main`; the first run can be started by hand from the Actions tab.
+- **Planned:** re-running the saved course searches to suggest new courses for a person to approve.
 - **Limit:** a weekly check means "continuously" in a weekly sense. OpenAlex can refuse requests (HTTP 429) on some days; the app then keeps the last file and shows its date.
 
 ## 9. Not built yet (say this plainly)
@@ -86,7 +87,6 @@ Output visibly changes when trend data changes: Refresh data re-ranks roles and 
 - Employer / HR heatmap and BM / Chinese interface: preview screens only.
 - Skill badges; low-bandwidth mode.
 - Real AI-exposure labels for the 20 roles (RunPod labelling job on hold).
-- The weekly automatic schedule (until it is switched on, refreshes run by button or script).
 - Everything marked PLANNED above.
 
 ## 10. Left out of the PDF on purpose
