@@ -1,0 +1,148 @@
+{
+  "_note": "Draft awaiting team review. Real AI course pages on HRD Corp e-Latih, read on 2026-10-24: title, price, duration and level are copied from the page. Claude chose which course helps which skill by matching titles. 'general' is shown for every role; 'bySkill' is shown for roles that use the skill. Nothing is added or changed by the app itself.",
+  "checkedAt": "2026-10-24",
+  "general": [
+    {
+      "portal": "elatih",
+      "title": "AI Fluency: Explore Generative AI",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/ai-fluency-explore-generative-ai",
+      "price": "Free",
+      "duration": "30 Min",
+      "level": "Beginner"
+    },
+    {
+      "portal": "elatih",
+      "title": "Crafting Prompts for ChatGPT (Prompt Engineering)",
+      "url": "https://elatih.hrdcorp.gov.my/courses-details/crafting-prompts-for-chatgpt-prompt-engineering",
+      "price": "Free",
+      "duration": "50 Min",
+      "level": "Beginner"
+    }
+  ],
+  "bySkill": {
+    "Python programming": [
+      {
+        "portal": "elatih",
+        "title": "Machine Learning Fundamentals",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/machine-learning-fundamentals",
+        "price": "Free",
+        "duration": "40 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Introduction to Machine Learning",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/introduction-to-machine-learning",
+        "price": "Free",
+        "duration": "1 Hour 51 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Statistics": [
+      {
+        "portal": "elatih",
+        "title": "Machine Learning Fundamentals",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/machine-learning-fundamentals",
+        "price": "Free",
+        "duration": "40 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Introduction to Machine Learning",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/introduction-to-machine-learning",
+        "price": "Free",
+        "duration": "1 Hour 51 Min",
+        "level": "Beginner"
+      }
+    ],
+    "SQL and databases": [
+      {
+        "portal": "elatih",
+        "title": "[ChatGPT Course] Uncover the Magic of ChatGPT for Data Processing",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-uncover-the-magic-of-chatgpt-for-data-processing",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Data visualisation": [
+      {
+        "portal": "elatih",
+        "title": "[ChatGPT Course] Uncover the Magic of ChatGPT for Data Processing",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-uncover-the-magic-of-chatgpt-for-data-processing",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Spreadsheets (Excel)": [
+      {
+        "portal": "elatih",
+        "title": "[ChatGPT Course] Uncover the Magic of ChatGPT for Data Processing",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-uncover-the-magic-of-chatgpt-for-data-processing",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Using AI tools": [
+      {
+        "portal": "elatih",
+        "title": "[ChatGPT Course] Improving Workplace Productivity with ChatGPT",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-improving-workplace-productivity-with-chatgpt",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "[AI Course] The Next Frontier of Artificial Intelligence",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/ai-course-the-next-frontier-of-artificial-intelligence",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Customer service": [
+      {
+        "portal": "elatih",
+        "title": "[Artificial Intelligence Course] AI to Enhanced Customer Engagement via ChatBot",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/artificial-intelligence-course-ai-to-enhanced-customer-engagement-via-chatbot",
+        "price": "RM60.00",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Content writing": [
+      {
+        "portal": "elatih",
+        "title": "Mastering Inquiry with ChatGPT: Enhance Your Research Skills Using AI",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/mastering-inquiry-with-chatgpt-enhance-your-research-skills-using-ai",
+        "price": "RM85.00",
+        "duration": "1 Hour",
+        "level": "Beginner"
+      }
+    ],
+    "Project coordination": [
+      {
+        "portal": "elatih",
+        "title": "[Intelligent Automation Course] The Power of Intelligent Automation in the Workplace",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/intelligent-automation-course-the-power-of-intelligent-automation-in-the-workplace",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Business process analysis": [
+      {
+        "portal": "elatih",
+        "title": "[Intelligent Automation Course] The Power of Intelligent Automation in the Workplace",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/intelligent-automation-course-the-power-of-intelligent-automation-in-the-workplace",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ]
+  }
+}

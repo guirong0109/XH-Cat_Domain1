@@ -204,6 +204,39 @@ class BuildTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "checkedAt"):
             self.build_with(change)
 
+    def test_ai_courses_built_when_valid(self):
+        course = {"portal": "elatih", "title": "AI Fluency",
+                  "url": "https://elatih.hrdcorp.gov.my/courses-details/ai-fluency-explore-generative-ai"}
+
+        def change(inputs):
+            inputs["team/ai_courses.json"] = {"_note": "draft", "checkedAt": "2026-10-24",
+                                              "general": [course], "bySkill": {"Communication": [course]}}
+
+        ai = self.build_with(change)["skills"]["aiCourses"]
+        self.assertEqual(ai["checkedAt"], "2026-10-24")
+        self.assertEqual(ai["general"][0]["title"], "AI Fluency")
+        self.assertEqual(list(ai["bySkill"]), ["Communication"])
+
+    def test_ai_courses_file_is_optional(self):
+        self.assertNotIn("aiCourses", self.build_with()["skills"])
+
+    def test_bad_ai_courses_raise(self):
+        good = {"portal": "elatih", "title": "AI Fluency",
+                "url": "https://elatih.hrdcorp.gov.my/courses-details/ai-fluency"}
+        cases = [
+            ("no date", {"general": [good]}, "checkedAt"),
+            ("unknown skill", {"checkedAt": "d", "bySkill": {"Nope": [good]}}, "unknown skill"),
+            ("empty skill list", {"checkedAt": "d", "bySkill": {"Communication": []}}, "non-empty"),
+            ("home page link", {"checkedAt": "d", "general": [{**good, "url": "https://elatih.hrdcorp.gov.my/"}]}, "own page"),
+        ]
+        for name, content, message in cases:
+            def change(inputs, content=content):
+                inputs["team/ai_courses.json"] = content
+
+            with self.subTest(name):
+                with self.assertRaisesRegex(ValueError, message):
+                    self.build_with(change)
+
     def test_null_hours_passed_through(self):
         def change(inputs):
             inputs["team/skill_labels.json"][1]["hours"] = None

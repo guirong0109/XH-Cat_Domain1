@@ -108,7 +108,7 @@ export default function SkillsVsAi({ role, profile, ctx, data }) {
                       ISCO {ilo.isco} {ilo.title}
                     </a>
                   ))}
-                  {row.iloRows.length > ILO_ROWS_SHOWN && <span>and {row.iloRows.length - ILO_ROWS_SHOWN} more occupations</span>}
+                  {row.iloRows.length > ILO_ROWS_SHOWN && <span>and {row.iloRows.length - ILO_ROWS_SHOWN} more {row.iloRows.length - ILO_ROWS_SHOWN === 1 ? 'occupation' : 'occupations'}</span>}
                 </div>
               )}
               {evidence.map((line) => (

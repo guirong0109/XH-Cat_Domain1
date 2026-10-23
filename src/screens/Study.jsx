@@ -15,6 +15,7 @@ import { orderForGoal } from '../lib/goalView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import SkillsVsAi from '../components/SkillsVsAi.jsx';
 import CourseLinks from '../components/CourseLinks.jsx';
+import AiForRole from '../components/AiForRole.jsx';
 
 export default function Study({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
   // No role picked yet: the top role in the student's goal order.
@@ -56,6 +57,8 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
         {startingPoint(profile.who) && (
           <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.who)}</p>
         )}
+
+        <AiForRole role={role} aiCourses={data.skills.aiCourses} />
 
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">

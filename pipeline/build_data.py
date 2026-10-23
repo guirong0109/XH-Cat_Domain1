@@ -34,6 +34,7 @@ def paths_for(data_directory):
         "role_skills": join("team", "role_skills.json"),
         "similar": join("team", "similar.json"),
         "skill_courses": join("team", "skill_courses.json"),
+        "ai_courses": join("team", "ai_courses.json"),
         "sdg_source": join("team", "sdg.json"),
         "samples_source": join("team", "samples.json"),
         "manual_labels": join("team", "manual_labels.json"),
@@ -196,23 +197,45 @@ COURSE_URL_PREFIX = {
 }
 
 
+def check_course_list(items, where):
+    """A non-empty list of real course pages on the two official portals (exact title, own URL)."""
+    if not isinstance(items, list) or not items:
+        raise ValueError(f"{where} needs a non-empty list of courses")
+    for course in items:
+        title = course.get("title")
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError(f"{where} has a course without a title")
+        prefix = COURSE_URL_PREFIX.get(course.get("portal"))
+        url = course.get("url")
+        if prefix is None:
+            raise ValueError(f"Course {title!r} has unknown portal {course.get('portal')!r}")
+        if not isinstance(url, str) or not url.startswith(prefix) or len(url) == len(prefix):
+            raise ValueError(f"Course {title!r} must link to its own page under {prefix}")
+
+
 def check_courses(courses, known_labels):
-    """Each skill lists real course pages on the two official portals (exact title, own URL)."""
     for label, items in courses.items():
         if label not in known_labels:
             raise ValueError(f"skill_courses.json has unknown skill {label!r}")
-        if not isinstance(items, list) or not items:
-            raise ValueError(f"Skill {label!r} needs a non-empty list of courses")
-        for course in items:
-            title = course.get("title")
-            if not isinstance(title, str) or not title.strip():
-                raise ValueError(f"Skill {label!r} has a course without a title")
-            prefix = COURSE_URL_PREFIX.get(course.get("portal"))
-            url = course.get("url")
-            if prefix is None:
-                raise ValueError(f"Course {title!r} has unknown portal {course.get('portal')!r}")
-            if not isinstance(url, str) or not url.startswith(prefix) or len(url) == len(prefix):
-                raise ValueError(f"Course {title!r} must link to its own page under {prefix}")
+        check_course_list(items, f"Skill {label!r}")
+
+
+def build_ai_courses(course_file, known_labels):
+    """AI courses: 'general' for every role, 'bySkill' for roles that use the skill. None if no file."""
+    if course_file is None:
+        return None
+    checked_at = course_file.get("checkedAt")
+    if not checked_at:
+        raise ValueError("ai_courses.json needs checkedAt (the date the pages were read)")
+    general = course_file.get("general", [])
+    if general:
+        check_course_list(general, "ai_courses.json general")
+    by_skill = course_file.get("bySkill", {})
+    for label, items in by_skill.items():
+        if label not in known_labels:
+            raise ValueError(f"ai_courses.json has unknown skill {label!r}")
+        check_course_list(items, f"AI courses for {label!r}")
+    return {"general": general, "bySkill": by_skill, "checkedAt": checked_at}
 
 
 def attach_courses(skill_labels, course_file):
@@ -369,6 +392,7 @@ def build(paths):
     check_hours(skill_labels)
     check_statements(skill_labels, set(raw_by_code))
     attach_courses(skill_labels, read_json(paths["skill_courses"], required=False))
+    ai_courses = build_ai_courses(read_json(paths["ai_courses"], required=False), known_labels)
 
     isco_map = without_notes(read_json(paths["isco_map"], required=False))
     ilo_file = read_json(paths["ilo"], required=False)
@@ -407,9 +431,12 @@ def build(paths):
     similar = read_json(paths["similar"])
     check_similar(similar, known_labels)
 
+    skills = {"labels": skill_labels, "similar": similar}
+    if ai_courses is not None:
+        skills["aiCourses"] = ai_courses
     return {
         "roles": roles,
-        "skills": {"labels": skill_labels, "similar": similar},
+        "skills": skills,
         "sdg": sdg,
         "samples": samples,
         "fields": {"majors": fields["majors"], "sectors": fields["sectors"], "groups": groups},
