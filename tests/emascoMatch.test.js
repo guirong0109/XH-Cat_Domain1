@@ -7,6 +7,7 @@ import {
   MIN_MATCHED,
   buildIndex,
   loadEmascoIndex,
+  loadPackedIndex,
   skillScores,
   rankRoles,
   rankByProfile,
@@ -17,6 +18,7 @@ import {
   LOW_CONFIDENCE_BELOW
 } from '../server/emascoMatch.js'
 import { inputHash, packVectors, roleInputs } from '../scripts/lib/emascoEmbed.js'
+import { quantize } from '../scripts/lib/packVectors.js'
 import { MODEL_ID } from '../server/embed.js'
 
 // Four skills, one unit vector each (dimension 4).
@@ -271,6 +273,55 @@ describe('rankByProfile and matchCvByProfile', () => {
     const result = await matchCvByProfile({ text: 'one skill\ntwo skill\nthree skill', embedder, index: profileIndex, cutoff: 0.9 })
     expect(result.status).toBe('ok')
     expect(codes(result)[0]).toBe('1111-01')
+  })
+})
+
+describe('loadPackedIndex', () => {
+  let directory
+  beforeEach(async () => {
+    directory = await mkdtemp(path.join(os.tmpdir(), 'emasco-packed-'))
+  })
+  afterEach(async () => {
+    await rm(directory, { recursive: true, force: true })
+  })
+
+  async function writePacked({ skillTexts = skillList.map((skill) => skill.text) } = {}) {
+    const roleCodes = [...occupations.roles, ...occupations.tasksOnly].map((item) => item.code)
+    const skillPack = quantize(Float32Array.from([unit(0), unit(1), unit(2), unit(3)].flat()), 4)
+    const rolePack = quantize(Float32Array.from(roleCodes.flatMap((code, row) => unit(row % 4))), 4)
+    await writeFile(path.join(directory, 'skills.i8'), Buffer.from(skillPack.codes.buffer))
+    await writeFile(path.join(directory, 'skills.scale.f32'), Buffer.from(skillPack.scales.buffer))
+    await writeFile(path.join(directory, 'roles.i8'), Buffer.from(rolePack.codes.buffer))
+    await writeFile(path.join(directory, 'roles.scale.f32'), Buffer.from(rolePack.scales.buffer))
+    await writeFile(path.join(directory, 'roles_ids.json'), JSON.stringify(roleCodes))
+    await writeFile(
+      path.join(directory, 'meta.json'),
+      JSON.stringify({
+        modelId: MODEL_ID,
+        dimension: 4,
+        skillsHash: inputHash(skillTexts, MODEL_ID),
+        rolesHash: inputHash(roleInputs(occupations).texts, MODEL_ID),
+        skillCount: 4,
+        roleCount: roleCodes.length
+      })
+    )
+  }
+
+  it('loads packed vectors that match the occupations file', async () => {
+    await writePacked()
+    const loaded = await loadPackedIndex({ directory, occupations })
+    expect(loaded.skillCount).toBe(4)
+    expect(Array.from(loaded.skillVectors.subarray(0, 4)).map((value) => Math.round(value))).toEqual([1, 0, 0, 0])
+    expect(loaded.rowOfId.get('s00002')).toBe(1)
+  })
+
+  it('refuses packed vectors made from other skill texts, with a rebuild message', async () => {
+    await writePacked({ skillTexts: ['x', 'y', 'z', 'w'] })
+    await expect(loadPackedIndex({ directory, occupations })).rejects.toThrow(/Rebuild/)
+  })
+
+  it('refuses a missing directory', async () => {
+    await expect(loadPackedIndex({ directory: path.join(directory, 'nope'), occupations })).rejects.toThrow(/Rebuild/)
   })
 })
 

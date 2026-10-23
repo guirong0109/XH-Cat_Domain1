@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { cut } from '../src/lib/cvSkills.js'
 import { inputHash, roleInputs, skillInputs } from '../scripts/lib/emascoEmbed.js'
+import { dequantize } from '../scripts/lib/packVectors.js'
 import { splitCvLines } from './cvMatch.js'
 import { groupKey, levelRank, qualificationLevel, splitGrade } from './emascoRoles.js'
 
@@ -76,19 +77,55 @@ export async function loadEmascoIndex({ cacheDirectory, occupations }) {
   } catch {
     throw rebuild('The eMASCO vectors are missing')
   }
+  checkMeta({ meta, roleCodes, occupations, rebuild })
+  if (buffer.length !== meta.skillCount * meta.dimension * 4) throw rebuild('The skills vector file has the wrong size')
+  if (roleBuffer.length !== roleCodes.length * meta.dimension * 4) throw rebuild('The roles vector file has the wrong size')
+  const skillVectors = new Float32Array(new Uint8Array(buffer).buffer)
+  const roleVectors = new Float32Array(new Uint8Array(roleBuffer).buffer)
+  return buildIndex({ occupations, skillVectors, dimension: meta.dimension, roleVectors, roleCodes })
+}
+
+// The vectors must have been made from exactly this occupations file.
+function checkMeta({ meta, roleCodes, occupations, rebuild }) {
   const { texts } = skillInputs(occupations)
   if (meta.skillsHash !== inputHash(texts, meta.modelId) || meta.skillCount !== texts.length) {
     throw rebuild('The eMASCO vectors do not match data/emasco/occupations.json')
   }
-  if (buffer.length !== texts.length * meta.dimension * 4) throw rebuild('The skills vector file has the wrong size')
   const roleTexts = roleInputs(occupations).texts
   if (meta.rolesHash !== inputHash(roleTexts, meta.modelId) || roleCodes.length !== roleTexts.length) {
     throw rebuild('The eMASCO role vectors do not match data/emasco/occupations.json')
   }
-  if (roleBuffer.length !== roleTexts.length * meta.dimension * 4) throw rebuild('The roles vector file has the wrong size')
-  const skillVectors = new Float32Array(new Uint8Array(buffer).buffer)
-  const roleVectors = new Float32Array(new Uint8Array(roleBuffer).buffer)
-  return buildIndex({ occupations, skillVectors, dimension: meta.dimension, roleVectors, roleCodes })
+}
+
+// The int8 vectors in data/emasco/vectors/ (written by scripts/pack-emasco-vectors.mjs); small enough to ship to Replit.
+export async function loadPackedIndex({ directory, occupations }) {
+  const rebuild = (reason) => new Error(`${reason}. Rebuild: node scripts/embed-emasco.mjs, then node scripts/pack-emasco-vectors.mjs`)
+  let meta
+  let files
+  try {
+    meta = JSON.parse(await readFile(path.join(directory, 'meta.json'), 'utf8'))
+    files = await Promise.all(['skills.i8', 'skills.scale.f32', 'roles.i8', 'roles.scale.f32'].map((name) => readFile(path.join(directory, name))))
+  } catch {
+    throw rebuild('The packed eMASCO vectors are missing')
+  }
+  const roleCodes = JSON.parse(await readFile(path.join(directory, 'roles_ids.json'), 'utf8').catch(() => 'null'))
+  if (!Array.isArray(roleCodes)) throw rebuild('The packed eMASCO vectors are missing')
+  checkMeta({ meta, roleCodes, occupations, rebuild })
+  const [skillCodes, skillScalesBuffer, roleCodesBuffer, roleScalesBuffer] = files
+  const toFloats = (buffer) => new Float32Array(new Uint8Array(buffer).buffer)
+  const skillScales = toFloats(skillScalesBuffer)
+  const roleScales = toFloats(roleScalesBuffer)
+  if (skillCodes.length !== meta.skillCount * meta.dimension || skillScales.length !== meta.skillCount ||
+      roleCodesBuffer.length !== roleCodes.length * meta.dimension || roleScales.length !== roleCodes.length) {
+    throw rebuild('The packed eMASCO vectors have the wrong size')
+  }
+  return buildIndex({
+    occupations,
+    skillVectors: dequantize(new Int8Array(new Uint8Array(skillCodes).buffer), skillScales, meta.dimension),
+    dimension: meta.dimension,
+    roleVectors: dequantize(new Int8Array(new Uint8Array(roleCodesBuffer).buffer), roleScales, meta.dimension),
+    roleCodes
+  })
 }
 
 export function skillScores(lineVectors, index) {
