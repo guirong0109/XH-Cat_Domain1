@@ -8,6 +8,7 @@ import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
+import EmergingFeed from '../components/EmergingFeed.jsx';
 import { referencesLine } from '../lib/referenceView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
@@ -350,6 +351,7 @@ export default function Matches({
           pickedSkills={profile.skills}
           learnSkills={profile.learn}
         />
+        <EmergingFeed emerging={data.emerging} />
         <YouthCard trends={data.trends} />
       </section>
     </main>
