@@ -31,3 +31,32 @@ describe('overviewView', () => {
     expect(cardEntries(undefined)).toEqual([]);
   });
 });
+
+import { MAX_TRACKED, toggleTracked, trackedEntries } from '../src/lib/overviewView.js';
+import { journeySteps, adjacentSteps } from '../src/lib/journey.js';
+
+describe('tracked roles', () => {
+  it('adds, removes and refuses a 4th role', () => {
+    expect(toggleTracked([], 'a')).toEqual({ list: ['a'], full: false });
+    expect(toggleTracked(['a', 'b'], 'a')).toEqual({ list: ['b'], full: false });
+    const full = ['a', 'b', 'c'];
+    expect(full.length).toBe(MAX_TRACKED);
+    expect(toggleTracked(full, 'd')).toEqual({ list: full, full: true });
+    expect(toggleTracked(undefined, 'a').list).toEqual(['a']);
+  });
+
+  it('keeps tracking order and drops roles that are no longer scored', () => {
+    const ranked = [{ role: { id: 'a' } }, { role: { id: 'b' } }];
+    expect(trackedEntries(ranked, ['b', 'zzz', 'a']).map((e) => e.role.id)).toEqual(['b', 'a']);
+  });
+
+  it('shows Your roles in the journey only after a role is tracked', () => {
+    const done = { who: 'student', field: 'x', skills: ['1', '2', '3'], goal: 'unsure' };
+    const names = (profile, screen = 'matches') => journeySteps(screen, profile, null).map((s) => s.screen);
+    expect(names({ ...done, tracked: [] })).not.toContain('overview');
+    expect(names({ ...done, tracked: ['a'] })).toContain('overview');
+    expect(names({ ...done, tracked: [] }, 'overview')).toContain('overview');
+    expect(adjacentSteps('matches', { ...done, tracked: [] }, null).next.screen).toBe('study');
+    expect(adjacentSteps('matches', { ...done, tracked: ['a'] }, null).next.screen).toBe('overview');
+  });
+});

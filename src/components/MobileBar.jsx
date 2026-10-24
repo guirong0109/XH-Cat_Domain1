@@ -13,7 +13,7 @@ export default function MobileBar({ data, profile, screen, menuOpen, onMenuOpen,
   const menuButtonRef = useRef(null);
   const panelRef = useRef(null);
   const wasOpen = useRef(false);
-  const position = stepPosition(screen);
+  const position = stepPosition(screen, profile);
 
   useEffect(() => {
     if (menuOpen) {

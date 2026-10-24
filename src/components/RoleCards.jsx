@@ -3,7 +3,7 @@ import { MATCH_LABEL, matchAria, matchText } from '../lib/skillMatchView.js';
 import { READY_AT, cardEntries, cardGaps, readyText, trendLine } from '../lib/overviewView.js';
 
 // Overview cards: one per role. Shown on the Your roles page and under the radar on Matches.
-export default function RoleCards({ entries, profile, ctx, scenario, trends, sdgInfo, activeId = null, onOpen, onChange }) {
+export default function RoleCards({ entries, profile, ctx, scenario, trends, sdgInfo, activeId = null, onOpen, onChange, onRemove, changeLabel = '+ Add or change roles' }) {
   const cards = cardEntries(entries);
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
@@ -61,13 +61,27 @@ export default function RoleCards({ entries, profile, ctx, scenario, trends, sdg
           </button>
         );
       })}
+      {onRemove && cards.length > 0 && (
+        <div className="col-span-full flex flex-wrap gap-2">
+          {cards.map(({ role }) => (
+            <button
+              key={role.id}
+              type="button"
+              onClick={() => onRemove(role.id)}
+              className="fr-btn min-h-11 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-3 text-sm"
+            >
+              Stop tracking {role.title}
+            </button>
+          ))}
+        </div>
+      )}
       {onChange && (
         <button
           type="button"
           onClick={onChange}
           className="fr-btn flex min-h-[120px] cursor-pointer items-center justify-center rounded-2xl border-2 border-dashed border-[#0F766E] bg-white p-4 text-center font-semibold text-[#0F766E]"
         >
-          + Add or change roles
+          {changeLabel}
         </button>
       )}
     </div>

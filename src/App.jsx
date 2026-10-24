@@ -9,6 +9,7 @@ import Skills from './screens/Skills.jsx';
 import Goal from './screens/Goal.jsx';
 import Matches from './screens/Matches.jsx';
 import Overview from './screens/Overview.jsx';
+import { MAX_TRACKED, toggleTracked } from './lib/overviewView.js';
 import Study from './screens/Study.jsx';
 import Explore from './screens/Explore.jsx';
 import { rankBySkillMatch } from './lib/skillRanking.js';
@@ -28,6 +29,7 @@ const EMPTY_PROFILE = {
   targetSectors: [],
   sdgs: [],
   learn: [],
+  tracked: [],
   sampleId: null,
 };
 
@@ -52,6 +54,7 @@ function profileFromSample(sample) {
     targetSectors: [...(sample.targetSectors ?? [])],
     sdgs: [...sample.sdgs],
     learn: [...(sample.learn ?? [])],
+    tracked: [],
     sampleId: sample.id,
   };
 }
@@ -308,7 +311,15 @@ export default function App() {
 
   const toggleSdg = (goal) => changeProfile((current) => ({ ...current, sdgs: toggleIn(current.sdgs, goal) }));
 
-  const toggleLearnSkill = (label) => changeProfile((current) => toggleLearn(current, label));
+  // Tracking a role keeps the sample label (it is not a change to the audit), so it does not use changeProfile.
+  const [trackNote, setTrackNote] = useState('');
+  const trackRole = (roleId) => {
+    const { list, full } = toggleTracked(profile.tracked, roleId);
+    setTrackNote(full ? `You can track up to ${MAX_TRACKED} roles. Untrack one first.` : '');
+    if (!full) setProfile((current) => ({ ...current, tracked: list }));
+  };
+
+  const toggleLearnSkill =(label) => changeProfile((current) => toggleLearn(current, label));
 
   const changeScenario = (next) => {
     setReplan(null);
@@ -469,9 +480,8 @@ export default function App() {
           setExpandedRoleId(roleId);
           navigate('matches');
         }}
-        onBack={() => navigate('goal')}
-        onChange={() => navigate('goal')}
-        onAll={() => navigate('matches')}
+        onUntrack={trackRole}
+        onAdd={() => navigate('matches')}
       />
     );
   } else if (shownScreen === 'matches') {
@@ -496,6 +506,8 @@ export default function App() {
         referencesRefresh={referencesRefresh}
         onRefreshReferences={refreshReferences}
         onStudy={openStudy}
+        onTrack={trackRole}
+        trackNote={trackNote}
         onExplore={() => navigate('explore')}
       />
     );
@@ -542,7 +554,7 @@ export default function App() {
           screen={shownScreen}
           profile={profile}
           fields={fields}
-          onNavigate={(next) => navigate(shownScreen === 'goal' && next === 'matches' ? 'overview' : next)}
+          onNavigate={navigate}
         />
       </div>
     </div>

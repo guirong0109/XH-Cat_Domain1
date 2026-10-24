@@ -40,6 +40,8 @@ export default function RoleCard({
   expanded,
   onToggle,
   onStudy,
+  tracked = false,
+  onTrack = null,
   reason = null,
   profile,
   similar,
@@ -201,6 +203,18 @@ export default function RoleCard({
             >
               {expanded ? 'Hide details' : 'Why this match?'}
             </button>
+            {onTrack && (
+              <button
+                type="button"
+                onClick={onTrack}
+                aria-pressed={tracked}
+                className={`fr-btn min-h-11 flex-1 cursor-pointer rounded-[10px] border px-2 text-sm font-semibold whitespace-nowrap ${
+                  tracked ? 'border-[#0F766E] bg-[#F0FDFA] text-[#0F766E]' : 'border-slate-300 bg-white'
+                }`}
+              >
+                {tracked ? 'Tracking ✓' : 'Track this role'}
+              </button>
+            )}
             <button
               type="button"
               onClick={onStudy}

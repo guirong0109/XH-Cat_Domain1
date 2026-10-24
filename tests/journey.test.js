@@ -11,9 +11,9 @@ const about = { ...empty, who: 'student', field: 'm-it' };
 const full = { ...about, skills: ['a', 'b', 'c'], goal: 'upgrade' };
 
 describe('JOURNEY', () => {
-  it('is home plus five labelled steps', () => {
-    expect(JOURNEY.map((s) => s.label)).toEqual(['Home', 'About you', 'Your skills', 'Your goal', 'Matches', 'What to study']);
-    expect(JOURNEY[5].sub).toBe('Courses on official portals');
+  it('is home plus five labelled steps and the Your roles dashboard', () => {
+    expect(JOURNEY.map((s) => s.label)).toEqual(['Home', 'About you', 'Your skills', 'Your goal', 'Matches', 'Your roles', 'What to study']);
+    expect(JOURNEY[6].sub).toBe('Courses on official portals');
   });
 });
 
@@ -85,7 +85,7 @@ describe('nextHint', () => {
     expect(nextHint('about')).toBe('Tell us who you are and pick your major or sector.');
     expect(nextHint('skills')).toBe('Upload your CV or pick at least 3 skills, then check each level.');
     expect(nextHint('goal')).toBe('Pick your goal, then see your matches.');
-    expect(nextHint('matches')).toBe('Pick a role, then plan what to study.');
+    expect(nextHint('matches')).toBe('Explore roles and track up to 3 you like, then plan what to study.');
     expect(nextHint('study')).toBe('Tick off steps as you learn. You can go back and try another role.');
     for (const step of JOURNEY) expect(nextHint(step.screen)).toMatch(/\w/);
     expect(nextHint('unknown')).toBe('Go back to your journey any time.');
