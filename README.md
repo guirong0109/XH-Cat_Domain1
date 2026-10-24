@@ -73,10 +73,10 @@ In five simple steps the student goes from a skills profile and a goal to ranked
 ├── data/                    # Generated app data, eMASCO snapshot, team inputs
 ├── testing/                 # Test sets and evaluation results (incl. RunPod evidence)
 ├── submission/              # Required submission documents
-│   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission 
-│   ├── SDC2026_TeamName_TechDeclaration.pdf  # Technology declaration 
-│   ├── SDC2026_TeamName_Replit_POU.pdf       # Replit proof of use 
-│   └── SDC2026_TeamName_Runpod_POU.pdf       # RunPod proof of use 
+│   ├── SDC2026_Hackathon_XH-Cat_Preliminary.pdf  # Preliminary submission
+│   ├── SDC2026_XH-Cat_TechDeclaration.pdf     # Technology declaration (to add)
+│   ├── SDC2026_XH-Cat_Replit_POU.pdf           # Replit proof of use
+│   └── SDC2026_XH-Cat_Runpod_POU.pdf           # RunPod proof of use
 ├── tests/                   # Vitest unit tests (pipeline tests are in pipeline/tests)
 ├── .env.example             # Example environment variables
 ├── .gitignore
@@ -103,7 +103,7 @@ RunPod (GPU, offline) ──► model tests + skill similarity ──► results
 
 ### Option 1 — Run on Replit (Recommended)
 
-1. Open the Replit project (TODO: link), or import this repository via **Create Repl → Import from GitHub**.
+1. Open the [Replit project](https://xh-cat-domain-1.replit.app/), or import this repository via **Create Repl → Import from GitHub**.
 2. Optional: open the **Secrets** tab (🔒) and add variables from `.env.example`. The app runs without any secret.
 3. Click **Run**. The `.replit` file builds the app and starts `npm start` on port 3000. On Replit the CV AI step is off (no model files) and the app uses keyword matching.
 
@@ -151,7 +151,7 @@ python -m unittest discover pipeline/tests
 - **Hosting:** the app is deployed with Replit Deployments (`.replit`: build `npm run build`, run `NODE_ENV=production npm start`) at the Live Demo link above.
 - **Secrets:** optional API keys are read from environment variables and are never committed.
 
-📄 Proof of use: [`submission/SDC2026_TeamName_Replit_POU.pdf`](submission/SDC2026_TeamName_Replit_POU.pdf)
+📄 Proof of use: [`submission/SDC2026_XH-Cat_Replit_POU.pdf`](submission/SDC2026_XH-Cat_Replit_POU.pdf)
 
 ## How We Use RunPod *(Required)*
 
@@ -159,7 +159,7 @@ python -m unittest discover pipeline/tests
 - **Setup:** jobs are in `pipeline/` (`compare_embeddings.py`, `runpod_label.py`); steps in [pipeline/README.md](pipeline/README.md). Results are committed (`testing/results/`, `data/runpod/`).
 - **Integration:** the live app never calls a GPU, so there is no RunPod endpoint. Details: [runpod/README.md](runpod/README.md); evidence log: [testing/runpod_evidence.md](testing/runpod_evidence.md).
 
-📄 Proof of use: [`submission/SDC2026_TeamName_Runpod_POU.pdf`](submission/SDC2026_TeamName_Runpod_POU.pdf)
+📄 Proof of use: [`submission/SDC2026_XH-Cat_Runpod_POU.pdf`](submission/SDC2026_XH-Cat_Runpod_POU.pdf)
 
 ---
 
@@ -191,11 +191,11 @@ python -m unittest discover pipeline/tests
 - [ ] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
 - [x] Slide deck link added
 - [ ] Demo video link added
-- [ ] Replit used, with proof of use in `submission/`
-- [ ] RunPod used, with proof of use in `submission/`
-- [ ] Preliminary submission completed (`SDC2026_TeamName_Preliminary.pdf`)
-- [ ] Technology declaration completed (`SDC2026_TeamName_TechDeclaration.pdf`)
-- [ ] Submission files renamed with your team name (replace `TeamName`)
+- [x] Replit used, with proof of use in `submission/`
+- [x] RunPod used, with proof of use in `submission/`
+- [x] Preliminary submission completed (`SDC2026_Hackathon_XH-Cat_Preliminary.pdf`)
+- [ ] Technology declaration completed (`SDC2026_XH-Cat_TechDeclaration.pdf`, still to add)
+- [ ] Submission files renamed with your team name (done except the Technology declaration)
 - [ ] "How to Run" steps verified
 - [ ] No API keys or secrets committed to the repository
 - [ ] Repository made public on submission day
