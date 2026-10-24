@@ -2,18 +2,6 @@ import { journeySteps, nextHint } from '../lib/journey.js';
 import { formatDate } from '../lib/roleView.js';
 import { findField } from '../lib/goalView.js';
 
-const PREVIEW_LINKS = [
-  {
-    screen: 'preview-lang',
-    label: (
-      <>
-        BM · <span lang="zh">中文</span>
-      </>
-    ),
-  },
-  { screen: 'preview-users', label: 'More users' },
-];
-
 function Tick() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -191,27 +179,6 @@ export default function Sidebar({ data, profile, screen, onNavigate, onClose }) 
           Explore all roles
           {screen === 'explore' && <span className="ml-auto text-[11px]">You are here</span>}
         </button>
-      </nav>
-
-      <nav aria-label="Coming in Stage 2" className="flex flex-col gap-1">
-        <span className="px-2 pb-1 text-xs font-bold text-slate-600">COMING IN STAGE 2</span>
-        {PREVIEW_LINKS.map((link) => {
-          const current = screen === link.screen;
-          return (
-            <button
-              key={link.screen}
-              type="button"
-              aria-current={current ? 'page' : undefined}
-              onClick={() => onNavigate(link.screen)}
-              className={`flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-[10px] border-0 px-2.5 text-left text-sm ${
-                current ? 'bg-orange-50 font-bold text-[#9A3412]' : 'bg-transparent text-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              <span>{link.label}</span>
-              <span className="ml-auto rounded-md bg-orange-100 px-1.5 py-0.5 text-[10px] font-bold text-[#9A3412]">PREVIEW</span>
-            </button>
-          );
-        })}
       </nav>
 
       <p className="m-0 mt-auto px-2 text-[11px] leading-relaxed text-slate-600">{dataLine(data)}</p>

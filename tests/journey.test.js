@@ -45,8 +45,8 @@ describe('journeySteps', () => {
     expect(later[1].number).toBe(1);
   });
 
-  it('has no current step on a preview screen', () => {
-    expect(journeySteps('preview-lang', full, f).some((s) => s.state === 'current')).toBe(false);
+  it('has no current step on a screen outside the journey', () => {
+    expect(journeySteps('explore', full, f).some((s) => s.state === 'current')).toBe(false);
   });
 });
 
@@ -55,9 +55,9 @@ describe('stepPosition', () => {
     expect(stepPosition('about')).toEqual({ number: 1, total: 5 });
     expect(stepPosition('study')).toEqual({ number: 5, total: 5 });
   });
-  it('returns null for home and previews', () => {
+  it('returns null for home and screens outside the journey', () => {
     expect(stepPosition('home')).toBeNull();
-    expect(stepPosition('preview-users')).toBeNull();
+    expect(stepPosition('explore')).toBeNull();
   });
 });
 
@@ -75,8 +75,8 @@ describe('adjacentSteps', () => {
     expect(adjacentSteps('study', full, f).next).toBeNull();
     expect(adjacentSteps('home', full, f).back).toBeNull();
   });
-  it('returns nothing for previews', () => {
-    expect(adjacentSteps('preview-lang', full, f)).toEqual({ back: null, next: null });
+  it('returns nothing for screens outside the journey', () => {
+    expect(adjacentSteps('explore', full, f)).toEqual({ back: null, next: null });
   });
 });
 
@@ -88,6 +88,6 @@ describe('nextHint', () => {
     expect(nextHint('matches')).toBe('Pick a role, then plan what to study.');
     expect(nextHint('study')).toBe('Tick off steps as you learn. You can go back and try another role.');
     for (const step of JOURNEY) expect(nextHint(step.screen)).toMatch(/\w/);
-    expect(nextHint('preview-lang')).toBe('This is a preview. Go back to your journey any time.');
+    expect(nextHint('unknown')).toBe('Go back to your journey any time.');
   });
 });

@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
 import Sidebar from './Sidebar.jsx';
 import { JOURNEY, stepPosition } from '../lib/journey.js';
-import { isPreview } from '../lib/navigation.js';
 
 function screenTitle(screen) {
-  if (isPreview(screen)) return 'Stage 2 preview';
   if (screen === 'explore') return 'Explore all roles';
   return JOURNEY.find((step) => step.screen === screen)?.label || 'Home';
 }

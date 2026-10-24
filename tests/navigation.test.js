@@ -1,11 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
   OLD_ROUTES,
-  PREVIEW_SCREENS,
   SCREENS,
   STEP_SCREENS,
   firstIncompleteStep,
-  isPreview,
   resolveScreen,
   stepComplete,
 } from '../src/lib/navigation.js';
@@ -88,26 +86,18 @@ describe('resolveScreen', () => {
     expect(resolveScreen('', full, f)).toBe('home');
     expect(resolveScreen('home', empty, f)).toBe('home');
   });
-  it('always allows previews', () => {
-    for (const screen of PREVIEW_SCREENS) expect(resolveScreen(screen, empty, f)).toBe(screen);
+  it('sends the removed Stage 2 preview screens home', () => {
+    expect(resolveScreen('preview-lang', empty, f)).toBe('home');
+    expect(resolveScreen('preview-users', full, f)).toBe('home');
   });
-  it('opens Explore all roles without a profile, and it is not a numbered step or a preview', () => {
+  it('opens Explore all roles without a profile, and it is not a numbered step', () => {
     expect(resolveScreen('explore', empty, f)).toBe('explore');
     expect(SCREENS).toContain('explore');
     expect(STEP_SCREENS).not.toContain('explore');
-    expect(isPreview('explore')).toBe(false);
   });
   it('a full sample profile unlocks all screens', () => {
     for (const sample of samples) {
       for (const screen of STEP_SCREENS) expect(resolveScreen(screen, sample, fields)).toBe(screen);
     }
-  });
-});
-
-describe('isPreview', () => {
-  it('is true only for preview screens', () => {
-    expect(isPreview('preview-lang')).toBe(true);
-    expect(isPreview('matches')).toBe(false);
-    expect(PREVIEW_SCREENS.every((screen) => SCREENS.includes(screen))).toBe(true);
   });
 });

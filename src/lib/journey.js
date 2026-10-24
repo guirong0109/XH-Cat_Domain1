@@ -58,5 +58,5 @@ export function adjacentSteps(screen, profile, fields) {
 }
 
 export function nextHint(screen) {
-  return HINTS[screen] ?? 'This is a preview. Go back to your journey any time.';
+  return HINTS[screen] ?? 'Go back to your journey any time.';
 }

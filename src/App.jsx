@@ -15,8 +15,6 @@ import { MIN_SKILLS_FOR_TOP, fetchTopMatches, generalSkills, rankingSkills } fro
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
-import PreviewLang from './screens/PreviewLang.jsx';
-import PreviewUsers from './screens/PreviewUsers.jsx';
 import { OLD_ROUTES, SCREENS, resolveScreen } from './lib/navigation.js';
 
 const INITIAL_SAMPLE_ID = 'aina';
@@ -419,10 +417,6 @@ export default function App() {
         onNavigate={navigate}
       />
     );
-  } else if (shownScreen === 'preview-lang') {
-    content = <PreviewLang />;
-  } else if (shownScreen === 'preview-users') {
-    content = <PreviewUsers data={data} />;
   } else if (shownScreen === 'explore') {
     content = <Explore onBack={() => navigate('matches')} />;
   } else if (shownScreen === 'about') {
