@@ -1,0 +1,11 @@
+{
+  "status": "draft",
+  "note": "Curated by Claude from the real eMASCO skill phrases of 24 Oct 2026; awaiting teammate review. Only groups of names for the SAME skill are listed. Related skills (for example Python and a Python framework, or physical stamina and physical fitness) are deliberately not here: they stay separate skills. Anything not listed is never merged by name.",
+  "groups": [
+    { "canonical": "Microsoft Office applications", "aliases": ["Microsoft Office", "Microsoft Office tools", "Microsoft Office suite", "Microsoft Office software", "MS Office"], "reason": "Same software suite" },
+    { "canonical": "Microsoft Excel", "aliases": ["MS Excel"], "reason": "Same product" },
+    { "canonical": "Computer literacy", "aliases": ["Computer proficiency", "Computer usage", "Computer skills"], "reason": "All name general ability to use a computer (eMASCO also writes 'basic computer skills')" },
+    { "canonical": "Teamwork", "aliases": ["Team work", "Teamwork skills"], "reason": "Spelling variants" },
+    { "canonical": "Record keeping", "aliases": ["Recordkeeping"], "reason": "Spelling variants" }
+  ]
+}

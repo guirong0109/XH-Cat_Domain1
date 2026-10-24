@@ -121,6 +121,13 @@ export default function ExploreCard({ card, observedSource }) {
             <span className="text-slate-600">{exposure.note}</span>
           </div>
         )}
+        {card.officialSkills && card.officialSkills.status !== 'ok' && (
+          <div className="text-slate-600">
+            {card.officialSkills.status === 'sparse'
+              ? `The eMASCO page lists only ${card.officialSkills.skillCount} skill${card.officialSkills.skillCount === 1 ? '' : 's'} for this role, so "skills I may be missing" is incomplete.`
+              : 'The eMASCO page has no usable skill list for this role.'}
+          </div>
+        )}
         <div>
           <span className="font-semibold">SDG:</span> {SDG_NOT_TAGGED}
         </div>

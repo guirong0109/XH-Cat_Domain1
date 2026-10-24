@@ -7,6 +7,7 @@ import ReplanNotice from '../components/ReplanNotice.jsx';
 import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
 import OtherRoleCard from '../components/OtherRoleCard.jsx';
+import { roleEvidenceFor } from '../lib/skillEvidence.js';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
 import EmergingFeed from '../components/EmergingFeed.jsx';
@@ -253,6 +254,8 @@ export default function Matches({
               references={data.references}
               observed={data.observed?.roles?.[role.code]}
               observedMeta={data.observed}
+              skillEvidence={roleEvidenceFor(data.skillEvidence, role.code)}
+              skillEvidenceMeta={data.skillEvidence?.meta}
             />
           );
         })}

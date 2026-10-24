@@ -1,6 +1,6 @@
 # task.md — FutureReady MY: overall progress
 
-Last updated: 2026-10-24 (evening; automated AI exposure and the score blend are on `main` = `1a66aec`). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
+Last updated: 2026-10-24 (late night; skill dataset, its QA and integration are on `main` = `132e101`). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
 Code state (23 Oct): `main` (code as of `b784590`, plus later docs), pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The user approved the Emerging feed being on `main` (23 Oct evening). It was built in its own session; the user said "Merge to main" and "push main" there (another session had noted an earlier "don't merge it first"; ask if unsure). Tests on `b784590`: 644 app (49 files) and 197 pipeline pass; `npm run build` works. Re-run before relying on the numbers.
 **23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
 **24 Oct update:** see Session 8 and section 6 below, and `HANDOVER.md` section 000000000. For the detailed log see `HANDOVER.md`. For rules see `CLAUDE.md`.
@@ -85,6 +85,15 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Per-role exposure | `data/exposure.json`: observed AI use, share of tasks with use, tasks AI is used for; "not enough matched tasks" for 6 of the 20 roles. Shown on role and Explore cards. |
 | Score | Observed AI use now counts in the outlook, weighted by how many of the role's tasks matched (user approved). Demo numbers and docs updated. |
 | Other | Exposure and SDG note on Explore cards; draft hours for 13 accounting skills; merged the course-pages and weekly-refresh work. Tests: 778 app, 216 pipeline. |
+
+### Session 9 (2026-10-24, night): occupation-skill dataset, QA and integration
+| Step | What was done |
+|---|---|
+| Audit | The briefs assumed a Search API, a DR API and a database. None exist in the repo, so the pipeline uses the official eMASCO pages and JSON files. A real search source is the user's decision. |
+| Dataset | `build_skill_dataset.py`: 1,814 occupations to 19,876 evidence-backed relations and 13,602 canonical skills in `data/skills/`; incremental, idempotent, validated before writing. |
+| Independent QA | `qa_skill_dataset.py`: 0 problems, 600 of 600 sampled quotes found in the saved eMASCO pages. 9 defects fixed with regression tests (report: `docs/skill-dataset-qa-report.md`). |
+| Integration | 38 app skills mapped: 13 exact, 1 curated synonym, 22 related only, 2 unresolved. Role cards show what the official page says per skill, other official skills, honest "not listed" and "no usable list" states; new read-only `/api/skills/*` routes; Explore cards note short skill lists. Scores, weights and AI-exposure data unchanged. |
+| Tests | 813 app, 264 pipeline. Merged to `main` (`132e101`) by a fast-forward push from a separate worktree. |
 
 ---
 
@@ -228,3 +237,17 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] Render tests for screens; check the new boxes at 360 px.
 - [ ] After each new Anthropic release: `/admin` refresh, `node scripts/embed-tasks.mjs`, `node scripts/match-tasks.mjs`, `node scripts/build-exposure.mjs`, re-check `docs/demo-script.md`.
 - [ ] Replit check; confirm the deadline; RunPod Billing screenshot; make the repo public.
+
+---
+
+## 7. 24 Oct 2026, night: skill dataset, what is left
+
+- [x] Dataset built (eMASCO only), independent QA, 9 defects fixed, integrated into the role cards and routes, merged to `main`.
+- [ ] User's decision on a Search API and DR API (provider name, endpoint, key, response format, terms, approval). Until then no "commonly mentioned" or "emerging" evidence exists.
+- [ ] Teammate review: `data/skills/synonyms.json`, `data/skills/app_skill_synonyms.json`, `data/skills/review.json` (286 relations), the 31 "not listed" role-skill rows (are those team skills right for the role?).
+- [ ] Decide whether the fit score should ever use the dataset (not done on purpose).
+- [ ] Per-skill "AI skills this role should have" (needs its own quality check).
+- [ ] Render tests for the screens and a 360 px check of the new role-card boxes.
+- [ ] Bring the shared folder up to date: local `main` is at `74f3dd7` with another session's uncommitted work (hybrid skill search); see `HANDOVER.md` section 00000000000.
+- [ ] Restart the user's server on port 3000 if it was stopped by an earlier cleanup.
+- [ ] Still open from before: the deadline question, the Replit check, the RunPod Billing screenshot, making the repo public on submission day.

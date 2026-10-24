@@ -2,6 +2,7 @@ import SdgTag from './SdgTag.jsx';
 import { roleReference } from '../lib/referenceView.js';
 import SkillMatchPanel from './SkillMatchPanel.jsx';
 import { MATCH_LABEL, MATCH_MEANING, matchAria, matchText, separateParts } from '../lib/skillMatchView.js';
+import { evidenceHeadline, evidenceSourceLine, otherOfficialSkills, skillSupportRows } from '../lib/skillEvidence.js';
 import {
   ILO_NO_MATCH,
   exposureShares,
@@ -29,6 +30,8 @@ export default function RoleCard({
   role,
   observed,
   observedMeta,
+  skillEvidence,
+  skillEvidenceMeta,
   score,
   ctx,
   rank,
@@ -52,6 +55,9 @@ export default function RoleCard({
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
   const separate = breakdown ? separateParts(breakdown.parts) : [];
+  const supportRows = expanded && skillEvidence ? skillSupportRows(skillEvidence, role.skills) : [];
+  const supportByLabel = Object.fromEntries(supportRows.map((row) => [row.label, row]));
+  const otherOfficial = expanded && skillEvidence ? otherOfficialSkills(skillEvidence, profile) : [];
   const ilo = iloView(role);
   const oecd = oecdView(role);
   const shares = exposureShares(role);

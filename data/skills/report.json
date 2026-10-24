@@ -1,0 +1,43 @@
+{
+ "meta": {
+  "schemaVersion": 2,
+  "extractorVersion": "9",
+  "generatedAt": "2026-10-24T14:00:11+00:00",
+  "source": {
+   "name": "eMASCO (MASCO 2020), Ministry of Human Resources Malaysia",
+   "url": "https://emasco.mohr.gov.my",
+   "retrievedAt": "2026-10-23"
+  },
+  "classifications": {
+   "listed_in_official_standard": "The official occupation page lists the skill for the occupation.",
+   "commonly_mentioned": "Not collected: no secondary source is available to this pipeline (no search API in the project).",
+   "emerging": "Not collected here: emerging skills come from the live signals layer, not from this dataset."
+  },
+  "fingerprint": "caa1daa8f1e369c34590a61b41b1a10177ea2052"
+ },
+ "report": {
+  "occupationsInScope": 1814,
+  "occupationsOk": 1722,
+  "occupationsSparse": 44,
+  "occupationsInsufficient": 48,
+  "occupationsFailed": 0,
+  "failuresByOccupation": [],
+  "sources": {
+   "retrieved": 1814,
+   "parsed": 1766,
+   "note": "one eMASCO page per occupation, crawled earlier"
+  },
+  "extractedStatements": 19899,
+  "canonicalSkills": 13602,
+  "occupationSkillRelations": 19876,
+  "statementsMergedIntoExistingSkill": 23,
+  "mergedByReorderedWords": 214,
+  "mergedBySynonymTable": 5,
+  "relationsNeedingReview": 286,
+  "reviewItems": 307,
+  "nearDuplicatePairs": 400,
+  "reusedFromCache": 1814,
+  "reprocessed": 0,
+  "skillsPerOccupationMedian": 12
+ }
+}

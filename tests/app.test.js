@@ -63,6 +63,7 @@ describe('api', () => {
       courseChecks: null,
       skillSimilarity: null,
       observed: null,
+      skillEvidence: null,
     })
   })
 
