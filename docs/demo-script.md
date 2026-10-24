@@ -15,12 +15,10 @@ Pending (say so if asked):
 - Open the app. Say: "FutureReady MY helps diploma and foundation students see which jobs are changing with AI, and what to learn next."
 - Press the start button.
 
-## 0:20 to 0:40 · About
+## 0:20 to 1:00 · About you (who, major, skills on one screen)
 - Pick **Student**, major **IT**. (Same as the Aina sample.)
-
-## 0:40 to 1:00 · Skills
-- Show the CV upload. Say: "The PDF is read in your browser. Its text goes to our own server for an AI check, and it is not saved or logged."
-- Or press **I don't have a CV** and pick skills: Python programming (Good), SQL and databases (Strong), Spreadsheets (Good), Communication (Good).
+- Under **Do you have a CV?** press **Upload my CV** and upload a sample CV. Say: "The PDF is read in your browser. Its text goes to our own server for an AI check, and it is not saved or logged." Point at **Check what we found in your CV**: each skill shows the CV line, keyword or AI, and a first-guess level with its reason (only listed = Basic, one project or job = Good, two or more, or 2+ years = Strong). "The student checks every level."
+- Or press **No CV, I will pick**: 5 skills are pre-ticked at Basic, "used by most of our 7 IT roles": Problem solving (5 of 7), Python programming (3), SQL and databases (3), Communication (2), Customer service (2). Untick Problem solving and Customer service, set Python programming (Good), SQL and databases (Strong), Communication (Good), and add Spreadsheets (Good). This gives Aina's skills, so the numbers below hold.
 - Point at a level switch: "Your level counts in the fit score."
 
 ## 1:00 to 1:15 · Goal

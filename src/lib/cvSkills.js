@@ -29,14 +29,36 @@ const BASIC_WORDS = /\b(basic|beginner|familiar|introductory)\b/i;
 const LEARNING = /(?<!\b(?:machine|deep)\s)\blearning\b/i;
 const YEARS = /(?<![\d.])(\d+(?:\.\d+)?)\s*\+?\s*(?:years?|yrs?)\b/gi;
 
-export function guessLevel(line) {
-  const text = String(line || '');
-  if (STRONG_WORDS.test(text) || LED_WORD.test(text)) return 'strong';
-  for (const m of text.matchAll(YEARS)) {
-    if (Number(m[1]) >= 3) return 'strong';
+// A line about doing something: a project, an internship or a job.
+const PROJECT_WORDS = /\b(built|developed|designed|created|implemented|projects?|intern|internship|worked|managed|final[- ]year|at work)\b/i;
+const STRONG_YEARS = 2;
+
+export const LEVEL_REASONS = {
+  words: 'Strong: your CV says advanced, expert, proficient or led',
+  years: `Strong: your CV says ${STRONG_YEARS} or more years`,
+  projects: 'Strong: used in 2 or more projects or jobs in your CV',
+  project: 'Good: used in a project or job in your CV',
+  'said-basic': 'Basic: your CV says basic, beginner or learning',
+  list: 'Basic: only listed in your CV, not in a project or job',
+};
+
+// First guess of a level from every CV line that matched the skill, with the reason.
+// The student always checks it.
+export function levelGuess(lines) {
+  const texts = (Array.isArray(lines) ? lines : [lines]).map((line) => String(line || ''));
+  if (texts.some((text) => STRONG_WORDS.test(text) || LED_WORD.test(text))) return { level: 'strong', reason: 'words' };
+  if (texts.some((text) => [...text.matchAll(YEARS)].some((m) => Number(m[1]) >= STRONG_YEARS))) {
+    return { level: 'strong', reason: 'years' };
   }
-  if (BASIC_WORDS.test(text) || LEARNING.test(text)) return 'basic';
-  return 'good';
+  if (texts.some((text) => BASIC_WORDS.test(text) || LEARNING.test(text))) return { level: 'basic', reason: 'said-basic' };
+  const projects = texts.filter((text) => PROJECT_WORDS.test(text)).length;
+  if (projects >= 2) return { level: 'strong', reason: 'projects' };
+  if (projects === 1) return { level: 'good', reason: 'project' };
+  return { level: 'basic', reason: 'list' };
+}
+
+export function guessLevel(lines) {
+  return levelGuess(lines).level;
 }
 
 function escapeRegExp(s) {
@@ -63,9 +85,10 @@ export function extractSkills(text, skillLabels) {
     // Phrases like "sql account" (accounting software) must not count as the keyword.
     const notWords = (skill.notKeywords || []).filter(Boolean);
     const notRe = notWords.length ? new RegExp(keywordRegex(notWords).source, 'giu') : null;
-    const line = lines.find((l) => re.test(notRe ? l.replace(notRe, ' ') : l));
-    if (line === undefined) continue;
-    found.push({ label: skill.label, level: guessLevel(line), evidence: cut(line) });
+    const matched = lines.filter((l) => re.test(notRe ? l.replace(notRe, ' ') : l));
+    if (matched.length === 0) continue;
+    const { level, reason } = levelGuess(matched);
+    found.push({ label: skill.label, level, reason, evidence: cut(matched[0]) });
   }
   return found;
 }
@@ -117,7 +140,8 @@ export function mergeMatches(keywordFound, aiFound) {
   for (const item of aiFound || []) {
     if (seen.has(item.label)) continue;
     seen.add(item.label);
-    merged.push({ label: item.label, level: guessLevel(item.evidence), evidence: cut(String(item.evidence || '')), source: 'ai' });
+    const { level, reason } = levelGuess(item.evidence);
+    merged.push({ label: item.label, level, reason, evidence: cut(String(item.evidence || '')), source: 'ai' });
   }
   return merged;
 }
@@ -176,4 +200,11 @@ export function unmatchedLines(text, max = 5) {
     sentences.push(cut(line));
   }
   return { lines: sentences.slice(0, max), total: sentences.length };
+}
+
+// CV sentences that are not the evidence line of any found skill, for the review card.
+export function linesNotMatched(text, evidence, max = 5) {
+  const used = new Set((evidence ?? []).map((line) => cut(String(line).replace(/^[\s\-–—•*·●▪◦▶>]+/u, '').replace(/\s+/g, ' '))));
+  const rest = unmatchedLines(text, Infinity).lines.filter((line) => !used.has(line));
+  return { lines: rest.slice(0, max), total: rest.length };
 }

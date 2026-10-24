@@ -195,6 +195,8 @@ COURSE_URL_PREFIX = {
     "elatih": "https://elatih.hrdcorp.gov.my/courses-details/",
     "tvet": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=",
 }
+# The answers to "How do you use AI now?" on Your goal (same ids as src/lib/aiUse.js).
+AI_USE_IDS = {"writing", "automation", "research", "data", "coding", "design", "other", "none"}
 
 
 def check_course_list(items, where):
@@ -235,7 +237,15 @@ def build_ai_courses(course_file, known_labels):
         if label not in known_labels:
             raise ValueError(f"ai_courses.json has unknown skill {label!r}")
         check_course_list(items, f"AI courses for {label!r}")
-    return {"general": general, "bySkill": by_skill, "checkedAt": checked_at}
+    uses = course_file.get("uses", {})
+    listed = {course["url"] for course in general} | {course["url"] for items in by_skill.values() for course in items}
+    for url, tags in uses.items():
+        if url not in listed:
+            raise ValueError(f"ai_courses.json uses names a course that is not listed: {url!r}")
+        unknown = [tag for tag in tags if tag not in AI_USE_IDS]
+        if not tags or unknown:
+            raise ValueError(f"ai_courses.json uses for {url!r} needs known AI uses, got {tags!r}")
+    return {"general": general, "bySkill": by_skill, "uses": uses, "checkedAt": checked_at}
 
 
 def attach_courses(skill_labels, course_file):

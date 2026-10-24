@@ -58,7 +58,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
           <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.who)}</p>
         )}
 
-        <AiForRole role={role} aiCourses={data.skills.aiCourses} checks={data.courseChecks} />
+        <AiForRole role={role} aiCourses={data.skills.aiCourses} checks={data.courseChecks} aiUses={profile.aiUses} />
 
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">

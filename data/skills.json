@@ -1593,6 +1593,41 @@
         }
       ]
     },
+    "uses": {
+      "https://elatih.hrdcorp.gov.my/courses-details/ai-fluency-explore-generative-ai": [
+        "none"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/crafting-prompts-for-chatgpt-prompt-engineering": [
+        "writing",
+        "research",
+        "none"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/machine-learning-fundamentals": [
+        "coding",
+        "data"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/introduction-to-machine-learning": [
+        "coding",
+        "data"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-uncover-the-magic-of-chatgpt-for-data-processing": [
+        "data"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-improving-workplace-productivity-with-chatgpt": [
+        "writing",
+        "automation"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/artificial-intelligence-course-ai-to-enhanced-customer-engagement-via-chatbot": [
+        "automation"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/mastering-inquiry-with-chatgpt-enhance-your-research-skills-using-ai": [
+        "research",
+        "writing"
+      ],
+      "https://elatih.hrdcorp.gov.my/courses-details/intelligent-automation-course-the-power-of-intelligent-automation-in-the-workplace": [
+        "automation"
+      ]
+    },
     "checkedAt": "2026-10-24"
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Chip from '../components/Chip.jsx';
-import LevelSwitch from '../components/LevelSwitch.jsx';
+import Chip from './Chip.jsx';
+import LevelSwitch from './LevelSwitch.jsx';
 import {
   CV_AI_TEXT,
   CV_MESSAGES,
@@ -9,6 +9,8 @@ import {
   cvReviewLine,
   extractSkills,
   fetchCvSkills,
+  LEVEL_REASONS,
+  linesNotMatched,
   mergeMatches,
   sourceBadge,
   unmatchedLines,
@@ -18,6 +20,7 @@ import { focusAfterRemove } from '../lib/skillFocus.js';
 import { cvFoundSkills, suggestField, weakFit } from '../lib/fieldCheck.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
+import { commonSkills, commonSkillsLine } from '../lib/fieldSkills.js';
 
 const LEVEL_LINE = `Your level counts in the fit score: Strong ${LEVEL_CREDIT.strong}, Good ${LEVEL_CREDIT.good}, Basic ${LEVEL_CREDIT.basic}.`;
 
@@ -29,7 +32,13 @@ function Card({ children, ...rest }) {
   );
 }
 
-export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, onCvFound, onCvSuggest, onAcceptSuggestion, onDismissSuggestion, onCvClear, onChooseField }) {
+// The skills part of About you. path 'cv': upload and check what the CV gave;
+// path 'pick': pick skills, with the field's common skills listed first.
+export default function SkillsStep({ data, profile, cv, path, field, onNoCv, onToggleSkill, onSetLevel, onCvFound, onCvSuggest, onAcceptSuggestion, onDismissSuggestion, onCvClear, onChooseField }) {
+  const common = useMemo(() => (path === 'pick' ? commonSkills(field, data.roles) : []), [path, field, data.roles]);
+  // CV sentences that matched no skill: memory only, never saved or sent.
+  const [notMatched, setNotMatched] = useState(null);
+  const [pickerOpen, setPickerOpen] = useState(path === 'pick');
   const pickerRef = useRef(null);
   const headingRef = useRef(null);
   const removeRefs = useRef(new Map());
@@ -88,8 +97,12 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   const showFieldNotice = fieldSuggestion && keptFor !== `${cv.fileName}|${profile.field}`;
 
   const goToPicker = () => {
-    pickerRef.current?.scrollIntoView({ block: 'start' });
-    pickerRef.current?.focus();
+    setPickerOpen(true);
+    // Wait one frame so a folded picker is shown before it is scrolled to.
+    requestAnimationFrame(() => {
+      pickerRef.current?.scrollIntoView({ block: 'start' });
+      pickerRef.current?.focus();
+    });
   };
 
   const readCv = async (file) => {
@@ -98,6 +111,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     if (!file || reading) return;
     setCvError(null);
     setUnread(null);
+    setNotMatched(null);
     const bad = checkCvFile(file);
     if (bad) {
       setCvError(bad);
@@ -110,8 +124,10 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       const text = await readPdfText(file);
       if (!mounted.current || id !== requestId.current) return;
       const keywordFound = extractSkills(text, data.skills.labels).map((item) => ({ ...item, source: 'keyword' }));
+      const evidenceOf = (items) => items.map((item) => item.evidence);
       if (keywordFound.length > 0) {
         onCvFound(keywordFound, file.name);
+        setNotMatched(linesNotMatched(text, evidenceOf(keywordFound)));
         setReading(false);
       }
       setAiStatus('checking');
@@ -137,6 +153,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
       // AI matches wait for the student's yes; keyword matches were added above.
       if (keywordFound.length === 0) onCvFound([], file.name);
       onCvSuggest(suggestions, file.name);
+      setNotMatched(linesNotMatched(text, evidenceOf([...keywordFound, ...suggestions])));
       setAiStatus('done');
     } catch (error) {
       if (mounted.current && id === requestId.current) {
@@ -161,15 +178,136 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
     onCvClear();
     setCvError(null);
     setUnread(null);
+    setNotMatched(null);
   };
 
-  return (
-    <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
-      <div>
-        <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your skills</h1>
-        <p className="m-0 text-slate-600">Pick at least {MIN_SKILLS} skills you have now, then check each level.</p>
-      </div>
+  const levelsCard = (
+      <Card aria-labelledby="your-skills-heading">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="your-skills-heading" className="m-0 text-lg font-bold">
+            {path === 'cv' ? 'Check what we found in your CV' : 'Set your skill levels'}
+          </h2>
+          <span aria-live="polite" className="text-[13px] text-slate-600">
+            {count} picked{count < MIN_SKILLS ? ` · pick ${MIN_SKILLS - count} more to continue` : ''}
+          </span>
+        </div>
+        <p className="m-0 text-sm text-slate-600">{LEVEL_LINE}</p>
+        {count === 0 ? (
+          <p className="m-0 text-sm text-slate-600">No skills yet. Pick them in the list above.</p>
+        ) : (
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {profile.skills.map((label) => (
+              <li
+                key={label}
+                className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-slate-200 px-3 py-2"
+              >
+                <span className="flex min-w-0 flex-[1_1_160px] flex-col">
+                  <span className="text-[15px] font-semibold">{label}</span>
+                  {cv?.evidence[label] && (
+                    <>
+                      {cv.sources?.[label] && (
+                        <span className={`text-xs font-semibold ${cv.sources[label] === 'ai' ? 'text-[#C2410C]' : 'text-[#0F766E]'}`}>
+                          {sourceBadge(cv.sources[label])}
+                        </span>
+                      )}
+                      <span className="text-xs break-words text-slate-600">Found in your CV: “{cv.evidence[label]}”</span>
+                      <span className="text-xs font-semibold text-slate-700">
+                        {LEVEL_REASONS[cv.reasons?.[label]] ?? 'Level is our guess'} · please check
+                      </span>
+                    </>
+                  )}
+                </span>
+                <LevelSwitch
+                  skill={label}
+                  value={skillLevel(label, profile)}
+                  onChange={(level) => onSetLevel(label, level)}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSkill(label)}
+                  ref={(node) => {
+                    if (node) removeRefs.current.set(label, node);
+                    else removeRefs.current.delete(label);
+                  }}
+                  aria-label={`Remove ${label}`}
+                  className="min-h-11 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-3 text-[13px] text-slate-700 hover:border-[#C2410C] hover:text-[#C2410C]"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {path === 'cv' && notMatched && notMatched.total > 0 && (
+          <details className="rounded-xl border border-slate-200 px-3 py-2 text-sm">
+            <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-slate-700">
+              Lines we read but did not match to a skill ({notMatched.total})
+            </summary>
+            <ul className="m-0 list-disc pl-5 text-[13px] break-words text-slate-700">
+              {notMatched.lines.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+            <p className="m-0 mt-1 text-xs text-slate-600">
+              Showing {notMatched.lines.length} of {notMatched.total}. If one of these is a skill, add it with “Add more skills”.
+              Your CV text stays on this screen and is not saved.
+            </p>
+          </details>
+        )}
+        {path === 'cv' && cv && (
+          <button
+            type="button"
+            aria-expanded={pickerOpen}
+            onClick={() => (pickerOpen ? setPickerOpen(false) : goToPicker())}
+            className="fr-btn min-h-11 self-start cursor-pointer rounded-xl border border-[#0F766E] bg-white px-4 text-sm font-bold text-[#0F766E]"
+          >
+            {pickerOpen ? 'Hide the skill list' : '+ Add more skills'}
+          </button>
+        )}
+      </Card>
+  );
 
+  const picker = (
+      <section
+        ref={pickerRef}
+        tabIndex={-1}
+        hidden={path === 'cv' && !pickerOpen}
+        aria-labelledby="skill-picker-heading"
+        className="flex scroll-mt-20 flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 outline-none sm:p-[22px]"
+      >
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="skill-picker-heading" ref={headingRef} tabIndex={-1} className="m-0 text-lg font-bold outline-none">
+            Pick your skills
+          </h2>
+          <span className="text-[13px] text-slate-600">From eMASCO skill statements</span>
+        </div>
+        {path === 'pick' && (
+          common.length > 0 ? (
+            <div className="rounded-xl bg-teal-50 p-3 text-sm text-teal-900">
+              <p className="m-0">{commonSkillsLine(field.label, common[0].total)}</p>
+              <p className="m-0 mt-1 text-[13px]">
+                {common.map((item) => `${item.label} (${item.count} of ${item.total})`).join(' · ')}
+              </p>
+            </div>
+          ) : (
+            <p className="m-0 text-sm text-slate-600">
+              We have no common skills for {field ? field.label : 'your field'} yet. Please pick your skills from this list.
+            </p>
+          )
+        )}
+        <div className="flex flex-wrap gap-2">
+          {data.skills.labels.map(({ label }) => (
+            <Chip key={label} pressed={profile.skills.includes(label)} onClick={() => onToggleSkill(label)}>
+              {label}
+            </Chip>
+          ))}
+        </div>
+      </section>
+  );
+
+  return (
+    <div className="flex flex-col gap-[18px]">
+      {path === 'cv' && (
       <Card aria-label="Start from your CV">
         {cv ? (
           <div className="flex flex-wrap items-center gap-3">
@@ -211,7 +349,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
             </label>
             <button
               type="button"
-              onClick={goToPicker}
+              onClick={onNoCv}
               className="fr-btn min-h-[52px] cursor-pointer rounded-xl border border-[#0F766E] bg-white px-5 text-base font-bold text-[#0F766E]"
             >
               I don't have a CV
@@ -316,7 +454,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
                 </button>
                 <button
                   type="button"
-                  onClick={goToPicker}
+                  onClick={onNoCv}
                   className="fr-btn min-h-11 cursor-pointer rounded-xl border border-[#0F766E] bg-white px-4 text-sm font-bold text-[#0F766E]"
                 >
                   Pick my skills
@@ -331,6 +469,7 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           </p>
         )}
       </Card>
+      )}
 
       {cv && cv.suggestions.length > 0 && (
         <Card aria-labelledby="ai-check-heading" style={{ borderColor: '#C2410C' }}>
@@ -344,6 +483,9 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
                 <span className="flex min-w-0 flex-[1_1_160px] flex-col">
                   <span className="text-[15px] font-semibold">{item.label}</span>
                   <span className="text-xs break-words text-slate-600">Found in your CV: “{item.evidence}”</span>
+                  {LEVEL_REASONS[item.reason] && (
+                    <span className="text-xs text-slate-600">If you add it, first guess: {LEVEL_REASONS[item.reason]}</span>
+                  )}
                 </span>
                 <button
                   type="button"
@@ -367,83 +509,18 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
         </Card>
       )}
 
-      <Card aria-labelledby="your-skills-heading">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="your-skills-heading" className="m-0 text-lg font-bold">
-            Your skills and levels
-          </h2>
-          <span aria-live="polite" className="text-[13px] text-slate-600">
-            {count} picked{count < MIN_SKILLS ? ` · pick ${MIN_SKILLS - count} more to continue` : ''}
-          </span>
-        </div>
-        <p className="m-0 text-sm text-slate-600">{LEVEL_LINE}</p>
-        {count === 0 ? (
-          <p className="m-0 text-sm text-slate-600">No skills yet. Pick them from the list below.</p>
-        ) : (
-          <ul className="m-0 flex list-none flex-col gap-2 p-0">
-            {profile.skills.map((label) => (
-              <li
-                key={label}
-                className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-slate-200 px-3 py-2"
-              >
-                <span className="flex min-w-0 flex-[1_1_160px] flex-col">
-                  <span className="text-[15px] font-semibold">{label}</span>
-                  {cv?.evidence[label] && (
-                    <>
-                      {cv.sources?.[label] && (
-                        <span className={`text-xs font-semibold ${cv.sources[label] === 'ai' ? 'text-[#C2410C]' : 'text-[#0F766E]'}`}>
-                          {sourceBadge(cv.sources[label])}
-                        </span>
-                      )}
-                      <span className="text-xs break-words text-slate-600">
-                        Found in your CV: “{cv.evidence[label]}” · level is our guess, please check
-                      </span>
-                    </>
-                  )}
-                </span>
-                <LevelSwitch
-                  skill={label}
-                  value={skillLevel(label, profile)}
-                  onChange={(level) => onSetLevel(label, level)}
-                />
-                <button
-                  type="button"
-                  onClick={() => removeSkill(label)}
-                  ref={(node) => {
-                    if (node) removeRefs.current.set(label, node);
-                    else removeRefs.current.delete(label);
-                  }}
-                  aria-label={`Remove ${label}`}
-                  className="min-h-11 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-3 text-[13px] text-slate-700 hover:border-[#C2410C] hover:text-[#C2410C]"
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
-
-      <section
-        ref={pickerRef}
-        tabIndex={-1}
-        aria-labelledby="skill-picker-heading"
-        className="flex scroll-mt-20 flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 outline-none sm:p-[22px]"
-      >
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="skill-picker-heading" ref={headingRef} tabIndex={-1} className="m-0 text-lg font-bold outline-none">
-            Pick your skills
-          </h2>
-          <span className="text-[13px] text-slate-600">From eMASCO skill statements</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {data.skills.labels.map(({ label }) => (
-            <Chip key={label} pressed={profile.skills.includes(label)} onClick={() => onToggleSkill(label)}>
-              {label}
-            </Chip>
-          ))}
-        </div>
-      </section>
-    </main>
+      {/* No CV: pick first, then levels. CV: levels only after a CV is read; the picker is folded. */}
+      {path === 'pick' ? (
+        <>
+          {picker}
+          {levelsCard}
+        </>
+      ) : (
+        <>
+          {cv && levelsCard}
+          {picker}
+        </>
+      )}
+    </div>
   );
 }

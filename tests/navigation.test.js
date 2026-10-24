@@ -23,20 +23,18 @@ const skilled = { ...about, skills: ['a', 'b', 'c'] };
 const full = { ...skilled, goal: 'upgrade' };
 
 describe('stepComplete', () => {
-  it('about needs who and a field from the matching list', () => {
+  it('about needs who, a field from the matching list and 3 skills', () => {
     expect(stepComplete('about', empty, f)).toBe(false);
-    expect(stepComplete('about', about, f)).toBe(true);
+    expect(stepComplete('about', about, f)).toBe(false);
+    expect(stepComplete('about', { ...about, skills: ['a', 'b'] }, f)).toBe(false);
+    expect(stepComplete('about', skilled, f)).toBe(true);
   });
   it('field from the other list is incomplete', () => {
-    expect(stepComplete('about', { ...empty, who: 'working', field: 'm-it' }, f)).toBe(false);
+    expect(stepComplete('about', { ...skilled, who: 'working', field: 'm-it' }, f)).toBe(false);
   });
-  it('without field data, who and field are enough', () => {
-    expect(stepComplete('about', about, null)).toBe(true);
-    expect(stepComplete('about', { ...empty, who: 'student' }, undefined)).toBe(false);
-  });
-  it('skills needs 3', () => {
-    expect(stepComplete('skills', { skills: ['a', 'b'] }, f)).toBe(false);
-    expect(stepComplete('skills', skilled, f)).toBe(true);
+  it('without field data, who, field and skills are enough', () => {
+    expect(stepComplete('about', skilled, null)).toBe(true);
+    expect(stepComplete('about', { ...empty, who: 'student', skills: ['a', 'b', 'c'] }, undefined)).toBe(false);
   });
   it('goal needs a goal, and targets for move', () => {
     expect(stepComplete('goal', skilled, f)).toBe(false);
@@ -52,9 +50,9 @@ describe('stepComplete', () => {
 });
 
 describe('firstIncompleteStep', () => {
-  it('walks about, skills, goal, then matches', () => {
+  it('walks about, goal, then matches', () => {
     expect(firstIncompleteStep(empty, f)).toBe('about');
-    expect(firstIncompleteStep(about, f)).toBe('skills');
+    expect(firstIncompleteStep(about, f)).toBe('about');
     expect(firstIncompleteStep(skilled, f)).toBe('goal');
     expect(firstIncompleteStep(full, f)).toBe('matches');
   });
@@ -63,9 +61,8 @@ describe('firstIncompleteStep', () => {
 describe('resolveScreen', () => {
   it('follows the unlock chain', () => {
     expect(resolveScreen('about', empty, f)).toBe('about');
-    expect(resolveScreen('skills', empty, f)).toBe('about');
-    expect(resolveScreen('skills', about, f)).toBe('skills');
-    expect(resolveScreen('goal', about, f)).toBe('skills');
+    expect(resolveScreen('goal', about, f)).toBe('about');
+    expect(resolveScreen('goal', skilled, f)).toBe('goal');
     expect(resolveScreen('matches', skilled, f)).toBe('goal');
     expect(resolveScreen('study', skilled, f)).toBe('goal');
     expect(resolveScreen('matches', full, f)).toBe('matches');
@@ -79,9 +76,11 @@ describe('resolveScreen', () => {
     expect(resolveScreen('radar', full, f)).toBe('matches');
     expect(resolveScreen('roles', full, f)).toBe('matches');
     expect(resolveScreen('pathway', full, f)).toBe('study');
-    expect(resolveScreen('preview-cv', about, f)).toBe('skills');
+    expect(resolveScreen('preview-cv', about, f)).toBe('about');
+    expect(resolveScreen('skills', empty, f)).toBe('about');
+    expect(resolveScreen('skills', full, f)).toBe('about');
     expect(resolveScreen('roles', empty, f)).toBe('about');
-    expect(Object.keys(OLD_ROUTES)).toHaveLength(5);
+    expect(Object.keys(OLD_ROUTES)).toHaveLength(6);
   });
   it('sends unknown screens home and always allows home', () => {
     expect(resolveScreen('nope', full, f)).toBe('home');

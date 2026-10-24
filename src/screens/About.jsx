@@ -1,5 +1,9 @@
+import { useState } from 'react';
 import Chip from '../components/Chip.jsx';
-import { fieldOptions } from '../lib/goalView.js';
+import SkillsStep from '../components/SkillsStep.jsx';
+import { fieldOptions, findField } from '../lib/goalView.js';
+import { commonSkills } from '../lib/fieldSkills.js';
+import { MIN_SKILLS } from '../lib/navigation.js';
 
 const WHO_CHOICES = [
   { id: 'student', title: 'Student or fresh graduate', text: 'Diploma, foundation or just finished studying.' },
@@ -11,14 +15,28 @@ const FIELD_QUESTION = {
   working: 'Which sector do you work in now?',
 };
 
-export default function About({ data, profile, onChooseWho, onChooseField, onLoadSample }) {
+const CV_CHOICES = [
+  { id: 'cv', title: 'Upload my CV', text: 'We read it and you check what we found.' },
+  { id: 'pick', title: 'No CV, I will pick', text: 'Start from the skills common in your field.' },
+];
+
+export default function About({ data, profile, cv, onChooseWho, onChooseField, onLoadSample, onPretick, ...skillHandlers }) {
   const options = data.fields ? fieldOptions(profile.who, data.fields) : [];
+  const field = data.fields ? findField(profile, data.fields) : null;
+  // 'cv' | 'pick' | null. A sample or a profile with skills opens straight at its skills.
+  const [path, setPath] = useState(null);
+  const shownPath = path ?? (cv ? 'cv' : profile.skills.length > 0 ? 'pick' : null);
+
+  const choosePath = (next) => {
+    setPath(next);
+    if (next === 'pick') onPretick(commonSkills(field, data.roles).map((item) => item.label));
+  };
 
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
       <div>
         <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">About you</h1>
-        <p className="m-0 text-slate-600">Two quick questions. Nothing is saved.</p>
+        <p className="m-0 text-slate-600">Who you are, your major, then at least {MIN_SKILLS} skills. Nothing is saved.</p>
       </div>
 
       <div role="group" aria-label="Who are you?" className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
@@ -60,7 +78,8 @@ export default function About({ data, profile, onChooseWho, onChooseField, onLoa
                 ))}
               </div>
               <p className="m-0 text-[13px] text-slate-600">
-                We use this to order your matches. It does not change any score. Major and sector links are a team draft.
+                We use this to order your matches and to suggest common skills. It does not change any score. Major and sector
+                links are a team draft.
               </p>
             </>
           ) : (
@@ -69,6 +88,47 @@ export default function About({ data, profile, onChooseWho, onChooseField, onLoa
             </p>
           )}
         </section>
+      )}
+
+      {field && (
+        <section aria-labelledby="cv-heading" className="flex flex-col gap-3">
+          <h2 id="cv-heading" className="m-0 text-lg font-bold">
+            Do you have a CV?
+          </h2>
+          <div role="group" aria-labelledby="cv-heading" className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+            {CV_CHOICES.map((choice) => {
+              const picked = shownPath === choice.id;
+              return (
+                <button
+                  key={choice.id}
+                  type="button"
+                  aria-pressed={picked}
+                  onClick={() => choosePath(choice.id)}
+                  className={`fr-card flex min-h-[96px] cursor-pointer flex-col justify-center gap-1 rounded-2xl border-2 p-4 text-left ${
+                    picked ? 'border-[#0F766E] bg-[#F0FDFA]' : 'border-slate-200 bg-white hover:border-[#0F766E]'
+                  }`}
+                >
+                  <span className="text-lg font-bold">{choice.title}</span>
+                  <span className="text-sm text-slate-600">{choice.text}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {field && shownPath && (
+        <SkillsStep
+          key={shownPath}
+          data={data}
+          profile={profile}
+          cv={cv}
+          path={shownPath}
+          field={field}
+          onNoCv={() => choosePath('pick')}
+          onChooseField={onChooseField}
+          {...skillHandlers}
+        />
       )}
 
       <div className="flex flex-wrap items-center gap-2">

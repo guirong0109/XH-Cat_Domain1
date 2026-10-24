@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import Chip from '../components/Chip.jsx';
 import { MAX_LEARN, learnChoice } from '../lib/potential.js';
+import { AI_SKILL, AI_USES, aiSkillSuggestion, usesAi } from '../lib/aiUse.js';
+import { skillLevel } from '../lib/scoring.js';
+
+const LEVEL_NAME = { basic: 'Basic', good: 'Good', strong: 'Strong' };
 
 const GOAL_CHOICES = [
   { id: 'upgrade', title: 'Upgrade in my field', text: 'Grow in your major or sector. Roles linked to it come first.' },
@@ -14,8 +18,10 @@ function roleCounts(roles) {
   return counts;
 }
 
-export default function Goal({ data, profile, onChooseGoal, onToggleTarget, onToggleSdg, onToggleLearn }) {
+export default function Goal({ data, profile, onChooseGoal, onToggleTarget, onToggleSdg, onToggleLearn, onToggleAiUse, onAddSkill }) {
   const counts = useMemo(() => roleCounts(data.roles), [data.roles]);
+  const aiSkill = aiSkillSuggestion(profile.aiUses, profile.skills);
+  const aiSkillLevel = profile.skills.includes(AI_SKILL) ? skillLevel(AI_SKILL, profile) : null;
   const groups = data.fields?.groups ?? [];
 
   return (
@@ -78,6 +84,51 @@ export default function Goal({ data, profile, onChooseGoal, onToggleTarget, onTo
           )}
         </section>
       )}
+
+      <section
+        aria-labelledby="ai-use-heading"
+        className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]"
+      >
+        <div>
+          <h2 id="ai-use-heading" className="m-0 text-lg font-bold">
+            How do you use AI now, at work or in your studies? <span className="text-sm font-normal text-slate-600">(optional)</span>
+          </h2>
+          <p className="m-0 mt-1 text-sm text-slate-600">Pick all that apply. We use it to order the AI courses on What to study.</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {AI_USES.map((use) => (
+            <Chip key={use.id} pressed={(profile.aiUses ?? []).includes(use.id)} onClick={() => onToggleAiUse(use.id)}>
+              {use.label}
+            </Chip>
+          ))}
+        </div>
+        <div aria-live="polite">
+          {aiSkill && (
+            <div className="flex flex-wrap items-center gap-3 rounded-xl bg-teal-50 p-3 text-sm text-teal-950">
+              <p className="m-0 min-w-0 flex-[1_1_240px]">
+                You use AI for {aiSkill.count} {aiSkill.count === 1 ? 'thing' : 'things'}, so you may have the skill{' '}
+                <strong>{aiSkill.label}</strong>. First guess: {LEVEL_NAME[aiSkill.level]} (1 or 2 uses Basic, 3 or more Good). It
+                counts in the fit score of roles that need it. You decide.
+              </p>
+              <button
+                type="button"
+                onClick={() => onAddSkill(aiSkill.label, aiSkill.level)}
+                className="fr-btn min-h-11 cursor-pointer rounded-xl border border-[#0F766E] bg-white px-4 text-sm font-bold text-[#0F766E]"
+              >
+                Add {aiSkill.label} ({LEVEL_NAME[aiSkill.level]})
+              </button>
+            </div>
+          )}
+          {usesAi(profile.aiUses) && aiSkillLevel && (
+            <p className="m-0 text-[13px] text-slate-600">
+              {AI_SKILL} is in your skills ({LEVEL_NAME[aiSkillLevel]}). You can change its level on About you.
+            </p>
+          )}
+        </div>
+        <p className="m-0 text-[13px] text-slate-600">
+          Your answer itself is not part of the score. Only the skill {AI_SKILL}, if you add it, counts like any other skill.
+        </p>
+      </section>
 
       <details className="rounded-2xl border border-slate-200 bg-white">
         <summary className="flex min-h-11 cursor-pointer items-center px-4 py-3 text-base font-bold sm:px-[22px]">

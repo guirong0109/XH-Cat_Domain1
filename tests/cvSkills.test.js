@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import skills from '../data/skills.json'
-import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, extractSkills, CV_MESSAGES, cvBannerText, mergeMatches, sourceBadge, fetchCvSkills, CV_AI_TEXT, aiOnly } from '../src/lib/cvSkills.js'
+import { mergeCvSkills, MAX_CV_BYTES, checkCvFile, guessLevel, levelGuess, LEVEL_REASONS, linesNotMatched, extractSkills, CV_MESSAGES, cvBannerText, mergeMatches, sourceBadge, fetchCvSkills, CV_AI_TEXT, aiOnly } from '../src/lib/cvSkills.js'
 
 const labels = [
   { label: 'SQL and databases', keywords: ['sql', 'database'] },
@@ -44,10 +44,16 @@ describe('extractSkills', () => {
     expect(short.evidence).toBe('Used SQL daily')
   })
 
-  it('first matching line wins and gives the level', () => {
+  it('shows the first matching line and guesses the level from all of them', () => {
     const [hit] = extractSkills('basic SQL\nexpert SQL', labels)
-    expect(hit.level).toBe('basic')
+    expect(hit.level).toBe('strong')
+    expect(hit.reason).toBe('words')
     expect(hit.evidence).toBe('basic SQL')
+  })
+  it('two project lines make Strong, one makes Good, a list makes Basic', () => {
+    expect(extractSkills('Built a SQL report\nDeveloped a database for a shop', labels)[0]).toMatchObject({ level: 'strong', reason: 'projects' })
+    expect(extractSkills('Skills: Excel\nFinal-year project: SQL inventory system', labels)[0]).toMatchObject({ label: 'SQL and databases', level: 'good', reason: 'project' })
+    expect(extractSkills('Skills: SQL, Java', labels).map((f) => f.level)).toEqual(['basic', 'basic'])
   })
 
   it('empty or whitespace text gives []', () => {
@@ -84,10 +90,26 @@ describe('guessLevel', () => {
       expect(guessLevel(line)).toBe('basic')
     }
   })
-  it('good', () => {
-    for (const line of ['2 years', '1.5 years', '0.5 yrs', 'Machine learning with Python', 'Deep learning', 'Installed LED lighting', 'Used Python at work', '']) {
+  it('strong from 2 or more years', () => {
+    expect(guessLevel('2 years')).toBe('strong')
+  })
+  it('good from one project or job line', () => {
+    for (const line of ['Built a website', 'Final year project in Python', 'Internship at a bank', 'Used Python at work', 'Developed a dashboard']) {
       expect(guessLevel(line)).toBe('good')
     }
+  })
+  it('basic when only listed', () => {
+    for (const line of ['1.5 years', '0.5 yrs', 'Machine learning with Python', 'Deep learning', 'Installed LED lighting', 'Skills: Python, SQL', '']) {
+      expect(guessLevel(line)).toBe('basic')
+    }
+  })
+  it('basic words win over a project line', () => {
+    expect(levelGuess('Built a basic website')).toEqual({ level: 'basic', reason: 'said-basic' })
+  })
+  it('takes a list of lines and gives a reason with text', () => {
+    expect(levelGuess(['Built an app', 'Designed a project site'])).toEqual({ level: 'strong', reason: 'projects' })
+    expect(levelGuess([])).toEqual({ level: 'basic', reason: 'list' })
+    for (const reason of ['words', 'years', 'projects', 'project', 'said-basic', 'list']) expect(LEVEL_REASONS[reason]).toMatch(/^(Strong|Good|Basic): /)
   })
 })
 
@@ -172,7 +194,7 @@ describe('mergeMatches', () => {
     const out = mergeMatches(kw, ai)
     expect(out).toEqual([
       { label: 'SQL and databases', level: 'strong', evidence: 'Built MySQL reports for 3 years', source: 'keyword' },
-      { label: 'Data visualisation', level: 'basic', evidence: 'Learning Power BI dashboards', source: 'ai' },
+      { label: 'Data visualisation', level: 'basic', reason: 'said-basic', evidence: 'Learning Power BI dashboards', source: 'ai' },
     ])
   })
   it('handles empty inputs', () => {
@@ -346,5 +368,22 @@ describe('unmatchedLines', () => {
     expect(unmatchedLines('', 5)).toEqual({ lines: [], total: 0 })
     expect(unmatchedLines('SKILLS\nEDUCATION\nCONTACT ME NOW PLEASE', 5)).toEqual({ lines: [], total: 0 })
     expect(unmatchedLines(undefined, 5)).toEqual({ lines: [], total: 0 })
+  })
+})
+
+describe('linesNotMatched', () => {
+  const text = 'JANE DOE\n- Built a shop website with React and Node\n• Wrote weekly sales reports for the manager\nVolunteered at the school library every Saturday'
+  it('drops the evidence lines, headings and short lines', () => {
+    const out = linesNotMatched(text, ['Built a shop website with React and Node'])
+    expect(out.lines).toEqual(['Wrote weekly sales reports for the manager', 'Volunteered at the school library every Saturday'])
+    expect(out.total).toBe(2)
+  })
+  it('keeps at most max lines and counts the rest', () => {
+    const out = linesNotMatched(text, [], 1)
+    expect(out.lines).toHaveLength(1)
+    expect(out.total).toBe(3)
+  })
+  it('handles empty input', () => {
+    expect(linesNotMatched('', undefined)).toEqual({ lines: [], total: 0 })
   })
 })

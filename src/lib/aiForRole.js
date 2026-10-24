@@ -2,6 +2,7 @@
 // ILO exposure of the role's closest occupation. Pure helpers. Information only: never changes a score.
 import { courseMeta, courseStatus, visibleCourses } from './pathwayView.js';
 import { iloRowUrl } from './roleView.js';
+import { orderForUses } from './aiUse.js';
 
 const PORTAL_NAME = { elatih: 'HRD Corp e-Latih', tvet: 'MyTVET' };
 
@@ -29,10 +30,11 @@ export function iloStrip(role) {
 
 // general: for every role. specific: courses tied to this role's own skills, each with the skills it
 // helps with. A role with no matching AI course simply has an empty specific list.
-export function aiForRole(role, aiCourses, checks) {
+// aiUses (the answer on Your goal) puts the courses that fit it first, each with `forUses`.
+export function aiForRole(role, aiCourses, checks, aiUses = []) {
   if (!aiCourses) return null;
   const courseView = courseViewFor(checks);
-  const general = visibleCourses(aiCourses.general, checks).map(courseView);
+  const general = orderForUses(visibleCourses(aiCourses.general, checks).map(courseView), aiUses, aiCourses.uses);
   const generalUrls = new Set(general.map((course) => course.url));
   const byUrl = new Map();
   for (const skill of role.skills) {
@@ -44,7 +46,7 @@ export function aiForRole(role, aiCourses, checks) {
   }
   return {
     general,
-    specific: [...byUrl.values()],
+    specific: orderForUses([...byUrl.values()], aiUses, aiCourses.uses),
     checkedAt: checks?.checkedAt?.slice(0, 10) || aiCourses.checkedAt || null,
     ilo: iloStrip(role),
   };

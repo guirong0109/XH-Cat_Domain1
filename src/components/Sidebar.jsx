@@ -1,6 +1,7 @@
 import { journeySteps, nextHint } from '../lib/journey.js';
 import { formatDate } from '../lib/roleView.js';
 import { findField } from '../lib/goalView.js';
+import { aiUseLine } from '../lib/aiUse.js';
 
 const PREVIEW_LINKS = [
   {
@@ -68,6 +69,8 @@ function profileSummary(data, profile) {
   }
   lines.push(`${profile.skills.length} ${profile.skills.length === 1 ? 'skill' : 'skills'}`);
   if (profile.goal) lines.push(GOAL_LABEL[profile.goal]);
+  const aiLine = aiUseLine(profile.aiUses);
+  if (aiLine) lines.push(aiLine);
   return { name, lines };
 }
 

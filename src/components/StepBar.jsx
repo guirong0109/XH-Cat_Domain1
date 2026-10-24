@@ -1,6 +1,6 @@
 import { adjacentSteps, journeySteps, stepPosition } from '../lib/journey.js';
 
-// Back / Next for the five journey steps. Sticky at the bottom on phones,
+// Back / Next for the four journey steps. Sticky at the bottom on phones,
 // a plain row under the content on wide screens.
 export default function StepBar({ screen, profile, fields, onNavigate }) {
   if (!stepPosition(screen)) return null;

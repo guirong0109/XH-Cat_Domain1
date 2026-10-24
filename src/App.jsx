@@ -5,7 +5,6 @@ import StepBar from './components/StepBar.jsx';
 import TipBanner from './components/TipBanner.jsx';
 import Home from './screens/Home.jsx';
 import About from './screens/About.jsx';
-import Skills from './screens/Skills.jsx';
 import Goal from './screens/Goal.jsx';
 import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
@@ -14,6 +13,7 @@ import { rankRoles } from './lib/scoring.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
+import { toggleAiUse } from './lib/aiUse.js';
 import PreviewLang from './screens/PreviewLang.jsx';
 import PreviewUsers from './screens/PreviewUsers.jsx';
 import { OLD_ROUTES, SCREENS, resolveScreen } from './lib/navigation.js';
@@ -28,10 +28,11 @@ const EMPTY_PROFILE = {
   targetSectors: [],
   sdgs: [],
   learn: [],
+  aiUses: [],
   sampleId: null,
 };
 
-// A URL hash such as #skills opens that screen directly (handy for demos).
+// A URL hash such as #goal opens that screen directly (handy for demos).
 // Old hashes (#profile, #roles, …) are kept so resolveScreen can redirect them.
 function screenFromHash() {
   const name = window.location.hash.replace('#', '');
@@ -52,6 +53,7 @@ function profileFromSample(sample) {
     targetSectors: [...(sample.targetSectors ?? [])],
     sdgs: [...sample.sdgs],
     learn: [...(sample.learn ?? [])],
+    aiUses: [...(sample.aiUses ?? [])],
     sampleId: sample.id,
   };
 }
@@ -219,8 +221,19 @@ export default function App() {
       suggestions: [],
       evidence: Object.fromEntries(found.map((item) => [item.label, item.evidence])),
       sources: Object.fromEntries(found.map((item) => [item.label, item.source])),
+      reasons: Object.fromEntries(found.map((item) => [item.label, item.reason])),
     });
   };
+
+  // No CV: the field's common skills are added at Basic, only when no skill is picked yet.
+  const pretickSkills = (labels) =>
+    changeProfile((current) => {
+      if (current.skills.length > 0 || labels.length === 0) return current;
+      const skills = [...labels];
+      const levels = Object.fromEntries(labels.map((label) => [label, 'basic']));
+      const learn = current.learn.filter((item) => !skills.includes(item));
+      return { ...current, skills, levels, learn };
+    });
 
   // AI matches wait for the student's yes; they are not in the profile yet.
   const suggestCv = (items, fileName) =>
@@ -248,6 +261,7 @@ export default function App() {
             suggestions: current.suggestions.filter((entry) => entry.label !== label),
             evidence: { ...current.evidence, [label]: item.evidence },
             sources: { ...current.sources, [label]: item.source },
+            reasons: { ...current.reasons, [label]: item.reason },
           }
         : current,
     );
@@ -281,6 +295,17 @@ export default function App() {
   const toggleSdg = (goal) => changeProfile((current) => ({ ...current, sdgs: toggleIn(current.sdgs, goal) }));
 
   const toggleLearnSkill = (label) => changeProfile((current) => toggleLearn(current, label));
+
+  const toggleAiUseAnswer = (id) => changeProfile((current) => ({ ...current, aiUses: toggleAiUse(current.aiUses, id) }));
+
+  // A skill the student adds from a suggestion, at the suggested level.
+  const addSkill = (label, level) =>
+    changeProfile((current) => {
+      if (current.skills.includes(label)) return current;
+      const skills = [...current.skills, label];
+      const learn = current.learn.filter((item) => !skills.includes(item));
+      return { ...current, skills, levels: { ...current.levels, [label]: level }, learn };
+    });
 
   const changeScenario = (next) => {
     setReplan(null);
@@ -404,14 +429,8 @@ export default function App() {
         onChooseWho={chooseWho}
         onChooseField={chooseField}
         onLoadSample={(sampleId) => loadSample(sampleId, 'matches')}
-      />
-    );
-  } else if (shownScreen === 'skills') {
-    content = (
-      <Skills
-        data={data}
-        profile={profile}
         cv={cv}
+        onPretick={pretickSkills}
         onToggleSkill={toggleSkill}
         onSetLevel={setLevel}
         onCvFound={applyCvSkills}
@@ -419,7 +438,6 @@ export default function App() {
         onAcceptSuggestion={acceptSuggestion}
         onDismissSuggestion={dismissSuggestion}
         onCvClear={clearCv}
-        onChooseField={chooseField}
       />
     );
   } else if (shownScreen === 'goal') {
@@ -431,6 +449,8 @@ export default function App() {
         onToggleTarget={toggleTarget}
         onToggleSdg={toggleSdg}
         onToggleLearn={toggleLearnSkill}
+        onToggleAiUse={toggleAiUseAnswer}
+        onAddSkill={addSkill}
       />
     );
   } else if (shownScreen === 'matches') {

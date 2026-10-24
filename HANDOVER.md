@@ -5,6 +5,15 @@ Read §0000000 first (where everything stands), then §00000 (admin console), §
 
 ---
 
+## 000000000. About you merge (24 Oct 2026, branch `claude/about-you-merge`, NOT on main)
+
+- Plan: `docs/superpowers/plans/2026-10-24-about-you-merge.md` (approved by the user in chat).
+- Journey is now 4 steps: About you → Your goal → Matches → What to study. About you = who, major, "Do you have a CV?" (Upload my CV / No CV, I will pick), then the skills part (`src/components/SkillsStep.jsx`, moved from `screens/Skills.jsx`). `#skills` and `#preview-cv` redirect to About.
+- CV path: "Check what we found in your CV" shows each skill's CV line, keyword/AI badge and a first-guess level with its reason (`levelGuess` in `cvSkills.js`: only listed → Basic; one project/job line → Good; 2+ project/job lines, 2+ years, or advanced/expert/proficient/led → Strong; basic/beginner/learning → Basic). Rule changed from before (plain line was Good, Strong needed 3+ years). Folded "Lines we read but did not match" and "+ Add more skills".
+- No-CV path: the major's common skills (`fieldSkills.js`, counted from the 20 scored roles: used by 2+ roles, at most 5) are pre-ticked at Basic, only when no skill is picked yet. IT gives Problem solving, Python, SQL, Communication, Customer service.
+- **AI use question on Your goal (same branch):** optional "How do you use AI now, at work or in your studies?" (writing, automation, research, data, coding, design, something else, I don't use AI yet; `src/lib/aiUse.js`, `profile.aiUses`). The answer is not in the score formula. If the student uses AI, Goal offers "Add Using AI tools" (1-2 uses Basic, 3+ Good; the student presses Add), and that skill counts like any other. The answer orders the AI courses on Study ("Listed first: you use AI for ..."), using draft tags in `data/team/ai_courses.json` `uses` (Claude tagged by course title; awaiting team review; validated by `build_data.py`). Left panel shows "Uses AI for: ...".
+- Tests: 741 app, 204 pipeline pass. Not yet clicked through in a browser by Claude (no browser tool in that session); the user should click through.
+
 ## 00000000. 24 Oct 2026 (newest; read this first)
 
 - **On `main` (`4e1901f`, pushed):** committed OpenAlex snapshot; "SDG: not tagged yet" on Explore roles; **Your skills vs AI today** panel on Study (`src/lib/skillsVsAi.js`, `SkillsVsAi.jsx`; type = ILO exposure of the roles using the skill; not scored; 33 of 38 skills come out AI-exposed, so it separates weakly); **exact course pages** per skill (`data/team/skill_courses.json`, 31 of 38 skills, 50 courses, read from the portals' own pages on 24 Oct; `CourseLinks.jsx`); ILO links point to the occupation row (`iloRowUrl`, text fragment; not verified in the in-app browser, check in Chrome).

@@ -210,9 +210,11 @@ class BuildTests(unittest.TestCase):
 
         def change(inputs):
             inputs["team/ai_courses.json"] = {"_note": "draft", "checkedAt": "2026-10-24",
-                                              "general": [course], "bySkill": {"Communication": [course]}}
+                                              "general": [course], "bySkill": {"Communication": [course]},
+                                              "uses": {course["url"]: ["none", "writing"]}}
 
         ai = self.build_with(change)["skills"]["aiCourses"]
+        self.assertEqual(ai["uses"], {course["url"]: ["none", "writing"]})
         self.assertEqual(ai["checkedAt"], "2026-10-24")
         self.assertEqual(ai["general"][0]["title"], "AI Fluency")
         self.assertEqual(list(ai["bySkill"]), ["Communication"])
@@ -228,6 +230,10 @@ class BuildTests(unittest.TestCase):
             ("unknown skill", {"checkedAt": "d", "bySkill": {"Nope": [good]}}, "unknown skill"),
             ("empty skill list", {"checkedAt": "d", "bySkill": {"Communication": []}}, "non-empty"),
             ("home page link", {"checkedAt": "d", "general": [{**good, "url": "https://elatih.hrdcorp.gov.my/"}]}, "own page"),
+            ("use for an unlisted course", {"checkedAt": "d", "general": [good],
+                                            "uses": {"https://elatih.hrdcorp.gov.my/courses-details/other": ["writing"]}}, "not listed"),
+            ("unknown use", {"checkedAt": "d", "general": [good], "uses": {good["url"]: ["dancing"]}}, "known AI uses"),
+            ("empty uses", {"checkedAt": "d", "general": [good], "uses": {good["url"]: []}}, "known AI uses"),
         ]
         for name, content, message in cases:
             def change(inputs, content=content):

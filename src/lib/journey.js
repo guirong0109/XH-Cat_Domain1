@@ -4,8 +4,7 @@ import { blockingStep } from './navigation.js';
 
 export const JOURNEY = [
   { screen: 'home', label: 'Home', sub: '' },
-  { screen: 'about', label: 'About you', sub: 'Who you are, your major or sector' },
-  { screen: 'skills', label: 'Your skills', sub: 'CV or pick skills' },
+  { screen: 'about', label: 'About you', sub: 'Who you are, your major, your skills' },
   { screen: 'goal', label: 'Your goal', sub: 'Upgrade, move or not sure' },
   { screen: 'matches', label: 'Matches', sub: 'Ranked roles and sources' },
   { screen: 'study', label: 'What to study', sub: 'Courses on official portals' },
@@ -15,8 +14,7 @@ const STEP_COUNT = JOURNEY.length - 1; // home is not a numbered step
 
 const HINTS = {
   home: 'Try a sample student or start your own profile.',
-  about: 'Tell us who you are and pick your major or sector.',
-  skills: 'Upload your CV or pick at least 3 skills, then check each level.',
+  about: 'Tell us who you are, then upload your CV or pick at least 3 skills.',
   goal: 'Pick your goal, then see your matches.',
   matches: 'Pick a role, then plan what to study.',
   study: 'Tick off steps as you learn. You can go back and try another role.',

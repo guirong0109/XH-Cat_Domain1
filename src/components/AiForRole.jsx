@@ -1,4 +1,5 @@
 import { aiForRole } from '../lib/aiForRole.js';
+import { forUsesLine } from '../lib/aiUse.js';
 import { formatDate } from '../lib/roleView.js';
 import SourceNote from './SourceNote.jsx';
 
@@ -13,14 +14,15 @@ function CourseCard({ course }) {
       <span className="text-sm font-semibold text-[#0F766E]">{course.title}</span>
       <span className="text-xs text-slate-600">{[course.portalName, course.meta].filter(Boolean).join(' · ')}</span>
       {course.helpsWith && <span className="text-xs text-slate-600">Helps with: {course.helpsWith.join(', ')}</span>}
+      {forUsesLine(course.forUses) && <span className="text-xs font-semibold text-teal-800">{forUsesLine(course.forUses)}</span>}
       {course.changed && <span className="text-xs text-[#C2410C]">The course page changed since we saved it. Check the details there.</span>}
     </a>
   );
 }
 
 // Information only: it never changes a score.
-export default function AiForRole({ role, aiCourses, checks }) {
-  const view = aiForRole(role, aiCourses, checks);
+export default function AiForRole({ role, aiCourses, checks, aiUses }) {
+  const view = aiForRole(role, aiCourses, checks, aiUses);
   if (!view || (view.general.length === 0 && view.specific.length === 0)) return null;
 
   return (
@@ -63,8 +65,8 @@ export default function AiForRole({ role, aiCourses, checks }) {
       <SourceNote>
         Source: ILO Working Paper 140 (2025), Table A1 (the MASCO-to-ISCO link is our team's draft mapping). Courses are real pages
         on HRD Corp e-Latih; title, price and length are copied from the course page
-        {view.checkedAt ? `, last checked ${formatDate(view.checkedAt)}` : ''}. Which course helps which skill is our team's draft
-        matching. Estimates, not predictions for one person.
+        {view.checkedAt ? `, last checked ${formatDate(view.checkedAt)}` : ''}. Which course helps which skill, and which AI use
+        each course fits, are our team's draft matching. Estimates, not predictions for one person.
       </SourceNote>
     </section>
   );

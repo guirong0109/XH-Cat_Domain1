@@ -103,3 +103,23 @@ describe('iloStrip', () => {
     expect(iloStrip({ ilo: { category: 'Gradient 3' } })).toBeNull();
   });
 });
+
+describe('aiForRole with AI uses', () => {
+  const course = (slug) => ({ portal: 'elatih', title: slug, url: `https://elatih.hrdcorp.gov.my/courses-details/${slug}` });
+  const courses = {
+    checkedAt: '2026-10-24',
+    general: [course('intro'), course('prompts')],
+    bySkill: { Teamwork: [course('auto'), course('data')] },
+    uses: { [course('prompts').url]: ['writing'], [course('data').url]: ['data'] },
+  };
+  it('puts the courses for the student answers first, in both lists', () => {
+    const view = aiForRole({ skills: [{ label: 'Teamwork' }] }, courses, null, ['writing', 'data']);
+    expect(view.general.map((c) => c.title)).toEqual(['prompts', 'intro']);
+    expect(view.general[0].forUses).toEqual(['writing']);
+    expect(view.specific.map((c) => c.title)).toEqual(['data', 'auto']);
+  });
+  it('keeps the saved order with no answer', () => {
+    const view = aiForRole({ skills: [{ label: 'Teamwork' }] }, courses, null);
+    expect(view.general.map((c) => c.title)).toEqual(['intro', 'prompts']);
+  });
+});

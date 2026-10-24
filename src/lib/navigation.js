@@ -3,10 +3,10 @@
 // the first step that is still missing something.
 import { findField } from './goalView.js';
 
-export const STEP_SCREENS = ['about', 'skills', 'goal', 'matches', 'study'];
+export const STEP_SCREENS = ['about', 'goal', 'matches', 'study'];
 // Stage 2 ideas shown as previews only. They are not working features.
 export const PREVIEW_SCREENS = ['preview-lang', 'preview-users'];
-// Reached from a link in Matches (or #explore); it is not one of the five steps and needs no profile.
+// Reached from a link in Matches (or #explore); it is not one of the four steps and needs no profile.
 export const EXTRA_SCREENS = ['explore'];
 export const SCREENS = ['home', ...STEP_SCREENS, ...EXTRA_SCREENS, ...PREVIEW_SCREENS];
 export const MIN_SKILLS = 3;
@@ -16,7 +16,9 @@ export const OLD_ROUTES = {
   radar: 'matches',
   roles: 'matches',
   pathway: 'study',
-  'preview-cv': 'skills',
+  'preview-cv': 'about',
+  // Your skills is now part of About you (24 Oct 2026).
+  skills: 'about',
 };
 
 export function isPreview(screen) {
@@ -26,10 +28,10 @@ export function isPreview(screen) {
 export function stepComplete(screen, profile, fields) {
   if (screen === 'about') {
     if (!profile?.who) return false;
+    if ((profile.skills?.length ?? 0) < MIN_SKILLS) return false;
     if (!fields) return Boolean(profile.field);
     return findField(profile, fields) !== null;
   }
-  if (screen === 'skills') return (profile?.skills?.length ?? 0) >= MIN_SKILLS;
   if (screen === 'goal') {
     if (!profile?.goal) return false;
     return profile.goal !== 'move' || (profile.targetSectors?.length ?? 0) > 0;
@@ -45,7 +47,7 @@ export function blockingStep(screen, profile, fields) {
 }
 
 export function firstIncompleteStep(profile, fields) {
-  return STEP_SCREENS.slice(0, 3).find((step) => !stepComplete(step, profile, fields)) ?? 'matches';
+  return STEP_SCREENS.slice(0, 2).find((step) => !stepComplete(step, profile, fields)) ?? 'matches';
 }
 
 export function resolveScreen(requested, profile, fields) {
