@@ -1,9 +1,9 @@
 # task.md — FutureReady MY: overall progress
 
-Last updated: 2026-10-23 (late evening; Emerging feed finished). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
+Last updated: 2026-10-24 (evening; automated AI exposure and the score blend are on `main` = `1a66aec`). Deadline: **25 Oct 2026, 8:00 am (MYT)** (unconfirmed: a RunPod/organiser message said Sunday 11:59 PM MYT; ask the user to check the official brief).
 Code state (23 Oct): `main` (code as of `b784590`, plus later docs), pushed (Explore all roles + admin console + all eMASCO data + the Emerging feed; Replit deploys `main`, CV AI off there). The user approved the Emerging feed being on `main` (23 Oct evening). It was built in its own session; the user said "Merge to main" and "push main" there (another session had noted an earlier "don't merge it first"; ask if unsure). Tests on `b784590`: 644 app (49 files) and 197 pipeline pass; `npm run build` works. Re-run before relying on the numbers.
 **23 Oct update:** option B (crawl ALL of eMASCO, from `Downloads\PLAN.md`) is started. Phase 1 crawler is committed (`558a3ee`, `e36fad4`, not pushed; 179 pipeline tests pass). The English crawl finished: 1,706 roles in `data/emasco/all_roles.json` (108 pages could not be parsed). Malay crawl cancelled: English only, Malay by translation later. See section 5 below and `HANDOVER.md` §0000.
-For the detailed log see `HANDOVER.md` (§000 is the current snapshot). For rules see `CLAUDE.md`.
+**24 Oct update:** see Session 8 and section 6 below, and `HANDOVER.md` section 000000000. For the detailed log see `HANDOVER.md`. For rules see `CLAUDE.md`.
 
 ---
 
@@ -74,6 +74,17 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 | Sharing | `npm start` on 3000 plus a Cloudflare quick tunnel for the group; `/admin` is refused through the tunnel. |
 | Emerging feed | "Emerging this week" card on Matches; feed server with OpenAlex plus 9 RSS feeds (English, Malay, Chinese only); confidence by source type; tagging by a model with a backup and a keyword fallback; admin section in `/admin` to refresh, add sources (feed test + terms box) and review or delete items; helper scripts `scripts/start-emerging.ps1` and `refresh-emerging.ps1`. A real DeepSeek run gave `tagging: ai`, 40 items. On `main` (`b784590`), approved by the user. State and limits: HANDOVER §000000. |
 | Docs | Specs and plans for each phase in `docs/superpowers/`; demo script has the Explore step. |
+
+### Session 8 (2026-10-24): automated, role-specific AI exposure
+| Step | What was done |
+|---|---|
+| Data store | `data/store/`: manifest of 13 datasets and an AI-exposure file for all 1,812 roles (`python pipeline/store.py`). |
+| OECD | AI Capability Gap (nine domains, 22 US groups) from the OECD paper PDF; panel on role cards; the role-to-group map is a Claude draft. Group averages only, not in the score. |
+| Sources | Fetchers for Semantic Scholar, arXiv, Hugging Face and the Anthropic Economic Index; shared retry helper; failure monitor; "Data sources" panel on `/admin`; live refresh writes `data/signals.json`. A real refresh ran against all four APIs. |
+| Matching | 17,998 O*NET tasks and 14,562 eMASCO tasks embedded on this PC (about 2 h) and matched; 80 pairs judged, 97% same or related at cutoff 0.80 (one judge, draft). |
+| Per-role exposure | `data/exposure.json`: observed AI use, share of tasks with use, tasks AI is used for; "not enough matched tasks" for 6 of the 20 roles. Shown on role and Explore cards. |
+| Score | Observed AI use now counts in the outlook, weighted by how many of the role's tasks matched (user approved). Demo numbers and docs updated. |
+| Other | Exposure and SDG note on Explore cards; draft hours for 13 accounting skills; merged the course-pages and weekly-refresh work. Tests: 778 app, 216 pipeline. |
 
 ---
 
@@ -154,7 +165,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [x] **Brief rule:** user chose to keep real upload and demo with a made-up CV; demo line added on the Skills screen (no sample button).
 - [ ] **OpenAlex snapshot:** an untracked `data/research.json` appeared in the folder on 23 Oct (not made by the option B work). Check it is a real snapshot, then commit it; the admin health list shows "No snapshot yet" until it exists.
 - [ ] **P2 Replit:** check the live site from `main` (on hold until the user asks).
-- [ ] **P4 RunPod:** run the labelling job (about USD 5) and rebuild the data (on hold until the user asks).
+- [ ] **P4 RunPod:** no longer the main route (the user chose matching on this PC, 24 Oct). Optional: label tasks and link skills with `runpod_label.py --all-roles`, only if the user asks.
 - [x] **Demo script** (3 minutes): `docs/demo-script.md`. Phone check of the Matches step done at 360px. Redo the numbers after RunPod.
 - [ ] **Teammate review** of drafts: role skills, skill SDG tags, ISCO map (4 weak fits), research search terms, course hours.
 - [ ] **Team names** in the README.
@@ -162,6 +173,7 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] **Confirm the deadline** with the user (25 Oct 8:00 am vs Sunday 11:59 PM MYT).
 - [ ] **User's click-through** of Explore (CV upload not yet clicked through by Claude) and of `/admin`.
 - [x] **Emerging feed on `main`:** approved by the user (23 Oct evening). Its open items are in section 4c.
+- [ ] **User's verification of the 24 Oct changes** on PC and Replit (guide in chat and in HANDOVER 000000000).
 - [ ] **Make the GitHub repo public** on submission day, then submit.
 
 ### 4b. Admin console (23 Oct)
@@ -202,3 +214,17 @@ The journey is now five simple steps: About you, Your skills, Your goal, Matches
 - [ ] Skill badges and more learner motivation.
 - [ ] Small polish left from reviews (e.g. the OpenDOSM status line waits for OpenAlex; "Live source" badge on stale data).
 - [ ] Not planned: job-posting counts (no free, allowed Malaysian source).
+
+---
+
+## 6. 24 Oct 2026: automated AI exposure, what is left
+
+- [x] Source layer, monitor and admin panel; four APIs; real refresh run.
+- [x] Task matching and quality sample; `data/exposure.json`; panels; score blend (approved); demo numbers.
+- [ ] Per-skill "AI skills this role should have" (needs its own quality check).
+- [ ] Research momentum / Hugging Face trending in the score (needs a new weight, not approved).
+- [ ] The 6 roles with too few matched tasks (Data Analyst, Digital Learning Specialist, Website Developer, UX Designer, Digital Content Writer, Tax Consultant): improve the wording match, or label them on RunPod.
+- [ ] Teammate review: the 80 judged pairs (`testing/results/task_match_sample.csv`), `data/team/oecd_map.json`, accounting hours.
+- [ ] Render tests for screens; check the new boxes at 360 px.
+- [ ] After each new Anthropic release: `/admin` refresh, `node scripts/embed-tasks.mjs`, `node scripts/match-tasks.mjs`, `node scripts/build-exposure.mjs`, re-check `docs/demo-script.md`.
+- [ ] Replit check; confirm the deadline; RunPod Billing screenshot; make the repo public.

@@ -1,7 +1,7 @@
 # CLAUDE.md — FutureReady MY
 
 Hackathon web app (Aiversecity Domain 1, deadline 25 Oct 2026, 8 am MYT). It helps Malaysian diploma and foundation students see AI-era job trends, ranked future roles, and a reskilling pathway linked to the UN SDGs.
-**Read `HANDOVER.md` first** for the current status, open problems and next steps.
+**Read `HANDOVER.md` first** (newest section on top: 000000000, 24 Oct evening) for the current status, open problems and next steps. Overall progress: `task.md`.
 
 ## Working with this user
 - Use simple English and short answers. Give a recommendation, not a long survey of options.
@@ -95,6 +95,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - CV review: keyword matches are added at once; AI (bge-m3) matches wait for the student's Add skill; a new CV (Change) removes the old CV's skills. Hints (field notice, weak fit) only suggest; the student decides. CV text is never stored or logged.
 - References: every reference link shows a "checked on" date. A role that eMASCO changed is flagged for the team and the saved version stays; never overwrite roles, skills or labels automatically. Do not bulk-scrape the course portals (no API). On 24 Oct the user asked for exact course links, so a short, polite, by-hand search (2 s between requests, one search per skill) was run to fill `skill_courses.json`; repeat only when the user asks.
 - Preview screens must never look like working features: orange banner, "Example" badges, disabled controls.
+- **Automated, not hard-coded (the brief's rule and the user's first priority):** do not add hand-written exposure, trend or label numbers to the score. A new signal must come from a source listed in `server/sources/registry.js`, with a date, a failure-monitor entry and a fallback. A hand-made value may exist only as a clearly marked fallback.
 - Data sources must be official or open (eMASCO, OpenDOSM, ILO pages on ilo.org/webapps.ilo.org, OpenAlex). The user rejected unofficial copies (e.g. a personal GitHub repo of ILO data); ask before using a new source.
 
 ## Emerging feed rules (23 Oct 2026, on `main`)
@@ -124,6 +125,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 ## Git
 - **Shared folder:** several Claude sessions work in this one folder at the same time and switch its checked-out branch. Before every commit run `git branch --show-current` and `git status`; stage only your own files by name (never `git add -A` or `git add docs`); never touch another session's untracked or uncommitted files. The ListAgents tool shows the other sessions. To commit on a branch that is not checked out, use a temporary `git worktree` in a sibling folder instead of switching. Say which branch a running server or tunnel is showing.
 - `main` includes Explore all roles, the admin console and the Emerging feed (`b784590`, pushed on 23 Oct) and the user approved it being on `main` (23 Oct evening). In the Emerging session the user said "Merge to main" and then "push main" and it was done by fast-forward; another session had noted an earlier "don't merge it first", so ask the user if they are surprised. Do not push to `main` again without the user's say-so.
+- **State 24 Oct evening:** `main` = `claude/stage2-cv-all-fields` = `1a66aec`, pushed. Tests: 778 app, 216 pipeline.
 - Work branch: `claude/stage2-cv-all-fields` (Stage 2; merged into `main` on 2026-10-22; Explore all roles and the admin console reached `main` on 2026-10-23). Push with `git push -u origin claude/stage2-cv-all-fields`. The older branch `claude/hackathon-mvp-phase-1-dwl3nm` is the pre-Stage-2 MVP; do not use it for new work.
 - Merge into `main` only when the user says so: fast-forward (`git merge --ff-only`) and push `main`, then switch back to the work branch. Replit deploys from `main`.
 - Do not open a PR unless the user asks.
