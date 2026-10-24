@@ -133,7 +133,17 @@ npm run build
 npm start        # http://localhost:3000
 ```
 
-For development run `npm run dev` (Vite on :5173) in one terminal and `npm start` in another. CV AI matching needs the bge-m3 model in `models/`; see [docs/project-details.md](docs/project-details.md#run-locally).
+For development run `npm run dev` (Vite on :5173) in one terminal and `npm start` in another.
+
+#### Local AI model (optional, for the CV AI step)
+
+The app runs without it: CV reading then uses keyword matching only. For the AI step ("Found by AI · estimate") the server needs the open **BAAI/bge-m3** embedding model (ONNX export `Xenova/bge-m3`, about 2.2 GB, 2–3 GB RAM). It runs on your own machine through `@huggingface/transformers`; no API key and no outside service. Choose one:
+
+1. **Use a model folder (default).** Put the model in the git-ignored `models/` folder so that this file exists: `models/Xenova/bge-m3/onnx/model.onnx`. To use another folder, set `MODELS_DIR=<folder>`.
+2. **Let the server download it once.** Start with `CV_AI_DOWNLOAD=on npm start`.
+3. **Use a remote embedding service.** Set `EMBED_URL=<url>`. The CV text is then sent to that service.
+
+The server log shows "AI model ready" when it is loaded. Until then `POST /api/cv-skills` answers 503 and the app falls back to keywords. It is off on Replit (no model files). More detail: [docs/project-details.md](docs/project-details.md#run-locally).
 
 ### Run Tests
 
