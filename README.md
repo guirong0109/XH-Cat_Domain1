@@ -10,7 +10,7 @@
 | ---------------------- | ------------------------------------------- |
 | **Team Name**          | XH-Cat                                      |
 | **Team Domain**        | Domain 1 (Future-Ready Workforce)           |
-| **SDG Track (1–17)**   | 1-17                                        |
+| **SDG Track (1–17)**   | 8,4                                         |
 | **Team Leader**        | Yip Gui Rong                                |
 | **University**         | Multimedia University                       |
 | **Number of Members**  | 2                                           |
