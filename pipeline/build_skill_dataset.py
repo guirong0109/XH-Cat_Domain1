@@ -32,9 +32,9 @@ import re
 import shutil
 import sys
 
-from skill_text import EXTRACTOR_VERSION, canonical_key, extract_phrase, reorder_key, skill_id
+from skill_text import EXTRACTOR_VERSION, SPELLING, TRAILING, canonical_key, extract_phrase, reorder_key, skill_id
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 MIN_SKILLS_OK = 3
@@ -100,12 +100,21 @@ def occupation_inputs(source, isco_map):
     return items
 
 
+def statement_key(text):
+    """The same key build_all_roles.py uses to make one statement per distinct text (whitespace and case ignored)."""
+    return " ".join(text.split()).casefold()
+
+
 def statement_lookup(source):
-    """(role code, statement text, type) -> statement ID from the cleaned data, so evidence can point back to the matching engine."""
+    """(role code, statement key) -> statement ID from the cleaned data, so evidence can point back to the matching engine.
+
+    The cleaned data keeps the FIRST spelling of a statement, while a role page may use another capitalisation, so the
+    lookup must use the same case-insensitive key as the cleaner (a plain text match lost 3 statement IDs on 24 Oct).
+    """
     lookup = {}
     for statement in source.get("skills", []):
         for code in statement.get("roles", []):
-            lookup[(code, statement["text"])] = statement["id"]
+            lookup[(code, statement_key(statement["text"]))] = statement["id"]
     return lookup
 
 
@@ -113,7 +122,7 @@ def statement_lookup(source):
 
 def extraction_confidence(extracted, statement):
     words = len(extracted["phrase"].split())
-    if extracted["language"] == "ms" or len(extracted["phrase"]) < 3 or words > 12:
+    if extracted["language"] == "ms" or len(extracted["phrase"]) < 3 or words > 12 or extracted.get("dangling"):
         return "low"
     if (not extracted["cut"] and not extracted["compound"] and words <= 6) or (extracted["cut"] and words <= 5):
         return "high"
@@ -129,7 +138,7 @@ def extract_occupation(item, lookup):
         if not key:
             continue
         rows.append({
-            "statementId": lookup.get((item["code"], text)), "section": statement["type"], "quote": text,
+            "statementId": lookup.get((item["code"], statement_key(text))), "section": statement["type"], "quote": text,
             "phrase": extracted["phrase"], "key": key, "qualifier": extracted["qualifier"], "cut": extracted["cut"],
             "compound": extracted["compound"], "language": extracted["language"],
             "confidence": extraction_confidence(extracted, text),
@@ -176,9 +185,12 @@ def build_catalogue(rows_by_code, synonyms, labels):
         if original in key_counts or canonical in key_counts:
             merged_by[canonical].add("synonym_table")
     # pure re-ordering: same words in another order, one skill
+    # Only lists joined by "and"/"or" ("A and B" = "B and A"). Two-word compounds are NOT reordered: "organizational
+    # leadership" and "leadership and organizational" are different skills (found by the QA review on 24 Oct).
     by_words = collections.defaultdict(list)
     for key in key_counts:
-        by_words[reorder_key(key)].append(key)
+        if " and " in key or " or " in key:
+            by_words[reorder_key(key)].append(key)
     remap = {}
     for group in by_words.values():
         if len(group) > 1:
@@ -200,17 +212,27 @@ def build_catalogue(rows_by_code, synonyms, labels):
     for original, canonical in synonyms.items():
         key_to_final[original] = remap.get(canonical, canonical)
     exact, _ = app_skill_links(labels)
+    # Each keyword is a whole-word search, done only when the keyword text occurs in the key at all (cheap test first).
+    # Matches overlap on purpose ("cost accounting" and "accounting" both count), exactly like one search per keyword.
+    keyword_labels = collections.defaultdict(list)
+    for item in labels:
+        for word in item.get("keywords", []):
+            if len(word) >= 3:
+                keyword_labels[word.lower()].append(item["label"])
+    keyword_patterns = {word: re.compile(rf"(?<!\w){re.escape(word)}(?!\w)") for word in keyword_labels}
+    label_order = {item["label"]: index for index, item in enumerate(labels)}
     catalogue = {}
     for key in sorted(final_counts):
         display = sorted(final_forms[key].items(), key=lambda pair: (-pair[1], pair[0]))
         name = display[0][0]
         name = name[0].upper() + name[1:] if name else name
         aliases = sorted({form for form, _ in display[1:5] if form.lower() != name.lower()})
-        related = [item["label"] for item in labels
-                   if item["label"] != exact.get(key) and any(re.search(rf"(?<!\w){re.escape(word.lower())}(?!\w)", key) for word in item.get("keywords", []) if len(word) >= 3)]
+        found = {label for word, pattern in keyword_patterns.items() if word in key and pattern.search(key) for label in keyword_labels[word]}
+        related = sorted((label for label in found if label != exact.get(key)), key=label_order.get)
         catalogue[skill_id(key)] = {
             "id": skill_id(key), "key": key, "name": name, "aliases": aliases, "language": languages.get(key, "en"),
             "mergedBy": sorted(merged_by.get(key, [])), "mentions": final_counts[key],
+            "aliasKeys": sorted(final_alias_keys.get(key, set()) | {original for original, canonical in synonyms.items() if canonical == key}),
             "taxonomy": {"appSkill": exact.get(key), "relatedAppSkills": related[:3]},
         }
     return catalogue, key_to_final
@@ -302,7 +324,7 @@ def review_items(occupations, catalogue):
         for relation in record["skills"]:
             reasons = []
             if relation["status"] == "needs_review":
-                reasons.append("low extraction confidence (very long phrase, Bahasa Malaysia text, or too short)")
+                reasons.append("low extraction confidence (very long phrase, Bahasa Malaysia text, too short, or cut before its object)")
             if len(relation["sections"]) > 1:
                 reasons.append("listed as both a basic and a specific skill")
             if catalogue[relation["skillId"]]["language"] == "ms":
@@ -416,8 +438,10 @@ def build(source, isco_map, labels, synonyms, previous=None, only=None, now=None
             skill_to_occ[relation["skillId"]].append(code)
     for sid, codes in skill_to_occ.items():
         catalogue[sid]["occupationCount"] = len(codes)
-    index = {"skillToOccupations": {sid: sorted(codes) for sid, codes in sorted(skill_to_occ.items())},
-             "nameToSkill": {entry["key"]: sid for sid, entry in sorted(catalogue.items())}}
+    index = {"normalisation": {"spelling": SPELLING, "trailing": [word.strip() for word in TRAILING]},
+             "skillToOccupations": {sid: sorted(codes) for sid, codes in sorted(skill_to_occ.items())},
+             "nameToSkill": {**{alias: sid for sid, entry in sorted(catalogue.items()) for alias in entry["aliasKeys"]},
+                             **{entry["key"]: sid for sid, entry in sorted(catalogue.items())}}}
     review = {"relations": review_items(occupations, catalogue), "nearDuplicates": near_duplicates(catalogue)}
     statuses = collections.Counter(record["status"] for record in occupations.values())
     extracted = sum(len(rows) for rows in rows_by_code.values())
@@ -530,7 +554,17 @@ def run(out_dir, only=None, sample=None, force=False, now=None):
     return stats, unchanged
 
 
+def files_consistent(out_dir):
+    """All result files must come from the same run. A crash while replacing files can leave a mix; that is detected here."""
+    prints = {name: (read_json(os.path.join(out_dir, name), {}) or {}).get("meta", {}).get("fingerprint")
+              for name in ("catalogue.json", "occupations.json", "skill_index.json", "review.json", "report.json")}
+    return len(set(prints.values())) == 1 and None not in prints.values(), prints
+
+
 def check(out_dir):
+    consistent, prints = files_consistent(out_dir)
+    if not consistent:
+        return [f"The dataset files come from different runs (interrupted write?): {prints}. Run build_skill_dataset.py again."], 0, 0
     catalogue = read_json(os.path.join(out_dir, "catalogue.json"))
     occupations = read_json(os.path.join(out_dir, "occupations.json"))
     index = read_json(os.path.join(out_dir, "skill_index.json"))

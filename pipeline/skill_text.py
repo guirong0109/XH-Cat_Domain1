@@ -12,7 +12,7 @@ Rules (all visible here, none learned):
 import hashlib
 import re
 
-EXTRACTOR_VERSION = "2"
+EXTRACTOR_VERSION = "9"
 
 OPENINGS = (
     "proficiency in", "proficiency with", "proficient in", "knowledge of", "knowledge in", "knowledge about",
@@ -74,9 +74,18 @@ def _strip_opening(text):
     return text
 
 
+MAX_STATEMENT_CHARS = 1000  # real eMASCO statements are far shorter; anything longer is cut before processing (DoS guard)
+
+
+MAX_STATEMENT_CHARS = 1000  # real eMASCO statements are at most about 300 characters; longer input is cut first (DoS guard)
+
+
 def extract_phrase(statement):
     """Returns dict: phrase (original casing), qualifier ('basic' or None), cut (clause removed), compound, language."""
-    original = _SPACE.sub(" ", statement.strip())
+    oversized = len(statement) > MAX_STATEMENT_CHARS
+    if oversized:
+        statement = statement[:MAX_STATEMENT_CHARS].rsplit(" ", 1)[0]
+    original = _SPACE.sub(" ", statement.replace(chr(0), " ").strip())
     language = detect_language(original)
     text = original.rstrip(" .;:")
     text = re.sub(r"^\(?\d+[.)]\s*", "", text)
@@ -90,6 +99,7 @@ def extract_phrase(statement):
     text = " ".join(words)
     text = _strip_opening(text)
     cut = False
+    dangling = False
     padded = f" {text} "
     positions = [padded.lower().find(marker) for marker in CLAUSE_MARKERS if padded.lower().find(marker) > 0]
     if positions:
@@ -105,12 +115,23 @@ def extract_phrase(statement):
             if len(text[:at].split()) >= 2 and not (marker == " to " and following in {"detail", "details"}):
                 text = text[:at]
                 cut = True
+                # "Strong interest in contributing to ..." cut after "contributing": the object is lost, so a person must look
+                kept = text.lower().split()
+                dangling = marker == " to " and len(kept) >= 2 and kept[-1].endswith("ing") and kept[-2] in {"in", "of", "on", "for", "at", "with"}
                 break
             start = at + 1
         if cut:
             break
+    stripped = re.sub(r"\s*(,|\band\b|\bor\b|\bwith\b)\s+(the\s+|an?\s+)?(ability|capability|capacity|willingness)$", "", text.rstrip(" ,;:"), flags=re.IGNORECASE)
+    if stripped != text.rstrip(" ,;:") and stripped.strip():
+        text, cut = stripped, True
     words = text.rstrip(" ,;:").split(" ")
-    while len(words) > 1 and words[-1].lower().strip(",") in {"ability", "capability", "capacity", "willingness", "and", "or", "the", "a", "an"}:
+    # "Honesty, discretion, and ability" (the clause after "to" was cut): drop the dangling "and ability".
+    # "Intellectual capability" keeps its head noun: only a word that follows and/or is dropped.
+    while len(words) > 2 and words[-1].lower().strip(",") in {"ability", "capability", "capacity", "willingness"} and words[-2].lower().strip(",") in {"and", "or"}:
+        words = words[:-1]
+        cut = True
+    while len(words) > 1 and words[-1].lower().strip(",") in {"and", "or", "the", "a", "an"}:
         words = words[:-1]
         cut = True
     text = " ".join(words)
@@ -118,7 +139,7 @@ def extract_phrase(statement):
     if not text:
         text = original.rstrip(" .;:")
     compound = bool(re.search(r"\b(and|or)\b|,", text, re.IGNORECASE))
-    return {"phrase": text, "qualifier": qualifier, "cut": cut, "compound": compound, "language": language}
+    return {"phrase": text, "qualifier": qualifier, "cut": cut, "compound": compound, "language": language, "dangling": dangling or oversized}
 
 
 def canonical_key(phrase):
@@ -131,7 +152,7 @@ def canonical_key(phrase):
         if text.endswith(suffix) and len(text) > len(suffix) + 2:
             text = text[: -len(suffix)].strip()
             break
-    return text
+    return re.sub(r"^the ", "", text)
 
 
 def reorder_key(key):

@@ -33,6 +33,7 @@ python pipeline/build_skill_dataset.py            # all 1,814 occupations -> dat
 python pipeline/build_skill_dataset.py --check    # validate the saved dataset
 python pipeline/build_skill_dataset.py --sample 30   # 20 app roles + 30 more -> data/skills_sample/
 python pipeline/build_skill_dataset.py --only 2524-02 3512-05   # rebuild some occupations (-> data/skills_sample/ unless --out)
+python pipeline/qa_skill_dataset.py --sample 600 --out testing/results/skill_dataset_qa_final.json   # independent quality checks (needs data/emasco/raw)
 python -m unittest pipeline.tests.test_skill_dataset
 npx vitest run tests/skillDataset.test.js
 ```
@@ -63,6 +64,8 @@ To refresh the source itself, re-run the existing crawl (`python pipeline/crawl_
 - Spelling variants are folded (organisational = organizational); a trailing "skills" is dropped.
 - Merges happen only in two cases: the same words in a different order, and the curated `synonyms.json`. Everything else stays separate, even when similar (Python and a Python framework, physical stamina and physical fitness). Similar wording is listed in `review.json`.
 - Lists ("A, B and C") are not split. The skill is the whole phrase.
+
+Quality and product test results: `docs/skill-dataset-qa-report.md`.
 
 ## Known limits
 

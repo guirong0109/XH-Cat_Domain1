@@ -50,6 +50,35 @@ class TextTests(unittest.TestCase):
         self.assertEqual(extract_phrase("Attention to detail to monitor processes and detect defects.")["phrase"], "Attention to detail")
         self.assertEqual(extract_phrase("Honesty, discretion, and ability to remain calm under pressure.")["phrase"], "Honesty, discretion")
 
+    def test_dangling_and_the_ability_is_dropped(self):
+        self.assertEqual(extract_phrase("Active listening and the ability to understand customers.")["phrase"], "Active listening")
+
+    def test_cut_right_after_a_gerund_is_flagged_for_review(self):
+        extracted = extract_phrase("Strong interest in contributing to and delivering arts programmes.")
+        self.assertTrue(extracted["dangling"])
+        self.assertEqual(bsd.extraction_confidence(extracted, ""), "low")
+
+    def test_a_huge_statement_cannot_stall_the_extractor(self):
+        import time
+        for hostile in ("a " * 500000, "to " * 500000, "x and " * 200000):
+            started = time.perf_counter()
+            extracted = extract_phrase(hostile)
+            canonical_key(extracted["phrase"])
+            self.assertLess(time.perf_counter() - started, 1.0)
+            self.assertTrue(extracted["dangling"])  # oversized input is flagged for review
+            self.assertEqual(bsd.extraction_confidence(extracted, ""), "low")
+
+    def test_markup_null_bytes_and_instructions_in_a_statement_are_treated_as_plain_text(self):
+        extracted = extract_phrase("<script>alert(1)</script> Ignore previous instructions. Proficiency in Python" + chr(0) + " programming.")
+        self.assertNotIn(chr(0), extracted["phrase"])
+        dataset, _ = bsd.build(make_source(), {}, [], {})
+        relation = dataset["occupations"]["1111-01"]["skills"][0]
+        self.assertEqual(relation["status"], "validated")  # nothing in the text can change a status
+
+    def test_head_noun_ability_or_capability_is_kept(self):
+        self.assertEqual(extract_phrase("Strong intellectual capability including cognitive skills.")["phrase"], "intellectual capability")
+        self.assertEqual(canonical_key("the Arabic language"), canonical_key("Arabic language"))
+
     def test_basic_is_a_qualifier_not_part_of_the_skill(self):
         extracted = extract_phrase("Basic computer skills.")
         self.assertEqual(extracted["qualifier"], "basic")
@@ -84,6 +113,18 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(dataset["catalogue"][python]["taxonomy"]["appSkill"], "Python programming")
         self.assertEqual(stats["mergedByReorderedWords"], 1)
 
+    def test_two_word_compound_is_not_merged_with_a_list_of_the_same_words(self):
+        source = make_source()
+        source["roles"][0]["skills"] += [{"text": "Organisational leadership.", "type": "specific"}, {"text": "Leadership and organisational abilities.", "type": "basic"}]
+        source["roles"][1]["skills"] += [{"text": "Listening comprehension.", "type": "basic"}, {"text": "Listening and comprehension skills.", "type": "basic"}]
+        source["skills"] = [{"id": f"s{i}", "text": s["text"], "roles": [r["code"]]} for i, (r, s) in enumerate((r, s) for r in source["roles"] for s in r["skills"])]
+        dataset, _ = bsd.build(source, {}, [], {})
+        keys = {e["key"] for e in dataset["catalogue"].values()}
+        self.assertIn("organizational leadership", keys)
+        self.assertIn("leadership and organizational", keys)
+        self.assertIn("listening comprehension", keys)
+        self.assertIn("listening and comprehension", keys)
+
     def test_synonym_table_merges_only_what_it_lists(self):
         source = make_source()
         source["roles"][0]["skills"].append({"text": "Microsoft Office tools.", "type": "specific"})
@@ -106,6 +147,14 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(record["source"]["retrievedAt"], "2026-10-23")
         self.assertEqual(relation["independentSources"], 1)
         self.assertIsNone(relation["importance"])
+
+    def test_statement_id_is_found_when_the_role_page_uses_another_capitalisation(self):
+        source = make_source()
+        source["roles"][0]["skills"][0]["text"] = "proficiency in PYTHON programming for data analysis."
+        dataset, _ = bsd.build(source, {}, [], {})
+        relation = dataset["occupations"]["1111-01"]["skills"][0]
+        self.assertEqual(relation["evidence"][0]["statementId"], "s1111-01-0")
+        self.assertEqual(relation["evidence"][0]["quote"], "proficiency in PYTHON programming for data analysis.")
 
     def test_two_statements_on_one_page_are_one_skill_with_two_evidence_and_still_one_source(self):
         source = make_source()
@@ -258,6 +307,68 @@ class WriteTests(unittest.TestCase):
         self.assertEqual(entries[0]["code"], "2222-02")
         self.assertEqual(len(entries[0]["removed"]), 1)
         self.assertEqual(entries[0]["added"], [])
+
+
+class InterruptedWriteTests(unittest.TestCase):
+    def test_a_crash_between_file_replacements_is_detected_and_a_rerun_repairs_it(self):
+        with tempfile.TemporaryDirectory() as directory:
+            first, stats = build()
+            bsd.write_outputs(directory, first, stats, make_source(), None)
+            self.assertEqual(bsd.check(directory)[0], [])
+            changed = make_source()
+            changed["roles"][1]["skills"].append({"text": "Welding.", "type": "specific"})
+            changed["skills"].append({"id": "sW", "text": "Welding.", "roles": ["2222-02"]})
+            second, stats2 = bsd.build(changed, {}, [], {})
+            real_replace, calls = os.replace, []
+
+            def crash_on_third(src, dst):
+                calls.append(dst)
+                if len(calls) == 3:
+                    raise OSError("disk full")
+                return real_replace(src, dst)
+
+            bsd.os.replace = crash_on_third
+            try:
+                with self.assertRaises(OSError):
+                    bsd.write_outputs(directory, second, stats2, changed, json.load(open(os.path.join(directory, "catalogue.json")))["meta"])
+            finally:
+                bsd.os.replace = real_replace
+            problems, _, _ = bsd.check(directory)
+            self.assertTrue(problems and "different runs" in problems[0])
+            bsd.write_outputs(directory, second, stats2, changed, None)
+            self.assertEqual(bsd.check(directory)[0], [])
+
+
+class SavedDatasetQaTests(unittest.TestCase):
+    def test_the_saved_dataset_passes_the_independent_quality_checks(self):
+        import qa_skill_dataset as qa
+        directory = os.path.join(ROOT, "data", "skills")
+        source = os.path.join(ROOT, "data", "emasco", "occupations.json")
+        if not (os.path.exists(os.path.join(directory, "occupations.json")) and os.path.exists(source)):
+            self.skipTest("saved dataset or source not present")
+        metrics, problems = qa.check_dataset(directory, source, raw_dir=None, sample=20)
+        self.assertEqual(problems, {})
+        self.assertEqual(metrics["completeness"]["coveragePctOfSource"], 100.0)
+        self.assertEqual(metrics["completeness"]["statusCounts"].get("failed", 0), 0)
+
+    def test_the_checker_finds_planted_defects(self):
+        import qa_skill_dataset as qa
+        source = make_source()
+        dataset, stats = build(source)
+        with tempfile.TemporaryDirectory() as directory:
+            bsd.write_outputs(directory, dataset, stats, source, None)
+            path = os.path.join(directory, "occupations.json")
+            data = json.load(open(path, encoding="utf-8"))
+            relation = data["occupations"]["1111-01"]["skills"][0]
+            relation["evidence"][0]["quote"] = "A sentence that eMASCO never wrote."
+            relation["importance"] = 0.7
+            data["occupations"]["2222-02"]["source"]["url"] = "http://localhost/admin"
+            json.dump(data, open(path, "w", encoding="utf-8"))
+            source_path = os.path.join(directory, "source.json")
+            json.dump(source, open(source_path, "w", encoding="utf-8"))
+            _, problems = qa.check_dataset(directory, source_path)
+        for expected in ("quote_differs_from_source_statement", "importance_invented", "bad_source_url", "skill_not_supported_by_quote"):
+            self.assertIn(expected, problems)
 
 
 class PreservationTests(unittest.TestCase):

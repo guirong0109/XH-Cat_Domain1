@@ -1,8 +1,8 @@
 {
  "meta": {
-  "schemaVersion": 1,
-  "extractorVersion": "2",
-  "generatedAt": "2026-10-24T13:24:16+00:00",
+  "schemaVersion": 2,
+  "extractorVersion": "9",
+  "generatedAt": "2026-10-24T14:00:11+00:00",
   "source": {
    "name": "eMASCO (MASCO 2020), Ministry of Human Resources Malaysia",
    "url": "https://emasco.mohr.gov.my",
@@ -13,7 +13,7 @@
    "commonly_mentioned": "Not collected: no secondary source is available to this pipeline (no search API in the project).",
    "emerging": "Not collected here: emerging skills come from the live signals layer, not from this dataset."
   },
-  "fingerprint": "28390564d0b9c0a32ee3957773be66ccaa605182"
+  "fingerprint": "caa1daa8f1e369c34590a61b41b1a10177ea2052"
  },
  "report": {
   "occupationsInScope": 1814,
@@ -28,13 +28,13 @@
    "note": "one eMASCO page per occupation, crawled earlier"
   },
   "extractedStatements": 19899,
-  "canonicalSkills": 13587,
+  "canonicalSkills": 13602,
   "occupationSkillRelations": 19876,
   "statementsMergedIntoExistingSkill": 23,
-  "mergedByReorderedWords": 228,
+  "mergedByReorderedWords": 214,
   "mergedBySynonymTable": 5,
-  "relationsNeedingReview": 272,
-  "reviewItems": 293,
+  "relationsNeedingReview": 286,
+  "reviewItems": 307,
   "nearDuplicatePairs": 400,
   "reusedFromCache": 1814,
   "reprocessed": 0,

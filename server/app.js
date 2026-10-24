@@ -448,6 +448,12 @@ export function createApp({
     response.json(await emergingSnapshot())
   })
 
+  // A broken or oversized body must give a short JSON answer, never Express's HTML page with a stack trace and file paths.
+  admin.use((error, request, response, next) => {
+    if (error?.type === 'entity.parse.failed') return response.status(400).json({ error: 'bad-json' })
+    if (error?.type === 'entity.too.large') return response.status(413).json({ error: 'too-large' })
+    return next(error)
+  })
   app.use('/api/admin', admin)
 
   // "Explore all roles": every eMASCO role, from picked skills (no model needed) or CV text (needs the model).
@@ -570,6 +576,13 @@ export function createApp({
     response.sendFile(path.join(distDirectory, 'index.html'), (error) => {
       if (error) next(error)
     })
+  })
+
+  // Last resort for anything not handled above: no stack trace, no paths, in the response.
+  app.use((error, request, response, next) => {
+    console.error('[server] unhandled error:', error?.message)
+    if (response.headersSent) return next(error)
+    return response.status(error?.status && error.status < 500 ? error.status : 500).json({ error: 'request-failed' })
   })
 
   return app
