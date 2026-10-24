@@ -4,8 +4,9 @@
 import { findField } from './goalView.js';
 
 export const STEP_SCREENS = ['about', 'skills', 'goal', 'matches', 'study'];
-// Reached from a link in Matches (or #explore); it is not one of the five steps and needs no profile.
-export const EXTRA_SCREENS = ['explore'];
+// 'explore' is reached from a link in Matches (or #explore) and needs no profile. 'overview' (Your roles) sits between
+// Goal and Matches and opens when the steps before Matches are complete.
+export const EXTRA_SCREENS = ['explore', 'overview'];
 export const SCREENS = ['home', ...STEP_SCREENS, ...EXTRA_SCREENS];
 export const MIN_SKILLS = 3;
 // Links and bookmarks from the old journey still work.
@@ -30,7 +31,7 @@ export function stepComplete(screen, profile, fields) {
 
 // The first earlier step that is not complete, or null when the step is open.
 export function blockingStep(screen, profile, fields) {
-  const index = STEP_SCREENS.indexOf(screen);
+  const index = STEP_SCREENS.indexOf(screen === 'overview' ? 'matches' : screen);
   if (index < 0) return null;
   return STEP_SCREENS.slice(0, index).find((step) => !stepComplete(step, profile, fields)) ?? null;
 }

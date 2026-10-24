@@ -8,6 +8,7 @@ import About from './screens/About.jsx';
 import Skills from './screens/Skills.jsx';
 import Goal from './screens/Goal.jsx';
 import Matches from './screens/Matches.jsx';
+import Overview from './screens/Overview.jsx';
 import Study from './screens/Study.jsx';
 import Explore from './screens/Explore.jsx';
 import { rankBySkillMatch } from './lib/skillRanking.js';
@@ -455,6 +456,24 @@ export default function App() {
         onToggleLearn={toggleLearnSkill}
       />
     );
+  } else if (shownScreen === 'overview') {
+    content = (
+      <Overview
+        data={data}
+        ctx={ctx}
+        profile={profile}
+        scenario={scenario}
+        ranked={ranked}
+        onOpenRole={(roleId) => {
+          setFocusRoleId(roleId);
+          setExpandedRoleId(roleId);
+          navigate('matches');
+        }}
+        onBack={() => navigate('goal')}
+        onChange={() => navigate('goal')}
+        onAll={() => navigate('matches')}
+      />
+    );
   } else if (shownScreen === 'matches') {
     content = (
       <Matches
@@ -519,7 +538,12 @@ export default function App() {
           onHideAll={() => setTipsOff(true)}
         />
         <div className="flex-1">{content}</div>
-        <StepBar screen={shownScreen} profile={profile} fields={fields} onNavigate={navigate} />
+        <StepBar
+          screen={shownScreen}
+          profile={profile}
+          fields={fields}
+          onNavigate={(next) => navigate(shownScreen === 'goal' && next === 'matches' ? 'overview' : next)}
+        />
       </div>
     </div>
   );

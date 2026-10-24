@@ -6,6 +6,7 @@ import RadarChart from '../components/RadarChart.jsx';
 import ReplanNotice from '../components/ReplanNotice.jsx';
 import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
+import RoleCards from '../components/RoleCards.jsx';
 import OtherRoleCard from '../components/OtherRoleCard.jsx';
 import { roleEvidenceFor } from '../lib/skillEvidence.js';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
@@ -452,6 +453,19 @@ export default function Matches({
           <p className="m-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
             None of our 20 scored roles is in your top list, so there is no skills radar. Open Explore all roles or change your skills.
           </p>
+        )}
+
+        {scored.length > 0 && (
+          <RoleCards
+            entries={scored}
+            profile={profile}
+            ctx={ctx}
+            scenario={scenario}
+            trends={data.trends}
+            sdgInfo={data.sdg}
+            activeId={focus?.id ?? null}
+            onOpen={onFocus}
+          />
         )}
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
