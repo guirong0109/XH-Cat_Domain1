@@ -23,7 +23,7 @@
 | Live Demo         | https://xh-cat-domain-1.replit.app/            |
 | RunPod Endpoint   | None. RunPod is used offline only (see "How We Use RunPod") |
 | Slide Deck        | [docs/FutureReady-MY-pitch-deck.html](docs/FutureReady-MY-pitch-deck.html) (open the file in a browser) |
-| Demo Video        | TODO: link (script: [docs/demo-script.md](docs/demo-script.md)) |
+| Demo Video        | https://youtu.be/A5YUlu3V_tA |
 
 ---
 
