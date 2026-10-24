@@ -20,6 +20,9 @@ import { jsonOnly, localOnly } from './adminAccess.js'
 import { createJobManager } from './adminJobs.js'
 import { healthChecks, runQuickCheck } from './adminChecks.js'
 import { runFullCheck } from './adminFull.js'
+import { createSourceMonitor } from './sources/monitor.js'
+import { describeSources, pingSources } from './sources/registry.js'
+import { readSignals, refreshSignals } from './sources/signals.js'
 
 const EMASCO_SKILL_LIMIT = 50
 const EMASCO_DEFAULT_TOP = 10
@@ -73,11 +76,18 @@ export function createApp({
   const logStore = createLogStore({ filePath: path.join(logDir, 'admin.jsonl') })
   logStore.markInterrupted().catch(() => {})
 
+  // How every outside source is doing (see the Sources panel on /admin).
+  const sourceMonitor = createSourceMonitor({ filePath: path.join(logDir, 'sources.json') })
+  const MONITORED_REFRESH = { trends: 'opendosm', research: 'openalex' }
+
   // Runs a data refresh and records it in the log; the refresh result is returned unchanged.
   async function logged(type, work) {
     const run = await logStore.startRun({ type })
     try {
       const result = await work()
+      if (MONITORED_REFRESH[type]) {
+        sourceMonitor.record({ id: MONITORED_REFRESH[type], ok: result.status !== 'failed', error: result.status === 'failed' ? result.message : null, kind: result.status === 'failed' ? 'http' : null })
+      }
       await run.log(result.status === 'failed' ? 'error' : 'info', result.message ?? `${type} refresh finished`)
       await run.finish(result.status === 'updated' ? 'ok' : result.status === 'failed' ? 'failed' : 'partial', { message: result.message })
       return result
@@ -87,6 +97,14 @@ export function createApp({
       throw error
     }
   }
+
+  // Observed AI use per role (data/exposure.json, built by scripts/build-exposure.mjs). Read once; missing file = none.
+  let observedFile
+  async function getObserved() {
+    if (observedFile === undefined) observedFile = await readOptionalJson(path.join(dataDir, 'exposure.json'))
+    return observedFile
+  }
+  const observedMeta = (file) => (file ? { source: file.source, url: file.url, release: file.release, fetchedAt: file.fetchedAt, builtAt: file.builtAt, cutoff: file.cutoff, minTasks: file.minTasks, quality: file.quality, limits: file.limits } : null)
 
   app.get('/api/data', async (request, response) => {
     try {
@@ -102,7 +120,9 @@ export function createApp({
         readEmerging(emergingPath),
         readCourseChecks(courseChecksPath),
       ])
-      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks })
+      const observed = await getObserved().catch(() => null)
+      const observedRoles = Object.fromEntries(roles.filter((role) => observed?.roles?.[role.code]).map((role) => [role.code, observed.roles[role.code]]))
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks, observed: observed ? { ...observedMeta(observed), roles: observedRoles } : null })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })
@@ -294,6 +314,33 @@ export function createApp({
       runFullCheck({ run, occupations, stateFile, fetchImpl, progress, isCancelled, resume, ...(adminSleep ? { sleep: adminSleep } : {}) }))
   })
 
+  // Sources panel: status of every outside source, a one-click test, and a refresh of the live AI signals.
+  admin.get('/sources', async (request, response) => {
+    const [status, signals] = await Promise.all([sourceMonitor.snapshot(describeSources()), readSignals(dataDir)])
+    const data = {
+      signalsUpdatedAt: signals?.updatedAt ?? null,
+      anthropicRelease: signals?.anthropicIndex?.latestRelease ?? null,
+      anthropicNewData: signals?.anthropicIndex?.newData ?? false,
+      huggingfaceFetchedAt: signals?.huggingface?.fetchedAt ?? null,
+    }
+    response.json({ sources: describeSources().map((source) => ({ ...source, ...status.find((row) => row.id === source.id) })), data, job: jobs.current() })
+  })
+
+  admin.post('/sources/test', async (request, response) => {
+    const ids = Array.isArray(request.body?.ids) ? request.body.ids.filter((id) => typeof id === 'string') : null
+    const results = await pingSources({ fetchImpl, monitor: sourceMonitor, ...(adminSleep ? { sleep: adminSleep } : {}) }, ids)
+    response.json({ results })
+  })
+
+  admin.post('/sources/refresh', async (request, response) => {
+    const started = await jobs.start('signals-refresh', async ({ run, progress, isCancelled }) => {
+      const result = await refreshSignals({ dataDir, fetchImpl, monitor: sourceMonitor, run, progress, isCancelled, ...(adminSleep ? { sleep: adminSleep } : {}) })
+      return { status: result.status, summary: { message: result.message, outcomes: result.outcomes }, report: null }
+    })
+    if (started.busy) return response.status(409).json({ error: 'busy', job: jobs.current() })
+    return response.status(202).json({ runId: started.runId })
+  })
+
   admin.post('/checks/cancel', (request, response) => response.json({ cancelled: jobs.cancel() }))
   admin.get('/job', (request, response) => response.json({ job: jobs.current() }))
 
@@ -477,10 +524,12 @@ export function createApp({
         result = await Promise.race([work, timeout])
       }
       const store = await getExposure().catch(() => null)
+      const observed = await getObserved().catch(() => null)
       const roles = (result.roles ?? []).map((card) => {
         const row = store?.roles?.[card.code]
         return {
           ...card,
+          observed: observed?.roles?.[card.code] ?? null,
           exposure: row
             ? {
                 status: row.status,
@@ -497,6 +546,7 @@ export function createApp({
         ...result,
         roles,
         maxLevel,
+        observedSource: observedMeta(observed),
         source: {
           occupations: data.occupations.source,
           crawledOn: data.occupations.fetchedAt,

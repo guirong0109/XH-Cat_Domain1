@@ -1,13 +1,15 @@
+import { observedView } from '../lib/roleView.js';
 import { SDG_NOT_TAGGED, barWidth, exposureView, gradesText, levelLabel, missingSkills, similarityText, whyLines } from '../lib/exploreView.js';
 
 const MISSING_SHOWN = 12;
 
 // One eMASCO role from "Explore all roles". Similarity is an AI estimate; AI risk is not scored for these roles.
-export default function ExploreCard({ card }) {
+export default function ExploreCard({ card, observedSource }) {
   const why = whyLines(card);
   const missing = missingSkills(card);
   const grades = gradesText(card);
   const exposure = exposureView(card.exposure);
+  const used = observedView(card.observed, observedSource);
   return (
     <li className="flex list-none flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -85,7 +87,24 @@ export default function ExploreCard({ card }) {
       )}
 
       <div className="flex flex-col gap-1 text-xs text-slate-700">
-        {exposure.labelled ? (
+        {used ? (
+          <>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-semibold">Observed AI use</span>
+              <span className="rounded-full border border-orange-300 bg-orange-50 px-2.5 py-0.5 font-semibold text-[#C2410C]">{used.badge}</span>
+            </div>
+            {used.state === 'ok' ? (
+              <>
+                <div>{used.shareText}. {used.coverageText}</div>
+                {used.aiTasks[0] && <div>AI is already used for: {used.aiTasks[0].task}</div>}
+                {used.zeroNote && <div>{used.zeroNote}</div>}
+              </>
+            ) : (
+              <div>{used.text}</div>
+            )}
+            <div className="text-slate-600">{used.sourceText} Does not change any score.</div>
+          </>
+        ) : exposure.labelled ? (
           <>
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-semibold">AI exposure</span>

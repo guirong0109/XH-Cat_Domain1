@@ -77,6 +77,22 @@
   <p class="note">This page works only on this PC, opened at <strong>localhost</strong>. A check only reads eMASCO and reports. It never changes your saved roles, skills or vectors.</p>
   <div id="problem" class="warnbox" role="alert" hidden></div>
 
+  <section class="card" aria-labelledby="h-src" id="sources">
+    <div class="row spread">
+      <div>
+        <h2 id="h-src" style="margin:0">Data sources</h2>
+        <p class="muted" id="src-status">Loading…</p>
+      </div>
+      <div class="row">
+        <button type="button" id="src-test">Test all sources</button>
+        <button type="button" class="primary" id="src-refresh">Refresh live AI signals</button>
+      </div>
+    </div>
+    <div id="src-msg" class="note" role="status" aria-live="polite" style="margin-top:10px" hidden></div>
+    <div id="src-list" style="margin-top:8px"><p class="muted">Loading…</p></div>
+    <p class="muted" style="margin-top:8px">Down = 3 failures in a row. Warning = a recent failure, or no success for 8 days. When a source is down the app keeps its last good data and shows that data's date; nothing saved is overwritten by a failed fetch.</p>
+  </section>
+
   <section class="card" aria-labelledby="h-em" id="emerging">
     <div class="row spread">
       <div>
@@ -159,7 +175,7 @@
 <script>
 (function () {
   'use strict';
-  var TYPE = { 'quick-check': 'Quick check', 'full-check': 'Full re-check', trends: 'Trends refresh', research: 'AI research refresh', references: 'Reference check' };
+  var TYPE = { 'quick-check': 'Quick check', 'full-check': 'Full re-check', trends: 'Trends refresh', research: 'AI research refresh', references: 'Reference check', 'signals-refresh': 'Live AI signals refresh' };
   var STATUS = { ok: ['OK', 'ok'], partial: ['Partial', 'warn'], failed: ['Failed', 'bad'], cancelled: ['Cancelled', ''], interrupted: ['Interrupted', 'warn'], running: ['Running', 'run'] };
   var HEALTH = { ok: ['OK', 'ok'], warn: ['Warning', 'warn'], fail: ['Problem', 'bad'] };
   var state = { selected: null, events: [], level: 'all', timer: null, running: false };
@@ -404,6 +420,114 @@
   });
 
   loadOverview();
+})();
+</script>
+<script>
+// Data sources: status of every outside source, a test button and the live AI signals refresh.
+// Text is inserted with textContent only: error messages can come from other websites.
+(function () {
+  'use strict';
+  var HEALTH = { ok: ['OK', 'ok'], degraded: ['Warning', 'warn'], down: ['Down', 'bad'], never: ['Not tested', ''] };
+  var timer = null;
+  function $(id) { return document.getElementById(id); }
+  function h(tag, props) {
+    var node = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (key) {
+      if (key === 'text') node.textContent = props[key];
+      else if (key === 'class') node.className = props[key];
+      else node.setAttribute(key, props[key]);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var child = arguments[i];
+      if (child != null) node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
+    }
+    return node;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+  function when(iso) {
+    if (!iso) return 'never';
+    var date = new Date(iso);
+    return isNaN(date) ? 'never' : date.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+  function msg(text) { var box = $('src-msg'); box.hidden = !text; box.textContent = text || ''; }
+  function post(path, body) {
+    return fetch('/api/admin' + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then(function (response) { return response.json().catch(function () { return {}; }).then(function (data) { return { status: response.status, ok: response.ok, body: data }; }); });
+  }
+
+  function detail(source) {
+    if (source.health === 'down' || source.health === 'degraded') {
+      var error = source.lastError || {};
+      var why = (error.kind ? error.kind.replace('_', ' ') : 'failed') + (error.status ? ' (HTTP ' + error.status + ')' : '') + (error.message ? ': ' + error.message : '');
+      return source.consecutiveFailures > 0
+        ? source.consecutiveFailures + ' failure' + (source.consecutiveFailures === 1 ? '' : 's') + ' in a row since ' + when(error.at) + ' — ' + why
+        : 'No successful fetch for over 8 days.';
+    }
+    return source.averageLatencyMs ? 'About ' + source.averageLatencyMs + ' ms per call.' : '';
+  }
+
+  function render(data) {
+    var box = clear($('src-list'));
+    var table = h('table', {}, h('thead', {}, h('tr', {}, h('th', { text: 'Source' }), h('th', { text: 'Status' }), h('th', { text: 'Last success' }), h('th', { text: 'Detail and fallback' }))));
+    var body = h('tbody');
+    data.sources.forEach(function (source) {
+      var pair = HEALTH[source.health] || ['?', ''];
+      var name = h('td', {}, h('a', { href: source.url, target: '_blank', rel: 'noopener noreferrer', text: source.name }), h('div', { class: 'muted', text: source.purpose }));
+      var info = h('td', {}, h('div', { text: detail(source) }), h('div', { class: 'muted', text: 'If down: ' + source.fallback }),
+        source.rateLimitHits ? h('div', { class: 'muted', text: 'Rate limited ' + source.rateLimitHits + ' time' + (source.rateLimitHits === 1 ? '' : 's') + '.' }) : null);
+      body.appendChild(h('tr', {}, name, h('td', {}, h('span', { class: 'pill ' + pair[1], text: pair[0] })), h('td', { text: when(source.lastSuccess) }), info));
+    });
+    table.appendChild(body);
+    box.appendChild(table);
+    var d = data.data || {};
+    var parts = ['AI signals saved: ' + when(d.signalsUpdatedAt)];
+    if (d.anthropicRelease) parts.push('Anthropic release: ' + d.anthropicRelease + (d.anthropicNewData ? ' (new data since the last fetch: re-match needed)' : ''));
+    if (d.huggingfaceFetchedAt) parts.push('Hugging Face list: ' + when(d.huggingfaceFetchedAt));
+    $('src-status').textContent = parts.join(' · ');
+    var running = Boolean(data.job && data.job.type === 'signals-refresh');
+    $('src-refresh').disabled = Boolean(data.job);
+    if (running) { msg('Refreshing: ' + ((data.job.progress && data.job.progress.message) || 'starting…')); poll(); }
+  }
+
+  function load() {
+    return fetch('/api/admin/sources', { cache: 'no-store' }).then(function (response) {
+      if (response.status === 403) throw new Error('local-only');
+      return response.json();
+    }).then(render).catch(function (error) {
+      $('src-list').textContent = error.message === 'local-only' ? 'Open this page directly at http://localhost:3000/admin on the same PC.' : 'Could not load the sources.';
+    });
+  }
+
+  function poll() {
+    if (timer) return;
+    timer = setInterval(function () {
+      fetch('/api/admin/sources', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (data) {
+        if (!data.job || data.job.type !== 'signals-refresh') { clearInterval(timer); timer = null; msg('Refresh finished. See Recent runs for the full log.'); }
+        render(data);
+      }).catch(function () { clearInterval(timer); timer = null; });
+    }, 2000);
+  }
+
+  $('src-test').addEventListener('click', function () {
+    msg('Testing every source…');
+    $('src-test').disabled = true;
+    post('/sources/test').then(function (result) {
+      var bad = (result.body.results || []).filter(function (item) { return !item.ok; });
+      msg(bad.length ? bad.length + ' source' + (bad.length === 1 ? '' : 's') + ' did not answer: ' + bad.map(function (item) { return item.id; }).join(', ') + '.' : 'All sources answered.');
+    }).catch(function () { msg('The test could not run.'); }).then(function () { $('src-test').disabled = false; return load(); });
+  });
+
+  $('src-refresh').addEventListener('click', function () {
+    msg('Starting the refresh. arXiv waits 3 seconds between calls, so this takes a few minutes.');
+    post('/sources/refresh').then(function (result) {
+      if (result.status === 409) msg('Another check is running. Wait for it to finish.');
+      else if (!result.ok) msg('Could not start the refresh.');
+      return load();
+    }).catch(function () { msg('Could not start the refresh.'); });
+  });
+
+  load();
 })();
 </script>
 <script>

@@ -61,6 +61,7 @@ describe('api', () => {
       references: null,
       emerging: null,
       courseChecks: null,
+      observed: null,
     })
   })
 
@@ -69,6 +70,20 @@ describe('api', () => {
     await writeFile(path.join(directory, 'course_checks.json'), JSON.stringify(checks))
     const baseUrl = await start()
     expect((await (await fetch(`${baseUrl}/api/data`)).json()).courseChecks).toEqual(checks)
+  })
+
+  it('GET /api/data returns observed AI use for the scored roles only, with its source block', async () => {
+    const file = {
+      source: 'Anthropic Economic Index', url: 'https://example.org/aei', release: 'release_2026_06_26', cutoff: 0.8, minTasks: 3,
+      roles: { A: { status: 'ok', exposure: 0.5 }, 'data-analyst': { status: 'not_enough' } },
+    }
+    await writeFile(path.join(directory, 'exposure.json'), JSON.stringify(file))
+    await writeFile(path.join(directory, 'roles.json'), JSON.stringify([{ id: 'data-analyst', code: 'data-analyst' }]))
+    const baseUrl = await start()
+    const { observed } = await (await fetch(`${baseUrl}/api/data`)).json()
+    expect(Object.keys(observed.roles)).toEqual(['data-analyst'])
+    expect(observed.url).toBe('https://example.org/aei')
+    expect(observed.cutoff).toBe(0.8)
   })
 
   it('GET /api/data without trends file returns trends null', async () => {

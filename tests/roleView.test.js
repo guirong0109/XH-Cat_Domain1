@@ -11,6 +11,7 @@ import {
   ILO_NO_MATCH,
   iloView,
   oecdView,
+  observedView,
   jobMarketEmptyText,
   jobMarketRows,
   RANGE_NOTE,
@@ -373,5 +374,45 @@ describe('oecdView', () => {
   it('adds the OECD link to the role sources', () => {
     const sources = roleSources({ code: 'x', group: 'professionals', oecd }, null);
     expect(sources.some((source) => source.url === 'https://example.org/oecd')).toBe(true);
+  });
+});
+
+describe('observedView', () => {
+  const meta = {
+    release: 'release_2026_06_26', fetchedAt: '2026-10-24T06:40:00.000Z', url: 'https://example.org/aei', minTasks: 3,
+    limits: 'One assistant, mostly US.', quality: { sample: 80, sameOrRelated: 0.97 },
+  };
+  const ok = {
+    status: 'ok', exposure: 0.4321, observedShare: 0.6, tasksUsed: 5, tasksTotal: 8,
+    aiTasks: [{ task: 'Prepare reports.', onetTask: 'Prepare reports of findings.', penetration: 0.72, score: 0.9 }],
+    humanTasks: [{ task: 'Present to management.', penetration: 0 }],
+  };
+
+  it('returns null without an entry', () => {
+    expect(observedView(undefined, meta)).toBeNull();
+  });
+
+  it('shows the average, the share with observed use and the source line', () => {
+    const view = observedView(ok, meta);
+    expect(view.badge).toBe('AI use 0.43');
+    expect(view.shareText).toBe('3 of 5 matched tasks have observed AI use');
+    expect(view.coverageText).toContain('5 of 8');
+    expect(view.sourceText).toContain('release 2026-06-26');
+    expect(view.sourceText).toContain('97%');
+    expect(view.sourceUrl).toBe('https://example.org/aei');
+  });
+
+  it('says not enough matched tasks instead of a number', () => {
+    const view = observedView({ status: 'not_enough', tasksUsed: 1, tasksTotal: 6 }, meta);
+    expect(view.state).toBe('not_enough');
+    expect(view.badge).toBe('AI use: not enough matched tasks');
+    expect(view.text).toContain('Only 1 of 6');
+    expect(view.text).toContain('at least 3');
+  });
+
+  it('an exposure of 0 is shown with a note that it is not the same as safe', () => {
+    const view = observedView({ ...ok, exposure: 0, observedShare: 0, aiTasks: [] }, meta);
+    expect(view.badge).toBe('AI use 0.00');
+    expect(view.zeroNote).toContain('not the same as safe');
   });
 });

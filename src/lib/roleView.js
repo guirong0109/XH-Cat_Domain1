@@ -224,6 +224,39 @@ export function oecdView(role) {
   };
 }
 
+// Observed AI use per role (Anthropic Economic Index, matched to the role's own tasks). Never used in the score.
+// entry = one role from data/exposure.json; meta = the file's source block.
+export function observedView(entry, meta) {
+  if (!entry) return null
+  const release = meta?.release ? `release ${meta.release.replace('release_', '').replaceAll('_', '-')}` : 'latest release'
+  const fetched = meta?.fetchedAt ? `, fetched ${formatDate(meta.fetchedAt)}` : ''
+  const quality = meta?.quality
+    ? ` Task matching checked on ${meta.quality.sample} judged pairs: ${Math.round(meta.quality.sameOrRelated * 100)}% same or related activity (draft judgement, not yet reviewed by the team).`
+    : ''
+  const sourceText = `Source: Anthropic Economic Index (${release}${fetched}), MIT licence on the dataset card. ${meta?.limits ?? ''}${quality}`.trim()
+  const base = { sourceText, sourceUrl: meta?.url ?? null }
+  if (entry.status !== 'ok') {
+    return {
+      ...base,
+      state: 'not_enough',
+      badge: 'AI use: not enough matched tasks',
+      text: `Only ${entry.tasksUsed} of ${entry.tasksTotal} tasks of this role matched an O*NET task well enough${meta?.minTasks ? ` (at least ${meta.minTasks} are needed)` : ''}, so no number is shown.`,
+    }
+  }
+  const withUse = Math.round(entry.observedShare * entry.tasksUsed)
+  return {
+    ...base,
+    state: 'ok',
+    badge: `AI use ${entry.exposure.toFixed(2)}`,
+    scoreText: `Observed AI use ${entry.exposure.toFixed(2)} (0 to 1, average of ${entry.tasksUsed} matched tasks)`,
+    shareText: `${withUse} of ${entry.tasksUsed} matched tasks have observed AI use`,
+    coverageText: `${entry.tasksUsed} of ${entry.tasksTotal} tasks of this role matched an O*NET task.`,
+    aiTasks: entry.aiTasks ?? [],
+    humanTasks: entry.humanTasks ?? [],
+    zeroNote: entry.exposure === 0 ? 'No observed AI use in this dataset for this role. That is not the same as safe from AI.' : null,
+  }
+}
+
 export const ILO_WP140_URL = 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html';
 
 // Link to the occupation's own row in Table A1. The paper has no row anchors, so this uses a
@@ -254,6 +287,7 @@ export function roleSources(role, trends) {
     const row = role.ilo.iscoTitle ? `: ISCO ${role.ilo.isco} ${role.ilo.iscoTitle}` : '';
     sources.push({ label: `ILO 2025 AI exposure (WP140)${row}`, url: iloRowUrl(role.ilo) });
   }
+  if (role.observed?.url) sources.push({ label: 'Anthropic Economic Index (observed AI use)', url: role.observed.url })
   if (role.oecd?.url) sources.push({ label: 'OECD AI Capability Gap (AI Papers No. 59)', url: role.oecd.url });
   return sources;
 }

@@ -280,7 +280,7 @@ export default function Explore({ onBack }) {
         {result?.roles?.length > 0 && (
           <ul className="m-0 flex flex-col gap-3 p-0" aria-label="Roles found">
             {result.roles.map((card) => (
-              <ExploreCard key={card.code} card={card} />
+              <ExploreCard key={card.code} card={card} observedSource={result.observedSource} />
             ))}
           </ul>
         )}

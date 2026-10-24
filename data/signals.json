@@ -1,0 +1,836 @@
+{
+  "papers": {
+    "Python programming": {
+      "semanticScholar": {
+        "2024": 424,
+        "2025": 367
+      },
+      "arxiv": {
+        "2024": 40,
+        "2025": 43
+      }
+    },
+    "SQL and databases": {
+      "semanticScholar": {
+        "2024": 22,
+        "2025": 31
+      },
+      "arxiv": {
+        "2024": 4,
+        "2025": 9
+      }
+    },
+    "Spreadsheets (Excel)": {
+      "semanticScholar": {
+        "2024": 82,
+        "2025": 126
+      },
+      "arxiv": {
+        "2024": 20,
+        "2025": 29
+      }
+    },
+    "Data visualisation": {
+      "semanticScholar": {
+        "2024": 483,
+        "2025": 662
+      },
+      "arxiv": {
+        "2024": 77,
+        "2025": 82
+      }
+    },
+    "Statistics": {
+      "semanticScholar": {
+        "2024": 1573,
+        "2025": 2430
+      },
+      "arxiv": {
+        "2024": 203,
+        "2025": 234
+      }
+    },
+    "Using AI tools": {
+      "semanticScholar": {
+        "2024": 432,
+        "2025": 1775
+      },
+      "arxiv": {
+        "2024": 33,
+        "2025": 93
+      }
+    },
+    "Web development": {
+      "semanticScholar": {
+        "2024": 63,
+        "2025": 110
+      },
+      "arxiv": {
+        "2024": 15,
+        "2025": 12
+      }
+    },
+    "Networking basics": {
+      "semanticScholar": {
+        "2024": 283,
+        "2025": 241
+      },
+      "arxiv": {
+        "2024": 52,
+        "2025": 34
+      }
+    },
+    "Network security": {
+      "semanticScholar": {
+        "2024": 963,
+        "2025": 1121
+      },
+      "arxiv": {
+        "2024": 75,
+        "2025": 85
+      }
+    },
+    "Electrical wiring": {
+      "semanticScholar": {
+        "2024": 6,
+        "2025": 3
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 1
+      }
+    },
+    "Solar PV basics": {
+      "semanticScholar": {
+        "2024": 155,
+        "2025": 230
+      },
+      "arxiv": {
+        "2024": 8,
+        "2025": 12
+      }
+    },
+    "Graphic design": {
+      "semanticScholar": {
+        "2024": 72,
+        "2025": 112
+      },
+      "arxiv": {
+        "2024": 22,
+        "2025": 12
+      }
+    },
+    "Communication": {
+      "semanticScholar": {
+        "2024": 185,
+        "2025": 361
+      },
+      "arxiv": {
+        "2024": 8,
+        "2025": 12
+      }
+    },
+    "Teamwork": {
+      "semanticScholar": {
+        "2024": 201,
+        "2025": 396
+      },
+      "arxiv": {
+        "2024": 21,
+        "2025": 53
+      }
+    },
+    "Problem solving": {
+      "semanticScholar": {
+        "2024": 1505,
+        "2025": 2581
+      },
+      "arxiv": {
+        "2024": 513,
+        "2025": 939
+      }
+    },
+    "Customer service": {
+      "semanticScholar": {
+        "2024": 819,
+        "2025": 1120
+      },
+      "arxiv": {
+        "2024": 79,
+        "2025": 95
+      }
+    },
+    "UX research and prototyping": {
+      "semanticScholar": {
+        "2024": 39,
+        "2025": 37
+      },
+      "arxiv": {
+        "2024": 5,
+        "2025": 2
+      }
+    },
+    "Content writing": {
+      "semanticScholar": {
+        "2024": 6,
+        "2025": 7
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "SEO and web analytics": {
+      "semanticScholar": {
+        "2024": 41,
+        "2025": 56
+      },
+      "arxiv": {
+        "2024": 2,
+        "2025": 9
+      }
+    },
+    "Energy auditing": {
+      "semanticScholar": {
+        "2024": 7,
+        "2025": 15
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "Renewable energy system design": {
+      "arxiv": {
+        "2024": 4,
+        "2025": 8
+      }
+    },
+    "Project coordination": {
+      "semanticScholar": {
+        "2024": 408,
+        "2025": 696
+      },
+      "arxiv": {
+        "2024": 19,
+        "2025": 24
+      }
+    },
+    "Healthcare data and records": {
+      "arxiv": {
+        "2024": 244,
+        "2025": 324
+      }
+    },
+    "Version control (Git)": {
+      "semanticScholar": {
+        "2024": 44,
+        "2025": 118
+      },
+      "arxiv": {
+        "2024": 17,
+        "2025": 34
+      }
+    },
+    "Business process analysis": {
+      "arxiv": {
+        "2024": 61,
+        "2025": 80
+      }
+    },
+    "Attention to detail": {
+      "semanticScholar": {
+        "2024": 16,
+        "2025": 12
+      },
+      "arxiv": {
+        "2024": 2,
+        "2025": 5
+      }
+    },
+    "Financial reporting": {
+      "semanticScholar": {
+        "2024": 236,
+        "2025": 455
+      },
+      "arxiv": {
+        "2024": 24,
+        "2025": 37
+      }
+    },
+    "Financial analysis": {
+      "semanticScholar": {
+        "2024": 154,
+        "2025": 264
+      },
+      "arxiv": {
+        "2024": 28,
+        "2025": 51
+      }
+    },
+    "Budgeting and costing": {
+      "semanticScholar": {
+        "2024": 41,
+        "2025": 67
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "Auditing and internal control": {
+      "semanticScholar": {
+        "2024": 1182,
+        "2025": 3357
+      },
+      "arxiv": {
+        "2024": 274,
+        "2025": 935
+      }
+    },
+    "Accounting software (ERP)": {
+      "semanticScholar": {
+        "2024": 39,
+        "2025": 51
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "Bookkeeping and reconciliation": {
+      "semanticScholar": {
+        "2024": 21,
+        "2025": 35
+      },
+      "arxiv": {
+        "2024": 3,
+        "2025": 7
+      }
+    },
+    "Tax planning": {
+      "semanticScholar": {
+        "2024": 9,
+        "2025": 9
+      },
+      "arxiv": {
+        "2024": 1,
+        "2025": 1
+      }
+    },
+    "Fraud detection": {
+      "semanticScholar": {
+        "2024": 14,
+        "2025": 42
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 0
+      }
+    },
+    "Payroll": {
+      "semanticScholar": {
+        "2024": 14,
+        "2025": 52
+      },
+      "arxiv": {
+        "2024": 1,
+        "2025": 1
+      }
+    },
+    "Accounting and audit standards": {
+      "semanticScholar": {
+        "2024": 20,
+        "2025": 39
+      },
+      "arxiv": {
+        "2024": 1,
+        "2025": 4
+      }
+    },
+    "Time management": {
+      "semanticScholar": {
+        "2024": 70,
+        "2025": 186
+      },
+      "arxiv": {
+        "2024": 3,
+        "2025": 5
+      }
+    },
+    "Tax compliance": {
+      "semanticScholar": {
+        "2024": 35,
+        "2025": 77
+      },
+      "arxiv": {
+        "2024": 0,
+        "2025": 2
+      }
+    }
+  },
+  "paperYears": [
+    2024,
+    2025
+  ],
+  "huggingface": {
+    "fetchedAt": "2026-10-24T06:35:24.042Z",
+    "models": [
+      {
+        "id": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+        "pipelineTag": "image-text-to-text",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "deepseek_v41",
+          "text-generation",
+          "image-text-to-text",
+          "license:mit",
+          "eval-results",
+          "endpoints_compatible",
+          "8-bit",
+          "fp8",
+          "region:us"
+        ],
+        "trendingScore": 2222,
+        "downloads": 57715,
+        "createdAt": "2026-10-17T02:40:38.000Z"
+      },
+      {
+        "id": "RecursiveSI/flint",
+        "pipelineTag": "text-generation",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "flint",
+          "text-generation",
+          "conversational",
+          "license:apache-2.0",
+          "endpoints_compatible",
+          "region:us"
+        ],
+        "trendingScore": 682,
+        "downloads": 1904,
+        "createdAt": "2026-10-21T14:20:58.000Z"
+      },
+      {
+        "id": "black-forest-labs/flux-3-image-klein-comfy",
+        "pipelineTag": "image-to-image",
+        "tags": [
+          "diffusion-single-file",
+          "comfyui",
+          "image-generation",
+          "image-editing",
+          "flux",
+          "flux-3",
+          "black-forest-labs",
+          "image-to-image",
+          "en",
+          "base_model:black-forest-labs/flux-3-image-klein",
+          "base_model:finetune:black-forest-labs/flux-3-image-klein",
+          "license:other"
+        ],
+        "trendingScore": 623,
+        "downloads": 534837,
+        "createdAt": "2026-10-14T12:00:13.000Z"
+      },
+      {
+        "id": "OpenMOSS-Team/MOSS-Image-SFT",
+        "pipelineTag": "text-to-image",
+        "tags": [
+          "diffusers",
+          "safetensors",
+          "moss-image",
+          "text-to-image",
+          "en",
+          "zh",
+          "arxiv:2610.23374",
+          "base_model:OpenMOSS-Team/MOSS-Image-Base",
+          "base_model:finetune:OpenMOSS-Team/MOSS-Image-Base",
+          "license:apache-2.0",
+          "diffusers:MOSSImagePipeline",
+          "region:us"
+        ],
+        "trendingScore": 447,
+        "downloads": 7658,
+        "createdAt": "2026-10-11T07:01:17.000Z"
+      },
+      {
+        "id": "Lightricks/LTX-2.5",
+        "pipelineTag": "image-to-video",
+        "tags": [
+          "diffusion-single-file",
+          "image-to-video",
+          "text-to-video",
+          "video-to-video",
+          "image-text-to-video",
+          "audio-to-video",
+          "text-to-audio",
+          "video-to-audio",
+          "audio-to-audio",
+          "text-to-audio-video",
+          "image-to-audio-video",
+          "image-text-to-audio-video"
+        ],
+        "trendingScore": 410,
+        "downloads": 2026951,
+        "createdAt": "2026-07-23T07:55:24.000Z"
+      },
+      {
+        "id": "XHToken/Spark-X2.6-4B",
+        "pipelineTag": "text-generation",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "spark2_5",
+          "text-generation",
+          "llm",
+          "sparkx2_5",
+          "conversational",
+          "custom_code",
+          "en",
+          "zh",
+          "base_model:XHToken/Spark-X2.6-4B-Base",
+          "base_model:finetune:XHToken/Spark-X2.6-4B-Base"
+        ],
+        "trendingScore": 388,
+        "downloads": 1060,
+        "createdAt": "2026-10-19T03:19:51.000Z"
+      },
+      {
+        "id": "fishaudio/drama-3",
+        "pipelineTag": "text-to-speech",
+        "tags": [
+          "safetensors",
+          "fish_omni",
+          "fish-audio",
+          "text-to-speech",
+          "multi-speaker",
+          "audio-editing",
+          "emotional-speech-generation",
+          "zh",
+          "en",
+          "ja",
+          "ko",
+          "es"
+        ],
+        "trendingScore": 364,
+        "downloads": 17017,
+        "createdAt": "2026-10-01T04:34:57.000Z"
+      },
+      {
+        "id": "OpenMOSS-Team/MOSS-Image-Base",
+        "pipelineTag": "text-to-image",
+        "tags": [
+          "diffusers",
+          "safetensors",
+          "moss-image",
+          "text-to-image",
+          "en",
+          "zh",
+          "arxiv:2610.23374",
+          "license:apache-2.0",
+          "diffusers:MOSSImagePipeline",
+          "region:us"
+        ],
+        "trendingScore": 330,
+        "downloads": 5618,
+        "createdAt": "2026-10-11T06:49:17.000Z"
+      },
+      {
+        "id": "abenzerps/Qwen-Image-2.1-Uncensored-Quantized",
+        "pipelineTag": "text-to-image",
+        "tags": [
+          "gguf",
+          "qwen",
+          "image-generation",
+          "comfyui",
+          "comfyui-gguf",
+          "mlx",
+          "fp8",
+          "nvfp4",
+          "text-to-image",
+          "base_model:Qwen/Qwen-Image-2.1",
+          "base_model:quantized:Qwen/Qwen-Image-2.1",
+          "license:other"
+        ],
+        "trendingScore": 317,
+        "downloads": 2398071,
+        "createdAt": "2026-09-20T15:51:13.000Z"
+      },
+      {
+        "id": "Qwen/Qwen3.8-27B",
+        "pipelineTag": "image-text-to-text",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "qwen3_5",
+          "image-text-to-text",
+          "conversational",
+          "license:apache-2.0",
+          "eval-results",
+          "endpoints_compatible",
+          "deploy:azure",
+          "deploy:sagemaker",
+          "region:us"
+        ],
+        "trendingScore": 314,
+        "downloads": 7710011,
+        "createdAt": "2026-08-05T08:22:59.000Z"
+      },
+      {
+        "id": "Comfy-Org/MOSS-Image",
+        "pipelineTag": null,
+        "tags": [
+          "diffusion-single-file",
+          "comfyui",
+          "base_model:OpenMOSS-Team/MOSS-Image-Base",
+          "base_model:finetune:OpenMOSS-Team/MOSS-Image-Base",
+          "license:apache-2.0",
+          "region:us"
+        ],
+        "trendingScore": 306,
+        "downloads": 1606363,
+        "createdAt": "2026-10-16T12:42:32.000Z"
+      },
+      {
+        "id": "google/embeddinggemma-2",
+        "pipelineTag": "feature-extraction",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "embedding_gemma2",
+          "feature-extraction",
+          "embedding",
+          "sentence-transformers",
+          "multimodal-embedding",
+          "multimodal",
+          "vision",
+          "audio",
+          "video",
+          "image-feature-extraction"
+        ],
+        "trendingScore": 281,
+        "downloads": 192741,
+        "createdAt": "2026-09-14T14:53:42.000Z"
+      },
+      {
+        "id": "dealignai/DeepSeek-V4.1-Flash-1017-UNCENSORED-FP8",
+        "pipelineTag": "image-text-to-text",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "deepseek_v41",
+          "text-generation",
+          "deepseek",
+          "fp8",
+          "uncensored",
+          "abliterated",
+          "vision-language",
+          "reasoning",
+          "tool-calling",
+          "1M-context"
+        ],
+        "trendingScore": 268,
+        "downloads": 4141,
+        "createdAt": "2026-10-18T04:11:31.000Z"
+      },
+      {
+        "id": "MiniMaxAI/MiniMax-M3.1-Flash",
+        "pipelineTag": "image-text-to-text",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "minimax_m3_vl",
+          "image-text-to-text",
+          "multimodal",
+          "moe",
+          "agent",
+          "coding",
+          "video",
+          "conversational",
+          "custom_code",
+          "arxiv:2606.13392"
+        ],
+        "trendingScore": 262,
+        "downloads": 1096,
+        "createdAt": "2026-10-17T06:37:50.000Z"
+      },
+      {
+        "id": "InternScience/Sage-A1.5",
+        "pipelineTag": "text-generation",
+        "tags": [
+          "transformers",
+          "safetensors",
+          "qwen3_5_moe",
+          "image-text-to-text",
+          "moe",
+          "vlm",
+          "vision",
+          "agentic",
+          "code",
+          "tool-use",
+          "text-generation",
+          "conversational"
+        ],
+        "trendingScore": 254,
+        "downloads": 924,
+        "createdAt": "2026-10-15T08:34:39.000Z"
+      }
+    ],
+    "papers": [
+      {
+        "id": "2610.30043",
+        "title": "TARSphere: A Robot-Oriented Full-Stack Framework for Long-Horizon Embodied Agents in Evolving Physical and Social Environments",
+        "publishedAt": "2026-10-21T00:00:00.000Z",
+        "upvotes": 1
+      },
+      {
+        "id": "2610.22722",
+        "title": "The LLM-Attacker: A Unified Red-Team Framework for Privacy Evaluation of Split and Distributed LLM Systems",
+        "publishedAt": "2026-10-15T00:00:00.000Z",
+        "upvotes": 2
+      },
+      {
+        "id": "2610.04184",
+        "title": "EvalResearchBench: Can AI Agents Build Their Own Feedback for Recursive Self-Improvement?",
+        "publishedAt": "2026-10-16T00:00:00.000Z",
+        "upvotes": 1
+      },
+      {
+        "id": "2610.25835",
+        "title": "Diffusion Language Models Change Speed Across Tasks and Languages",
+        "publishedAt": "2026-10-19T05:47:58.000Z",
+        "upvotes": 2
+      },
+      {
+        "id": "2610.31198",
+        "title": "Different Tasks, Different Timesteps: Temporal Task-Aware Quantization for Diffusion Language Models",
+        "publishedAt": "2026-10-22T00:00:00.000Z",
+        "upvotes": 5
+      },
+      {
+        "id": "2610.24385",
+        "title": "Bridging Exploration and Persona: Information-Directed Dueling for Test-Time Agent Personalization",
+        "publishedAt": "2026-10-17T00:00:00.000Z",
+        "upvotes": 1
+      },
+      {
+        "id": "2610.24383",
+        "title": "IF-MAP: Influence-Function-Inspired Agent Prioritization in Multi-Agent Systems",
+        "publishedAt": "2026-10-17T00:00:00.000Z",
+        "upvotes": 2
+      },
+      {
+        "id": "2610.30418",
+        "title": "Agent Mosaic: Recognizing Confidentiality Leaks in Agentic LLM Systems",
+        "publishedAt": "2026-10-21T00:00:00.000Z",
+        "upvotes": 16
+      },
+      {
+        "id": "2610.28950",
+        "title": "HyperDrone: Simulation-to-Reality Transfer at Millions of Frames per Second",
+        "publishedAt": "2026-10-20T00:00:00.000Z",
+        "upvotes": 2
+      },
+      {
+        "id": "2610.31651",
+        "title": "BrickWright: Agentic Creation of Physically Feasible Brick Builds",
+        "publishedAt": "2026-10-22T00:00:00.000Z",
+        "upvotes": 3
+      },
+      {
+        "id": "2610.27148",
+        "title": "Who Takes the Lead? Model Ability and Task-Conditioned Collaboration with Humans",
+        "publishedAt": "2026-10-19T00:00:00.000Z",
+        "upvotes": 4
+      },
+      {
+        "id": "2610.30753",
+        "title": "FilmFlow: Agentic System for 3D Virtual Film Cinematography",
+        "publishedAt": "2026-10-22T00:00:00.000Z",
+        "upvotes": 26
+      },
+      {
+        "id": "2610.31372",
+        "title": "RIDAR: Safeguarding Research Integrity in Autonomous Research Agents via Automated Detection and Runtime Intervention",
+        "publishedAt": "2026-10-22T00:00:00.000Z",
+        "upvotes": 7
+      },
+      {
+        "id": "2610.12586",
+        "title": "Realism VS Accuracy: Event Sequence Forecasting from a Generative Modeling Perspective",
+        "publishedAt": "2026-10-08T00:00:00.000Z",
+        "upvotes": 1
+      },
+      {
+        "id": "2610.22951",
+        "title": "MambaAct: Efficient Mamba Action Experts for Flow-Matching Vision-Language-Action Models",
+        "publishedAt": "2026-10-16T00:00:00.000Z",
+        "upvotes": 3
+      }
+    ],
+    "mentions": {
+      "Python programming": 0,
+      "SQL and databases": 0,
+      "Spreadsheets (Excel)": 0,
+      "Data visualisation": 0,
+      "Statistics": 0,
+      "Using AI tools": 0,
+      "Web development": 0,
+      "Networking basics": 0,
+      "Network security": 0,
+      "Electrical wiring": 0,
+      "Solar PV basics": 0,
+      "Graphic design": 0,
+      "Communication": 0,
+      "Teamwork": 0,
+      "Problem solving": 0,
+      "Customer service": 0,
+      "UX research and prototyping": 0,
+      "Content writing": 0,
+      "SEO and web analytics": 0,
+      "Energy auditing": 0,
+      "Renewable energy system design": 0,
+      "Project coordination": 0,
+      "Healthcare data and records": 0,
+      "Version control (Git)": 0,
+      "Business process analysis": 0,
+      "Attention to detail": 0,
+      "Financial reporting": 0,
+      "Financial analysis": 0,
+      "Budgeting and costing": 0,
+      "Auditing and internal control": 0,
+      "Accounting software (ERP)": 0,
+      "Bookkeeping and reconciliation": 0,
+      "Tax planning": 0,
+      "Fraud detection": 0,
+      "Payroll": 0,
+      "Accounting and audit standards": 0,
+      "Time management": 0,
+      "Tax compliance": 0
+    }
+  },
+  "anthropicIndex": {
+    "fetchedAt": "2026-10-24T06:35:24.042Z",
+    "latestRelease": "release_2026_06_26",
+    "files": {
+      "labor_market_impacts/job_exposure.csv": {
+        "oid": "aae568975228d5850a1913c0d09f6ce8437e7253",
+        "size": 37176
+      },
+      "labor_market_impacts/task_penetration.csv": {
+        "oid": "2a20bcc33ccb02ae97c9aa6b2899bfa3911fc75b",
+        "size": 1889822
+      }
+    },
+    "counts": {
+      "occupations": 756,
+      "tasks": 17998
+    },
+    "newData": false,
+    "licence": "MIT (dataset card on Hugging Face)",
+    "url": "https://huggingface.co/datasets/Anthropic/EconomicIndex"
+  },
+  "updatedAt": "2026-10-24T06:35:24.042Z"
+}

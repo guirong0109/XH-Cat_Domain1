@@ -203,6 +203,8 @@ export default function Matches({
               scenario={scenario}
               trends={data.trends}
               references={data.references}
+              observed={data.observed?.roles?.[role.code]}
+              observedMeta={data.observed}
             />
           );
         })}

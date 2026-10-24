@@ -9,6 +9,7 @@ import {
   iloView,
   labelOrigin,
   levelName,
+  observedView,
   oecdView,
   roleSources,
   scoreBreakdown,
@@ -33,6 +34,8 @@ function fitRowText(row) {
 // One ranked role. Matches renders cards in DOM in the displayed (goal) order.
 export default function RoleCard({
   role,
+  observed,
+  observedMeta,
   score,
   range,
   rank,
@@ -50,7 +53,8 @@ export default function RoleCard({
 }) {
   const shownMatch = useTween({ match: score.match }).match;
   const reasonText = whyReason(reason);
-  const sources = roleSources(role, trends);
+  const used = observedView(observed, observedMeta);
+  const sources = roleSources({ ...role, observed: used ? { url: used.sourceUrl } : undefined }, trends);
   const reference = roleReference(references, role);
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
@@ -103,6 +107,9 @@ export default function RoleCard({
             )}
             {ilo && (
               <span className="rounded-md bg-indigo-100 px-2 py-0.5 text-xs font-bold text-indigo-800">{ilo.badge}</span>
+            )}
+            {used && used.state === 'ok' && (
+              <span className="rounded-md bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-900">{used.badge}</span>
             )}
             {oecd && (
               <span className="rounded-md bg-teal-100 px-2 py-0.5 text-xs font-bold text-teal-900">{oecd.badge}</span>
@@ -254,6 +261,44 @@ export default function RoleCard({
                 <p className="m-0">{ILO_NO_MATCH}</p>
               )}
             </section>
+            {used && (
+              <section className="flex flex-col gap-1.5 rounded-lg border border-orange-200 bg-orange-50/40 p-3 text-[13px] text-slate-700">
+                <h3 className="m-0 text-sm font-bold text-[#0F172A]">Observed AI use for this role (not in the score)</h3>
+                {used.state === 'ok' ? (
+                  <>
+                    <p className="m-0 tabular-nums">{used.scoreText}</p>
+                    <p className="m-0">{used.shareText}</p>
+                    <p className="m-0 text-xs text-slate-600">{used.coverageText}</p>
+                    {used.zeroNote && <p className="m-0">{used.zeroNote}</p>}
+                    {used.aiTasks.length > 0 && (
+                      <div>
+                        <p className="m-0 font-semibold">AI is already used for these tasks</p>
+                        <ul className="m-0 list-disc pl-5">
+                          {used.aiTasks.map((item) => (
+                            <li key={item.task}>
+                              {item.task} <span className="text-xs text-slate-600">(use {item.penetration.toFixed(2)})</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {used.humanTasks.length > 0 && (
+                      <div>
+                        <p className="m-0 font-semibold">No observed AI use yet</p>
+                        <ul className="m-0 list-disc pl-5">
+                          {used.humanTasks.map((item) => (
+                            <li key={item.task}>{item.task}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="m-0">{used.text}</p>
+                )}
+                <p className="m-0 text-xs text-slate-600">{used.sourceText}</p>
+              </section>
+            )}
             {oecd && (
               <section className="flex flex-col gap-1.5 rounded-lg border border-teal-200 bg-teal-50/40 p-3 text-[13px] text-slate-700">
                 <h3 className="m-0 text-sm font-bold text-[#0F172A]">OECD AI capability gap (not in the score)</h3>
