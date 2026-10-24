@@ -55,3 +55,93 @@ A generative LLM is NOT used for any score. One optional model call only tags th
 Emerging news feed (information only, "AI estimate", has a keyword fallback).
 
 Output: Current Skill Match, gaps, AI-at-work view, SDG tags, tracked roles, ordered course pathway
+
+
+=====================================================================
+PART B. HOW SEARCH WORKS (skill search and role search; runs on our own saved data)
+=====================================================================
+Note: there is no external Search API or database server. "Search" means searching the
+eMASCO data we already saved (18,161 skills, 1,814 roles) with four rankers, then merging.
+
+Student types a skill ("accounting", "perakaunan") or uploads a CV
+  |
+  v
+GET /api/emasco/skills?q=...   (query max 100 characters, max 20 results, cached)
+  |
+  +--> Ranker 1  EXACT     every typed word is inside the skill text (good for "c++", codes)
+  +--> Ranker 2  BM25      any word counts; rare words weigh more (partial matches)
+  +--> Ranker 3  CONCEPT   query names one of our team skills or aliases (English + Malay)
+  +--> Ranker 4  MEANING   bge-m3 vector of the query vs the saved skill vectors
+  |                        (finds synonyms and Malay); kept only if cosine >= 0.55 and
+  |                        within 0.08 of the best hit (stops unrelated matches)
+  v
+Merge by Reciprocal Rank Fusion:  score(skill) = sum over rankers of 1 / (60 + rank)
+  (uses ranks only, so scores from different rankers are never compared)
+  |
+  v
+Optional reranker re-orders the top results  ->  top 20 skills shown
+  If the model is off (Replit), MEANING and rerank are skipped and the reply says so.
+
+Role search (POST /api/matches/top and /api/emasco/match):
+  picked skills or CV lines -> vectors -> cosine vs every role vector
+  role similarity = mean of the 5 best-matching lines
+  -> diploma-level filter -> merge grades -> split into "your field" / "other fields" lists
+  CV lines: keyword match is added at once; an AI match (cosine >= 0.72) waits for the student's "Add skill"
+  CV text is never stored or logged.
+
+
+=====================================================================
+PART C. HOW DATA IS SAVED (no database server: JSON files, written safely)
+=====================================================================
+Source (official or open API)
+  |  fetch with retries, 8 s timeout, error kinds (rate limit, timeout, bad reply)
+  v
+Validate the reply (shape, numbers, row counts; all-or-nothing)
+  |  fail -> keep the LAST GOOD file, record the failure, show its old date
+  v
+Write to a temporary file, then rename over the real file (atomic; no half-written data)
+  |  only one refresh of the same file runs at a time (single in-flight)
+  v
+Saved JSON with source, fetched date and count:
+  data/trends.json        OpenDOSM job trend per occupation group
+  data/research.json      AI-research counts per skill (OpenAlex)
+  data/references.json    eMASCO page check and link check per role
+  data/course_checks.json HRD Corp / MyTVET course page checks
+  data/exposure.json      observed AI use per role (built from embeddings, see PART A step 3)
+  data/emerging.json      reviewed news items (information only)
+  data/emasco/            1,814 roles + skill/role vectors (int8, committed)
+  data/skills/, data/intel/  skill catalogue with quoted evidence; one versioned record per role
+  data/store/             manifest of every dataset + AI-exposure file for every role
+Generated files are rebuilt by scripts, never edited by hand. Team-written inputs are in
+data/team/ and are labelled "draft" until a teammate reviews them.
+
+
+=====================================================================
+PART D. HOW DATA IS MAINTAINED (automatic refresh, monitoring, human review)
+=====================================================================
+Triggers
+  weekly GitHub Action (Mondays 02:00 UTC): trends, research, references, course checks
+                                            -> commits only if a file changed -> main -> Replit
+  "Refresh data" button on Matches          -> POST /api/refresh-trends | research | references
+  Emerging feed: weekly by default (daily by setting), or admin refresh
+  New Anthropic release (admin page shows "new data") -> re-run embed + match + build-exposure
+  eMASCO changes: quick check (about 3 min) and full re-check (about 3 h, resumable) on /admin
+
+Monitoring (server/sources/monitor.js, shown on /admin "Data sources")
+  every call to every source is recorded: last success, failures in a row, rate-limit hits, speed
+  status: ok -> warning -> DOWN after 3 failures in a row; STALE if no success for 8 days
+  a failing source never blocks the app: the last good data stays and shows its date
+
+Rules that protect the data
+  - a check only REPORTS; a role that eMASCO changed is flagged for the team, never overwritten
+  - skill dataset and intelligence builds are incremental by input hash, idempotent, validated
+    before writing, and keep the previous copy; intelligence keeps the last 50 runs
+  - Emerging items start "Pending review"; the admin approves; new sources only by the admin
+    after a feed test and a "read the publisher terms" tick
+  - no signal enters a score unless its source is in server/sources/registry.js with a date,
+    a failure monitor and a fallback; ILO, OECD, research and Emerging never change the score
+  - keys come only from environment variables, are never committed or logged
+
+Human review (the maintenance that cannot be automated)
+  teammate reviews the drafts: role skills, SDG tags, aliases, similar-skill pairs,
+  course pages, judged task pairs; 31 of 122 role-skill rows are "not listed" (review item)
