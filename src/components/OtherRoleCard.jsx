@@ -1,4 +1,5 @@
 import FieldTag from './FieldTag.jsx';
+import TrackBox from './TrackBox.jsx';
 import { observedView, formatDate } from '../lib/roleView.js';
 import { SDG_NOT_TAGGED, barWidth, gradesText, levelLabel, missingSkills, similarityText, whyLines } from '../lib/exploreView.js';
 
@@ -8,7 +9,7 @@ const clip = (text) => (text.length > CHIP_CHARS ? `${text.slice(0, CHIP_CHARS -
 
 // One eMASCO role that is not one of our 20 scored roles. Same layout as RoleCard; it shows a skill fit estimate
 // instead of the full score, and only the links and panels that have data.
-export default function OtherRoleCard({ card, rank, total, observedSource, crawledOn }) {
+export default function OtherRoleCard({ card, rank, total, observedSource, crawledOn, tracked = false, onTrack }) {
   const used = observedView(card.observed, observedSource);
   const why = whyLines(card, CHIPS_SHOWN);
   const missing = missingSkills(card);
@@ -26,14 +27,7 @@ export default function OtherRoleCard({ card, rank, total, observedSource, crawl
       className={`fr-card fr-role-card box-border rounded-2xl border bg-white p-4 sm:px-[22px] sm:py-5 ${first ? 'border-teal-300' : 'border-slate-200'}`}
     >
       <div className="flex flex-wrap items-start gap-x-[18px] gap-y-3">
-        <div
-          className={`flex size-10 flex-none items-center justify-center rounded-xl text-lg font-extrabold ${
-            first ? 'bg-[#0F766E] text-white' : 'bg-slate-100 text-[#0F172A]'
-          }`}
-        >
-          <span className="sr-only">Rank </span>
-          {rank}
-        </div>
+        <TrackBox title={card.baseTitle || card.title} rank={rank} checked={tracked} onChange={onTrack} />
         <div className="flex min-w-0 flex-[999_1_300px] flex-col gap-2">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <h2 id={titleId} className="m-0 text-[19px] font-bold">

@@ -1,4 +1,5 @@
 import SdgTag from './SdgTag.jsx';
+import TrackBox from './TrackBox.jsx';
 import FieldTag from './FieldTag.jsx';
 import { roleReference } from '../lib/referenceView.js';
 import SkillMatchPanel from './SkillMatchPanel.jsx';
@@ -82,14 +83,7 @@ export default function RoleCard({
       }`}
     >
       <div className="flex flex-wrap items-start gap-x-[18px] gap-y-3">
-        <div
-          className={`flex size-10 flex-none items-center justify-center rounded-xl text-lg font-extrabold ${
-            first ? 'bg-[#0F766E] text-white' : 'bg-slate-100 text-[#0F172A]'
-          }`}
-        >
-          <span className="sr-only">Rank </span>
-          {rank}
-        </div>
+        <TrackBox title={role.title} rank={rank} checked={tracked} onChange={onTrack} />
         <div className="flex min-w-0 flex-[999_1_300px] flex-col gap-2">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <h2 id={`title-${role.id}`} className="m-0 text-[19px] font-bold">
@@ -203,18 +197,6 @@ export default function RoleCard({
             >
               {expanded ? 'Hide details' : 'Why this match?'}
             </button>
-            {onTrack && (
-              <button
-                type="button"
-                onClick={onTrack}
-                aria-pressed={tracked}
-                className={`fr-btn min-h-11 flex-1 cursor-pointer rounded-[10px] border px-2 text-sm font-semibold whitespace-nowrap ${
-                  tracked ? 'border-[#0F766E] bg-[#F0FDFA] text-[#0F766E]' : 'border-slate-300 bg-white'
-                }`}
-              >
-                {tracked ? 'Tracking ✓' : 'Track this role'}
-              </button>
-            )}
             <button
               type="button"
               onClick={onStudy}

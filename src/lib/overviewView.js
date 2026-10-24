@@ -14,6 +14,25 @@ export function toggleTracked(tracked, roleId) {
   return { list: [...list, roleId], full: false };
 }
 
+// A role outside our 20 scored roles is tracked by its eMASCO code. A small snapshot of its card is kept, because
+// the Matches list changes when the student's skills change.
+export const otherKey = (card) => `emasco:${card.code}`;
+
+export function otherSnapshot(card) {
+  return {
+    code: card.code,
+    title: card.baseTitle || card.title,
+    similarity: card.similarity,
+    url: card.url,
+    field: card.field ?? null,
+    transferable: card.transferable ?? null,
+  };
+}
+
+export function trackedOthers(tracked, snapshots) {
+  return (tracked ?? []).map((key) => (key.startsWith('emasco:') ? snapshots?.[key] : null)).filter(Boolean);
+}
+
 // The tracked roles that are still scored, in the order the student tracked them.
 export function trackedEntries(ranked, tracked) {
   return (tracked ?? []).map((id) => ranked.find((entry) => entry.role.id === id)).filter(Boolean);

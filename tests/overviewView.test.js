@@ -60,3 +60,17 @@ describe('tracked roles', () => {
     expect(adjacentSteps('matches', { ...done, tracked: ['a'] }, null).next.screen).toBe('overview');
   });
 });
+
+import { otherKey, otherSnapshot, trackedOthers } from '../src/lib/overviewView.js';
+
+describe('tracked roles outside the scored 20', () => {
+  const card = { code: '4132-02', title: 'Data Entry Clerk (G1)', baseTitle: 'Data Entry Clerk', similarity: 0.61, url: 'u' };
+  it('keys and snapshots a card, and finds it again', () => {
+    expect(otherKey(card)).toBe('emasco:4132-02');
+    const snap = otherSnapshot(card);
+    expect(snap.title).toBe('Data Entry Clerk');
+    expect(trackedOthers(['a', 'emasco:4132-02'], { 'emasco:4132-02': snap })).toEqual([snap]);
+    expect(trackedOthers(['emasco:x'], {})).toEqual([]);
+    expect(trackedOthers(undefined, undefined)).toEqual([]);
+  });
+});

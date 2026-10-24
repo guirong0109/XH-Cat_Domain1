@@ -3,7 +3,7 @@ import { MATCH_LABEL, matchAria, matchText } from '../lib/skillMatchView.js';
 import { READY_AT, cardEntries, cardGaps, readyText, trendLine } from '../lib/overviewView.js';
 
 // Overview cards: one per role. Shown on the Your roles page and under the radar on Matches.
-export default function RoleCards({ entries, profile, ctx, scenario, trends, sdgInfo, activeId = null, onOpen, onChange, onRemove, changeLabel = '+ Add or change roles' }) {
+export default function RoleCards({ entries, profile, ctx, scenario, trends, sdgInfo, activeId = null, onOpen, onChange, onRemove, extra = null, changeLabel = '+ Add or change roles' }) {
   const cards = cardEntries(entries);
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
@@ -61,6 +61,7 @@ export default function RoleCards({ entries, profile, ctx, scenario, trends, sdg
           </button>
         );
       })}
+      {extra}
       {onRemove && cards.length > 0 && (
         <div className="col-span-full flex flex-wrap gap-2">
           {cards.map(({ role }) => (

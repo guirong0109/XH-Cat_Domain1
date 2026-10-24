@@ -30,6 +30,7 @@ const EMPTY_PROFILE = {
   sdgs: [],
   learn: [],
   tracked: [],
+  trackedCards: {},
   sampleId: null,
 };
 
@@ -55,6 +56,7 @@ function profileFromSample(sample) {
     sdgs: [...sample.sdgs],
     learn: [...(sample.learn ?? [])],
     tracked: [],
+    trackedCards: {},
     sampleId: sample.id,
   };
 }
@@ -313,10 +315,16 @@ export default function App() {
 
   // Tracking a role keeps the sample label (it is not a change to the audit), so it does not use changeProfile.
   const [trackNote, setTrackNote] = useState('');
-  const trackRole = (roleId) => {
+  const trackRole = (roleId, snapshot = null) => {
     const { list, full } = toggleTracked(profile.tracked, roleId);
     setTrackNote(full ? `You can track up to ${MAX_TRACKED} roles. Untrack one first.` : '');
-    if (!full) setProfile((current) => ({ ...current, tracked: list }));
+    if (full) return;
+    setProfile((current) => {
+      const cards = { ...(current.trackedCards ?? {}) };
+      if (list.includes(roleId) && snapshot) cards[roleId] = snapshot;
+      else delete cards[roleId];
+      return { ...current, tracked: list, trackedCards: cards };
+    });
   };
 
   const toggleLearnSkill =(label) => changeProfile((current) => toggleLearn(current, label));
@@ -480,7 +488,7 @@ export default function App() {
           setExpandedRoleId(roleId);
           navigate('matches');
         }}
-        onUntrack={trackRole}
+        onUntrack={(key) => trackRole(key)}
         onAdd={() => navigate('matches')}
       />
     );

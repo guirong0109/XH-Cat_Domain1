@@ -7,6 +7,7 @@ import ReplanNotice from '../components/ReplanNotice.jsx';
 import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
 import RoleCards from '../components/RoleCards.jsx';
+import { otherKey, otherSnapshot } from '../lib/overviewView.js';
 import OtherRoleCard from '../components/OtherRoleCard.jsx';
 import { roleEvidenceFor } from '../lib/skillEvidence.js';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
@@ -159,6 +160,8 @@ export default function Matches({
           total={total}
           observedSource={top.result.observedSource}
           crawledOn={top.result.source?.crawledOn}
+          tracked={profile.tracked?.includes(otherKey(entry.card))}
+          onTrack={() => onTrack(otherKey(entry.card), otherSnapshot(entry.card))}
         />
       );
     }
