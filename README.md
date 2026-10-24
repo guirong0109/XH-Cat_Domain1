@@ -8,19 +8,19 @@
 
 | Field                  | Details                                     |
 | ---------------------- | ------------------------------------------- |
-| **Team Name**          | TODO: team name                             |
+| **Team Name**          | XH-Cat                                      |
 | **Team Domain**        | Domain 1 (Future-Ready Workforce)           |
-| **SDG Track (1–17)**   | TODO: SDG track (the app links roles to SDG 3, 4, 8, 9, 16 and more) |
-| **Team Leader**        | TODO: leader name                           |
-| **University**         | TODO: university                            |
-| **Number of Members**  | TODO: number                                |
+| **SDG Track (1–17)**   | 1-17                                        |
+| **Team Leader**        | Yip Gui Rong                                |
+| **University**         | Multimedia University                       |
+| **Number of Members**  | 2                                           |
 
 ## Links
 
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
-| GitHub Repository | TODO: https://github.com/Guirong0109/<repo> (private until submission) |
-| Live Demo         | TODO: https://<your-project>.replit.app        |
+| GitHub Repository | https://github.com/guirong0109/XH-Cat_Domain1  |
+| Live Demo         | https://xh-cat-domain-1.replit.app/            |
 | RunPod Endpoint   | None. RunPod is used offline only (see "How We Use RunPod") |
 | Slide Deck        | TODO: link                                     |
 | Demo Video        | TODO: link (script: [docs/demo-script.md](docs/demo-script.md)) |
@@ -73,10 +73,10 @@ In five simple steps the student goes from a skills profile and a goal to ranked
 ├── data/                    # Generated app data, eMASCO snapshot, team inputs
 ├── testing/                 # Test sets and evaluation results (incl. RunPod evidence)
 ├── submission/              # Required submission documents
-│   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission (to add)
-│   ├── SDC2026_TeamName_TechDeclaration.pdf  # Technology declaration (to add)
-│   ├── SDC2026_TeamName_Replit_POU.pdf       # Replit proof of use (to add)
-│   └── SDC2026_TeamName_Runpod_POU.pdf       # RunPod proof of use (to add)
+│   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission 
+│   ├── SDC2026_TeamName_TechDeclaration.pdf  # Technology declaration 
+│   ├── SDC2026_TeamName_Replit_POU.pdf       # Replit proof of use 
+│   └── SDC2026_TeamName_Runpod_POU.pdf       # RunPod proof of use 
 ├── tests/                   # Vitest unit tests (pipeline tests are in pipeline/tests)
 ├── .env.example             # Example environment variables
 ├── .gitignore
