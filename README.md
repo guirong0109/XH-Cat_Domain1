@@ -89,12 +89,48 @@ In five simple steps the student goes from a skills profile and a goal to ranked
 ### Architecture
 
 ```
-Student ──► Replit (React app + Express API) ──► committed data (eMASCO, ILO, OpenDOSM cache)
-                        │
-                        ├──► OpenDOSM / OpenAlex (live refresh)
-                        └──► bge-m3 on the server (CV reading, when the model is present)
-
-RunPod (GPU, offline) ──► model tests + skill similarity ──► results committed to data/ and testing/
+Student (browser, React)
+  |  picks major and skills / PDF CV read in the browser / goal
+  v
+Express API (Node 22)  ---->  BAAI/bge-m3 embedding model (local ONNX)
+  |   ^                         multilingual (English + Bahasa Malaysia), not a chat LLM
+  |   |                         text -> vector; closeness = cosine similarity (0 to 1)
+  v   |                         used for: CV lines, skill search, role ranking, task matching
+  |
+  +--> 1. Role ranking (embedding search)
+  |      Reference data (assumption): eMASCO role pages are taken as the official
+  |      truth for what a role needs; eMASCO gives no skill importance, so we
+  |      assume: specific skill = 1.5, basic skill = 1.0.
+  |      Each role and each student skill/CV line becomes a vector.
+  |      role similarity = mean of the 5 best-matching student lines vs the role vector
+  |      -> ranked roles ("AI fit", an estimate, not a percentage)
+  |
+  +--> 2. Current Skill Match (fixed formula, no AI; the match is never changed by AI)
+  |      credit per skill C: same skill = 1, team-reviewed similar skill = 0.5,
+  |                          then x level (Basic 0.5, Good 0.8, Expert 1.0)
+  |      Current Skill Match = 100 x sum(I x C) / sum(I)      I = skill importance
+  |      Example: role has 2 specific skills (I=1.5) and 1 basic (I=1.0).
+  |        student has skill A at Good (0.8), skill B missing (0), skill C at Expert (1.0)
+  |        = 100 x (1.5x0.8 + 1.5x0 + 1.0x1.0) / (1.5 + 1.5 + 1.0) = 100 x 2.2 / 4.0 = 55%
+  |
+  +--> 3. AI exposure of a role (shown beside the match, never part of it)
+         a) eMASCO tasks of the role are matched to O*NET tasks by bge-m3
+            (keep cosine >= 0.80; need at least 3 matched tasks, else "not enough data")
+         b) Anthropic Economic Index gives observed AI use per O*NET task (0 to 1)
+         c) role AI use = average over its matched tasks
+         d) tasks are classified in three categories:
+              Automatable   = AI can do the task itself
+              AI-assisted   = AI helps, the person still decides
+              Human-led     = needs people (judgement, care, presenting)
+            observed AI use covers the matched tasks; the AI-made labels
+            (labelled "estimate") cover the rest:
+            automatable % = w x observed share + (1 - w) x label,  w = matched / total tasks
+         e) Job outlook = 0.5 x demand (OpenDOSM) + 0.5 x (100 - automatable % x scenario)
+            scenario: Moderate 0.6, Fast 1.0
+  |
+  v
+JSON data store  <----  refresh jobs (weekly GitHub Action, Refresh button, admin checks)
+  ...
 ```
 
 ---
