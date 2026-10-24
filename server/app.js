@@ -14,6 +14,7 @@ import { modelFromEnv, readEmerging, refreshEmerging, reviewItem } from './emerg
 import { activeFeeds, allFeeds, checkFeed, readSourceConfig, validateNewSource, writeSourceConfig } from './emergingSources.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
+import { skillIdsForLabels } from './topMatches.js'
 import { createSkillSearch } from './emascoRoles.js'
 import { createLogStore } from './adminLog.js'
 import { jsonOnly, localOnly } from './adminAccess.js'
@@ -28,6 +29,7 @@ import { createSkillEvidence } from './skillEvidence.js'
 const EMASCO_SKILL_LIMIT = 50
 const EMASCO_DEFAULT_TOP = 10
 const EMASCO_MAX_TOP = 20
+const TOP_MATCHES = 20
 
 const distDirectory = fileURLToPath(new URL('../dist', import.meta.url))
 
@@ -498,6 +500,71 @@ export function createApp({
     response.json({ skills: data.search(query, Number(request.query.limit)) })
   })
 
+  // Adds exposure, observed AI use and official skills to ranked eMASCO cards and wraps them with the source line.
+  async function buildMatchBody(result, data, maxLevel) {
+    const store = await getExposure().catch(() => null)
+    const observed = await getObserved().catch(() => null)
+    const skillData = await skillStore.dataset().catch(() => null)
+    const summaries = skillData ? Object.fromEntries((result.roles ?? []).map((card) => [card.code, skillData.occupation(card.code)])) : null
+    const roles = (result.roles ?? []).map((card) => {
+      const row = store?.roles?.[card.code]
+      return {
+        ...card,
+        observed: observed?.roles?.[card.code] ?? null,
+        officialSkills: summaries?.[card.code] ?? null,
+        exposure: row
+          ? {
+              status: row.status,
+              labelSource: row.labelSource,
+              automatablePct: row.automatablePct,
+              assistedPct: row.assistedPct,
+              humanPct: row.humanPct,
+              date: store.builtAt ?? null
+            }
+          : null
+      }
+    })
+    return {
+      ...result,
+      roles,
+      maxLevel,
+      observedSource: observedMeta(observed),
+      source: {
+        occupations: data.occupations.source,
+        crawledOn: data.occupations.fetchedAt,
+        model: 'BAAI/bge-m3',
+        note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
+      }
+    }
+  }
+
+  // Top roles for the student's picked app skills: each skill label is searched in the eMASCO skill list (keyword search, no model needed),
+  // then all roles are ranked like "Explore all roles". Send labels only; nothing is stored.
+  app.post('/api/matches/top', parseCvBody, async (request, response) => {
+    const { labels, maxLevel: wantedLevel, top } = request.body ?? {}
+    if (!Array.isArray(labels) || labels.length > EMASCO_SKILL_LIMIT || labels.some((label) => typeof label !== 'string' || !label.trim() || label.length > 120)) {
+      return response.status(400).json({ error: 'labels must be a list of at most 50 skill names.' })
+    }
+    let data
+    try {
+      data = await getEmascoData()
+    } catch (error) {
+      console.error('[emasco] data not available:', error.message)
+      return response.status(503).json({ error: 'emasco-data-missing' })
+    }
+    try {
+      const skillIds = await skillIdsForLabels(labels, (query, limit) => data.search(query, limit, { meaningAllowed: false }))
+      // Our scored roles include degree-level jobs, so the default reaches degree level; master and PhD only when asked.
+      const maxLevel = ['diploma', 'degree', 'phd'].includes(wantedLevel) ? wantedLevel : 'degree'
+      const options = { maxLevel, groupGrades: true, top: Math.min(Math.max(1, Math.floor(Number(top)) || TOP_MATCHES), EMASCO_MAX_TOP) }
+      const result = matchPickedSkills({ skillIds, index: data.index, ...options })
+      response.json({ ...(await buildMatchBody(result, data, maxLevel)), mappedSkillCount: skillIds.length })
+    } catch (error) {
+      console.error('[matches-top] failed:', error.message)
+      response.status(503).json({ error: 'match-failed' })
+    }
+  })
+
   app.post('/api/emasco/match', parseCvBody, async (request, response) => {
     const { skillIds, text, includeHigher, top } = request.body ?? {}
     const haveSkills = Array.isArray(skillIds)
@@ -535,40 +602,7 @@ export function createApp({
         })
         result = await Promise.race([work, timeout])
       }
-      const store = await getExposure().catch(() => null)
-      const observed = await getObserved().catch(() => null)
-      const skillData = await skillStore.dataset().catch(() => null)
-      const summaries = skillData ? Object.fromEntries((result.roles ?? []).map((card) => [card.code, skillData.occupation(card.code)])) : null
-      const roles = (result.roles ?? []).map((card) => {
-        const row = store?.roles?.[card.code]
-        return {
-          ...card,
-          observed: observed?.roles?.[card.code] ?? null,
-          officialSkills: summaries?.[card.code] ?? null,
-          exposure: row
-            ? {
-                status: row.status,
-                labelSource: row.labelSource,
-                automatablePct: row.automatablePct,
-                assistedPct: row.assistedPct,
-                humanPct: row.humanPct,
-                date: store.builtAt ?? null
-              }
-            : null
-        }
-      })
-      response.json({
-        ...result,
-        roles,
-        maxLevel,
-        observedSource: observedMeta(observed),
-        source: {
-          occupations: data.occupations.source,
-          crawledOn: data.occupations.fetchedAt,
-          model: 'BAAI/bge-m3',
-          note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
-        }
-      })
+      response.json(await buildMatchBody(result, data, maxLevel))
     } catch (error) {
       // Never log the CV text; the message of our own errors does not contain it.
       if (/^Unknown skill id/.test(error.message)) return response.status(400).json({ error: error.message })

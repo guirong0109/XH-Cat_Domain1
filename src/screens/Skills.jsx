@@ -17,6 +17,8 @@ import { pdfErrorCode, readPdfText } from '../lib/pdfText.js';
 import { focusAfterRemove } from '../lib/skillFocus.js';
 import { cvFoundSkills, suggestField, weakFit } from '../lib/fieldCheck.js';
 import { MIN_SKILLS } from '../lib/navigation.js';
+import { findField } from '../lib/goalView.js';
+import { splitSkillsByField } from '../lib/majorSkills.js';
 import { LEVEL_CREDIT, skillLevel } from '../lib/scoring.js';
 
 const LEVEL_LINE = `Your level counts in the fit score: Strong ${LEVEL_CREDIT.strong}, Good ${LEVEL_CREDIT.good}, Basic ${LEVEL_CREDIT.basic}.`;
@@ -86,6 +88,14 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
   );
   const showWeak = weak && keptFor !== `${cv.fileName}|${profile.field}`;
   const showFieldNotice = fieldSuggestion && keptFor !== `${cv.fileName}|${profile.field}`;
+
+  // Skills of the picked major or sector first; the others stay one tap away.
+  const pickerField = data.fields ? findField(profile, data.fields) : null;
+  const { mine, others, filtered } = useMemo(
+    () => splitSkillsByField(data.skills.labels, pickerField, data.roles),
+    [data.skills.labels, pickerField, data.roles],
+  );
+  const otherPicked = others.filter(({ label }) => profile.skills.includes(label)).length;
 
   const goToPicker = () => {
     pickerRef.current?.scrollIntoView({ block: 'start' });
@@ -436,13 +446,33 @@ export default function Skills({ data, profile, cv, onToggleSkill, onSetLevel, o
           </h2>
           <span className="text-[13px] text-slate-600">From eMASCO skill statements</span>
         </div>
+        {filtered && (
+          <h3 className="m-0 text-base font-bold">
+            Skills for {pickerField.label}
+          </h3>
+        )}
         <div className="flex flex-wrap gap-2">
-          {data.skills.labels.map(({ label }) => (
+          {mine.map(({ label }) => (
             <Chip key={label} pressed={profile.skills.includes(label)} onClick={() => onToggleSkill(label)}>
               {label}
             </Chip>
           ))}
         </div>
+        {others.length > 0 && (
+          <details className="rounded-xl border border-dashed border-slate-400 p-3">
+            <summary className="flex min-h-11 cursor-pointer items-center font-bold text-[#0F766E]">
+              Skills from other fields ({others.length}){otherPicked > 0 ? ` · ${otherPicked} picked` : ''}
+            </summary>
+            <p className="mb-2 mt-1 text-sm text-slate-600">You can pick any skill, even if it is not usual for your major or sector.</p>
+            <div className="flex flex-wrap gap-2">
+              {others.map(({ label }) => (
+                <Chip key={label} pressed={profile.skills.includes(label)} onClick={() => onToggleSkill(label)}>
+                  {label}
+                </Chip>
+              ))}
+            </div>
+          </details>
+        )}
       </section>
     </main>
   );

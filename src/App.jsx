@@ -11,6 +11,7 @@ import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
 import Explore from './screens/Explore.jsx';
 import { rankRoles } from './lib/scoring.js';
+import { MIN_SKILLS_FOR_TOP, fetchTopMatches, rankingSkills } from './lib/topMatches.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
@@ -121,6 +122,31 @@ export default function App() {
     () => (data ? rankRoles(data.roles, profile, ctx, scenario) : []),
     [data, profile, ctx, scenario],
   );
+
+  // Top 20 roles from all of eMASCO for the picked skills. Only runs on the Matches screen; skill names only are sent.
+  const [top, setTop] = useState({ status: 'idle', key: '', result: null });
+  const topKey = profile.skills.join('|');
+  useEffect(() => {
+    if (!data || screen !== 'matches') return undefined;
+    if (profile.skills.length < MIN_SKILLS_FOR_TOP) {
+      setTop({ status: 'idle', key: '', result: null });
+      return undefined;
+    }
+    let cancelled = false;
+    setTop((old) => (old.key === topKey && old.status === 'ok' ? old : { status: 'loading', key: topKey, result: null }));
+    const timer = setTimeout(async () => {
+      const { used, left } = rankingSkills(profile.skills, data.roles, data.fields);
+      const out = await fetchTopMatches(used);
+      if (cancelled) return;
+      setTop(out.ok ? { status: 'ok', key: topKey, result: out.result, left } : { status: 'failed', key: topKey, result: null });
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+    // profile.skills is covered by topKey
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, screen, topKey]);
 
   const navigate = useCallback((next) => {
     setMenuOpen(false);
@@ -441,6 +467,7 @@ export default function App() {
         profile={profile}
         scenario={scenario}
         ranked={ranked}
+        top={top}
         expandedRoleId={expandedRoleId}
         focusRoleId={focusRoleId}
         refresh={refresh}

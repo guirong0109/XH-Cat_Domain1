@@ -6,6 +6,7 @@ import RadarChart from '../components/RadarChart.jsx';
 import ReplanNotice from '../components/ReplanNotice.jsx';
 import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
+import OtherRoleCard from '../components/OtherRoleCard.jsx';
 import { roleEvidenceFor } from '../lib/skillEvidence.js';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
@@ -15,6 +16,7 @@ import { referencesLine } from '../lib/referenceView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
 import { roleRadarValues } from '../lib/radar.js';
+import { FALLBACK_NOTE, ORDER_NOTE, mergeTop, scoredOf } from '../lib/topMatches.js';
 import { matchRange } from '../lib/scoring.js';
 import {
   SCENARIO_NAME,
@@ -92,6 +94,7 @@ export default function Matches({
   profile,
   scenario,
   ranked,
+  top,
   expandedRoleId,
   focusRoleId,
   refresh,
@@ -107,33 +110,42 @@ export default function Matches({
   onStudy,
   onExplore,
 }) {
-  const { entries, note } = orderForGoal(ranked, profile, data.fields);
-  const best = bestScoreNote(entries, ranked);
+  const goalOrder = orderForGoal(ranked, profile, data.fields);
+  // Top 20 across all eMASCO roles when the server answered; else our 20 scored roles in goal order.
+  const topOk = top?.status === 'ok';
+  const entries = topOk
+    ? mergeTop(top.result.roles, ranked)
+    : goalOrder.entries.map((entry) => ({ ...entry, kind: 'scored' }));
+  const note = topOk ? null : goalOrder.note;
+  const best = topOk ? null : bestScoreNote(entries, ranked);
+  const scored = scoredOf(entries);
   const listRef = useRef(null);
   // Re-ordering moves card nodes; if that drops focus, put it back.
   const focused = typeof document === 'undefined' ? null : document.activeElement;
-  const order = entries.map((entry) => entry.role.id).join(',');
+  const order = entries.map((entry) => entry.role?.id ?? entry.card.code).join(',');
   useLayoutEffect(() => {
     if (focused && focused.isConnected && document.activeElement !== focused && listRef.current?.contains(focused)) {
       focused.focus({ preventScroll: true });
     }
   }, [order, focused]);
 
-  // Radar: the focused role, else the first role in goal order.
-  const topThree = entries.slice(0, 3);
-  const focusEntry = entries.find((entry) => entry.role.id === focusRoleId) || entries[0];
-  const tabs = topThree.some((entry) => entry.role.id === focusEntry.role.id) ? topThree : [...topThree, focusEntry];
-  const focus = focusEntry.role;
-  const values = roleRadarValues(focus, profile, ctx.similar, scenario);
-  const gaps = biggestGaps(focus, profile, ctx.similar, scenario);
-  const exposureRoles = entries.slice(0, 5).map((entry) => entry.role);
+  // Radar: the focused scored role, else the first scored role. Only our 20 roles have the data for it.
+  const topThree = scored.slice(0, 3);
+  const focusEntry = scored.find((entry) => entry.role.id === focusRoleId) || scored[0] || null;
+  const tabs = focusEntry ? (topThree.some((entry) => entry.role.id === focusEntry.role.id) ? topThree : [...topThree, focusEntry]) : [];
+  const focus = focusEntry?.role ?? null;
+  const values = focus ? roleRadarValues(focus, profile, ctx.similar, scenario) : null;
+  const gaps = focus ? biggestGaps(focus, profile, ctx.similar, scenario) : [];
+  const exposureRoles = scored.slice(0, 5).map((entry) => entry.role);
 
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Roles that match you</h1>
-          <p className="m-0 text-slate-600">{goalLine(profile, data.fields)} This changes the order only, not the score.</p>
+          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">{topOk ? `Top ${entries.length} roles for you` : 'Roles that match you'}</h1>
+          <p className="m-0 text-slate-600">
+            {topOk ? ORDER_NOTE : `${goalLine(profile, data.fields)} This changes the order only, not the score.`}
+          </p>
           <p className="m-0 mt-1 text-sm text-slate-600">Estimates. {SCENARIO_NOTE}</p>
           <p className="m-0 mt-1 text-sm text-slate-700">
             Looking at other fields?{' '}
@@ -152,6 +164,24 @@ export default function Matches({
       {note && (
         <p role="status" className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
           {note}
+        </p>
+      )}
+
+      {top?.status === 'loading' && (
+        <p role="status" className="m-0 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+          Looking across all eMASCO roles for your skills… showing our 20 scored roles for now.
+        </p>
+      )}
+      {top?.status === 'failed' && (
+        <p role="status" className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
+          {FALLBACK_NOTE}
+        </p>
+      )}
+      {topOk && top.result.source && (
+        <p className="m-0 text-xs text-slate-600">
+          Source: {top.result.source.occupations}, crawled {formatDate(top.result.source.crawledOn)}. Search for your skills in the eMASCO skill list, then ranking by AI meaning
+          (BAAI/bge-m3). {top.result.source.note}
+          {top.left?.length > 0 && ` Left out of this ranking because almost every field uses them: ${top.left.join(', ')}.`}
         </p>
       )}
 
@@ -181,10 +211,22 @@ export default function Matches({
       <div
         ref={listRef}
         role="list"
-        aria-label="Matched roles, in your goal order"
+        aria-label={topOk ? 'Top roles for your skills, best fit first' : 'Matched roles, in your goal order'}
         className="flex flex-col gap-3.5"
       >
         {entries.map((entry, index) => {
+          if (entry.kind === 'other') {
+            return (
+              <OtherRoleCard
+                key={entry.card.code}
+                card={entry.card}
+                rank={index + 1}
+                total={entries.length}
+                observedSource={top.result.observedSource}
+                crawledOn={top.result.source?.crawledOn}
+              />
+            );
+          }
           const { role } = entry;
           return (
             <RoleCard
@@ -218,7 +260,7 @@ export default function Matches({
         className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]"
       >
         <p className="m-0 min-w-0 flex-[1_1_320px] text-sm text-slate-700">
-          These are the 20 roles we score. Want to see roles from every field in eMASCO? They are not scored for AI risk.
+          Roles that are not one of our 20 scored roles show a skill fit estimate instead of a full score. Want to search eMASCO yourself?
         </p>
         <button
           type="button"
@@ -299,6 +341,7 @@ export default function Matches({
           />
         )}
 
+        {focus ? (
         <section className="flex flex-wrap items-center gap-6 rounded-[20px] border border-slate-200 bg-white p-4 sm:p-6">
           <div className="flex min-w-0 flex-[1_1_360px] flex-col items-center">
             <RadarChart
@@ -344,6 +387,11 @@ export default function Matches({
             <SourceNote>{radarSourceNote(focus)}</SourceNote>
           </div>
         </section>
+        ) : (
+          <p className="m-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+            None of our 20 scored roles is in your top list, so there is no skills radar. Open Explore all roles or change your skills.
+          </p>
+        )}
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <JobMarketChart trends={data.trends} />

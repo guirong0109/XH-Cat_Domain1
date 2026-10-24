@@ -20,6 +20,15 @@ describe('skillIdsForLabels', () => {
   });
 });
 
+describe('skillIdsForLabels, simple search', () => {
+  it('accepts a plain array and falls back to the main words of a label', async () => {
+    const calls = [];
+    const search = async (query) => (calls.push(query), query === 'databases' ? [{ id: 'd1' }, { id: 'd2' }] : []);
+    expect(await skillIdsForLabels(['SQL and (databases)'], search)).toEqual(['d1', 'd2']);
+    expect(calls).toEqual(['SQL and databases', 'databases']);
+  });
+});
+
 describe('mergeTop', () => {
   const ranked = [
     { role: { id: 'data-analyst', code: '2524-02' }, score: { match: 80 } },
