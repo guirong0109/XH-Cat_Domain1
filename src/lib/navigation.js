@@ -30,10 +30,7 @@ export function stepComplete(screen, profile, fields) {
     return findField(profile, fields) !== null;
   }
   if (screen === 'skills') return (profile?.skills?.length ?? 0) >= MIN_SKILLS;
-  if (screen === 'goal') {
-    if (!profile?.goal) return false;
-    return profile.goal !== 'move' || (profile.targetSectors?.length ?? 0) > 0;
-  }
+  if (screen === 'goal') return Boolean(profile?.goal);
   return true;
 }
 

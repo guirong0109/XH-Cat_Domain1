@@ -38,10 +38,10 @@ describe('stepComplete', () => {
     expect(stepComplete('skills', { skills: ['a', 'b'] }, f)).toBe(false);
     expect(stepComplete('skills', skilled, f)).toBe(true);
   });
-  it('goal needs a goal, and targets for move', () => {
+  it('goal needs a goal only (Change work no longer asks for target sectors)', () => {
     expect(stepComplete('goal', skilled, f)).toBe(false);
     expect(stepComplete('goal', full, f)).toBe(true);
-    expect(stepComplete('goal', { ...skilled, goal: 'move' }, f)).toBe(false);
+    expect(stepComplete('goal', { ...skilled, goal: 'move' }, f)).toBe(true);
     expect(stepComplete('goal', { ...skilled, goal: 'move', targetSectors: ['A'] }, f)).toBe(true);
     expect(stepComplete('goal', { ...skilled, goal: 'unsure' }, f)).toBe(true);
   });
@@ -71,8 +71,8 @@ describe('resolveScreen', () => {
     expect(resolveScreen('matches', full, f)).toBe('matches');
     expect(resolveScreen('study', full, f)).toBe('study');
   });
-  it('move with no targets keeps matches locked', () => {
-    expect(resolveScreen('matches', { ...skilled, goal: 'move' }, f)).toBe('goal');
+  it('Change work with no target sectors opens matches', () => {
+    expect(resolveScreen('matches', { ...skilled, goal: 'move' }, f)).toBe('matches');
   });
   it('redirects old routes to their new screens', () => {
     expect(resolveScreen('profile', empty, f)).toBe('about');

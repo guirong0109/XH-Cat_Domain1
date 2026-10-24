@@ -1,3 +1,4 @@
+import FieldTag from './FieldTag.jsx';
 import { observedView, formatDate } from '../lib/roleView.js';
 import { SDG_NOT_TAGGED, barWidth, gradesText, levelLabel, missingSkills, similarityText, whyLines } from '../lib/exploreView.js';
 
@@ -49,6 +50,7 @@ export default function OtherRoleCard({ card, rank, total, observedSource, crawl
               <span className="rounded-md bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-900">{used.badge}</span>
             )}
           </div>
+          <FieldTag field={card.field} transferable={card.transferable} />
           {why.length > 0 && (
             <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
               {why.map((item) => (
@@ -86,7 +88,7 @@ export default function OtherRoleCard({ card, rank, total, observedSource, crawl
         </div>
         <div className="flex min-w-[min(100%,250px)] flex-[1_1_250px] flex-col gap-2">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="text-[13px] text-slate-600">Skill fit · AI estimate</span>
+            <span className="text-[13px] text-slate-600">AI fit (similarity, not readiness)</span>
             <span className="text-base font-bold tabular-nums">{card.similarity.toFixed(2)}</span>
           </div>
           <div role="img" aria-label={`Similarity ${card.similarity.toFixed(2)}`} className="h-2 overflow-hidden rounded bg-slate-100">

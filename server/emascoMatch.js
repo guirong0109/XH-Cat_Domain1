@@ -240,7 +240,7 @@ function roleCard(role, similarity, lineVectors, cvLines, index, cutoff) {
     const matched = best >= cutoff
     requiredWeight += weight
     if (matched) matchedWeight += weight
-    return { text: entry.text, type: entry.type, score: round4(best), matched, evidence: matched ? cut(cvLines[bestLine]) : null }
+    return { text: entry.text, type: entry.type, score: round4(best), matched, evidence: matched ? cut(cvLines[bestLine]) : null, line: matched ? bestLine : null }
   })
   skills.sort((left, right) => right.score - left.score)
   return {

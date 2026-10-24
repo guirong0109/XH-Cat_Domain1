@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import Chip from '../components/Chip.jsx';
 import ExposureBars from '../components/ExposureBars.jsx';
 import JobMarketChart from '../components/JobMarketChart.jsx';
@@ -17,6 +17,7 @@ import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
 import { roleRadarValues } from '../lib/radar.js';
 import { FALLBACK_NOTE, ORDER_NOTE, mergeTop, scoredOf } from '../lib/topMatches.js';
+import { MORE_STEP, SECTIONS_NOTE, careerLists } from '../lib/careerSections.js';
 import { MATCH_LABEL, MATCH_MEANING, RANKING_POLICY } from '../lib/skillMatchView.js';
 import {
   SCENARIO_NAME,
@@ -38,13 +39,10 @@ const RESEARCH_PREFIX = 'AI research (OpenAlex): ';
 function goalLine(profile, fields) {
   if (profile.goal === 'upgrade') {
     const field = findField(profile, fields);
-    return `Your goal: upgrade in your field${field ? ` (${field.label})` : ''}.`;
+    return `Your goal: improve myself${field ? ` (${field.label})` : ''}.`;
   }
-  if (profile.goal === 'move') {
-    const sectors = profile.targetSectors ?? [];
-    return `Your goal: move to a new role${sectors.length ? ` (${sectors.join(', ')})` : ''}.`;
-  }
-  return 'Your goal: not sure yet. Roles are in plain score order.';
+  if (profile.goal === 'move') return 'Your goal: change work.';
+  return 'Your goal: not sure yet.';
 }
 
 function YouthCard({ trends }) {
@@ -111,11 +109,20 @@ export default function Matches({
   onExplore,
 }) {
   const goalOrder = orderForGoal(ranked, profile, data.fields);
-  // Top 20 across all eMASCO roles when the server answered; else our 20 scored roles in goal order.
+  // With a major and the intelligence store: two career lists (your field, other fields) in goal order.
+  // Else the top 20 across all eMASCO roles when the server answered; else our 20 scored roles in goal order.
   const topOk = top?.status === 'ok';
-  const entries = topOk
-    ? mergeTop(top.result.roles, ranked)
-    : goalOrder.entries.map((entry) => ({ ...entry, kind: 'scored' }));
+  const sections = topOk ? top.result.sections ?? null : null;
+  // "Show more" counts belong to one result: new skills, a new major or a new sample start from the goal's counts again.
+  const [more, setMore] = useState({ key: '', extra: {} });
+  const extra = more.key === top?.key ? more.extra : {};
+  const showMore = (listKey) => setMore({ key: top?.key ?? '', extra: { ...extra, [listKey]: (extra[listKey] ?? 0) + MORE_STEP } });
+  const lists = sections ? careerLists(sections, profile.goal, ranked, extra) : [];
+  const entries = sections
+    ? lists.flatMap((list) => list.entries.slice(0, list.shown))
+    : topOk
+      ? mergeTop(top.result.roles, ranked)
+      : goalOrder.entries.map((entry) => ({ ...entry, kind: 'scored' }));
   const note = topOk ? null : goalOrder.note;
   const best = topOk ? null : bestScoreNote(entries, ranked);
   const scored = scoredOf(entries);
@@ -138,18 +145,63 @@ export default function Matches({
   const gaps = focus ? biggestGaps(focus, profile, ctx.similar, scenario) : [];
   const exposureRoles = scored.slice(0, 5).map((entry) => entry.role);
 
+  // One card. Ranks count within the list the card is in.
+  const renderEntry = (entry, index, total) => {
+    if (entry.kind === 'other') {
+      return (
+        <OtherRoleCard
+          key={entry.card.code}
+          card={entry.card}
+          rank={index + 1}
+          total={total}
+          observedSource={top.result.observedSource}
+          crawledOn={top.result.source?.crawledOn}
+        />
+      );
+    }
+    const { role } = entry;
+    return (
+      <RoleCard
+        key={role.id}
+        role={role}
+        score={entry.score}
+        reason={entry.reason}
+        ctx={ctx}
+        rank={index + 1}
+        total={total}
+        expanded={expandedRoleId === role.id}
+        onToggle={() => onToggleExpanded(role.id)}
+        onStudy={() => onStudy(role.id)}
+        profile={profile}
+        similar={ctx.similar}
+        sdgInfo={data.sdg}
+        scenario={scenario}
+        trends={data.trends}
+        references={data.references}
+        observed={data.observed?.roles?.[role.code]}
+        observedMeta={data.observed}
+        skillEvidence={roleEvidenceFor(data.skillEvidence, role.code)}
+        skillEvidenceMeta={data.skillEvidence?.meta}
+        field={entry.card?.field ?? null}
+        transferable={entry.card?.transferable ?? null}
+      />
+    );
+  };
+
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">{topOk ? `Top ${entries.length} roles for you` : 'Roles that match you'}</h1>
+          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">
+            {sections ? 'Roles in your field and in other fields' : topOk ? `Top ${entries.length} roles for you` : 'Roles that match you'}
+          </h1>
           <p className="m-0 text-slate-600">
-            {topOk ? ORDER_NOTE : `${goalLine(profile, data.fields)} This changes the order only, not the score.`}
+            {sections ? `${goalLine(profile, data.fields)} ${SECTIONS_NOTE}` : topOk ? ORDER_NOTE : `${goalLine(profile, data.fields)} This changes the order only, not the score.`}
           </p>
           <p className="m-0 mt-1 text-sm text-slate-600">
             {MATCH_LABEL}: {MATCH_MEANING}{' '}
             {topOk
-              ? 'In this list the order is the AI fit estimate. The Current Skill Match % on our 20 scored roles is a different measure, so it may not follow this order. Other roles show a similarity bar, not a percentage.'
+              ? 'The Current Skill Match % on our 20 scored roles is a different measure from the AI fit order, so it may not follow it. Other roles show an AI fit bar, not a percentage.'
               : RANKING_POLICY}
           </p>
           <p className="m-0 mt-1 text-sm text-slate-600">Job outlook is an estimate. {SCENARIO_NOTE} The AI scenario changes the outlook, not your Skill Match.</p>
@@ -194,9 +246,8 @@ export default function Matches({
       {best && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border-2 border-[#0F766E] bg-white px-4 py-3 text-sm text-slate-800">
           <p className="m-0 min-w-0 flex-[1_1_260px]">
-            Your highest score is <strong>{best.role.title}</strong> ({Math.round(best.match)}%), but it is{' '}
-            {profile.goal === 'move' ? 'not in the sectors you picked' : 'not linked to your major or sector'}, so it is
-            lower in this list.
+            Your highest score is <strong>{best.role.title}</strong> ({Math.round(best.match)}%), but it is not linked to your
+            major or sector, so it is lower in this list.
           </p>
           <button
             type="button"
@@ -214,52 +265,53 @@ export default function Matches({
         </div>
       )}
 
-      <div
-        ref={listRef}
-        role="list"
-        aria-label={topOk ? 'Top roles for your skills, best fit first' : 'Matched roles, in your goal order'}
-        className="flex flex-col gap-3.5"
-      >
-        {entries.map((entry, index) => {
-          if (entry.kind === 'other') {
-            return (
-              <OtherRoleCard
-                key={entry.card.code}
-                card={entry.card}
-                rank={index + 1}
-                total={entries.length}
-                observedSource={top.result.observedSource}
-                crawledOn={top.result.source?.crawledOn}
-              />
-            );
-          }
-          const { role } = entry;
-          return (
-            <RoleCard
-              key={role.id}
-              role={role}
-              score={entry.score}
-              reason={entry.reason}
-              ctx={ctx}
-              rank={index + 1}
-              total={entries.length}
-              expanded={expandedRoleId === role.id}
-              onToggle={() => onToggleExpanded(role.id)}
-              onStudy={() => onStudy(role.id)}
-              profile={profile}
-              similar={ctx.similar}
-              sdgInfo={data.sdg}
-              scenario={scenario}
-              trends={data.trends}
-              references={data.references}
-              observed={data.observed?.roles?.[role.code]}
-              observedMeta={data.observed}
-              skillEvidence={roleEvidenceFor(data.skillEvidence, role.code)}
-              skillEvidenceMeta={data.skillEvidence?.meta}
-            />
-          );
-        })}
-      </div>
+      {sections ? (
+        <div ref={listRef} className="flex flex-col gap-6">
+          {lists.map((list) => (
+            <section key={list.key} aria-labelledby={`list-${list.key}`} className="flex flex-col gap-3.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-[#0F766E] pb-1.5">
+                <h2 id={`list-${list.key}`} className="m-0 text-xl font-bold text-[#0F766E]">
+                  {list.title}
+                </h2>
+                <span className="text-sm text-slate-600">
+                  {list.total === 0 ? 'none yet' : `showing ${list.shown} of ${list.total}`}
+                </span>
+              </div>
+              {list.note && <p className="m-0 text-[13px] text-slate-600">{list.note}</p>}
+              {list.total === 0 ? (
+                <p className="m-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">{list.empty}</p>
+              ) : (
+                <div role="list" aria-label={`${list.title}, best AI fit first`} className="flex flex-col gap-3.5">
+                  {list.entries.slice(0, list.shown).map((entry, index) => renderEntry(entry, index, list.shown))}
+                </div>
+              )}
+              {list.shown < list.total && (
+                <button
+                  type="button"
+                  onClick={() => showMore(list.key)}
+                  className="fr-btn min-h-11 cursor-pointer self-start rounded-[10px] border border-[#0F766E] bg-white px-4 font-semibold text-[#0F766E]"
+                >
+                  Show more ({Math.min(MORE_STEP, list.total - list.shown)})
+                </button>
+              )}
+            </section>
+          ))}
+          <p className="m-0 text-xs text-slate-600">
+            {sections.intelligence.fieldsNote} Fields last worked out {formatDate(sections.intelligence.builtAt)} (run {sections.intelligence.runId},{' '}
+            {sections.intelligence.mode}). Ranked from the {sections.pool} closest roles.
+            {sections.unclassified > 0 && ` ${sections.unclassified} of them have no field yet and are not shown.`}
+          </p>
+        </div>
+      ) : (
+        <div
+          ref={listRef}
+          role="list"
+          aria-label={topOk ? 'Top roles for your skills, best fit first' : 'Matched roles, in your goal order'}
+          className="flex flex-col gap-3.5"
+        >
+          {entries.map((entry, index) => renderEntry(entry, index, entries.length))}
+        </div>
+      )}
 
       <section
         aria-label="Explore all roles"

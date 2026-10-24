@@ -1,0 +1,82 @@
+{
+ "runs": [
+  {
+   "runId": "20261024T192329832Z-live",
+   "mode": "live",
+   "label": "Phase 1 after review fixes",
+   "startedAt": "2026-10-24T19:23:29.832Z",
+   "finishedAt": "2026-10-24T19:23:30.173Z",
+   "inputs": [
+    {
+     "source": "eMASCO occupations",
+     "file": "emasco/occupations.json",
+     "date": "2026-10-23",
+     "hash": "4a5097b9353d28cf"
+    },
+    {
+     "source": "Saved bge-m3 role and skill vectors",
+     "file": "emasco/vectors/meta.json",
+     "date": "2026-10-23T03:30:55.137Z",
+     "hash": "a43124ee41b5fc71"
+    },
+    {
+     "source": "Field definitions (team draft)",
+     "file": "team/field_concepts.json",
+     "date": "2026-10-25.1",
+     "hash": "ff10bb26baaf96df"
+    },
+    {
+     "source": "Anthropic Economic Index (observed AI use)",
+     "file": "exposure.json",
+     "date": "2026-10-24T09:35:48.147Z",
+     "hash": "c7f829276cbe0ff2"
+    },
+    {
+     "source": "OpenDOSM wages_occupation",
+     "file": "trends.json",
+     "date": "2026-10-23T18:32:25.446Z",
+     "hash": "535d55fc5aea2552"
+    },
+    {
+     "source": "Our 20 scored roles (placeholder task labels)",
+     "file": "roles.json",
+     "date": null,
+     "hash": "ea43f2d1e20c383f"
+    }
+   ],
+   "counts": {
+    "processed": 1812,
+    "new": 1812,
+    "updated": 0,
+    "unchanged": 0,
+    "gone": 0
+   },
+   "fieldCounts": {
+    "office": 101,
+    "business": 109,
+    "security": 117,
+    "technology": 54,
+    "transport": 160,
+    "design": 111,
+    "sales": 83,
+    "health": 164,
+    "manufacturing": 257,
+    "construction": 181,
+    "hospitality": 83,
+    "data": 43,
+    "agriculture": 103,
+    "engineering": 135,
+    "education": 111
+   },
+   "confidenceCounts": {
+    "unclear": 495,
+    "medium": 910,
+    "high": 407
+   },
+   "outlookCounts": {
+    "unavailable": 429,
+    "ok": 1383
+   }
+  }
+ ]
+}

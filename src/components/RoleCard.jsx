@@ -1,4 +1,5 @@
 import SdgTag from './SdgTag.jsx';
+import FieldTag from './FieldTag.jsx';
 import { roleReference } from '../lib/referenceView.js';
 import SkillMatchPanel from './SkillMatchPanel.jsx';
 import { MATCH_LABEL, MATCH_MEANING, matchAria, matchText, separateParts } from '../lib/skillMatchView.js';
@@ -46,6 +47,8 @@ export default function RoleCard({
   scenario,
   trends,
   references,
+  field = null,
+  transferable = null,
 }) {
   const shownMatch = useTween({ match: score.match }).match;
   const reasonText = whyReason(reason);
@@ -114,6 +117,7 @@ export default function RoleCard({
               <span className="rounded-md bg-teal-100 px-2 py-0.5 text-xs font-bold text-teal-900">{oecd.badge}</span>
             )}
           </div>
+          <FieldTag field={field} transferable={transferable} />
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
             {role.skills.map((skill) => {
               const chip = skillChipText(skill.label, profile, similar);

@@ -1,7 +1,7 @@
 import express from 'express'
 import { existsSync } from 'node:fs'
 import { timingSafeEqual } from 'node:crypto'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readTrends, refreshTrends } from './trends.js'
@@ -14,7 +14,9 @@ import { modelFromEnv, readEmerging, refreshEmerging, reviewItem } from './emerg
 import { activeFeeds, allFeeds, checkFeed, readSourceConfig, validateNewSource, writeSourceConfig } from './emergingSources.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
-import { skillIdsForLabels } from './topMatches.js'
+import { labelsOfId, skillIdsByLabel } from './topMatches.js'
+import { FILES as INTEL_FILES, readStore, userFieldsFor } from './intelligence.js'
+import { POOL_SIZE, splitCareers } from './careerSections.js'
 import { buildConcepts, createHybridSearch, createReranker } from './hybridSearch.js'
 import { createSkillSearch } from './emascoRoles.js'
 import { createLogStore } from './adminLog.js'
@@ -527,68 +529,6 @@ export function createApp({
     response.json({ skills: found.skills, methods: found.methods, concepts: found.concepts, aliases: found.aliases, query: found.query, status: found.status, notes: found.notes })
   })
 
-  // Adds exposure and observed AI use to ranked eMASCO cards and wraps them with the source line.
-  async function buildMatchBody(result, data, maxLevel) {
-    const store = await getExposure().catch(() => null)
-    const observed = await getObserved().catch(() => null)
-    const roles = (result.roles ?? []).map((card) => {
-      const row = store?.roles?.[card.code]
-      return {
-        ...card,
-        observed: observed?.roles?.[card.code] ?? null,
-        exposure: row
-          ? {
-              status: row.status,
-              labelSource: row.labelSource,
-              automatablePct: row.automatablePct,
-              assistedPct: row.assistedPct,
-              humanPct: row.humanPct,
-              date: store.builtAt ?? null
-            }
-          : null
-      }
-    })
-    return {
-      ...result,
-      roles,
-      maxLevel,
-      observedSource: observedMeta(observed),
-      source: {
-        occupations: data.occupations.source,
-        crawledOn: data.occupations.fetchedAt,
-        model: 'BAAI/bge-m3',
-        note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
-      }
-    }
-  }
-
-  // Top roles for the student's picked app skills: each skill label is searched in the eMASCO skill list (keyword search, no model needed),
-  // then all roles are ranked like "Explore all roles". Send labels only; nothing is stored.
-  app.post('/api/matches/top', parseCvBody, async (request, response) => {
-    const { labels, maxLevel: wantedLevel, top } = request.body ?? {}
-    if (!Array.isArray(labels) || labels.length > EMASCO_SKILL_LIMIT || labels.some((label) => typeof label !== 'string' || !label.trim() || label.length > 120)) {
-      return response.status(400).json({ error: 'labels must be a list of at most 50 skill names.' })
-    }
-    let data
-    try {
-      data = await getEmascoData()
-    } catch (error) {
-      console.error('[emasco] data not available:', error.message)
-      return response.status(503).json({ error: 'emasco-data-missing' })
-    }
-    try {
-      const skillIds = await skillIdsForLabels(labels, (query, limit) => data.search(query, limit, { meaningAllowed: false }))
-      // Our scored roles include degree-level jobs, so the default reaches degree level; master and PhD only when asked.
-      const maxLevel = ['diploma', 'degree', 'phd'].includes(wantedLevel) ? wantedLevel : 'degree'
-      const options = { maxLevel, groupGrades: true, top: Math.min(Math.max(1, Math.floor(Number(top)) || TOP_MATCHES), EMASCO_MAX_TOP) }
-      const result = matchPickedSkills({ skillIds, index: data.index, ...options })
-      response.json({ ...(await buildMatchBody(result, data, maxLevel)), mappedSkillCount: skillIds.length })
-    } catch (error) {
-      console.error('[matches-top] failed:', error.message)
-      response.status(503).json({ error: 'match-failed' })
-    }
-  })
-
   // Adds exposure, observed AI use and official skills to ranked eMASCO cards and wraps them with the source line.
   async function buildMatchBody(result, data, maxLevel) {
     const store = await getExposure().catch(() => null)
@@ -627,12 +567,36 @@ export function createApp({
     }
   }
 
+  // Occupation intelligence (data/intel/, built by scripts/build-intelligence.mjs). Re-read when the records file changes,
+  // so a new pipeline run reaches matching without a restart. Missing store = no career split (the single list as before).
+  let intelCache = { mtimeMs: -1, store: null }
+  async function getIntelligence() {
+    const recordsFile = path.join(dataDir, 'intel', INTEL_FILES.records)
+    let mtimeMs
+    try {
+      mtimeMs = (await stat(recordsFile)).mtimeMs
+    } catch {
+      return null
+    }
+    if (mtimeMs !== intelCache.mtimeMs) intelCache = { mtimeMs, store: await readStore(path.join(dataDir, 'intel')) }
+    return intelCache.store
+  }
+
   // Top roles for the student's picked app skills: each skill label is searched in the eMASCO skill list (keyword search, no model needed),
   // then all roles are ranked like "Explore all roles". Send labels only; nothing is stored.
+  // With `field` (a major or sector id) and the intelligence store, a larger pool is split into "in your field" and
+  // "other fields" by each role's generated field. The ranking itself is unchanged.
   app.post('/api/matches/top', parseCvBody, async (request, response) => {
-    const { labels, maxLevel: wantedLevel, top } = request.body ?? {}
-    if (!Array.isArray(labels) || labels.length > EMASCO_SKILL_LIMIT || labels.some((label) => typeof label !== 'string' || !label.trim() || label.length > 120)) {
+    const { labels, maxLevel: wantedLevel, top, field, generalLabels } = request.body ?? {}
+    const badLabels = (list) => !Array.isArray(list) || list.length > EMASCO_SKILL_LIMIT || list.some((label) => typeof label !== 'string' || !label.trim() || label.length > 120)
+    if (badLabels(labels)) {
       return response.status(400).json({ error: 'labels must be a list of at most 50 skill names.' })
+    }
+    if (generalLabels !== undefined && badLabels(generalLabels)) {
+      return response.status(400).json({ error: 'generalLabels must be a list of at most 50 skill names.' })
+    }
+    if (field !== undefined && (typeof field !== 'string' || field.length > 40)) {
+      return response.status(400).json({ error: 'field must be a major or sector id.' })
     }
     let data
     try {
@@ -642,12 +606,48 @@ export function createApp({
       return response.status(503).json({ error: 'emasco-data-missing' })
     }
     try {
-      const skillIds = await skillIdsForLabels(labels, (query, limit) => data.search(query, limit, { meaningAllowed: false }))
+      const byLabel = await skillIdsByLabel(labels, (query, limit) => data.search(query, limit, { meaningAllowed: false }))
+      const skillIds = [...new Set(byLabel.flatMap((entry) => entry.ids))]
       // Our scored roles include degree-level jobs, so the default reaches degree level; master and PhD only when asked.
       const maxLevel = ['diploma', 'degree', 'phd'].includes(wantedLevel) ? wantedLevel : 'degree'
-      const options = { maxLevel, groupGrades: true, top: Math.min(Math.max(1, Math.floor(Number(top)) || TOP_MATCHES), EMASCO_MAX_TOP) }
-      const result = matchPickedSkills({ skillIds, index: data.index, ...options })
-      response.json({ ...(await buildMatchBody(result, data, maxLevel)), mappedSkillCount: skillIds.length })
+      const topCount = Math.min(Math.max(1, Math.floor(Number(top)) || TOP_MATCHES), EMASCO_MAX_TOP)
+      const intel = await getIntelligence().catch((error) => {
+        console.error('[intel] store not readable:', error.message)
+        return null
+      })
+      const userFields = intel ? userFieldsFor(field, intel.fields) : []
+      const split = userFields.length > 0
+      const result = matchPickedSkills({ skillIds, index: data.index, maxLevel, groupGrades: true, top: split ? POOL_SIZE : topCount })
+      const body = await buildMatchBody(result, data, maxLevel)
+      if (!split) return response.json({ ...body, mappedSkillCount: skillIds.length })
+      const labelsOf = labelsOfId(byLabel)
+      const sections = splitCareers({
+        cards: body.roles,
+        records: intel.roles,
+        fields: intel.fields,
+        userFields,
+        lineLabels: skillIds.map((id) => labelsOf.get(id) ?? []),
+        generalLabels: generalLabels ?? []
+      })
+      const labelOfField = new Map(intel.fields.fields.map((item) => [item.id, item.label]))
+      response.json({
+        ...body,
+        roles: body.roles.slice(0, topCount),
+        mappedSkillCount: skillIds.length,
+        sections: {
+          ...sections,
+          pool: body.roles.length,
+          userFields: userFields.map((id) => ({ id, label: labelOfField.get(id) ?? id })),
+          intelligence: {
+            runId: intel.meta.runId,
+            builtAt: intel.meta.builtAt,
+            mode: intel.meta.mode,
+            fieldsVersion: intel.meta.fieldsVersion,
+            conceptsVersion: intel.meta.conceptsVersion,
+            fieldsNote: 'Fields are worked out automatically from each role’s saved AI vector (AI estimate). Field definitions and major links are a team draft.'
+          }
+        }
+      })
     } catch (error) {
       console.error('[matches-top] failed:', error.message)
       response.status(503).json({ error: 'match-failed' })

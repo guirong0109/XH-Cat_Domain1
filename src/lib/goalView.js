@@ -28,11 +28,9 @@ export function orderForGoal(ranked, profile, fields) {
   const plain = () => ranked.map((r) => ({ ...r, reason: null }));
   const goal = profile?.goal;
 
-  if (goal === 'move') {
-    const groups = profile.targetSectors ?? [];
-    const { first, rest } = partition(ranked, groups, 'target');
-    return { entries: [...first, ...rest], note: null };
-  }
+  // "Change work" no longer asks for target sectors (removed 25 Oct 2026), so saved samples' targetSectors are ignored:
+  // the student cannot see or change them. The career lists, not this fallback, put other fields first.
+  if (goal === 'move') return { entries: plain(), note: null };
   if (goal === 'upgrade') {
     const field = findField(profile, fields);
     if (!field) return { entries: plain(), note: null };

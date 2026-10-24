@@ -1,0 +1,116 @@
+{
+  "_note": "TEAM DRAFT, written by Claude on 25 Oct 2026, awaiting teammate review. These are field DEFINITIONS, not lists of occupations: no occupation is assigned here. scripts/build-intelligence.mjs finds the eMASCO skills that contain each field's search words (word search, no model), averages their saved bge-m3 vectors into one field vector, and compares every occupation's saved vector with each field vector. majorFields and sectorFields link a student's major (or a worker's sector) to one or two fields; they are the only hand-made links. Changing anything here changes the field version and makes the next run reclassify every occupation.",
+  "version": "2026-10-25.1",
+  "fields": [
+    {
+      "id": "technology",
+      "label": "Technology and software",
+      "definition": "Work with software, computers, networks, information systems and cybersecurity.",
+      "searchWords": ["software", "programming", "computer", "network", "cybersecurity", "database", "web", "application", "server", "coding"]
+    },
+    {
+      "id": "data",
+      "label": "Data and analytics",
+      "definition": "Work that collects, analyses, models and presents data and statistics.",
+      "searchWords": ["data", "analysis", "statistics", "analytics", "visualisation", "dashboard", "modelling", "forecasting", "datasets", "statistical"]
+    },
+    {
+      "id": "business",
+      "label": "Business and finance",
+      "definition": "Work in accounting, finance, audit, tax, banking, investment and business strategy.",
+      "searchWords": ["accounting", "finance", "audit", "tax", "budget", "banking", "investment", "financial", "bookkeeping", "strategy"]
+    },
+    {
+      "id": "sales",
+      "label": "Sales and customer service",
+      "definition": "Work that sells products or services, markets them and looks after customers.",
+      "searchWords": ["sales", "selling", "customer", "retail", "marketing", "promotion", "negotiation", "merchandise", "client", "complaints"]
+    },
+    {
+      "id": "office",
+      "label": "Office and administration",
+      "definition": "Office work that keeps records, files, documents, schedules and correspondence in order.",
+      "searchWords": ["filing", "records", "clerical", "typing", "documents", "administrative", "scheduling", "correspondence", "office", "registry"]
+    },
+    {
+      "id": "health",
+      "label": "Health and care",
+      "definition": "Work that diagnoses, treats or cares for patients and supports health services.",
+      "searchWords": ["patient", "clinical", "medical", "nursing", "health", "treatment", "diagnosis", "hospital", "therapy", "pharmacy"]
+    },
+    {
+      "id": "engineering",
+      "label": "Engineering and energy",
+      "definition": "Work that designs, installs and maintains electrical, electronic, mechanical and energy systems.",
+      "searchWords": ["electrical", "electronic", "mechanical", "engineering", "energy", "power", "circuit", "renewable", "instrumentation", "wiring"]
+    },
+    {
+      "id": "manufacturing",
+      "label": "Manufacturing and production",
+      "definition": "Work that operates machines and makes, assembles, processes or checks products in factories.",
+      "searchWords": ["production", "machine", "manufacturing", "assembly", "factory", "quality", "operating", "fabrication", "processing", "packaging"]
+    },
+    {
+      "id": "construction",
+      "label": "Construction and building trades",
+      "definition": "Work that builds, repairs and finishes buildings, structures and their piping or fittings.",
+      "searchWords": ["construction", "building", "welding", "plumbing", "carpentry", "masonry", "piping", "scaffolding", "concrete", "plastering"]
+    },
+    {
+      "id": "transport",
+      "label": "Transport and logistics",
+      "definition": "Work that drives or operates vehicles and moves, stores or ships goods and people.",
+      "searchWords": ["vehicle", "driving", "transport", "logistics", "warehouse", "shipping", "cargo", "delivery", "aviation", "freight"]
+    },
+    {
+      "id": "hospitality",
+      "label": "Hospitality, food and tourism",
+      "definition": "Work that prepares food and drinks or serves guests in hotels, restaurants and tourism.",
+      "searchWords": ["food", "cooking", "hotel", "restaurant", "tourism", "guest", "beverage", "kitchen", "catering", "menu"]
+    },
+    {
+      "id": "agriculture",
+      "label": "Agriculture and environment",
+      "definition": "Work with crops, animals, forests, fisheries, plantations and the natural environment.",
+      "searchWords": ["agriculture", "crop", "farming", "livestock", "forestry", "fishery", "plantation", "soil", "environmental", "irrigation"]
+    },
+    {
+      "id": "design",
+      "label": "Design, media and communication",
+      "definition": "Work that designs, writes, films, photographs or broadcasts visual and written content.",
+      "searchWords": ["design", "graphic", "media", "content", "writing", "video", "photography", "visual", "broadcasting", "editing"]
+    },
+    {
+      "id": "education",
+      "label": "Education and social services",
+      "definition": "Work that teaches, trains, counsels or supports learners and communities.",
+      "searchWords": ["teaching", "education", "training", "students", "learning", "curriculum", "counselling", "community", "welfare", "children"]
+    },
+    {
+      "id": "security",
+      "label": "Security, law and public safety",
+      "definition": "Work that protects people and property, enforces laws and handles legal matters.",
+      "searchWords": ["security", "enforcement", "legal", "law", "court", "police", "guarding", "investigation", "regulation", "emergency"]
+    }
+  ],
+  "majorFields": {
+    "m-it": ["technology", "data"],
+    "m-data": ["data", "business"],
+    "m-business": ["business", "sales"],
+    "m-ee": ["engineering", "technology"],
+    "m-design": ["design"],
+    "m-education": ["education"],
+    "m-health": ["health"],
+    "m-other": []
+  },
+  "sectorFields": {
+    "s-it": ["technology"],
+    "s-data": ["data"],
+    "s-business": ["business"],
+    "s-energy": ["engineering"],
+    "s-media": ["design", "sales"],
+    "s-education": ["education"],
+    "s-health": ["health"],
+    "s-other": []
+  }
+}

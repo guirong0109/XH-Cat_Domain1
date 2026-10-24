@@ -60,7 +60,8 @@ export default function About({ data, profile, onChooseWho, onChooseField, onLoa
                 ))}
               </div>
               <p className="m-0 text-[13px] text-slate-600">
-                We use this to order your matches. It does not change any score. Major and sector links are a team draft.
+                We use this to split your matches into roles in your field and roles in other fields. It does not change any score.
+                Each role&rsquo;s field is worked out automatically (AI estimate); the links from majors and sectors to fields are a team draft.
               </p>
             </>
           ) : (

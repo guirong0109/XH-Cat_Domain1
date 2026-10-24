@@ -11,7 +11,7 @@ import Matches from './screens/Matches.jsx';
 import Study from './screens/Study.jsx';
 import Explore from './screens/Explore.jsx';
 import { rankBySkillMatch } from './lib/skillRanking.js';
-import { MIN_SKILLS_FOR_TOP, fetchTopMatches, rankingSkills } from './lib/topMatches.js';
+import { MIN_SKILLS_FOR_TOP, fetchTopMatches, generalSkills, rankingSkills } from './lib/topMatches.js';
 import { rankChanges, shouldReplan } from './lib/replan.js';
 import { mergeCvSkills, removeCvSkills } from './lib/cvSkills.js';
 import { toggleLearn } from './lib/potential.js';
@@ -126,9 +126,10 @@ export default function App() {
     [data, profile, ctx, scenario],
   );
 
-  // Top 20 roles from all of eMASCO for the picked skills. Only runs on the Matches screen; skill names only are sent.
+  // Top 20 roles from all of eMASCO for the picked skills. Only runs on the Matches screen; skill names and the
+  // major/sector id only are sent. With a major, the server also splits a larger pool into "your field" and "other fields".
   const [top, setTop] = useState({ status: 'idle', key: '', result: null });
-  const topKey = profile.skills.join('|');
+  const topKey = `${profile.field ?? ''}#${profile.skills.join('|')}`;
   useEffect(() => {
     if (!data || screen !== 'matches') return undefined;
     if (profile.skills.length < MIN_SKILLS_FOR_TOP) {
@@ -139,7 +140,8 @@ export default function App() {
     setTop((old) => (old.key === topKey && old.status === 'ok' ? old : { status: 'loading', key: topKey, result: null }));
     const timer = setTimeout(async () => {
       const { used, left } = rankingSkills(profile.skills, data.roles, data.fields);
-      const out = await fetchTopMatches(used);
+      const generalLabels = generalSkills(profile.skills, data.roles, data.fields);
+      const out = await fetchTopMatches(used, fetch, { field: profile.field, generalLabels });
       if (cancelled) return;
       setTop(out.ok ? { status: 'ok', key: topKey, result: out.result, left } : { status: 'failed', key: topKey, result: null });
     }, 300);
@@ -147,7 +149,7 @@ export default function App() {
       cancelled = true;
       clearTimeout(timer);
     };
-    // profile.skills is covered by topKey
+    // profile.skills and profile.field are covered by topKey
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, screen, topKey]);
 
@@ -301,11 +303,9 @@ export default function App() {
     changeProfile((current) => ({ ...current, levels: { ...current.levels, [label]: level } }));
   };
 
-  // Leaving "move" keeps the target sectors; they are only used for "move".
+  // The target-sector picker was removed on 25 Oct 2026 (the career lists use generated fields instead);
+  // targetSectors stays in the profile so saved samples still load.
   const chooseGoal = (goal) => changeProfile((current) => ({ ...current, goal }));
-
-  const toggleTarget = (group) =>
-    changeProfile((current) => ({ ...current, targetSectors: toggleIn(current.targetSectors, group) }));
 
   const toggleSdg = (goal) => changeProfile((current) => ({ ...current, sdgs: toggleIn(current.sdgs, goal) }));
 
@@ -457,7 +457,6 @@ export default function App() {
         data={data}
         profile={profile}
         onChooseGoal={chooseGoal}
-        onToggleTarget={toggleTarget}
         onToggleSdg={toggleSdg}
         onToggleLearn={toggleLearnSkill}
       />

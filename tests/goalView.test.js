@@ -21,11 +21,10 @@ describe('goalView', () => {
     expect(o.entries.map((e) => e.reason)).toEqual(['field', 'field', 'field', null, null]);
     expect(o.note).toBeNull();
   });
-  it('move puts target sectors first', () => {
+  it('move (Change work) keeps score order and ignores saved target sectors the student can no longer see', () => {
     const o = orderForGoal(ranked, { goal: 'move', targetSectors: ['B', 'A'] }, fields);
-    expect(ids(o)).toEqual(['r2', 'r3', 'r5', 'r1', 'r4']);
-    expect(o.entries.slice(0, 3).every((e) => e.reason === 'target')).toBe(true);
-    expect(o.entries[3].reason).toBeNull();
+    expect(ids(o)).toEqual(['r1', 'r2', 'r3', 'r4', 'r5']);
+    expect(o.entries.every((e) => e.reason === null)).toBe(true);
   });
   it('unsure keeps score order', () => {
     const o = orderForGoal(ranked, { who: 'student', field: 'm-it', goal: 'unsure' }, fields);
@@ -84,8 +83,8 @@ describe('bestScoreNote', () => {
     const o = orderForGoal(sr, { who: 'student', field: 'm-it', goal: 'upgrade' }, fields);
     expect(bestScoreNote(o.entries, sr)).toEqual({ role: sr[0].role, match: 90.4 });
   });
-  it('works for move', () => {
+  it('is null for move, which no longer reorders', () => {
     const o = orderForGoal(sr, { goal: 'move', targetSectors: ['A'] }, fields);
-    expect(bestScoreNote(o.entries, sr).role.id).toBe('r1');
+    expect(bestScoreNote(o.entries, sr)).toBeNull();
   });
 });

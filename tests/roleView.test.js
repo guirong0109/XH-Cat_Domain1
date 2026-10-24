@@ -152,21 +152,21 @@ describe('biggestGaps', () => {
 
 describe('scenario and radar copy', () => {
   it('describes the scenarios only as the factor on automatable tasks', () => {
-    expect(SCENARIO_NOTE).toBe('Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Fast AI counts all of it.');
+    expect(SCENARIO_NOTE).toBe('Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Rapid AI counts all of it.');
   });
 
   it('explains the score range in visible text', () => {
-    expect(RANGE_NOTE).toMatch(/^Range = Moderate AI to Fast AI/);
+    expect(RANGE_NOTE).toMatch(/^Range = Moderate AI to Rapid AI/);
   });
 
-  it('names importance as a team estimate and says Fast AI does not change it without links', () => {
+  it('names importance as a team estimate and says Rapid AI does not change it without links', () => {
     const dated = { ...role, source: { fetchedAt: '2026-10-20' } };
     expect(radarSourceNote(dated)).toBe(
-      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Fast AI shifts importance for skills linked to automatable or AI-assisted tasks.',
+      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Rapid AI shifts importance for skills linked to automatable or AI-assisted tasks.',
     );
     const flat = { ...dated, skills: role.skills.map((skill) => ({ ...skill, fast: skill.moderate })) };
     expect(radarSourceNote(flat)).toBe(
-      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Fast AI does not change importance yet; it changes the outlook score.',
+      'Estimate. Skills from eMASCO 2524-02, fetched 20 Oct 2026; importance is a team estimate (specific 0.8, basic 0.6). Rapid AI does not change importance yet; it changes the outlook score.',
     );
   });
 });
@@ -197,7 +197,7 @@ describe('scoreBreakdown', () => {
       'Job demand 50 (no OpenDOSM data for this group). Automatable tasks 25% × 1.0.',
     );
     expect(parts[2].detail).toBe('No match with your chosen goals.');
-    expect(formula).toContain('(Fast AI scenario)');
+    expect(formula).toContain('(Rapid AI scenario)');
     expect(formula).not.toContain('NaN');
   });
 });

@@ -3,7 +3,7 @@
 
 import { LEVEL_CREDIT, SCENARIO_FACTOR, WEIGHTS, skillCredit, skillLevel, skillStatus } from './scoring.js';
 
-export const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Fast AI' };
+export const SCENARIO_NAME = { moderate: 'Moderate AI', fast: 'Rapid AI' };
 
 export const GROUP_LABELS = {
   managers: 'Managers',
@@ -101,16 +101,16 @@ export function exposureSourceText(roles) {
 }
 
 // The scenario factor only scales the automatable share in the outlook score.
-export const SCENARIO_NOTE = 'Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Fast AI counts all of it.';
+export const SCENARIO_NOTE = 'Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Rapid AI counts all of it.';
 
-export const RANGE_NOTE = 'Range = Moderate AI to Fast AI: the lowest and highest match across the two scenarios.';
+export const RANGE_NOTE = 'Range = Moderate AI to Rapid AI: the lowest and highest match across the two scenarios.';
 
 export function radarSourceNote(role) {
   const fetched = role.source?.fetchedAt ? `, fetched ${formatDate(role.source.fetchedAt)}` : '';
   const varies = role.skills.some((skill) => skill.fast !== skill.moderate);
   const scenarioPart = varies
-    ? 'Fast AI shifts importance for skills linked to automatable or AI-assisted tasks.'
-    : 'Fast AI does not change importance yet; it changes the outlook score.';
+    ? 'Rapid AI shifts importance for skills linked to automatable or AI-assisted tasks.'
+    : 'Rapid AI does not change importance yet; it changes the outlook score.';
   return `Estimate. Skills from eMASCO ${role.code}${fetched}; importance is a team estimate (specific 0.8, basic 0.6). ${scenarioPart}`;
 }
 

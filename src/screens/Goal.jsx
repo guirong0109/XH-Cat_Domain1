@@ -1,28 +1,20 @@
-import { useMemo } from 'react';
 import Chip from '../components/Chip.jsx';
 import { MAX_LEARN, learnChoice } from '../lib/potential.js';
 
 const GOAL_CHOICES = [
-  { id: 'upgrade', title: 'Upgrade in my field', text: 'Grow in your major or sector. Roles linked to it come first.' },
-  { id: 'move', title: 'Move to a new role', text: 'Try a new sector. Pick the sectors you want next.' },
-  { id: 'unsure', title: 'Not sure yet', text: 'See every role in plain score order.' },
+  { id: 'upgrade', title: 'Improve myself', text: 'Grow in your current field. Roles in your field come first.' },
+  { id: 'move', title: 'Change work', text: 'Look at other fields where your skills carry over. Those roles come first.' },
+  { id: 'unsure', title: 'Not sure yet', text: 'See the same number of roles from your field and from other fields.' },
 ];
 
-function roleCounts(roles) {
-  const counts = {};
-  for (const role of roles) counts[role.interest] = (counts[role.interest] ?? 0) + 1;
-  return counts;
-}
-
-export default function Goal({ data, profile, onChooseGoal, onToggleTarget, onToggleSdg, onToggleLearn }) {
-  const counts = useMemo(() => roleCounts(data.roles), [data.roles]);
-  const groups = data.fields?.groups ?? [];
-
+export default function Goal({ data, profile, onChooseGoal, onToggleSdg, onToggleLearn }) {
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
       <div>
         <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your goal</h1>
-        <p className="m-0 text-slate-600">Your goal changes the order of your matches only, not the score.</p>
+        <p className="m-0 text-slate-600">
+          Your goal decides which list of matches comes first and how many roles it shows. It never changes a score.
+        </p>
       </div>
 
       <div role="group" aria-label="Your goal" className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
@@ -45,39 +37,6 @@ export default function Goal({ data, profile, onChooseGoal, onToggleTarget, onTo
           );
         })}
       </div>
-
-      {profile.goal === 'move' && (
-        <section
-          aria-labelledby="target-heading"
-          className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]"
-        >
-          <h2 id="target-heading" className="m-0 text-lg font-bold">
-            Which sectors do you want to move to?
-          </h2>
-          {groups.length > 0 ? (
-            <>
-              <p className="m-0 text-sm text-slate-600">Pick at least one. Roles in these sectors come first.</p>
-              <div className="flex flex-wrap gap-2">
-                {groups.map((group) => (
-                  <Chip key={group} pressed={profile.targetSectors.includes(group)} onClick={() => onToggleTarget(group)}>
-                    {group}
-                    <span className="text-xs">
-                      · {counts[group] ?? 0} {counts[group] === 1 ? 'role' : 'roles'}
-                    </span>
-                  </Chip>
-                ))}
-              </div>
-              <p className="m-0 text-[13px] text-slate-600">
-                Role counts from our {data.roles.length} eMASCO roles. Major and sector links are a team draft.
-              </p>
-            </>
-          ) : (
-            <p role="status" className="m-0 text-sm text-amber-900">
-              The list of sectors is not loaded. Please refresh the page or pick another goal.
-            </p>
-          )}
-        </section>
-      )}
 
       <details className="rounded-2xl border border-slate-200 bg-white">
         <summary className="flex min-h-11 cursor-pointer items-center px-4 py-3 text-base font-bold sm:px-[22px]">

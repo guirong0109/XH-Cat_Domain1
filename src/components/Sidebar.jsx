@@ -53,7 +53,7 @@ function StepMark({ step }) {
 }
 
 const WHO_LABEL = { student: 'Student or fresh graduate', working: 'Working' };
-const GOAL_LABEL = { upgrade: 'Goal: upgrade in my field', move: 'Goal: move to a new role', unsure: 'Goal: not sure yet' };
+const GOAL_LABEL = { upgrade: 'Goal: improve myself', move: 'Goal: change work', unsure: 'Goal: not sure yet' };
 
 function profileSummary(data, profile) {
   const sample = data.samples.find((item) => item.id === profile.sampleId);
@@ -61,11 +61,7 @@ function profileSummary(data, profile) {
   const lines = [];
   if (profile.who) lines.push(WHO_LABEL[profile.who]);
   const field = data.fields ? findField(profile, data.fields) : null;
-  if (field) {
-    const wants =
-      profile.goal === 'move' && profile.targetSectors.length ? ` → wants ${profile.targetSectors.join(', ')}` : '';
-    lines.push(`${profile.who === 'working' ? 'Sector' : 'Major'}: ${field.label}${wants}`);
-  }
+  if (field) lines.push(`${profile.who === 'working' ? 'Sector' : 'Major'}: ${field.label}`);
   lines.push(`${profile.skills.length} ${profile.skills.length === 1 ? 'skill' : 'skills'}`);
   if (profile.goal) lines.push(GOAL_LABEL[profile.goal]);
   return { name, lines };
