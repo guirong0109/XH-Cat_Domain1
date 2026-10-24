@@ -1,11 +1,3 @@
-> [!IMPORTANT]
-> ## 📁 Submission Documents & Templates
-> **All required submission templates are in the Google Drive folder below. Download them before you start.**
->
-> ### 👉 [**OPEN THE GOOGLE DRIVE FOLDER**](https://drive.google.com/drive/folders/1xw7c2aN8N-at8hPEULzkcU76e_FFb0Ef) 👈
-
----
-
 # FutureReady MY
 
 > Helps Malaysian diploma and foundation students see how AI may change the jobs they aim for, and gives them a reskilling pathway linked to the UN SDGs.
@@ -16,19 +8,19 @@
 
 | Field                  | Details                                     |
 | ---------------------- | ------------------------------------------- |
-| **Team Name**          | TODO: team name                             |
+| **Team Name**          | XH-Cat                                      |
 | **Team Domain**        | Domain 1 (Future-Ready Workforce)           |
-| **SDG Track (1–17)**   | TODO: SDG track (the app links roles to SDG 3, 4, 8, 9, 16 and more) |
-| **Team Leader**        | TODO: leader name                           |
-| **University**         | TODO: university                            |
-| **Number of Members**  | TODO: number                                |
+| **SDG Track (1–17)**   | 8,4                                         |
+| **Team Leader**        | Yip Gui Rong                                |
+| **University**         | Multimedia University                       |
+| **Number of Members**  | 2                                           |
 
 ## Links
 
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
-| GitHub Repository | TODO: https://github.com/Guirong0109/<repo> (private until submission) |
-| Live Demo         | TODO: https://<your-project>.replit.app        |
+| GitHub Repository | https://github.com/guirong0109/XH-Cat_Domain1  |
+| Live Demo         | https://xh-cat-domain-1.replit.app/            |
 | RunPod Endpoint   | None. RunPod is used offline only (see "How We Use RunPod") |
 | Slide Deck        | [docs/FutureReady-MY-pitch-deck.html](docs/FutureReady-MY-pitch-deck.html) (open the file in a browser) |
 | Demo Video        | TODO: link (script: [docs/demo-script.md](docs/demo-script.md)) |
@@ -81,10 +73,10 @@ In five simple steps the student goes from a skills profile and a goal to ranked
 ├── data/                    # Generated app data, eMASCO snapshot, team inputs
 ├── testing/                 # Test sets and evaluation results (incl. RunPod evidence)
 ├── submission/              # Required submission documents
-│   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission (to add)
-│   ├── SDC2026_TeamName_TechDeclaration.pdf  # Technology declaration (to add)
-│   ├── SDC2026_TeamName_Replit_POU.pdf       # Replit proof of use (to add)
-│   └── SDC2026_TeamName_Runpod_POU.pdf       # RunPod proof of use (to add)
+│   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission 
+│   ├── SDC2026_TeamName_TechDeclaration.pdf  # Technology declaration 
+│   ├── SDC2026_TeamName_Replit_POU.pdf       # Replit proof of use 
+│   └── SDC2026_TeamName_Runpod_POU.pdf       # RunPod proof of use 
 ├── tests/                   # Vitest unit tests (pipeline tests are in pipeline/tests)
 ├── .env.example             # Example environment variables
 ├── .gitignore
