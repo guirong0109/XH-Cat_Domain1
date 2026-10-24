@@ -1,10 +1,10 @@
 import SdgTag from './SdgTag.jsx';
 import { roleReference } from '../lib/referenceView.js';
+import SkillMatchPanel from './SkillMatchPanel.jsx';
+import { MATCH_LABEL, MATCH_MEANING, matchAria, matchText, separateParts } from '../lib/skillMatchView.js';
 import {
   ILO_NO_MATCH,
-  RANGE_NOTE,
   exposureShares,
-  fitSkillRows,
   groupLabel,
   iloView,
   labelOrigin,
@@ -24,20 +24,13 @@ const SKILL_LOOK = {
   similar: 'border-2 border-[#0F766E] bg-white text-[#0F766E]',
   gap: 'border-2 border-dashed border-[#C2410C] bg-white text-[#9A3412]',
 };
-const FIT_ROW_TEXT = { similar: 'Similar skill', gap: 'Gap to learn' };
-
-function fitRowText(row) {
-  if (row.status !== 'have') return FIT_ROW_TEXT[row.status];
-  return row.level ? `You have it (${levelName(row.level)})` : 'You have it';
-}
-
 // One ranked role. Matches renders cards in DOM in the displayed (goal) order.
 export default function RoleCard({
   role,
   observed,
   observedMeta,
   score,
-  range,
+  ctx,
   rank,
   total,
   expanded,
@@ -58,7 +51,7 @@ export default function RoleCard({
   const reference = roleReference(references, role);
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
-  const fitRows = expanded ? fitSkillRows(role, profile, similar) : [];
+  const separate = breakdown ? separateParts(breakdown.parts) : [];
   const ilo = iloView(role);
   const oecd = oecdView(role);
   const shares = exposureShares(role);
@@ -163,17 +156,31 @@ export default function RoleCard({
         </div>
         <div className="flex min-w-[min(100%,250px)] flex-[1_1_250px] flex-col gap-2">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="text-[13px] text-slate-600" title="Lowest to highest match across the two AI scenarios">
-              Match · range {range.low}–{range.high}
+            <span className="text-[13px] text-slate-600" title={MATCH_MEANING}>
+              {MATCH_LABEL}
             </span>
             <span className="text-[30px] font-extrabold tabular-nums">
-              <span aria-hidden="true">{Math.round(shownMatch)}</span>
-              <span className="sr-only">Match {Math.round(score.match)} out of 100</span>
+              {score.matchAvailable ? (
+                <>
+                  <span aria-hidden="true">{Math.round(shownMatch)}%</span>
+                  <span className="sr-only">{matchAria(role, score)}</span>
+                </>
+              ) : (
+                <span className="text-base">{matchText(score)}</span>
+              )}
             </span>
           </div>
           <div aria-hidden="true" className="h-2 overflow-hidden rounded bg-slate-100">
-            <div className="h-full bg-[#0F766E]" style={{ width: `${Math.min(100, Math.max(0, shownMatch))}%` }} />
+            <div className="h-full bg-[#0F766E]" style={{ width: `${score.matchAvailable ? Math.min(100, Math.max(0, shownMatch)) : 0}%` }} />
           </div>
+          {score.skill?.provisional && (
+            <p className="m-0 text-xs font-semibold text-[#9A3412]">
+              Provisional: {score.skill.provisionalCount} {score.skill.provisionalCount === 1 ? 'skill has' : 'skills have'} no level, counted as Basic until you set {score.skill.provisionalCount === 1 ? 'it' : 'them'}.
+            </p>
+          )}
+          <p className="m-0 text-xs text-slate-600">
+            Job market outlook {Math.round(score.outlook)}/100 · shown apart, not in your match
+          </p>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -182,7 +189,7 @@ export default function RoleCard({
               onClick={onToggle}
               className="fr-btn min-h-11 flex-1 cursor-pointer rounded-[10px] border border-slate-300 bg-white px-2 text-sm whitespace-nowrap"
             >
-              {expanded ? 'Hide details' : 'Why this score?'}
+              {expanded ? 'Hide details' : 'Why this match?'}
             </button>
             <button
               type="button"
@@ -197,8 +204,9 @@ export default function RoleCard({
       </div>
       {breakdown && (
         <div id={panelId} className="fr-tip mt-[18px] border-t border-slate-200 pt-4">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
-            {breakdown.parts.map((part) => (
+          <SkillMatchPanel role={role} score={score} profile={profile} ctx={ctx} observed={observed} />
+          <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
+            {separate.map((part) => (
               <div key={part.key} className="flex flex-col gap-1.5">
                 <div className="flex justify-between text-sm">
                   <strong>{part.label}</strong>
@@ -212,32 +220,10 @@ export default function RoleCard({
               </div>
             ))}
           </div>
-          <section className="mt-4 flex flex-col gap-1.5">
-            <h3 className="m-0 text-sm font-bold">Skill fit, skill by skill</h3>
-            <ul className="m-0 flex list-none flex-col gap-1 p-0 text-[13px] text-slate-700">
-              {fitRows.map((row) => (
-                <li key={row.label} className="flex flex-wrap justify-between gap-x-3 border-b border-slate-100 pb-1">
-                  <span>
-                    {row.label} <span className="text-slate-600">· {fitRowText(row)}</span>
-                  </span>
-                  <span className="tabular-nums">+{row.credit}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="m-0 text-xs text-slate-600">
-              Skill list: eMASCO {role.code} (MOHR). Levels are what you chose; skills with no level count as Strong.
-            </p>
-          </section>
-          <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2.5 text-[13px] text-slate-700 tabular-nums">
-            {breakdown.formula}
-          </div>
-          <p className="m-0 mt-2 text-[13px] text-slate-600">
-            {RANGE_NOTE} This card: {range.low}–{range.high}.
-          </p>
           <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
             <section className="flex flex-col gap-1.5 rounded-lg border border-slate-200 p-3 text-[13px] text-slate-700">
               <h3 className="m-0 flex flex-wrap items-center gap-2 text-sm font-bold text-[#0F172A]">
-                Our task labels (used for the part not measured)
+                Our task labels (used in the job outlook for the part not measured)
                 {role.labelSource === 'manual' && (
                   <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Sample</span>
                 )}
@@ -248,7 +234,7 @@ export default function RoleCard({
               <p className="m-0 text-xs text-slate-600">Estimates from eMASCO tasks; {labelOrigin(role.labelSource)}.</p>
             </section>
             <section className="flex flex-col gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50/40 p-3 text-[13px] text-slate-700">
-              <h3 className="m-0 text-sm font-bold text-[#0F172A]">ILO second opinion (not in the score)</h3>
+              <h3 className="m-0 text-sm font-bold text-[#0F172A]">ILO second opinion (not in your Skill Match)</h3>
               {ilo ? (
                 <>
                   <p className="m-0 tabular-nums">{ilo.scoreText}</p>
@@ -263,7 +249,7 @@ export default function RoleCard({
             </section>
             {used && (
               <section className="flex flex-col gap-1.5 rounded-lg border border-orange-200 bg-orange-50/40 p-3 text-[13px] text-slate-700">
-                <h3 className="m-0 text-sm font-bold text-[#0F172A]">Observed AI use for this role (not in the score)</h3>
+                <h3 className="m-0 text-sm font-bold text-[#0F172A]">Observed AI use for this role (feeds the job outlook only)</h3>
                 {used.state === 'ok' ? (
                   <>
                     <p className="m-0 tabular-nums">{used.scoreText}</p>
@@ -301,7 +287,7 @@ export default function RoleCard({
             )}
             {oecd && (
               <section className="flex flex-col gap-1.5 rounded-lg border border-teal-200 bg-teal-50/40 p-3 text-[13px] text-slate-700">
-                <h3 className="m-0 text-sm font-bold text-[#0F172A]">OECD AI capability gap (not in the score)</h3>
+                <h3 className="m-0 text-sm font-bold text-[#0F172A]">OECD AI capability gap (not in your Skill Match)</h3>
                 <p className="m-0 tabular-nums">{oecd.scoreText}</p>
                 <p className="m-0">{oecd.groupText}</p>
                 <p className="m-0 text-xs text-slate-600">{oecd.scaleText}</p>

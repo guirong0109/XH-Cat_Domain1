@@ -10,6 +10,7 @@ import {
   pickSkill,
   pickedStatus,
   resultNote,
+  searchNote,
   sourceLine,
   unpickSkill,
 } from '../lib/exploreView.js';
@@ -46,6 +47,8 @@ export default function Explore({ onBack }) {
   const [mode, setMode] = useState('skills');
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [meaning, setMeaning] = useState('unknown');
+  const [noHits, setNoHits] = useState(false);
   const [picked, setPicked] = useState([]);
   const [includeHigher, setIncludeHigher] = useState(false);
   const [cvName, setCvName] = useState(null);
@@ -56,12 +59,17 @@ export default function Explore({ onBack }) {
   const [error, setError] = useState(null);
   const requestId = useRef(0);
   const mounted = useRef(true);
-  useEffect(() => () => { mounted.current = false; }, []);
+  // Set true again on mount: React StrictMode (dev) runs the cleanup once and would otherwise leave this false for good.
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
 
   // Skill search while typing.
   useEffect(() => {
     if (!query.trim()) {
       setSuggestions([]);
+      setNoHits(false);
       return undefined;
     }
     let cancelled = false;
@@ -70,9 +78,12 @@ export default function Explore({ onBack }) {
       if (cancelled) return;
       if (found.ok) {
         setSuggestions(found.skills.filter((skill) => !picked.some((item) => item.id === skill.id)));
+        setMeaning(found.meaning);
+        setNoHits(found.skills.length === 0);
         setError(null);
       } else {
         setSuggestions([]);
+        setNoHits(false);
         setError(found.error);
       }
     }, SEARCH_DELAY_MS);
@@ -203,6 +214,8 @@ export default function Explore({ onBack }) {
                 ))}
               </ul>
             )}
+            {noHits && query.trim() && <p className="m-0 text-sm text-slate-700" role="status">No skills found for "{query.trim()}". Try other words, or a shorter one.</p>}
+            {(suggestions.length > 0 || noHits) && searchNote(meaning) && <p className="m-0 text-xs text-slate-600">{searchNote(meaning)}</p>}
             {picked.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {picked.map((skill) => (

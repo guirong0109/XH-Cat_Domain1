@@ -130,3 +130,14 @@ export function exposureView(exposure) {
 }
 
 export const SDG_NOT_TAGGED = 'SDG not tagged yet for this role';
+
+// One line under the skill suggestions: how the list was found, from what the server says really ran.
+// "Meaning" search is an AI estimate and needs the local model.
+export function searchNote(meaning) {
+  if (meaning === 'ran') return 'Searched by keywords and by meaning (AI estimate, also reads Bahasa Malaysia).';
+  if (meaning === 'loading') return 'Keywords only for now: the AI model is still loading.';
+  if (meaning === 'limited') return 'Keywords only for now: many searches in a short time. Wait a moment and type again.';
+  if (meaning === 'failed') return 'Keywords only: search by meaning failed this time.';
+  if (meaning === 'off') return 'Keywords only. Search by meaning needs the AI model, which is off on this server.';
+  return '';
+}

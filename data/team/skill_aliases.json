@@ -1,0 +1,28 @@
+{
+  "status": "draft",
+  "note": "Written by Claude from standard English and Bahasa Malaysia vocabulary. Awaiting teammate review. Each concept is a search aid only: it points to eMASCO skills whose text contains one of its terms. It never merges or renames skills. A word whose Malay meaning is unclear is left out (for example 'keselamatan' = safety or security, 'akaun' = account or user account).",
+  "concepts": [
+    { "id": "accounting", "label": "accounting", "aliases": { "en": ["accounting", "accountant"], "ms": ["perakaunan", "akauntan"] }, "terms": ["accounting", "accountant", "ledger", "financial statement", "financial statements", "trial balance"] },
+    { "id": "bookkeeping", "label": "bookkeeping", "aliases": { "en": ["bookkeeping", "book-keeping"], "ms": ["simpan kira", "penyimpanan buku"] }, "terms": ["bookkeeping", "book-keeping", "ledger"] },
+    { "id": "patient-care", "label": "patient care", "aliases": { "en": ["patient care"], "ms": ["jaga pesakit", "penjagaan pesakit"] }, "terms": ["patient care", "care of patients", "care for patients", "caring for patients", "patient-centred care", "patient-centered care"] },
+    { "id": "welding", "label": "welding", "aliases": { "en": ["welding", "welder"], "ms": ["kimpalan", "pengimpal"] }, "terms": ["welding", "weld", "welder"] },
+    { "id": "nursing", "label": "nursing", "aliases": { "en": ["nursing", "nurse"], "ms": ["kejururawatan", "jururawat"] }, "terms": ["nursing", "nurse", "nurses"] },
+    { "id": "programming", "label": "programming", "aliases": { "en": ["programming", "programmer"], "ms": ["pengaturcaraan", "pengaturcara"] }, "terms": ["programming", "programmer", "coding"] },
+    { "id": "marketing", "label": "marketing", "aliases": { "en": ["marketing"], "ms": ["pemasaran"] }, "terms": ["marketing"] },
+    { "id": "customer-service", "label": "customer service", "aliases": { "en": ["customer service"], "ms": ["khidmat pelanggan", "perkhidmatan pelanggan"] }, "terms": ["customer service"] },
+    { "id": "database", "label": "database", "aliases": { "en": ["database", "databases"], "ms": ["pangkalan data"] }, "terms": ["database", "databases"] },
+    { "id": "project-management", "label": "project management", "aliases": { "en": ["project management"], "ms": ["pengurusan projek"] }, "terms": ["project management", "project manager"] },
+    { "id": "teamwork", "label": "teamwork", "aliases": { "en": ["teamwork"], "ms": ["kerja berpasukan", "kerja secara berpasukan"] }, "terms": ["teamwork", "team work", "work in a team", "working in a team", "team player"] },
+    { "id": "data-analysis", "label": "data analysis", "aliases": { "en": ["data analysis"], "ms": ["analisis data"] }, "terms": ["data analysis", "data analytics", "analyse data", "analyze data", "analysing data"] },
+    { "id": "electrical-wiring", "label": "electrical wiring", "aliases": { "en": ["electrical wiring"], "ms": ["pendawaian elektrik"] }, "terms": ["wiring"] },
+    { "id": "tax", "label": "tax", "aliases": { "en": ["tax", "taxation"], "ms": ["cukai", "percukaian"] }, "terms": ["tax", "taxes", "taxation"] },
+    { "id": "inventory", "label": "inventory management", "aliases": { "en": ["inventory management"], "ms": ["pengurusan inventori", "pengurusan stok"] }, "terms": ["inventory"] },
+    { "id": "teaching", "label": "teaching", "aliases": { "en": ["teaching"], "ms": ["pengajaran"] }, "terms": ["teaching", "teach"] },
+    { "id": "sales", "label": "sales", "aliases": { "en": ["sales"], "ms": ["jualan"] }, "terms": ["sales"] },
+    { "id": "maintenance", "label": "maintenance", "aliases": { "en": ["maintenance"], "ms": ["penyelenggaraan"] }, "terms": ["maintenance"] },
+    { "id": "construction", "label": "construction", "aliases": { "en": ["construction"], "ms": ["pembinaan"] }, "terms": ["construction"] },
+    { "id": "cooking", "label": "cooking", "aliases": { "en": ["cooking"], "ms": ["memasak"] }, "terms": ["cooking", "culinary"] },
+    { "id": "driving", "label": "driving", "aliases": { "en": ["driving"], "ms": ["memandu"] }, "terms": ["driving"] },
+    { "id": "administration", "label": "administration", "aliases": { "en": ["administration"], "ms": ["pentadbiran"] }, "terms": ["administration", "administrative"] }
+  ]
+}

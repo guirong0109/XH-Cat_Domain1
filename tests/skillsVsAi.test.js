@@ -43,9 +43,9 @@ describe('skillsVsAi', () => {
     expect(row(rows, 'Orphan')).toMatchObject({ status: 'missing', you: 'Not yet' });
   });
 
-  it('treats a picked skill with no level as Strong (same as the score)', () => {
+  it('treats a picked skill with no level as Basic (same as the Skill Match)', () => {
     const rows = run({ skills: ['Python'], levels: {} });
-    expect(row(rows, 'Python')).toMatchObject({ status: 'onTrack', you: 'Level: Strong' });
+    expect(row(rows, 'Python')).toMatchObject({ status: 'buildUp', you: 'Level: Basic (level unknown)' });
   });
 
   it('orders missing first, then build up, then on track, keeping the role order inside each', () => {
@@ -85,7 +85,7 @@ describe('skillsVsAi', () => {
 
   it('filters and counts by status', () => {
     const rows = run({ skills: ['Python'], levels: {} });
-    expect(statusCounts(rows)).toEqual({ all: 4, missing: 3, buildUp: 0, onTrack: 1 });
+    expect(statusCounts(rows)).toEqual({ all: 4, missing: 3, buildUp: 1, onTrack: 0 });
     expect(filterRows(rows, 'missing').map((r) => r.label)).toEqual(['Teamwork', 'Wiring', 'Orphan']);
     expect(filterRows(rows, 'all')).toHaveLength(4);
   });

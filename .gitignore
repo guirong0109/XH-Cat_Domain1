@@ -8,3 +8,8 @@ models/
 
 data/emasco/all_roles.json
 data/logs/
+
+# skill dataset: rebuildable cache and samples
+data/skills/.previous/
+data/skills/state.json
+data/skills_sample/

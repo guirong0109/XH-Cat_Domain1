@@ -304,6 +304,7 @@ export function roleSources(role, trends) {
 const SKILL_STATUS_TEXT = { have: 'you have it', similar: 'similar skill, half credit', gap: 'gap to learn' };
 
 export function levelName(level) {
+  if (level === 'strong') return 'Expert';
   return level[0].toUpperCase() + level.slice(1);
 }
 

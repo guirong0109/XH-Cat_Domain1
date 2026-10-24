@@ -14,7 +14,8 @@ import { modelFromEnv, readEmerging, refreshEmerging, reviewItem } from './emerg
 import { activeFeeds, allFeeds, checkFeed, readSourceConfig, validateNewSource, writeSourceConfig } from './emergingSources.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
 import { loadPackedIndex, matchCvByProfile, matchPickedSkills } from './emascoMatch.js'
-import { createSkillSearch } from './emascoRoles.js'
+import { skillIdsForLabels } from './topMatches.js'
+import { buildConcepts, createHybridSearch, createReranker } from './hybridSearch.js'
 import { createLogStore } from './adminLog.js'
 import { jsonOnly, localOnly } from './adminAccess.js'
 import { createJobManager } from './adminJobs.js'
@@ -27,6 +28,7 @@ import { readSignals, refreshSignals } from './sources/signals.js'
 const EMASCO_SKILL_LIMIT = 50
 const EMASCO_DEFAULT_TOP = 10
 const EMASCO_MAX_TOP = 20
+const TOP_MATCHES = 20
 
 const distDirectory = fileURLToPath(new URL('../dist', import.meta.url))
 
@@ -46,10 +48,13 @@ async function readOptionalJson(filePath) {
 const adminPage = fileURLToPath(new URL('./adminPage.html', import.meta.url))
 const RUN_ID = /^\d{14}-[0-9a-f]{4}$/
 
+const SEARCH_WINDOW_MS = 60_000
+
 export function createApp({
   dataDir,
   fetchImpl = fetch,
   embedder = null,
+  meaningSearchLimit = 90,
   cvTimeoutMs = 15000,
   emascoLoader = null,
   logDir = path.join(dataDir, 'logs'),
@@ -120,9 +125,10 @@ export function createApp({
         readEmerging(emergingPath),
         readCourseChecks(courseChecksPath),
       ])
+      const skillSimilarity = await readOptionalJson(path.join(dataDir, 'skill_similarity.json')).catch(() => null)
       const observed = await getObserved().catch(() => null)
       const observedRoles = Object.fromEntries(roles.filter((role) => observed?.roles?.[role.code]).map((role) => [role.code, observed.roles[role.code]]))
-      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks, observed: observed ? { ...observedMeta(observed), roles: observedRoles } : null })
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks, skillSimilarity, observed: observed ? { ...observedMeta(observed), roles: observedRoles } : null })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })
@@ -461,7 +467,12 @@ export function createApp({
       return { occupations, index }
     })
     const { occupations, index } = await loader()
-    emascoData = { occupations, index, search: createSkillSearch(occupations.skills) }
+    const concepts = buildConcepts({
+      teamSkills: await readOptionalJson(path.join(dataDir, 'team', 'skill_labels.json')),
+      aliasFile: await readOptionalJson(path.join(dataDir, 'team', 'skill_aliases.json'))
+    })
+    const reranker = createReranker({ modelId: process.env.RERANKER_MODEL })
+    emascoData = { occupations, index, search: createHybridSearch({ skills: occupations.skills, index, embedder, concepts, reranker }) }
     return emascoData
   }
 
@@ -474,6 +485,22 @@ export function createApp({
     return exposureStore
   }
 
+  // The meaning search costs CPU (about 0.1-0.5 s each). Past the limit it is skipped and keyword search still answers.
+  // Behind a tunnel every visitor shares one address, so the limit is generous.
+  const searchHits = new Map()
+  function meaningSearchAllowed(address) {
+    const now = Date.now()
+    const recent = (searchHits.get(address) ?? []).filter((time) => now - time < SEARCH_WINDOW_MS)
+    if (recent.length >= meaningSearchLimit) {
+      searchHits.set(address, recent)
+      return false
+    }
+    recent.push(now)
+    searchHits.set(address, recent)
+    if (searchHits.size > 1000) for (const [key, times] of searchHits) if (times.every((time) => now - time >= SEARCH_WINDOW_MS)) searchHits.delete(key)
+    return true
+  }
+
   app.get('/api/emasco/skills', async (request, response) => {
     let data
     try {
@@ -483,7 +510,70 @@ export function createApp({
       return response.status(503).json({ error: 'emasco-data-missing' })
     }
     const query = typeof request.query.q === 'string' ? request.query.q : ''
-    response.json({ skills: data.search(query, Number(request.query.limit)) })
+    const found = await data.search(query, Number(request.query.limit), { meaningAllowed: meaningSearchAllowed(request.ip) })
+    response.json({ skills: found.skills, methods: found.methods, concepts: found.concepts, aliases: found.aliases, query: found.query, status: found.status, notes: found.notes })
+  })
+
+  // Adds exposure and observed AI use to ranked eMASCO cards and wraps them with the source line.
+  async function buildMatchBody(result, data, maxLevel) {
+    const store = await getExposure().catch(() => null)
+    const observed = await getObserved().catch(() => null)
+    const roles = (result.roles ?? []).map((card) => {
+      const row = store?.roles?.[card.code]
+      return {
+        ...card,
+        observed: observed?.roles?.[card.code] ?? null,
+        exposure: row
+          ? {
+              status: row.status,
+              labelSource: row.labelSource,
+              automatablePct: row.automatablePct,
+              assistedPct: row.assistedPct,
+              humanPct: row.humanPct,
+              date: store.builtAt ?? null
+            }
+          : null
+      }
+    })
+    return {
+      ...result,
+      roles,
+      maxLevel,
+      observedSource: observedMeta(observed),
+      source: {
+        occupations: data.occupations.source,
+        crawledOn: data.occupations.fetchedAt,
+        model: 'BAAI/bge-m3',
+        note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
+      }
+    }
+  }
+
+  // Top roles for the student's picked app skills: each skill label is searched in the eMASCO skill list (keyword search, no model needed),
+  // then all roles are ranked like "Explore all roles". Send labels only; nothing is stored.
+  app.post('/api/matches/top', parseCvBody, async (request, response) => {
+    const { labels, maxLevel: wantedLevel, top } = request.body ?? {}
+    if (!Array.isArray(labels) || labels.length > EMASCO_SKILL_LIMIT || labels.some((label) => typeof label !== 'string' || !label.trim() || label.length > 120)) {
+      return response.status(400).json({ error: 'labels must be a list of at most 50 skill names.' })
+    }
+    let data
+    try {
+      data = await getEmascoData()
+    } catch (error) {
+      console.error('[emasco] data not available:', error.message)
+      return response.status(503).json({ error: 'emasco-data-missing' })
+    }
+    try {
+      const skillIds = await skillIdsForLabels(labels, (query, limit) => data.search(query, limit, { meaningAllowed: false }))
+      // Our scored roles include degree-level jobs, so the default reaches degree level; master and PhD only when asked.
+      const maxLevel = ['diploma', 'degree', 'phd'].includes(wantedLevel) ? wantedLevel : 'degree'
+      const options = { maxLevel, groupGrades: true, top: Math.min(Math.max(1, Math.floor(Number(top)) || TOP_MATCHES), EMASCO_MAX_TOP) }
+      const result = matchPickedSkills({ skillIds, index: data.index, ...options })
+      response.json({ ...(await buildMatchBody(result, data, maxLevel)), mappedSkillCount: skillIds.length })
+    } catch (error) {
+      console.error('[matches-top] failed:', error.message)
+      response.status(503).json({ error: 'match-failed' })
+    }
   })
 
   app.post('/api/emasco/match', parseCvBody, async (request, response) => {
@@ -523,37 +613,7 @@ export function createApp({
         })
         result = await Promise.race([work, timeout])
       }
-      const store = await getExposure().catch(() => null)
-      const observed = await getObserved().catch(() => null)
-      const roles = (result.roles ?? []).map((card) => {
-        const row = store?.roles?.[card.code]
-        return {
-          ...card,
-          observed: observed?.roles?.[card.code] ?? null,
-          exposure: row
-            ? {
-                status: row.status,
-                labelSource: row.labelSource,
-                automatablePct: row.automatablePct,
-                assistedPct: row.assistedPct,
-                humanPct: row.humanPct,
-                date: store.builtAt ?? null
-              }
-            : null
-        }
-      })
-      response.json({
-        ...result,
-        roles,
-        maxLevel,
-        observedSource: observedMeta(observed),
-        source: {
-          occupations: data.occupations.source,
-          crawledOn: data.occupations.fetchedAt,
-          model: 'BAAI/bge-m3',
-          note: 'Similarity is an AI estimate, not a percentage, and not a decision.'
-        }
-      })
+      response.json(await buildMatchBody(result, data, maxLevel))
     } catch (error) {
       // Never log the CV text; the message of our own errors does not contain it.
       if (/^Unknown skill id/.test(error.message)) return response.status(400).json({ error: error.message })

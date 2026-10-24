@@ -6,6 +6,7 @@ import RadarChart from '../components/RadarChart.jsx';
 import ReplanNotice from '../components/ReplanNotice.jsx';
 import ResearchMomentum from '../components/ResearchMomentum.jsx';
 import RoleCard from '../components/RoleCard.jsx';
+import OtherRoleCard from '../components/OtherRoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
 import EmergingFeed from '../components/EmergingFeed.jsx';
@@ -14,7 +15,8 @@ import { referencesLine } from '../lib/referenceView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
 import { roleRadarValues } from '../lib/radar.js';
-import { matchRange } from '../lib/scoring.js';
+import { FALLBACK_NOTE, ORDER_NOTE, mergeTop, scoredOf } from '../lib/topMatches.js';
+import { MATCH_LABEL, MATCH_MEANING, RANKING_POLICY } from '../lib/skillMatchView.js';
 import {
   SCENARIO_NAME,
   SCENARIO_NOTE,
@@ -91,6 +93,7 @@ export default function Matches({
   profile,
   scenario,
   ranked,
+  top,
   expandedRoleId,
   focusRoleId,
   refresh,
@@ -106,34 +109,49 @@ export default function Matches({
   onStudy,
   onExplore,
 }) {
-  const { entries, note } = orderForGoal(ranked, profile, data.fields);
-  const best = bestScoreNote(entries, ranked);
+  const goalOrder = orderForGoal(ranked, profile, data.fields);
+  // Top 20 across all eMASCO roles when the server answered; else our 20 scored roles in goal order.
+  const topOk = top?.status === 'ok';
+  const entries = topOk
+    ? mergeTop(top.result.roles, ranked)
+    : goalOrder.entries.map((entry) => ({ ...entry, kind: 'scored' }));
+  const note = topOk ? null : goalOrder.note;
+  const best = topOk ? null : bestScoreNote(entries, ranked);
+  const scored = scoredOf(entries);
   const listRef = useRef(null);
   // Re-ordering moves card nodes; if that drops focus, put it back.
   const focused = typeof document === 'undefined' ? null : document.activeElement;
-  const order = entries.map((entry) => entry.role.id).join(',');
+  const order = entries.map((entry) => entry.role?.id ?? entry.card.code).join(',');
   useLayoutEffect(() => {
     if (focused && focused.isConnected && document.activeElement !== focused && listRef.current?.contains(focused)) {
       focused.focus({ preventScroll: true });
     }
   }, [order, focused]);
 
-  // Radar: the focused role, else the first role in goal order.
-  const topThree = entries.slice(0, 3);
-  const focusEntry = entries.find((entry) => entry.role.id === focusRoleId) || entries[0];
-  const tabs = topThree.some((entry) => entry.role.id === focusEntry.role.id) ? topThree : [...topThree, focusEntry];
-  const focus = focusEntry.role;
-  const values = roleRadarValues(focus, profile, ctx.similar, scenario);
-  const gaps = biggestGaps(focus, profile, ctx.similar, scenario);
-  const exposureRoles = entries.slice(0, 5).map((entry) => entry.role);
+  // Radar: the focused scored role, else the first scored role. Only our 20 roles have the data for it.
+  const topThree = scored.slice(0, 3);
+  const focusEntry = scored.find((entry) => entry.role.id === focusRoleId) || scored[0] || null;
+  const tabs = focusEntry ? (topThree.some((entry) => entry.role.id === focusEntry.role.id) ? topThree : [...topThree, focusEntry]) : [];
+  const focus = focusEntry?.role ?? null;
+  const values = focus ? roleRadarValues(focus, profile, ctx.similar, scenario) : null;
+  const gaps = focus ? biggestGaps(focus, profile, ctx.similar, scenario) : [];
+  const exposureRoles = scored.slice(0, 5).map((entry) => entry.role);
 
   return (
     <main className="fr-screen mx-auto flex max-w-[1180px] flex-col gap-[18px] px-4 pt-6 pb-16 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Roles that match you</h1>
-          <p className="m-0 text-slate-600">{goalLine(profile, data.fields)} This changes the order only, not the score.</p>
-          <p className="m-0 mt-1 text-sm text-slate-600">Estimates. {SCENARIO_NOTE}</p>
+          <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">{topOk ? `Top ${entries.length} roles for you` : 'Roles that match you'}</h1>
+          <p className="m-0 text-slate-600">
+            {topOk ? ORDER_NOTE : `${goalLine(profile, data.fields)} This changes the order only, not the score.`}
+          </p>
+          <p className="m-0 mt-1 text-sm text-slate-600">
+            {MATCH_LABEL}: {MATCH_MEANING}{' '}
+            {topOk
+              ? 'In this list the order is the AI fit estimate. The Current Skill Match % on our 20 scored roles is a different measure, so it may not follow this order. Other roles show a similarity bar, not a percentage.'
+              : RANKING_POLICY}
+          </p>
+          <p className="m-0 mt-1 text-sm text-slate-600">Job outlook is an estimate. {SCENARIO_NOTE} The AI scenario changes the outlook, not your Skill Match.</p>
           <p className="m-0 mt-1 text-sm text-slate-700">
             Looking at other fields?{' '}
             <button
@@ -154,10 +172,28 @@ export default function Matches({
         </p>
       )}
 
+      {top?.status === 'loading' && (
+        <p role="status" className="m-0 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+          Looking across all eMASCO roles for your skills… showing our 20 scored roles for now.
+        </p>
+      )}
+      {top?.status === 'failed' && (
+        <p role="status" className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">
+          {FALLBACK_NOTE}
+        </p>
+      )}
+      {topOk && top.result.source && (
+        <p className="m-0 text-xs text-slate-600">
+          Source: {top.result.source.occupations}, crawled {formatDate(top.result.source.crawledOn)}. Search for your skills in the eMASCO skill list, then ranking by AI meaning
+          (BAAI/bge-m3). {top.result.source.note}
+          {top.left?.length > 0 && ` Left out of this ranking because almost every field uses them: ${top.left.join(', ')}.`}
+        </p>
+      )}
+
       {best && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border-2 border-[#0F766E] bg-white px-4 py-3 text-sm text-slate-800">
           <p className="m-0 min-w-0 flex-[1_1_260px]">
-            Your highest score is <strong>{best.role.title}</strong> ({Math.round(best.match)}), but it is{' '}
+            Your highest score is <strong>{best.role.title}</strong> ({Math.round(best.match)}%), but it is{' '}
             {profile.goal === 'move' ? 'not in the sectors you picked' : 'not linked to your major or sector'}, so it is
             lower in this list.
           </p>
@@ -180,10 +216,22 @@ export default function Matches({
       <div
         ref={listRef}
         role="list"
-        aria-label="Matched roles, in your goal order"
+        aria-label={topOk ? 'Top roles for your skills, best fit first' : 'Matched roles, in your goal order'}
         className="flex flex-col gap-3.5"
       >
         {entries.map((entry, index) => {
+          if (entry.kind === 'other') {
+            return (
+              <OtherRoleCard
+                key={entry.card.code}
+                card={entry.card}
+                rank={index + 1}
+                total={entries.length}
+                observedSource={top.result.observedSource}
+                crawledOn={top.result.source?.crawledOn}
+              />
+            );
+          }
           const { role } = entry;
           return (
             <RoleCard
@@ -191,7 +239,7 @@ export default function Matches({
               role={role}
               score={entry.score}
               reason={entry.reason}
-              range={matchRange(role, profile, ctx)}
+              ctx={ctx}
               rank={index + 1}
               total={entries.length}
               expanded={expandedRoleId === role.id}
@@ -215,7 +263,7 @@ export default function Matches({
         className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-[22px]"
       >
         <p className="m-0 min-w-0 flex-[1_1_320px] text-sm text-slate-700">
-          These are the 20 roles we score. Want to see roles from every field in eMASCO? They are not scored for AI risk.
+          Roles that are not one of our 20 scored roles show a skill fit estimate instead of a full score. Want to search eMASCO yourself?
         </p>
         <button
           type="button"
@@ -296,6 +344,7 @@ export default function Matches({
           />
         )}
 
+        {focus ? (
         <section className="flex flex-wrap items-center gap-6 rounded-[20px] border border-slate-200 bg-white p-4 sm:p-6">
           <div className="flex min-w-0 flex-[1_1_360px] flex-col items-center">
             <RadarChart
@@ -331,16 +380,24 @@ export default function Matches({
               <ul className="m-0 flex flex-col gap-1.5 pl-[18px] text-sm">
                 {gaps.map((gap) => (
                   <li key={gap.label}>
-                    {gap.label} <span className="text-slate-600">· future importance {gap.importance}/100</span>
+                    {gap.label}{' '}
+                    <span className="text-slate-600">
+                      · {gap.status === 'partial' ? 'partly covered' : 'not demonstrated'}, weight {Math.round(gap.importance * 10) / 10}
+                    </span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="m-0 text-sm text-slate-700">You already have every listed skill for this role.</p>
+              <p className="m-0 text-sm text-slate-700">Every listed skill is covered at Good level or better.</p>
             )}
             <SourceNote>{radarSourceNote(focus)}</SourceNote>
           </div>
         </section>
+        ) : (
+          <p className="m-0 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+            None of our 20 scored roles is in your top list, so there is no skills radar. Open Explore all roles or change your skills.
+          </p>
+        )}
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <JobMarketChart trends={data.trends} />

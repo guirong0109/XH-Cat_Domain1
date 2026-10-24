@@ -1,0 +1,421 @@
+{
+  "version": 1,
+  "written": "2026-10-24",
+  "about": "Labelled queries for the skill search. Relevance is decided by cue patterns written from domain knowledge BEFORE looking at any ranking, and applied to the whole skill list (18,161 texts), so recall can be counted. grade 2 = relevant (matches `relevant`), grade 1 = related (matches `related` only), grade 0 = everything else. Malay and cross-language queries use English cue patterns, so a keyword-only system cannot pass them by matching the query word. Written by Claude, NOT reviewed by a teammate. 'dev' queries were used while building; 'test' queries were not looked at until the final run. Small set: use it to compare versions, not as proof of general accuracy. 'test2' queries were added after the first full run, before the BM25 coverage rule was tried, to check that rule on queries not looked at before.",
+  "queries": [
+    {
+      "id": "en-python",
+      "q": "python",
+      "lang": "en",
+      "kind": "exact",
+      "split": "test",
+      "relevant": "\\bpython\\b"
+    },
+    {
+      "id": "en-bookkeeping",
+      "q": "bookkeeping",
+      "lang": "en",
+      "kind": "exact",
+      "split": "dev",
+      "relevant": "book-?keeping",
+      "related": "record.?keeping|ledger|reconcil"
+    },
+    {
+      "id": "en-welding",
+      "q": "welding",
+      "lang": "en",
+      "kind": "exact",
+      "split": "test",
+      "relevant": "\\bweld"
+    },
+    {
+      "id": "en-excel",
+      "q": "excel",
+      "lang": "en",
+      "kind": "exact",
+      "split": "dev",
+      "relevant": "\\bexcel\\b|spreadsheet"
+    },
+    {
+      "id": "en-customer-service",
+      "q": "customer service",
+      "lang": "en",
+      "kind": "exact",
+      "split": "test",
+      "relevant": "customer service|customer support|customer relations",
+      "related": "customer"
+    },
+    {
+      "id": "en-project-management",
+      "q": "project management",
+      "lang": "en",
+      "kind": "exact",
+      "split": "dev",
+      "relevant": "project (management|manager|coordinat|planning)",
+      "related": "\\bproject"
+    },
+    {
+      "id": "en-nursing",
+      "q": "nursing",
+      "lang": "en",
+      "kind": "exact",
+      "split": "test",
+      "relevant": "\\bnurs(e|es|ing)\\b",
+      "related": "patient|clinical"
+    },
+    {
+      "id": "en-data-analysis",
+      "q": "data analysis",
+      "lang": "en",
+      "kind": "exact",
+      "split": "dev",
+      "relevant": "data analy(s|z)",
+      "related": "statistic|analytic"
+    },
+    {
+      "id": "en-electrical-wiring",
+      "q": "electrical wiring",
+      "lang": "en",
+      "kind": "exact",
+      "split": "test",
+      "relevant": "wiring",
+      "related": "electrical install|electrical system|circuit"
+    },
+    {
+      "id": "en-patient-care",
+      "q": "patient care",
+      "lang": "en",
+      "kind": "exact",
+      "split": "dev",
+      "relevant": "patient care|care (of|for) (the )?patients?|caring for patients|patient-?(centred|centered) care|attending to patients",
+      "related": "patient"
+    },
+    {
+      "id": "ms-perakaunan",
+      "q": "perakaunan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "dev",
+      "relevant": "accounting|accountant|bookkeeping|ledger|financial statement",
+      "related": "financ|budget|payroll|\\btax|audit"
+    },
+    {
+      "id": "ms-jaga-pesakit",
+      "q": "jaga pesakit",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "dev",
+      "relevant": "patient care|care (of|for) (the )?patients?|caring for patients|patient-?(centred|centered) care|attending to patients|nursing care",
+      "related": "patient"
+    },
+    {
+      "id": "ms-kimpalan",
+      "q": "kimpalan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "\\bweld"
+    },
+    {
+      "id": "ms-pengaturcaraan",
+      "q": "pengaturcaraan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "programming|programmer|\\bcoding\\b|software develop",
+      "related": "\\bcode\\b|software|script"
+    },
+    {
+      "id": "ms-kejururawatan",
+      "q": "kejururawatan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "\\bnurs(e|es|ing)\\b",
+      "related": "patient|clinical"
+    },
+    {
+      "id": "ms-pemasaran",
+      "q": "pemasaran",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "marketing",
+      "related": "promotion|brand|advertis|campaign"
+    },
+    {
+      "id": "ms-khidmat-pelanggan",
+      "q": "khidmat pelanggan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "dev",
+      "relevant": "customer service|customer support|customer relations",
+      "related": "customer|client"
+    },
+    {
+      "id": "ms-pangkalan-data",
+      "q": "pangkalan data",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "database",
+      "related": "\\bsql\\b|data management"
+    },
+    {
+      "id": "ms-kerja-berpasukan",
+      "q": "kerja berpasukan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "team ?work|(in|as part of|within) (a )?teams?\\b|team player",
+      "related": "collaborat|cooperat"
+    },
+    {
+      "id": "ms-pendawaian-elektrik",
+      "q": "pendawaian elektrik",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "wiring",
+      "related": "electrical install|circuit|electrical system"
+    },
+    {
+      "id": "ms-pengurusan-projek-sentence",
+      "q": "saya pandai pengurusan projek",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "project (management|manager|coordinat|planning)",
+      "related": "\\bproject"
+    },
+    {
+      "id": "ms-cukai",
+      "q": "cukai",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "dev",
+      "relevant": "\\btax",
+      "related": "customs|duty|duties|levy"
+    },
+    {
+      "id": "ms-memasak",
+      "q": "memasak",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "cooking|culinary|\\bcook\\b",
+      "related": "kitchen|food prep"
+    },
+    {
+      "id": "xl-simpan-kira",
+      "q": "simpan kira",
+      "lang": "ms",
+      "kind": "synonym",
+      "split": "dev",
+      "relevant": "book-?keeping",
+      "related": "record.?keeping|ledger|accounting"
+    },
+    {
+      "id": "xl-jururawat",
+      "q": "jururawat",
+      "lang": "ms",
+      "kind": "synonym",
+      "split": "test",
+      "relevant": "\\bnurs(e|es|ing)\\b",
+      "related": "patient|clinical"
+    },
+    {
+      "id": "amb-account",
+      "q": "account",
+      "lang": "en",
+      "kind": "ambiguous",
+      "split": "dev",
+      "relevant": "account",
+      "related": "financ|billing|invoice"
+    },
+    {
+      "id": "amb-care",
+      "q": "care",
+      "lang": "en",
+      "kind": "ambiguous",
+      "split": "test",
+      "relevant": "\\bcare\\b|caring",
+      "related": "patient|welfare"
+    },
+    {
+      "id": "amb-keselamatan",
+      "q": "keselamatan",
+      "lang": "ms",
+      "kind": "ambiguous",
+      "split": "test",
+      "relevant": "safety|security",
+      "related": "hazard|risk|protect"
+    },
+    {
+      "id": "no-nonsense",
+      "q": "qzxv 8492 nonexistent",
+      "lang": "none",
+      "kind": "nonsense",
+      "split": "dev",
+      "expectNone": true
+    },
+    {
+      "id": "no-keyboard-mash",
+      "q": "asdfghjk",
+      "lang": "none",
+      "kind": "nonsense",
+      "split": "test",
+      "expectNone": true
+    },
+    {
+      "id": "no-lorem",
+      "q": "lorem ipsum dolor sit amet",
+      "lang": "none",
+      "kind": "nonsense",
+      "split": "test",
+      "expectNone": true
+    },
+    {
+      "id": "no-malay-nonsense",
+      "q": "xyzabc pqrst",
+      "lang": "none",
+      "kind": "nonsense",
+      "split": "dev",
+      "expectNone": true
+    },
+    {
+      "id": "no-quantum",
+      "q": "quantum chromodynamics",
+      "lang": "en",
+      "kind": "out-of-domain",
+      "split": "test",
+      "expectNone": true
+    },
+    {
+      "id": "ms-unaliased-komputer",
+      "q": "kemahiran komputer",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "computer (skills|literacy|proficien|applications|software)|\bit skills\b",
+      "related": "computer|software"
+    },
+    {
+      "id": "ms-unaliased-masa",
+      "q": "pengurusan masa",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "time management|manage (their |own |one's )?time|prioriti[sz]",
+      "related": "deadline|schedul"
+    },
+    {
+      "id": "ms-unaliased-makanan",
+      "q": "keselamatan makanan",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test",
+      "relevant": "food safety|food hygiene|haccp",
+      "related": "hygiene|sanitation|halal"
+    },
+    {
+      "id": "ms-unaliased-komunikasi",
+      "q": "kemahiran komunikasi",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test2",
+      "relevant": "communicat",
+      "related": "interpersonal|presentation|negotiat"
+    },
+    {
+      "id": "ms-unaliased-kanak",
+      "q": "jaga kanak-kanak",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test2",
+      "relevant": "child ?care|care (of|for) (young )?children|caring for children|childcare",
+      "related": "child|infant|toddler"
+    },
+    {
+      "id": "ms-unaliased-mesin",
+      "q": "mengendalikan mesin",
+      "lang": "ms",
+      "kind": "cross-language",
+      "split": "test2",
+      "relevant": "operat(e|ing|ion of) (a |the )?(industrial )?(machine|machinery|equipment)",
+      "related": "machine|machinery|equipment"
+    }
+  ],
+  "pairs": [
+    {
+      "q": "perakaunan",
+      "skill": "Basic accounting skills.",
+      "relevant": true
+    },
+    {
+      "q": "perakaunan",
+      "skill": "terhadap perincian.",
+      "relevant": false
+    },
+    {
+      "q": "perakaunan",
+      "skill": "Proficiency in accounting software.",
+      "relevant": true
+    },
+    {
+      "q": "perakaunan",
+      "skill": "Management.",
+      "relevant": false
+    },
+    {
+      "q": "jaga pesakit",
+      "skill": "Proficiency in coordinating patient care.",
+      "relevant": true
+    },
+    {
+      "q": "jaga pesakit",
+      "skill": "Active listening to understand patient needs.",
+      "relevant": false
+    },
+    {
+      "q": "jaga pesakit",
+      "skill": "Ability to provide comprehensive patient care and supportive management.",
+      "relevant": true
+    },
+    {
+      "q": "kimpalan",
+      "skill": "Basic welding skills.",
+      "relevant": true
+    },
+    {
+      "q": "kimpalan",
+      "skill": "terhadap perincian.",
+      "relevant": false
+    },
+    {
+      "q": "pengaturcaraan",
+      "skill": "Basic programming skills in languages such as Python, C++, or Java.",
+      "relevant": true
+    },
+    {
+      "q": "pengaturcaraan",
+      "skill": "terhadap perincian.",
+      "relevant": false
+    },
+    {
+      "q": "bookkeeping",
+      "skill": "Record-keeping skills.",
+      "relevant": false
+    },
+    {
+      "q": "bookkeeping",
+      "skill": "Proficiency in basic bookkeeping and maintaining daily sales records.",
+      "relevant": true
+    },
+    {
+      "q": "excel",
+      "skill": "Excellent attention to detail.",
+      "relevant": false
+    }
+  ]
+}

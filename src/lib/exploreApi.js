@@ -15,7 +15,7 @@ export async function searchSkills(query, fetchImpl = fetch) {
     const response = await fetchImpl(`/api/emasco/skills?q=${encodeURIComponent(query)}&limit=8`);
     if (response.status !== 200) return { ok: false, error: await readError(response) };
     const body = await response.json();
-    return Array.isArray(body?.skills) ? { ok: true, skills: body.skills } : { ok: false, error: 'failed' };
+    return Array.isArray(body?.skills) ? { ok: true, skills: body.skills, methods: Array.isArray(body.methods) ? body.methods : [], meaning: typeof body.status?.meaning === 'string' ? body.status.meaning : 'unknown' } : { ok: false, error: 'failed' };
   } catch {
     return { ok: false, error: 'failed' };
   }

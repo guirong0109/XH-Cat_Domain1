@@ -17,6 +17,7 @@ import {
   unpickSkill,
   whyLines,
 } from '../src/lib/exploreView.js';
+import { searchNote } from '../src/lib/exploreView.js';
 import { matchRoles, searchSkills } from '../src/lib/exploreApi.js';
 
 describe('picking skills', () => {
@@ -121,6 +122,17 @@ describe('notes', () => {
   });
 });
 
+describe('searchNote', () => {
+  it('says what really ran, from the server status', () => {
+    expect(searchNote('ran')).toMatch(/by meaning \(AI estimate/);
+    expect(searchNote('off')).toMatch(/Keywords only.*off on this server/);
+    expect(searchNote('loading')).toMatch(/still loading/);
+    expect(searchNote('failed')).toMatch(/failed this time/);
+    expect(searchNote('unknown')).toBe('');
+    expect(searchNote(undefined)).toBe('');
+  });
+});
+
 describe('server calls', () => {
   const reply = (status, body) => async () => ({ status, json: async () => body });
   it('searchSkills encodes the query and returns the skills', async () => {
@@ -130,7 +142,7 @@ describe('server calls', () => {
       return { status: 200, json: async () => ({ skills: [{ id: 's1', text: 'Bank', roles: 2 }] }) };
     });
     expect(seen).toBe('/api/emasco/skills?q=bank%20%26%20tax&limit=8');
-    expect(result).toEqual({ ok: true, skills: [{ id: 's1', text: 'Bank', roles: 2 }] });
+    expect(result).toEqual({ ok: true, skills: [{ id: 's1', text: 'Bank', roles: 2 }], methods: [], meaning: 'unknown' });
   });
   it('searchSkills reports the server error code and survives a network failure', async () => {
     expect(await searchSkills('x', reply(503, { error: 'emasco-data-missing' }))).toEqual({ ok: false, error: 'emasco-data-missing' });

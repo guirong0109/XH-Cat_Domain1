@@ -2,7 +2,8 @@
 // status and the evidence. Pure helpers. Type comes only from the ILO 2025 exposure of the
 // roles that use the skill (same rule as Skills in demand). It never changes the score.
 // Not built: "how do you do this today" and "New AI skill" (no data to decide it from).
-import { skillLevel, skillStatus } from './scoring.js';
+import { skillStatus } from './scoring.js';
+import { PROFICIENCY_NAME, profileLevel } from './skillMatch.js';
 import { skillTrends } from './skillTrends.js';
 import { momentum } from './research.js';
 import { iloRowUrl } from './roleView.js';
@@ -36,14 +37,12 @@ export const TYPE_ADVICE = {
 export const STATUS_LABEL = { missing: 'Missing', buildUp: 'Build up', onTrack: 'On track' };
 const STATUS_ORDER = { missing: 0, buildUp: 1, onTrack: 2 };
 
-const LEVEL_TEXT = { basic: 'Basic', good: 'Good', strong: 'Strong' };
-
 function statusFor(label, profile, similar) {
   const status = skillStatus(label, profile.skills, similar);
   if (status === 'gap') return { status: 'missing', you: 'Not yet' };
   if (status === 'similar') return { status: 'buildUp', you: 'A related skill only' };
-  const level = skillLevel(label, profile);
-  return { status: level === 'basic' ? 'buildUp' : 'onTrack', you: `Level: ${LEVEL_TEXT[level]}` };
+  const { level, assumed } = profileLevel(label, profile);
+  return { status: level === 'basic' ? 'buildUp' : 'onTrack', you: `Level: ${PROFICIENCY_NAME[level]}${assumed ? ' (level unknown)' : ''}` };
 }
 
 export function skillsVsAi({ role, profile, similar, roles, trendGroups, research, skillLabels }) {

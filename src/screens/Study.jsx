@@ -1,4 +1,6 @@
-import { buildPathway } from '../lib/scoring.js';
+import { buildSkillPathway } from '../lib/skillPathway.js';
+import { targetText } from '../lib/skillMatchView.js';
+import FutureMatch from '../components/FutureMatch.jsx';
 import {
   disclosureText,
   hoursSummary,
@@ -7,7 +9,6 @@ import {
   stepCountText,
   stepSdgs,
   totalHours,
-  whyText,
 } from '../lib/pathwayView.js';
 import SdgTag from '../components/SdgTag.jsx';
 import { startingPoint } from '../lib/potential.js';
@@ -22,7 +23,8 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
   const entry =
     ranked.find((item) => item.role.id === focusRoleId) || orderForGoal(ranked, profile, data.fields).entries[0];
   const role = entry.role;
-  const steps = buildPathway(role, profile, ctx, scenario, data.skills.labels);
+  const result = entry.score.skill;
+  const steps = result.status === 'ok' ? buildSkillPathway(role, profile, ctx, data.skills.labels, result) : [];
   const { done, total, percent } = progress(steps, doneSkills);
   const hoursTotal = totalHours(steps);
   const sdgs = pathwaySdgs(role, profile, data.sdg, steps, data.skills.labels);
@@ -40,7 +42,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
           </button>
           <h1 className="m-0 mt-1.5 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your pathway to {role.title}</h1>
           <p className="m-0 text-slate-600">
-            MASCO {role.code} · {total} {total === 1 ? 'step' : 'steps'} · {hoursSummary(hoursTotal)} · {done} of {total} done
+            MASCO {role.code} · Current Skill Match {result.status === 'ok' ? `${Math.round(result.match)}%` : 'not available'} · {total} {total === 1 ? 'step' : 'steps'} · {hoursSummary(hoursTotal)} · {done} of {total} done
           </p>
         </div>
         <div
@@ -62,7 +64,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
 
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">
-            You already have every listed skill for this role. Talk to your career centre about internships.
+            Every listed skill is covered at Good level or better. Talk to your career centre about internships.
           </div>
         )}
 
@@ -107,7 +109,20 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                       ))}
                     </div>
                   )}
-                  <div className="text-sm text-slate-700">{whyText(step)}</div>
+                  <div className="text-sm text-slate-700">{step.reason}</div>
+                  <div className="text-xs text-slate-600 tabular-nums">
+                    Gap priority {Math.round(step.gap * 100) / 100} (weight {Math.round(step.importance * 10) / 10} × missing{' '}
+                    {Math.round((1 - step.coverage) * 100)}%){step.rising ? ' · its importance rises as AI spreads' : ''}
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    Aim for <strong>{targetText(step.targetLevel)}</strong>
+                    {typeof step.simulatedGain === 'number' && step.simulatedGain > 0
+                      ? ` · if you reach it, your Skill Match could rise by about ${Math.round(step.simulatedGain * 10) / 10} points (what-if, not a promise)`
+                      : ''}
+                    .
+                  </div>
+                  <div className="text-[13px] text-slate-700">Practice idea: {step.practice}</div>
+                  <div className="text-xs text-slate-600">AI tip (general): {step.aiWorkflow}</div>
                   <CourseLinks
                     skillInfo={data.skills.labels.find((item) => item.label === step.label)}
                     who={profile.who}
@@ -128,9 +143,10 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
             );
           })}
         </ol>
+        <FutureMatch key={role.id} role={role} profile={profile} ctx={ctx} steps={steps} />
         <SkillsVsAi role={role} profile={profile} ctx={ctx} data={data} />
         <SourceNote>
-          Order: skill with the highest future importance first. Courses are real pages on the official portals (HRD Corp
+          Order: biggest skill gap first (role weight × what your skills do not yet cover), the same list as “Why this match?”. Courses are real pages on the official portals (HRD Corp
           e-Latih, MyTVET), picked by our draft matching of the course title to the skill. The app does not invent course
           names. Where no course was found, the portal link is shown instead. Skill-to-SDG tags: our team's
           mapping (draft), using UN SDG targets. They do not change the score.
@@ -158,7 +174,7 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                 {sdg.chosen && (
                   <>
                     <br />
-                    <em className="text-[#0F766E]">You chose this goal: +5 points.</em>
+                    <em className="text-[#0F766E]">You chose this goal (it does not change your Skill Match).</em>
                   </>
                 )}
               </div>

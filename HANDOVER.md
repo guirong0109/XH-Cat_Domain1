@@ -5,7 +5,24 @@ Read §000000000 first (newest, 24 Oct evening), then §00000000 (24 Oct, course
 
 ---
 
-## 000000000. 24 Oct 2026, evening: automated, role-specific AI exposure (NEWEST; read this first)
+## 0000000000. 24 Oct 2026, night: hybrid skill search (NEWEST; uncommitted)
+
+**Phase 2 (same night):** bilingual concept layer `data/team/skill_aliases.json` (Claude draft, teammate review needed), meaning floor 0.55, BM25 coverage rule, meaning-search rate limit, labelled eval set `testing/skill_search_eval.json` + `scripts/eval-skill-search.mjs`, results in `testing/results/skill_search_*.json`, one-page design overview `docs/system-design.md`. P@5 0.51 to 0.86 on 39 queries (mostly alias coverage; Malay with no alias is still weak, about 0.4-0.5). Reranker untested (no model here). Details: `docs/hybrid-search.md`.
+
+The user gave SkillPipe 0.2 (Downloads\skillpipe-v0.2) and asked to apply its search idea. Built `server/hybridSearch.js` (exact + BM25 + concept + bge-m3 meaning + optional reranker, merged by RRF) behind `GET /api/emasco/skills`, a one-line note on Explore (`searchNote`), `scripts/try-hybrid-search.mjs`, tests `tests/hybridSearch.test.js`, doc `docs/hybrid-search.md`. Replit has no model, so meaning/rerank are off there (documented as a Replit limitation; everything works when run locally). Tests: 797 app pass, build works. **Not committed, not checked in the browser or on Replit.** No labelled search-quality set; reranker untested with a real model. Restart port 3000 after pulling (server code).
+
+---
+
+## 0000000000. 24 Oct 2026, night: occupation-skill dataset (built, NOT committed; read `docs/skill-dataset.md`)
+
+- The user asked for an automated pipeline that discovers skills per occupation from online sources and writes a pre-computed dataset. **Audit result: the repo has no Search API and no DR API**, so none was used. The only occupation-skill source is the official eMASCO page (already crawled). `pipeline/build_skill_dataset.py` + `pipeline/skill_text.py` + `server/skillDataset.js` build and read `data/skills/` from it.
+- Real run on all 1,814 occupations: 1,722 ok, 44 sparse (1-2 skills), 48 insufficient (46 tasks-only + 2 unparsed; reported, not hidden), 0 failed. 19,899 statements to 19,876 occupation-skill relations and 13,587 canonical skills (950 skills shared by 2 or more occupations; 13 equal an app skill, about 2,000 related). 272 relations need review (very long, Bahasa Malaysia or too short). Importance is null everywhere (not invented). Every relation quotes the eMASCO statement with its statement ID, URL and retrieval date.
+- Tests: 241 pipeline, 832 app pass; a test proves `data/exposure.json`, `data/store/ai_exposure.json`, `data/roles.json` and `src/lib/scoring.js` are unchanged by a build.
+- Open: user's decision on the Search API and DR API (provider, key, terms); teammate review of `data/skills/synonyms.json` and `review.json`; whether to commit `data/skills/` (about 18 MB) and wire the matching engine to it (nothing consumes it yet except the loader and tests). The shared folder was on `main` with another session's uncommitted skill-search files (`scripts/eval-skill-search.mjs`, `data/team/skill_aliases.json`); they are not mine.
+
+---
+
+## 000000000. 24 Oct 2026, evening: automated, role-specific AI exposure (read this first for the AI exposure work)
 
 **State:** `main` = `claude/stage2-cv-all-fields` = `1a66aec`, pushed. Tests: 778 app, 216 pipeline pass. Replit not checked yet. Plans (all approved by the user): `docs/superpowers/plans/2026-10-24-automated-ai-exposure.md`, `2026-10-24-fast-ai-score-change.md`; draft `2026-10-24-accounting-hours-draft.md`.
 

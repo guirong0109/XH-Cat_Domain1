@@ -61,8 +61,17 @@ describe('api', () => {
       references: null,
       emerging: null,
       courseChecks: null,
+      skillSimilarity: null,
       observed: null,
     })
+  })
+
+  it('GET /api/data passes the skill similarity file through when it exists', async () => {
+    const similarity = { labels: ['A', 'B'], matrix: [[1, 0.5], [0.5, 1]] }
+    await writeFile(path.join(directory, 'skill_similarity.json'), JSON.stringify(similarity))
+    const baseUrl = await start()
+    const body = await (await fetch(`${baseUrl}/api/data`)).json()
+    expect(body.skillSimilarity).toEqual(similarity)
   })
 
   it('GET /api/data returns the saved course check when there is one', async () => {

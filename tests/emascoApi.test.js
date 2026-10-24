@@ -34,8 +34,8 @@ const readyEmbedder = { modelId: 'fake', isReady: () => true, embed: async (line
 
 let directory
 let server
-async function start({ embedder = null, emascoLoader = async () => ({ occupations, index }) } = {}) {
-  server = createApp({ dataDir: directory, embedder, emascoLoader }).listen(0)
+async function start({ embedder = null, emascoLoader = async () => ({ occupations, index }), ...more } = {}) {
+  server = createApp({ dataDir: directory, embedder, emascoLoader, ...more }).listen(0)
   await new Promise((resolve) => server.once('listening', resolve))
   return `http://127.0.0.1:${server.address().port}`
 }
@@ -50,11 +50,33 @@ afterEach(async () => {
   await rm(directory, { recursive: true, force: true })
 })
 
+describe('GET /api/emasco/skills, meaning search', () => {
+  it('runs the meaning search when the model is ready and reports the cosine score', async () => {
+    const baseUrl = await start({ embedder: readyEmbedder })
+    const body = await (await fetch(`${baseUrl}/api/emasco/skills?q=anything`)).json()
+    expect(body.status).toEqual({ meaning: 'ran' })
+    expect(body.skills[0]).toMatchObject({ id: 's00001', foundBy: ['meaning'], semantic: 1 })
+  })
+  it('skips the meaning search past the per-minute limit, still answers by keyword, and says so', async () => {
+    const baseUrl = await start({ embedder: readyEmbedder, meaningSearchLimit: 2 })
+    const ask = async () => (await fetch(`${baseUrl}/api/emasco/skills?q=skill`)).json()
+    expect((await ask()).status.meaning).toBe('ran')
+    expect((await ask()).status.meaning).toBe('ran')
+    const limited = await ask()
+    expect(limited.status).toEqual({ meaning: 'limited' })
+    expect(limited.notes[0]).toMatch(/meaning-search-limited/)
+    expect(limited.skills.length).toBeGreaterThan(0)
+  })
+})
+
 describe('GET /api/emasco/skills', () => {
   it('searches the skill texts', async () => {
     const baseUrl = await start()
     const body = await (await fetch(`${baseUrl}/api/emasco/skills?q=skill%20b`)).json()
-    expect(body.skills).toEqual([{ id: 's00002', text: 'Skill B', roles: 1 }])
+    expect(body.skills[0]).toMatchObject({ id: 's00002', text: 'Skill B', roles: 1, foundBy: expect.arrayContaining(['exact', 'bm25']) })
+    expect(body.methods).toEqual(['exact', 'bm25'])
+    expect(body.status).toEqual({ meaning: 'off' })
+    expect(body.notes[0]).toMatch(/meaning-search-off/)
   })
   it('returns an empty list for no query and caps the limit', async () => {
     const baseUrl = await start()

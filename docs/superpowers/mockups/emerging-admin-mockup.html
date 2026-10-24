@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOCKUP · Admin: Emerging feed</title>
+<style>
+  :root { --teal:#0F766E; --orange:#C2410C; --ink:#0F172A; --muted:#475569; --line:#E2E8F0; --bg:#F6F7F9; --card:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Plus Jakarta Sans", system-ui, "Segoe UI", sans-serif; font-size:15px; line-height:1.5; }
+  main { max-width:1000px; margin:0 auto; padding:20px 16px 64px; display:flex; flex-direction:column; gap:16px; }
+  h1 { font-size:26px; margin:0 0 4px; } h2 { font-size:17px; margin:0 0 8px; } h3 { font-size:15px; margin:0 0 4px; } p { margin:0; }
+  .muted { color:var(--muted); font-size:13px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; }
+  .banner { background:#FFF7ED; border:1px solid #FED7AA; color:#9A3412; border-radius:12px; padding:10px 14px; font-size:14px; font-weight:700; }
+  .note { background:#F0FDFA; border:1px solid #99F6E4; border-radius:12px; padding:10px 14px; font-size:14px; }
+  button { font:inherit; min-height:44px; padding:0 16px; border-radius:10px; border:1px solid var(--teal); background:#fff; color:var(--teal); font-weight:700; cursor:pointer; }
+  button.primary { background:var(--teal); color:#fff; } button.danger { border-color:var(--orange); color:var(--orange); }
+  button[disabled] { border-style:dashed; color:#64748B; border-color:#94A3B8; cursor:not-allowed; }
+  .row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; } .spread { justify-content:space-between; }
+  .pill { display:inline-block; font-size:12px; font-weight:700; padding:1px 9px; border-radius:999px; border:1px solid var(--line); background:#F1F5F9; }
+  .ok { background:#ECFDF5; border-color:#A7F3D0; color:#065F46; } .warn { background:#FFF7ED; border-color:#FED7AA; color:#9A3412; } .bad { background:#FEF2F2; border-color:#FECACA; color:#991B1B; }
+  table { width:100%; border-collapse:collapse; font-size:14px; } th { text-align:left; font-size:12px; color:var(--muted); padding:6px; border-bottom:1px solid var(--line); }
+  td { padding:10px 6px; border-bottom:1px solid var(--line); vertical-align:top; } .url { overflow-wrap:anywhere; color:var(--muted); font-size:12px; }
+  label { display:block; font-size:13px; font-weight:700; margin:10px 0 4px; }
+  input, select { font:inherit; min-height:44px; width:100%; padding:0 12px; border:1px solid #94A3B8; border-radius:10px; background:#fff; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; }
+  .item { border-top:1px solid var(--line); padding:14px 0; display:flex; flex-direction:column; gap:6px; }
+  .item:first-of-type { border-top:0; } a { color:var(--teal); font-weight:700; }
+  .check { display:flex; gap:10px; align-items:flex-start; font-weight:400; font-size:14px; } .check input { width:22px; min-height:22px; margin-top:2px; }
+  .seg { display:flex; flex-wrap:wrap; gap:6px; } .seg button[aria-pressed="true"] { background:var(--teal); color:#fff; }
+  .sample { background:#F8FAFC; border:1px dashed #94A3B8; border-radius:10px; padding:10px 12px; font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="banner">MOCKUP only. Nothing here works yet. This is how the new "Emerging feed" part of /admin would look.</div>
+  <div>
+    <h1>Admin console</h1>
+    <p class="muted">New section: Emerging feed (this PC only, no password, same as the rest of /admin)</p>
+  </div>
+
+  <section class="card" aria-labelledby="a1">
+    <div class="row spread"><h2 id="a1">1. Refresh</h2><button class="primary">Refresh now</button></div>
+    <p class="muted">Last checked 23 Oct 2026, 15:12 · weekly · tagging: <span class="pill ok">AI</span> · 40 items · 38 pending, 2 reviewed</p>
+    <p class="muted" style="margin-top:6px">Refresh takes about 1 minute. It adds new items only. It never changes an item you already reviewed.</p>
+    <div class="note" style="margin-top:10px">Last run: 10 of 10 sources answered. No errors.</div>
+  </section>
+
+  <section class="card" aria-labelledby="a2">
+    <div class="row spread"><h2 id="a2">2. Sources</h2><span class="muted">13 sources · 12 on</span></div>
+    <table>
+      <thead><tr><th>Source</th><th>Language</th><th>Confidence</th><th>Last run</th><th>On</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>OpenAlex<div class="url">api.openalex.org · built in</div></td><td>EN/MS/ZH</td><td><span class="pill ok">High</span></td><td><span class="pill ok">OK</span> 10 items</td><td>On</td><td></td></tr>
+        <tr><td>Berita Harian<div class="url">bharian.com.my/feed · built in</div></td><td>Malay</td><td><span class="pill warn">Medium</span></td><td><span class="pill ok">OK</span> 3 items</td><td>On</td><td></td></tr>
+        <tr><td>Sin Chew Daily<div class="url">example.com/sinchew/feed · added by you, 23 Oct</div></td><td>Chinese</td><td><span class="pill warn">Medium</span></td><td><span class="pill bad">Failed</span> HTTP 404</td><td>Off</td><td><button class="danger">Remove</button></td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top:8px">Built-in sources can be switched off, not removed. Confidence is set by the type of source, never by the AI.</p>
+
+    <h3 style="margin-top:18px">Add a source</h3>
+    <p class="muted">Public feeds only (RSS). No scraping. The page is read-only until you test it.</p>
+    <div class="grid">
+      <div><label for="n">Name</label><input id="n" value="Utusan Malaysia"></div>
+      <div><label for="u">Feed address (https)</label><input id="u" value="https://www.utusan.com.my/feed/"></div>
+      <div><label for="l">Language</label><select id="l"><option>Malay</option><option>English</option><option>Chinese</option></select></div>
+      <div><label for="f">Which stories</label><select id="f"><option>Only job and work stories</option><option>All stories (feed is already about AI)</option></select></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button>Test this feed</button></div>
+    <div class="sample" style="margin-top:10px">
+      <strong>Test result</strong> <span class="pill ok">Feed works</span> <span class="pill ok">robots.txt allows it</span> <span class="pill ok">10 items read</span>
+      <ul style="margin:8px 0 0; padding-left:18px">
+        <li>Pekerja kilang dilatih kemahiran AI · 22 Oct 2026</li>
+        <li>Graduan dapat kerja dalam 6 bulan · 22 Oct 2026</li>
+        <li>3 of 10 would pass the job-word filter</li>
+      </ul>
+    </div>
+    <label class="check" style="margin-top:12px"><input type="checkbox"> I read the publisher's terms and they allow showing headlines and links.</label>
+    <div class="row" style="margin-top:12px"><button class="primary" disabled>Add source (test it and tick the box first)</button></div>
+  </section>
+
+  <section class="card" aria-labelledby="a3">
+    <div class="row spread"><h2 id="a3">3. Review items</h2>
+      <div class="seg" role="group" aria-label="Show"><button aria-pressed="true">Pending 38</button><button aria-pressed="false">Reviewed 2</button><button aria-pressed="false">All 40</button></div>
+    </div>
+    <div class="note">Check four things before you press Reviewed: <strong>1</strong> the link opens and the headline matches, <strong>2</strong> the summary says only what the article says, <strong>3</strong> the tags fit, <strong>4</strong> it is useful for Malaysian diploma or foundation students.</div>
+
+    <div class="item" style="margin-top:8px">
+      <div class="row"><span class="pill warn">Medium</span><span class="pill">Malay</span><span class="pill">Pending review</span><span class="muted">Berita Harian · 23 Oct 2026</span></div>
+      <h3>Lebih 5,000 rakyat berkemahiran tinggi kembali ke Malaysia menerusi REP</h3>
+      <p class="muted">AI estimate: 5,234 Malaysians working abroad have returned to work at home under the Returning Expert Programme.</p>
+      <p class="muted">Tags: General</p>
+      <div class="row"><a href="#">Open source</a><button class="primary">Reviewed</button><button class="danger">Delete</button></div>
+    </div>
+    <div class="item">
+      <div class="row"><span class="pill warn">Medium</span><span class="pill">Malay</span><span class="pill">Pending review</span><span class="muted">Berita Harian · 23 Oct 2026</span></div>
+      <h3>Amarjit raih pengiktirafan antarabangsa</h3>
+      <p class="muted">AI estimate: Behind a sports leader's international recognition lies the work of many people keeping cycling growing.</p>
+      <p class="muted">Tags: General</p>
+      <div class="row"><a href="#">Open source</a><button class="primary">Reviewed</button><button class="danger">Delete</button></div>
+    </div>
+    <p class="muted">Delete hides the item for good: its address is remembered, so the next refresh does not bring it back. Reviewed items show the teal badge to students.</p>
+  </section>
+</main>
+</body>
+</html>
