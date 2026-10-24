@@ -1,7 +1,7 @@
 import RoleCards from '../components/RoleCards.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import FieldTag from '../components/FieldTag.jsx';
-import { MAX_TRACKED, trackedEntries, trackedOthers } from '../lib/overviewView.js';
+import { trackedEntries, trackedOthers } from '../lib/overviewView.js';
 import { MATCH_LABEL, MATCH_MEANING } from '../lib/skillMatchView.js';
 
 // The student's dashboard: the roles they chose to track in Matches.
@@ -14,7 +14,7 @@ export default function Overview({ data, ctx, profile, scenario, ranked, onOpenR
       <div>
         <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Your roles</h1>
         <p className="m-0 text-slate-600">
-          The roles you track, up to {MAX_TRACKED}. {MATCH_LABEL}: {MATCH_MEANING}
+          The roles you tick in Matches. {MATCH_LABEL}: {MATCH_MEANING}
         </p>
       </div>
       {total ? (
@@ -27,7 +27,7 @@ export default function Overview({ data, ctx, profile, scenario, ranked, onOpenR
             trends={data.trends}
             sdgInfo={data.sdg}
             onOpen={onOpenRole}
-            onChange={total < MAX_TRACKED ? onAdd : null}
+            onChange={onAdd}
             changeLabel="+ Track another role"
             onRemove={onUntrack}
             extra={others.map((card) => (

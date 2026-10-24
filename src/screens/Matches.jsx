@@ -109,7 +109,6 @@ export default function Matches({
   onRefreshReferences,
   onStudy,
   onTrack,
-  trackNote,
   onExplore,
 }) {
   const goalOrder = orderForGoal(ranked, profile, data.fields);
@@ -225,12 +224,6 @@ export default function Matches({
           </p>
         </div>
         <ScenarioToggle value={scenario} onChange={onScenarioChange} />
-      </div>
-
-      <div role="status" aria-live="polite" className={trackNote ? '' : 'sr-only'}>
-        {trackNote && (
-          <p className="m-0 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm text-orange-900">{trackNote}</p>
-        )}
       </div>
 
       {note && (

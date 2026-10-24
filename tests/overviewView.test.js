@@ -32,16 +32,14 @@ describe('overviewView', () => {
   });
 });
 
-import { MAX_TRACKED, toggleTracked, trackedEntries } from '../src/lib/overviewView.js';
+import { toggleTracked, trackedEntries } from '../src/lib/overviewView.js';
 import { journeySteps, adjacentSteps } from '../src/lib/journey.js';
 
 describe('tracked roles', () => {
-  it('adds, removes and refuses a 4th role', () => {
+  it('adds and removes roles with no limit', () => {
     expect(toggleTracked([], 'a')).toEqual({ list: ['a'], full: false });
     expect(toggleTracked(['a', 'b'], 'a')).toEqual({ list: ['b'], full: false });
-    const full = ['a', 'b', 'c'];
-    expect(full.length).toBe(MAX_TRACKED);
-    expect(toggleTracked(full, 'd')).toEqual({ list: full, full: true });
+    expect(toggleTracked(['a', 'b', 'c'], 'd').list).toEqual(['a', 'b', 'c', 'd']);
     expect(toggleTracked(undefined, 'a').list).toEqual(['a']);
   });
 

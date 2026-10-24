@@ -85,7 +85,7 @@ describe('nextHint', () => {
     expect(nextHint('about')).toBe('Tell us who you are and pick your major or sector.');
     expect(nextHint('skills')).toBe('Upload your CV or pick at least 3 skills, then check each level.');
     expect(nextHint('goal')).toBe('Pick your goal, then see your matches.');
-    expect(nextHint('matches')).toBe('Explore roles and track up to 3 you like, then plan what to study.');
+    expect(nextHint('matches')).toBe('Explore roles and tick the ones you like to track, then plan what to study.');
     expect(nextHint('study')).toBe('Tick off steps as you learn. You can go back and try another role.');
     for (const step of JOURNEY) expect(nextHint(step.screen)).toMatch(/\w/);
     expect(nextHint('unknown')).toBe('Go back to your journey any time.');

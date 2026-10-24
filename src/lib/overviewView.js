@@ -4,13 +4,11 @@ import { biggestGaps, formatDate, formatGrowth, groupLabel } from './roleView.js
 
 export const READY_AT = 70;
 export const CARD_COUNT = 3;
-export const MAX_TRACKED = 3;
 
 // Track or untrack a role. A 4th role is refused (the list is returned unchanged) so the caller can say why.
 export function toggleTracked(tracked, roleId) {
   const list = tracked ?? [];
   if (list.includes(roleId)) return { list: list.filter((id) => id !== roleId), full: false };
-  if (list.length >= MAX_TRACKED) return { list, full: true };
   return { list: [...list, roleId], full: false };
 }
 

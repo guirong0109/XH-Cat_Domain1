@@ -26,7 +26,7 @@ const HINTS = {
   about: 'Tell us who you are and pick your major or sector.',
   skills: 'Upload your CV or pick at least 3 skills, then check each level.',
   goal: 'Pick your goal, then see your matches.',
-  matches: 'Explore roles and track up to 3 you like, then plan what to study.',
+  matches: 'Explore roles and tick the ones you like to track, then plan what to study.',
   overview: 'Your tracked roles. Open one to see its full match, or plan what to study.',
   study: 'Tick off steps as you learn. You can go back and try another role.',
   explore: 'Pick skills or upload a CV to see roles from every field. Go back to Matches any time.',
