@@ -181,14 +181,14 @@ python -m unittest discover pipeline/tests
 
 | Name        | Role                | GitHub                                   |
 | ----------- | ------------------- | ---------------------------------------- |
-| TODO        | Team Lead           | [@Guirong0109](https://github.com/Guirong0109) |
-| TODO        | TODO                | TODO                                     |
+| Yip Gui Rong| Team Lead           | [@Guirong0109](https://github.com/Guirong0109) |
+| Sit Jia En  | Member              | [@Jane2151](https://github.com/Jane2151) |
 
 ---
 
 ## Submission Checklist
 
-- [ ] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
+- [x] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
 - [x] Slide deck link added
 - [ ] Demo video link added
 - [x] Replit used, with proof of use in `submission/`
