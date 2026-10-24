@@ -145,3 +145,74 @@ Rules that protect the data
 Human review (the maintenance that cannot be automated)
   teammate reviews the drafts: role skills, SDG tags, aliases, similar-skill pairs,
   course pages, judged task pairs; 31 of 122 role-skill rows are "not listed" (review item)
+
+
+=====================================================================
+PART E. "EMERGING THIS WEEK" FEED (information only; never part of any score)
+=====================================================================
+Purpose: show the student real, recent headlines about AI and work, so they see what is
+changing now. It does not change a score, role, skill or label. The card says "Not part of the score".
+
+TRIGGER   weekly by default (daily by setting), "Refresh now" in /admin, or script refresh-emerging.ps1
+  |       public route POST /api/refresh-emerging needs an admin token; without ?force=1 it returns
+  |       the saved file while it is still fresh (7 days; 20 hours in daily mode)
+  v
+1. COLLECT (how it searches: public feeds and open APIs only; no scraping, no search API, no job-ad sites)
+     OpenAlex works API   query: ("artificial intelligence" OR "generative AI" OR "machine learning")
+                          AND (jobs OR skills OR workforce OR employment OR automation)
+                          last 30 days; English, Malay or Chinese only
+     RSS news feeds (9 built in; admin can add more):
+        English: MIT News AI, MIT Technology Review, Free Malaysia Today, Malay Mail Money
+        Malay:   Berita Harian, Astro Awani Business, FMT Bahasa
+        Chinese: BBC Chinese, DW Chinese
+     fetch: 8 s timeout, robots.txt respected; a source that fails is skipped, the rest still run
+  |
+  v
+2. FILTER (rules, no AI)
+     topic feeds: pass if an AI word OR a work word is in the title/snippet
+     general news feeds: must contain a WORK word (jobs, skills, hiring, layoffs, automation;
+       Malay: kerja, pekerja, gaji, kemahiran; Chinese: 工作, 就业, 技能, 裁员 ...), so stock-market stories drop out
+     drop: future dates, older than 30 days, duplicates (same address or same title), addresses
+       the admin deleted before (removedUrls); at most 10 new items per source, 40 per run
+  |
+  v
+3. CLASSIFY (one batched model call for all new items; the only generative-model use in the app)
+     input: title + snippet only (no full article)
+     asked for each item, as JSON only:
+        fields   zero or more role groups from data/fields.json, else "General"   (the category)
+        skills   up to 3 skill names; a name from our skill list is "in eMASCO", a new name is
+                 marked "Emerging, not in eMASCO" (allowed only if the title clearly names it)
+        summary  one English sentence, max about 200 characters, labelled "AI estimate"
+     the reply is VALIDATED: unknown fields or malformed items are dropped
+     main model, then a backup model only if the main one fails; model and key come from
+       environment variables (never committed or logged)
+     no model or both fail: KEYWORD fallback (tags by matching skill words, no summary)
+     confidence is set by the SOURCE type, never by the AI: OpenAlex = High, news feeds = Medium
+  |
+  v
+4. SAVE (same safe-save rules as PART C)
+     data/emerging.json  per item: title, real source link, source name, language, published date,
+       checked date, confidence, fields, skills, summary, review = "pending"
+     written atomically under a lock, so an admin review made during a refresh is not lost
+     a failed refresh keeps the last good file and says so
+  |
+  v
+5. HUMAN REVIEW (the admin on /admin, this PC only)
+     items start "Pending review"; the admin checks the link, the date, the category and the
+       summary, then marks "Reviewed by the team", puts it back to pending, or deletes it
+     sources table: last run per source, switch a source off or on, remove a source you added
+     add a source: name, https feed address, language, filter -> "Test this feed" (reads robots.txt
+       and the first headlines) -> tick "I read the publisher terms" -> server tests again -> Add
+       (https only; no IP or local names; no redirects; 2 MB cap; at most 20 added)
+  |
+  v
+6. SHOW (Matches page, under "Skills in demand")
+     each item: headline link, source, published and checked dates, confidence badge,
+       review badge (Pending review / Reviewed by the team), role-group tags,
+       "Emerging, not in eMASCO" for new skills, Malay / Chinese badge, "AI estimate:" summary
+     card hidden until a first refresh has saved the file; "No new items this week" if empty
+
+Limits stated openly: the filter is loose (some items are not about jobs, so the admin deletes them);
+summaries use only the title and snippet; reviews live in data/emerging.json on the admin's PC
+(not committed, so Replit shows nothing until a reviewed file is committed); the team has not
+yet read the publisher terms.
