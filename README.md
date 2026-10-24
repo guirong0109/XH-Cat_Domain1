@@ -30,7 +30,7 @@
 | GitHub Repository | TODO: https://github.com/Guirong0109/<repo> (private until submission) |
 | Live Demo         | TODO: https://<your-project>.replit.app        |
 | RunPod Endpoint   | None. RunPod is used offline only (see "How We Use RunPod") |
-| Slide Deck        | TODO: link                                     |
+| Slide Deck        | [docs/FutureReady-MY-pitch-deck.html](docs/FutureReady-MY-pitch-deck.html) (open the file in a browser) |
 | Demo Video        | TODO: link (script: [docs/demo-script.md](docs/demo-script.md)) |
 
 ---
@@ -71,7 +71,7 @@ In five simple steps the student goes from a skills profile and a goal to ranked
 
 ```
 .
-├── docs/                    # Documentation, specs, plans, screenshots
+├── docs/                    # Documentation, specs, plans, screenshots, pitch deck
 │   └── project-details.md   # Full project description (formerly the README)
 ├── runpod/                  # RunPod notes (the GPU job lives in pipeline/)
 ├── src/                     # React app (screens, components, lib/scoring.js)
@@ -197,7 +197,7 @@ python -m unittest discover pipeline/tests
 ## Submission Checklist
 
 - [ ] Team name, domain (Domain 1 / Domain 2) and SDG track filled in
-- [ ] Slide deck link added
+- [x] Slide deck link added
 - [ ] Demo video link added
 - [ ] Replit used, with proof of use in `submission/`
 - [ ] RunPod used, with proof of use in `submission/`
