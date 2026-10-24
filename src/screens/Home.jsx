@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import RadarChart from '../components/RadarChart.jsx';
+import HowItWorks from '../components/HowItWorks.jsx';
 import SourceNote from '../components/SourceNote.jsx';
 import { roleRadarValues } from '../lib/radar.js';
 import { rankRoles } from '../lib/scoring.js';
@@ -102,6 +103,7 @@ export default function Home({ data, ctx, onTrySample, onStartFresh }) {
         />
         <FactCard value={youth.value} text={youth.text} source="OpenDOSM, lfs_month_youth" />
       </div>
+      <HowItWorks />
     </main>
   );
 }
