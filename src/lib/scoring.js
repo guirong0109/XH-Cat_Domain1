@@ -24,6 +24,25 @@ export function skillCredit(label, profile, similar) {
   return status === 'similar' ? 0.5 : 0;
 }
 
+// The automatable share used in the outlook. For a role with observed AI use (Anthropic Economic Index, matched to the
+// role's own tasks) the measured part counts in proportion to how much of the role was measured:
+//   weight = tasksUsed / tasksTotal;  share = weight x (observedShare x 100) + (1 - weight) x label.
+// No usable observed data (missing, not enough matched tasks, bad numbers): the placeholder label, exactly as before.
+export function effectiveAutomatable(role, observed) {
+  const label = role.automatablePct;
+  const ok =
+    observed &&
+    observed.status === 'ok' &&
+    Number.isFinite(observed.observedShare) &&
+    Number.isFinite(observed.tasksUsed) &&
+    Number.isFinite(observed.tasksTotal) &&
+    observed.tasksTotal > 0 &&
+    observed.tasksUsed > 0;
+  if (!ok) return { automatable: label, observedWeight: 0, label };
+  const weight = Math.min(1, observed.tasksUsed / observed.tasksTotal);
+  return { automatable: weight * observed.observedShare * 100 + (1 - weight) * label, observedWeight: weight, label };
+}
+
 export function scoreRole(role, profile, ctx, scenario) {
   const earned = role.skills.reduce(
     (sum, s) => sum + skillCredit(s.label, profile, ctx.similar),
@@ -34,13 +53,14 @@ export function scoreRole(role, profile, ctx, scenario) {
   const group = ctx.trendGroups && ctx.trendGroups[role.group];
   const demandMissing = !group || typeof group.demand !== 'number';
   const demand = demandMissing ? DEFAULT_DEMAND : group.demand;
-  const outlook = 0.5 * demand + 0.5 * (100 - role.automatablePct * SCENARIO_FACTOR[scenario]);
+  const { automatable, observedWeight, label: labelAutomatable } = effectiveAutomatable(role, ctx.observed?.roles?.[role.code]);
+  const outlook = 0.5 * demand + 0.5 * (100 - automatable * SCENARIO_FACTOR[scenario]);
 
   const matchedGoals = (role.sdgs || []).filter((g) => profile.sdgs.includes(g));
   const bonus = Math.min(10, 5 * matchedGoals.length);
   const match = Math.min(100, WEIGHTS.fit * fit + WEIGHTS.outlook * outlook + bonus);
 
-  return { earned, fit, demand, demandMissing, outlook, bonus, matchedGoals, match };
+  return { earned, fit, demand, demandMissing, outlook, bonus, matchedGoals, match, automatable, observedWeight, labelAutomatable };
 }
 
 export function rankRoles(roles, profile, ctx, scenario) {

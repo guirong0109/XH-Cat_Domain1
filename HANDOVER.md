@@ -16,6 +16,17 @@ Read §0000000 first (where everything stands), then §00000 (admin console), §
 
 ---
 
+## 00000000. 24 Oct 2026: automated AI exposure (newest; read first)
+
+- **Why:** the brief says hard-coded lists do not count and the output must change with the data. Our only AI signal in the score was a hand-made placeholder label. Now the AI part comes from a live source for the roles it can measure.
+- **Built and merged to `main` (see `CLAUDE.md` section "Automated AI signals"):** central data store (`data/store/`), OECD gap panel (group averages, draft SOC map), source layer + failure monitor + `/admin` Data sources panel, task matching on the local model, `data/exposure.json`, observed AI use panel on role and Explore cards, and the coverage-weighted blend in the score (approved by the user 24 Oct).
+- **Real limits:** 14 of 20 scored roles have enough matched tasks; Data Analyst, Digital Learning Specialist, Website Developer, UX Designer, Digital Content Writer and Tax Consultant keep placeholder labels. Most O*NET tasks have 0 observed use. The match quality sample (80 pairs) was judged by Claude alone. The data measures one assistant, mostly US users. Anthropic made the dataset; the app says so.
+- **Not done:** per-skill exposure ("AI skills this role should have"), a score effect from research momentum or Hugging Face trending (needs a new weight), render tests for screens (a crash in `RoleCard` was only caught in the browser), teammate review of the judged sample, `data/team/oecd_map.json` and accounting hours, the Replit check, confirming the deadline.
+- **Re-run after a new Anthropic release:** `/admin` Refresh live AI signals, `node scripts/embed-tasks.mjs`, `node scripts/match-tasks.mjs`, `node scripts/build-exposure.mjs`, then re-check `docs/demo-script.md` numbers.
+- Tests at the end of the day: 778 app, 216 pipeline.
+
+---
+
 ## 0000000. Where everything stands (23 Oct 2026, evening)
 
 - **`main` = `973b9b7` (code as of `b784590`, plus these docs), pushed to GitHub (Replit can deploy it).** It has: the full eMASCO data (`data/emasco/occupations.json`: 1,766 roles with skills, 46 tasks-only, 18,161 skills), packed search vectors (`data/emasco/vectors/`, 20 MB), the matching engine, the **Explore all roles** screen (link under the Matches heading, in the left menu and at the bottom of Matches; `#explore`), the **admin console** (plain HTML page `http://localhost:3000/admin`, this PC only, no token), the demo script with the Explore step, and the **Emerging feed** (see below). Details: §00000 (admin), §000000 (Emerging), §0000 (option B phases 1-7).

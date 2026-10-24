@@ -42,6 +42,11 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Stop servers with `kill <pid>`, not `pkill`. The user's own server runs on port 3000; use other ports for test servers. Restart port 3000 after changing `server/` code (Node does not reload it).
 - Live refreshes (also behind the Matches "Refresh data" button): `POST /api/refresh-trends` (OpenDOSM), `POST /api/refresh-research` (OpenAlex) and `POST /api/refresh-references` (eMASCO role pages + portal/ILO links; about 1 minute, 2 s between pages; writes `data/references.json`). OpenAlex without an API key has a small shared daily budget per IP and returns HTTP 429 when it is used up.
 
+## Automated AI signals (24 Oct 2026; plan `docs/superpowers/plans/2026-10-24-automated-ai-exposure.md`)
+- `server/sources/`: one module per outside source (Semantic Scholar, arXiv, Hugging Face, Anthropic Economic Index; OpenAlex and OpenDOSM are monitored too), shared `http.js` (retries, error kinds), `monitor.js` (health: ok / warning / down after 3 failures), `registry.js`, `signals.js` (`refreshSignals` writes `data/signals.json`; a failing source keeps its old data). Admin panel "Data sources" at `/admin`; routes `GET /api/admin/sources`, `POST /api/admin/sources/test`, `POST /api/admin/sources/refresh`.
+- Role-specific AI exposure: `node scripts/embed-tasks.mjs` (about 2 h on this PC) then `node scripts/match-tasks.mjs [--sample]` then `node scripts/build-exposure.mjs` -> committed `data/exposure.json` (cutoff 0.80, at least 3 matched tasks, else "not enough matched tasks"). Quality: `testing/results/task_match_eval.md` (80 pairs judged by Claude, 97% same or related; draft). Run the embed step after a new Anthropic release (`/admin` shows "new data"). The central store is `data/store/` (`python pipeline/store.py`).
+- OECD AI Capability Gap (group averages, Table 6.3) and ILO are reference views, never in the score. `data/oecd/`, `data/team/oecd_map.json` (draft).
+
 ## Layout
 - `server/opendosm.js`: OpenDOSM fetch, validation and group trends.
 - `server/trends.js`: atomic, single in-flight refresh of `data/trends.json`.
@@ -79,6 +84,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - AI-made labels are disclosed and called estimates. Placeholder labels (`labelSource: "manual"`) show a "Sample" badge and must not be described as team-made.
 - The app **supports** the student's decision; it never decides.
 - Scoring formula and factors (Moderate 0.6, Fast 1.0) and level credits (Basic 0.5, Good 0.75, Strong 1.0, approved 2026-10-21) are fixed by the approved spec. Change them only with the user's approval.
+  - **Approved change 2026-10-24:** the automatable share in the outlook is a coverage-weighted blend (`effectiveAutomatable` in `src/lib/scoring.js`): observed AI use from the Anthropic Economic Index for the part of the role's tasks that matched, the placeholder label for the rest. Factors and weights are unchanged. Plan: `docs/superpowers/plans/2026-10-24-fast-ai-score-change.md`.
 - Approved dependencies:
   - App: react, react-dom, express, vite, @vitejs/plugin-react, tailwindcss, @tailwindcss/vite, vitest, pdfjs-dist, @huggingface/transformers (approved by the user on 2026-10-22).
   - RunPod only: torch, transformers, accelerate, sentence-transformers.

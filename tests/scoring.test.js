@@ -10,6 +10,7 @@ import {
   LEVEL_CREDIT,
   skillLevel,
   skillCredit,
+  effectiveAutomatable,
 } from '../src/lib/scoring.js';
 
 const sk = (label, type = 'specific', moderate = 0.8, fast = 0.8) => ({ label, type, moderate, fast });
@@ -284,5 +285,54 @@ describe('fairness', () => {
       expect(personal.map((r) => r.role.id)).toEqual(plain.map((r) => r.role.id));
       expect(personal.map((r) => r.score)).toEqual(plain.map((r) => r.score));
     }
+  });
+});
+
+describe('observed AI use in the outlook (coverage-weighted blend)', () => {
+  const role = { ...roleA, code: 'A-1', automatablePct: 40 };
+  const observed = (extra) => ({ status: 'ok', observedShare: 0.5, tasksUsed: 3, tasksTotal: 6, ...extra });
+  const profile = { skills: ['a1', 'a2'], sdgs: [], levels: {} };
+  const ctxWith = (entry) => ({ similar: {}, trendGroups: { professionals: { demand: 60 } }, observed: entry ? { roles: { 'A-1': entry } } : undefined });
+
+  it('weights the observed share by the share of tasks that were measured', () => {
+    const result = effectiveAutomatable(role, observed());
+    expect(result.observedWeight).toBeCloseTo(0.5);
+    expect(result.automatable).toBeCloseTo(0.5 * 50 + 0.5 * 40);
+    expect(result.label).toBe(40);
+  });
+
+  it('full coverage equals the observed share, no coverage keeps the label', () => {
+    expect(effectiveAutomatable(role, observed({ tasksUsed: 4, tasksTotal: 4, observedShare: 0.25 })).automatable).toBeCloseTo(25);
+    expect(effectiveAutomatable(role, observed({ tasksUsed: 0 })).automatable).toBe(40);
+  });
+
+  it('keeps the label when there is no usable observed data', () => {
+    for (const entry of [undefined, null, { status: 'not_enough', tasksUsed: 2, tasksTotal: 8 }, observed({ observedShare: NaN }), observed({ tasksTotal: 0 }), observed({ tasksUsed: undefined })]) {
+      expect(effectiveAutomatable(role, entry)).toEqual({ automatable: 40, observedWeight: 0, label: 40 });
+    }
+  });
+
+  it('a missing observed file leaves every score exactly as before', () => {
+    for (const scenario of ['moderate', 'fast']) {
+      const before = scoreRole(roleA, profile, { similar: {}, trendGroups: { professionals: { demand: 60 } } }, scenario);
+      const after = scoreRole({ ...roleA, code: 'A-1' }, profile, ctxWith(undefined), scenario);
+      expect(after.match).toBe(before.match);
+      expect(after.outlook).toBe(before.outlook);
+    }
+  });
+
+  it('keeps the scenario factors: the observed part is scaled by 0.6 or 1.0 like the label was', () => {
+    const entry = observed({ tasksUsed: 4, tasksTotal: 4, observedShare: 0.5 });
+    const moderate = scoreRole(role, profile, ctxWith(entry), 'moderate');
+    const fast = scoreRole(role, profile, ctxWith(entry), 'fast');
+    expect(moderate.outlook).toBeCloseTo(0.5 * 60 + 0.5 * (100 - 50 * SCENARIO_FACTOR.moderate));
+    expect(fast.outlook).toBeCloseTo(0.5 * 60 + 0.5 * (100 - 50 * SCENARIO_FACTOR.fast));
+    expect(fast.observedWeight).toBe(1);
+  });
+
+  it('two roles with different observed use get different scores from the same student', () => {
+    const quiet = scoreRole({ ...role, code: 'Q' }, profile, { ...ctxWith(null), observed: { roles: { Q: observed({ observedShare: 0 }) } } }, 'fast');
+    const busy = scoreRole({ ...role, code: 'B' }, profile, { ...ctxWith(null), observed: { roles: { B: observed({ observedShare: 1 }) } } }, 'fast');
+    expect(quiet.match).toBeGreaterThan(busy.match);
   });
 });

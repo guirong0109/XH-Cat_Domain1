@@ -237,7 +237,7 @@ export default function RoleCard({
           <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
             <section className="flex flex-col gap-1.5 rounded-lg border border-slate-200 p-3 text-[13px] text-slate-700">
               <h3 className="m-0 flex flex-wrap items-center gap-2 text-sm font-bold text-[#0F172A]">
-                Our task labels (used in the score)
+                Our task labels (used for the part not measured)
                 {role.labelSource === 'manual' && (
                   <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">Sample</span>
                 )}

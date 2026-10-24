@@ -10,6 +10,7 @@ import {
   growthBarWidth,
   ILO_NO_MATCH,
   iloView,
+  automatableDetail,
   oecdView,
   observedView,
   jobMarketEmptyText,
@@ -151,7 +152,7 @@ describe('biggestGaps', () => {
 
 describe('scenario and radar copy', () => {
   it('describes the scenarios only as the factor on automatable tasks', () => {
-    expect(SCENARIO_NOTE).toBe('Moderate AI counts 60% of tasks labelled automatable; Fast AI counts all of them.');
+    expect(SCENARIO_NOTE).toBe('Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Fast AI counts all of it.');
   });
 
   it('explains the score range in visible text', () => {
@@ -374,6 +375,18 @@ describe('oecdView', () => {
   it('adds the OECD link to the role sources', () => {
     const sources = roleSources({ code: 'x', group: 'professionals', oecd }, null);
     expect(sources.some((source) => source.url === 'https://example.org/oecd')).toBe(true);
+  });
+});
+
+describe('automatableDetail', () => {
+  it('names only the labels when nothing was measured', () => {
+    expect(automatableDetail({ automatable: 25, observedWeight: 0, labelAutomatable: 25 }, '0.6')).toBe('Automatable tasks 25% × 0.6.');
+  });
+  it('says how much of the role used observed AI use', () => {
+    const text = automatableDetail({ automatable: 30, observedWeight: 0.5, labelAutomatable: 10 }, '1.0');
+    expect(text).toContain('Automatable tasks 30% × 1.0.');
+    expect(text).toContain('covers 50% of this role');
+    expect(text).toContain('(10%)');
   });
 });
 

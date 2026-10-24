@@ -101,7 +101,7 @@ export function exposureSourceText(roles) {
 }
 
 // The scenario factor only scales the automatable share in the outlook score.
-export const SCENARIO_NOTE = 'Moderate AI counts 60% of tasks labelled automatable; Fast AI counts all of them.';
+export const SCENARIO_NOTE = 'Moderate AI counts 60% of the share of tasks AI can do (observed AI use where we could measure it, our task labels for the rest); Fast AI counts all of it.';
 
 export const RANGE_NOTE = 'Range = Moderate AI to Fast AI: the lowest and highest match across the two scenarios.';
 
@@ -124,6 +124,15 @@ export function biggestGaps(role, profile, similar, scenario, count = 3) {
 }
 
 const DEFAULT_DEMAND_TEXT = '50';
+
+// The automatable share in the outlook and, when observed AI use is part of it, where it came from.
+export function automatableDetail(score, factorText) {
+  const fmt = (value) => String(Math.round(value));
+  const base = `Automatable tasks ${fmt(score.automatable)}% × ${factorText}.`;
+  if (!score.observedWeight) return base;
+  const measured = Math.round(score.observedWeight * 100);
+  return `${base} Observed AI use (Anthropic Economic Index) covers ${measured}% of this role's tasks; the rest use our task labels (${fmt(score.labelAutomatable)}%).`;
+}
 
 // The three "Why this score?" parts and the formula line.
 export function scoreBreakdown(role, score, scenario, trends) {
@@ -152,8 +161,8 @@ export function scoreBreakdown(role, score, scenario, trends) {
       value: String(Math.round(score.outlook)),
       width: score.outlook,
       color: '#1D4ED8',
-      detail: `${outlookDetail} Automatable tasks ${role.automatablePct}% × ${factor.toFixed(1)}.`,
-      source: `OpenDOSM wages_occupation${fetched}; task labels: ${labels}`,
+      detail: `${outlookDetail} ${automatableDetail(score, factor.toFixed(1))}`,
+      source: `OpenDOSM wages_occupation${fetched}; ${score.observedWeight > 0 ? 'observed AI use: Anthropic Economic Index; rest from task labels: ' : 'task labels: '}${labels}`,
     },
     {
       key: 'bonus',

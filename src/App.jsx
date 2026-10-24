@@ -114,7 +114,7 @@ export default function App() {
   }, []);
 
   const ctx = useMemo(
-    () => (data ? { similar: data.skills.similar, trendGroups: data.trends?.groups } : null),
+    () => (data ? { similar: data.skills.similar, trendGroups: data.trends?.groups, observed: data.observed } : null),
     [data],
   );
   const ranked = useMemo(
