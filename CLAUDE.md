@@ -47,6 +47,10 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 - Role-specific AI exposure: `node scripts/embed-tasks.mjs` (about 2 h on this PC) then `node scripts/match-tasks.mjs [--sample]` then `node scripts/build-exposure.mjs` -> committed `data/exposure.json` (cutoff 0.80, at least 3 matched tasks, else "not enough matched tasks"). Quality: `testing/results/task_match_eval.md` (80 pairs judged by Claude, 97% same or related; draft). Run the embed step after a new Anthropic release (`/admin` shows "new data"). The central store is `data/store/` (`python pipeline/store.py`).
 - OECD AI Capability Gap (group averages, Table 6.3) and ILO are reference views, never in the score. `data/oecd/`, `data/team/oecd_map.json` (draft).
 
+## Occupation-skill dataset (24 Oct 2026; branch `claude/skill-dataset`, not on `main`; details `docs/skill-dataset.md`)
+- `python pipeline/build_skill_dataset.py` (`--check`, `--sample N`, `--only CODE`) turns the eMASCO statements of all 1,814 occupations into `data/skills/` (canonical skill catalogue with stable `sk_` IDs, occupation records with quoted evidence, index, review list, report). Rule-based normaliser `pipeline/skill_text.py`; curated true synonyms `data/skills/synonyms.json` (draft); lookups in `server/skillDataset.js`. Incremental by input hash, idempotent, writes only after validation. It does not touch `data/exposure.json`, `data/store/`, `scoring.js` or the matching formula.
+- **There is no Search API or DR API in this repo.** Do not assume one. A search-based source is a new source and needs the user's approval and the provider details.
+
 ## Layout
 - `server/opendosm.js`: OpenDOSM fetch, validation and group trends.
 - `server/trends.js`: atomic, single in-flight refresh of `data/trends.json`.
