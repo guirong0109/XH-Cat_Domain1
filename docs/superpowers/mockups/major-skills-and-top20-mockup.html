@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup: major skills and top 20</title>
+<style>
+:root{--teal:#0F766E;--orange:#C2410C}
+*{box-sizing:border-box}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:#f8fafc;color:#0f172a;margin:0;padding:16px}
+.page{max-width:1180px;margin:0 auto;display:grid;gap:32px}
+h2.t{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px}
+h1{font-size:26px;margin:0 0 4px}h3{font-size:16px;margin:12px 0 6px}
+p{margin:0 0 8px;color:#475569;font-size:14px}
+.screen{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;max-width:1180px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid #cbd5e1;border-radius:999px;font-size:14px;background:#fff}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+details{margin-top:12px;border:1px dashed #94a3b8;border-radius:12px;padding:10px}
+summary{min-height:44px;display:flex;align-items:center;font-weight:700;color:var(--teal);cursor:pointer}
+/* role card, same look as today's RoleCard */
+.rc{display:flex;flex-wrap:wrap;gap:12px 18px;border:1px solid #e2e8f0;border-radius:16px;padding:20px 22px;margin-top:14px;background:#fff}
+.rc.first{border-color:#5eead4}
+.rank{width:40px;height:40px;border-radius:12px;background:#f1f5f9;font-size:18px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.rc.first .rank{background:var(--teal);color:#fff}
+.main{flex:999 1 300px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.side{flex:1 1 250px;min-width:min(100%,250px);display:flex;flex-direction:column;gap:8px}
+.titleline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.titleline b{font-size:19px}.code{font-size:13px;color:#475569}
+.tag{font-size:12px;font-weight:700;border-radius:6px;padding:2px 8px}
+.blue{background:#dbeafe;color:#1e40af}.org{background:#ffedd5;color:#9a3412}.amb{background:#fef3c7;color:#78350f}
+.ind{background:#e0e7ff;color:#3730a3}.tl{background:#ccfbf1;color:#134e4a}.noscore{background:#ffedd5;color:var(--orange)}
+.sk{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.sk li{border-radius:999px;padding:2px 10px;font-size:13px}
+.have{background:var(--teal);color:#fff;border:1px solid var(--teal)}
+.sim{border:2px solid var(--teal);color:var(--teal)}
+.gap{border:2px dashed var(--orange);color:#9a3412}
+.sdg{border:1px solid #e2e8f0;border-radius:8px;padding:2px 8px;font-size:12px;color:#334155;display:inline-block;margin-right:6px}
+.src{font-size:13px;color:#475569;display:flex;flex-wrap:wrap;gap:0 12px;align-items:center}
+.src u{color:var(--teal);min-height:28px;display:inline-flex;align-items:center}
+.small{font-size:12px;color:#475569;margin:0}
+.warn{font-size:12px;color:var(--orange);margin:0}
+.scoreline{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#475569}
+.scoreline b{font-size:30px;color:#0f172a}
+.bar{height:8px;background:#f1f5f9;border-radius:6px;overflow:hidden}.bar i{display:block;height:8px;background:var(--teal)}
+.btn{min-height:44px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0 8px;text-align:center}
+.btn.go{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
+.note{background:#fffbeb;border:1px dashed #f59e0b;border-radius:10px;padding:8px 10px;font-size:13px;color:#78350f;margin-top:10px}
+</style></head><body>
+<div class="page">
+
+<div><h2 class="t">Screen 1 · Your skills (major picked: Business and accounting)</h2>
+<div class="screen">
+<h1>Your skills</h1><p>Pick at least 3 skills you have now, then check each level.</p>
+<h3>Skills for Business and accounting</h3>
+<div class="chips"><span class="chip on">Financial reporting</span><span class="chip on">Bookkeeping</span><span class="chip">Tax preparation</span><span class="chip">Audit procedures</span><span class="chip">Data analysis</span><span class="chip">Spreadsheets (Excel)</span></div>
+<details><summary>Skills from other majors (32) ▾</summary>
+<p>You can pick any skill. Tap to open or close.</p>
+<div class="chips"><span class="chip">Python programming</span><span class="chip">Data visualisation</span><span class="chip on">Network security</span><span class="chip">Solar installation</span></div>
+</details>
+<p style="margin-top:10px" class="small">Skills you picked from other majors stay visible in "Your skills and levels". "Other" major shows every skill, as now.</p>
+</div></div>
+
+<div><h2 class="t">Screen 2 · Matches (same card design as today, top 20 of all eMASCO roles)</h2>
+<div class="screen">
+<h1>Top 20 roles for you</h1>
+<p>Ranked by how well your skills fit, out of 1,766 eMASCO roles. This changes the order only, not the score.</p>
+
+<!-- Card 1: one of our 20 roles, identical to today -->
+<article class="rc first">
+ <div class="rank">1</div>
+ <div class="main">
+  <div class="titleline"><b>Business Intelligence Analyst</b><span class="code">MASCO 2543-07 · Professionals</span><span class="tag blue">Linked to your major or sector</span></div>
+  <div class="titleline"><span class="tag org">★ Builds 1 skill you want</span><span class="tag amb">Sample labels</span><span class="tag ind">ILO 2025: Gradient 2</span></div>
+  <ul class="sk"><li class="have">SQL and databases · Strong</li><li class="sim">★ Data visualisation</li><li class="sim">Statistics</li><li class="have">Communication · Good</li><li class="have">Spreadsheets (Excel) · Good</li></ul>
+  <div><span class="sdg">● SDG 8</span><span class="sdg">● SDG 9</span></div>
+  <p class="src"><span>Sources:</span><u>eMASCO role page 2543-07 (snapshot 21 Oct 2026)</u><u>OpenDOSM job trend, Professionals (2020–2025)</u><u>ILO 2025 AI exposure (WP140): ISCO 2421 Management and Organization Analysts</u></p>
+  <p class="small">eMASCO page: Checked 22 Oct 2026, link works</p>
+ </div>
+ <div class="side">
+  <div class="scoreline"><span>Match · range 80–81</span><b>81</b></div>
+  <div class="bar"><i style="width:81%"></i></div>
+  <div class="btn">Why this score?</div>
+  <div class="btn go">Plan my study for this role</div>
+ </div>
+</article>
+
+<!-- Card 2: a role outside our 20: same layout, only the missing parts change -->
+<article class="rc">
+ <div class="rank">2</div>
+ <div class="main">
+  <div class="titleline"><b>Billing Clerk</b><span class="code">MASCO 4311-01 · Clerical</span><span class="tag blue">Linked to your major or sector</span></div>
+  <div class="titleline"><span class="tag noscore">Full score not available</span><span class="tag org">Observed AI use: low</span></div>
+  <ul class="sk"><li class="have">Bookkeeping · Good</li><li class="have">Spreadsheets (Excel) · Good</li><li class="gap">Invoice processing</li><li class="gap">Customer billing</li></ul>
+  <div><span class="sdg">SDG: not tagged yet</span></div>
+  <p class="src"><span>Sources:</span><u>eMASCO role page 4311-01 (snapshot date)</u><u>Anthropic Economic Index (observed AI use)</u><u>ILO 2025 AI exposure (WP140), shown only if this role maps to an ISCO group</u></p>
+  <p class="small">eMASCO page: Checked date and "link works", or "not checked yet"</p>
+ </div>
+ <div class="side">
+  <div class="scoreline"><span>Skill fit · AI estimate</span><b>71%</b></div>
+  <div class="bar"><i style="width:71%"></i></div>
+  <p class="small">Job market outlook: not available for this role</p>
+  <div class="btn">Why this match?</div>
+  <div class="btn go">Plan my study for this role</div>
+ </div>
+</article>
+
+<div class="note"><b>Rules:</b> same card design as today. Our 20 roles keep the full score, range, "Why this score?" and every source link. Other roles show skill fit instead of the score, and a link, badge or panel appears only when its data exists (otherwise "not available"). The scenario toggle changes only the scored roles. Source and date stay on every number. Example names and numbers here are not real results.</div>
+</div></div>
+
+</div></body></html>

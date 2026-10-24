@@ -6,7 +6,7 @@ export const MIN_MARGIN = 2;
 const labelOf = (skill) => (typeof skill === 'string' ? skill : skill.label);
 
 // Skills used by any role in the major's groups, as a Set of labels.
-function majorSkillSet(major, roles) {
+export function majorSkillSet(major, roles) {
   const used = new Set();
   for (const role of roles) {
     if (!major.groups.includes(role.interest)) continue;
