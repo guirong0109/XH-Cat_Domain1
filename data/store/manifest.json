@@ -69,8 +69,8 @@
       "path": "research.json",
       "producer": "server/research.js (OpenAlex refresh)",
       "source": "OpenAlex",
-      "present": false,
-      "count": null,
+      "present": true,
+      "count": 38,
       "date": null
     },
     {
@@ -89,7 +89,7 @@
       "source": "eMASCO pages + portal links",
       "present": true,
       "count": 20,
-      "date": "2026-10-23T09:30:26.547Z"
+      "date": "2026-10-22T13:57:53.565Z"
     },
     {
       "kind": "ilo",

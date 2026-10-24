@@ -9,6 +9,7 @@ import RoleCard from '../components/RoleCard.jsx';
 import ScenarioToggle from '../components/ScenarioToggle.jsx';
 import SkillsDemand from '../components/SkillsDemand.jsx';
 import EmergingFeed from '../components/EmergingFeed.jsx';
+import DataFreshness from '../components/DataFreshness.jsx';
 import { referencesLine } from '../lib/referenceView.js';
 import SourceNote from '../components/SourceNote.jsx';
 import { bestScoreNote, findField, orderForGoal } from '../lib/goalView.js';
@@ -352,6 +353,7 @@ export default function Matches({
           learnSkills={profile.learn}
         />
         <EmergingFeed emerging={data.emerging} />
+        <DataFreshness data={data} />
         <YouthCard trends={data.trends} />
       </section>
     </main>

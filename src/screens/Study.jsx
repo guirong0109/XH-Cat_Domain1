@@ -1,9 +1,7 @@
-import { linkStatus } from '../lib/referenceView.js';
 import { buildPathway } from '../lib/scoring.js';
 import {
   disclosureText,
   hoursSummary,
-  linksForPortal,
   pathwaySdgs,
   progress,
   stepCountText,
@@ -15,6 +13,9 @@ import SdgTag from '../components/SdgTag.jsx';
 import { startingPoint } from '../lib/potential.js';
 import { orderForGoal } from '../lib/goalView.js';
 import SourceNote from '../components/SourceNote.jsx';
+import SkillsVsAi from '../components/SkillsVsAi.jsx';
+import CourseLinks from '../components/CourseLinks.jsx';
+import AiForRole from '../components/AiForRole.jsx';
 
 export default function Study({ data, ctx, profile, scenario, ranked, focusRoleId, doneSkills, onToggleDone, onBack }) {
   // No role picked yet: the top role in the student's goal order.
@@ -56,6 +57,8 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
         {startingPoint(profile.who) && (
           <p className="m-0 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">{startingPoint(profile.who)}</p>
         )}
+
+        <AiForRole role={role} aiCourses={data.skills.aiCourses} checks={data.courseChecks} />
 
         {steps.length === 0 && (
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">
@@ -105,24 +108,12 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
                     </div>
                   )}
                   <div className="text-sm text-slate-700">{whyText(step)}</div>
-                  <div className="flex flex-col gap-2">
-                    {linksForPortal(step.portal, profile.who).map((link) => {
-                      const status = linkStatus(data.references, link.url);
-                      return (
-                        <div key={link.url} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="fr-btn inline-flex min-h-11 items-center rounded-[10px] border border-slate-300 bg-white px-3.5 text-sm font-semibold no-underline"
-                          >
-                            {link.label}
-                          </a>
-                          <span className={`text-xs ${status.ok === false ? 'text-[#C2410C]' : 'text-slate-600'}`}>{status.text}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <CourseLinks
+                    skillInfo={data.skills.labels.find((item) => item.label === step.label)}
+                    who={profile.who}
+                    references={data.references}
+                    checks={data.courseChecks}
+                  />
                   <label className="fr-noprint inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-sm">
                     <input
                       type="checkbox"
@@ -137,9 +128,11 @@ export default function Study({ data, ctx, profile, scenario, ranked, focusRoleI
             );
           })}
         </ol>
+        <SkillsVsAi role={role} profile={profile} ctx={ctx} data={data} />
         <SourceNote>
-          Order: skill with the highest future importance first. Links go to official portals (HRD Corp e-Latih, HRD
-          Corp claimable courses, MyTVET). The app does not invent course names. Skill-to-SDG tags: our team's
+          Order: skill with the highest future importance first. Courses are real pages on the official portals (HRD Corp
+          e-Latih, MyTVET), picked by our draft matching of the course title to the skill. The app does not invent course
+          names. Where no course was found, the portal link is shown instead. Skill-to-SDG tags: our team's
           mapping (draft), using UN SDG targets. They do not change the score.
         </SourceNote>
       </section>

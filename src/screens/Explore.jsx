@@ -158,7 +158,7 @@ export default function Explore({ onBack }) {
         </button>
         <h1 className="m-0 mb-1.5 text-[26px] font-bold sm:text-[30px]">Explore all roles</h1>
         <p className="m-0 text-slate-600">
-          Find roles from every field in eMASCO, the official Malaysian occupation list. These roles are not scored for AI risk.
+          Find roles from every field in eMASCO, the official Malaysian occupation list. These roles are not scored for AI risk and have no SDG tags yet.
         </p>
       </div>
 

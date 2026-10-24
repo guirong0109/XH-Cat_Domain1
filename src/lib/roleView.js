@@ -226,6 +226,14 @@ export function oecdView(role) {
 
 export const ILO_WP140_URL = 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html';
 
+// Link to the occupation's own row in Table A1. The paper has no row anchors, so this uses a
+// text fragment (the browser scrolls to and highlights the occupation name). Without a title
+// it falls back to the paper's front page.
+export function iloRowUrl(ilo) {
+  if (!ilo?.iscoTitle) return ILO_WP140_URL;
+  return `${ILO_WP140_URL}#:~:text=${encodeURIComponent(ilo.iscoTitle).replace(/-/g, '%2D')}`;
+}
+
 // The "Sources:" links on a role card: eMASCO page, OpenDOSM trend, ILO index.
 export function roleSources(role, trends) {
   const sources = [];
@@ -242,7 +250,10 @@ export function roleSources(role, trends) {
       url: trendSource.url,
     });
   }
-  if (role.ilo) sources.push({ label: 'ILO 2025 AI exposure (WP140)', url: ILO_WP140_URL });
+  if (role.ilo) {
+    const row = role.ilo.iscoTitle ? `: ISCO ${role.ilo.isco} ${role.ilo.iscoTitle}` : '';
+    sources.push({ label: `ILO 2025 AI exposure (WP140)${row}`, url: iloRowUrl(role.ilo) });
+  }
   if (role.oecd?.url) sources.push({ label: 'OECD AI Capability Gap (AI Papers No. 59)', url: role.oecd.url });
   return sources;
 }

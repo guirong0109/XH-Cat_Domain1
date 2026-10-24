@@ -17,6 +17,42 @@ export function linksForPortal(portal, who) {
   return who === 'working' ? [PORTAL_LINKS.claimable, own] : [own, PORTAL_LINKS.claimable];
 }
 
+const COURSE_PORTAL_NAME = { elatih: 'HRD Corp e-Latih', tvet: 'MyTVET' };
+
+// One line under a course title, copied from the portal's own page (nothing computed or invented).
+export function courseMeta(course) {
+  const parts = course.portal === 'tvet' ? [course.institution, course.level] : [course.price, course.duration, course.level];
+  return parts.filter(Boolean).join(' · ');
+}
+
+// The weekly check (data/course_checks.json) says ok, changed, gone or unreadable for each course page.
+export const courseStatus = (checks, url) => checks?.courses?.[url]?.status || null;
+
+// A course whose page is gone is hidden; unreadable or unchecked ones stay (one bad read must not hide a good course).
+export function visibleCourses(courses, checks) {
+  return (courses || []).filter((course) => courseStatus(checks, course.url) !== 'gone');
+}
+
+// What the pathway shows for one skill: the exact course pages we listed, or, when none was
+// found on the portals (or the page is gone), the portal's own link (so the student can still look).
+export function courseOptions(skillInfo, who, checks) {
+  const listed = skillInfo?.courses || [];
+  const shown = visibleCourses(listed, checks);
+  const courses = shown.map((course) => ({
+    title: course.title,
+    url: course.url,
+    meta: courseMeta(course),
+    portalName: COURSE_PORTAL_NAME[course.portal] || '',
+    changed: courseStatus(checks, course.url) === 'changed',
+  }));
+  return {
+    courses,
+    checkedAt: courses.length ? checks?.checkedAt?.slice(0, 10) || skillInfo.coursesCheckedAt || null : null,
+    goneCount: listed.length - shown.length,
+    fallback: courses.length ? [] : linksForPortal(skillInfo?.portal, who),
+  };
+}
+
 export function whyText(step) {
   const leads = {
     similar: 'You have a similar skill, so this step is shorter. ',

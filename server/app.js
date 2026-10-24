@@ -9,6 +9,7 @@ import { readResearch, refreshResearch } from './research.js'
 import { CUTOFF, MAX_CHARS, SKILL_TEXT_MODE, matchSkills, splitCvLines } from './cvMatch.js'
 import { loadSkillVectors } from './skillVectors.js'
 import { readReferences, refreshReferences } from './references.js'
+import { readCourseChecks } from './courseCheck.js'
 import { modelFromEnv, readEmerging, refreshEmerging, reviewItem } from './emerging.js'
 import { activeFeeds, allFeeds, checkFeed, readSourceConfig, validateNewSource, writeSourceConfig } from './emergingSources.js'
 import { PORTAL_LINKS } from '../src/lib/pathwayView.js'
@@ -66,6 +67,7 @@ export function createApp({
   const trendsPath = path.join(dataDir, 'trends.json')
   const researchPath = path.join(dataDir, 'research.json')
   const referencesPath = path.join(dataDir, 'references.json')
+  const courseChecksPath = path.join(dataDir, 'course_checks.json')
 
   // The log of what the system does behind the scenes (see the admin console below).
   const logStore = createLogStore({ filePath: path.join(logDir, 'admin.jsonl') })
@@ -88,7 +90,7 @@ export function createApp({
 
   app.get('/api/data', async (request, response) => {
     try {
-      const [roles, skills, sdg, samples, trends, research, fields, references, emerging] = await Promise.all([
+      const [roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks] = await Promise.all([
         readJson(path.join(dataDir, 'roles.json')),
         readJson(path.join(dataDir, 'skills.json')),
         readJson(path.join(dataDir, 'sdg.json')),
@@ -98,8 +100,9 @@ export function createApp({
         readOptionalJson(path.join(dataDir, 'fields.json')),
         readReferences(referencesPath),
         readEmerging(emergingPath),
+        readCourseChecks(courseChecksPath),
       ])
-      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging })
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })

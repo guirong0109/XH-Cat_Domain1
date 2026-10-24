@@ -1,0 +1,461 @@
+{
+  "_note": "Draft awaiting team review. Real course pages found with each portal's own course search and read on 2026-10-24: title, price, duration and level are copied from the page; nothing is written by us. Claude chose the courses by matching the title to the skill. A course page can move or change, so the app shows the checked date and keeps the portal link as the fallback. Skills with no listed course had no matching course on the portals.",
+  "checkedAt": "2026-10-24",
+  "courses": {
+    "Python programming": [
+      {
+        "portal": "elatih",
+        "title": "Python - Basics to Brilliance in HD",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/python-basics-to-brilliance-in-hd",
+        "price": "Free",
+        "duration": "2 Hours 41 Min",
+        "level": "Beginner"
+      }
+    ],
+    "SQL and databases": [
+      {
+        "portal": "elatih",
+        "title": "[Kursus MySQL, PHP dan HTML] Memanipulasi Pangkalan Data Atas Talian",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/kursus-mysql-php-dan-html-memanipulasi-pangkalan-data-atas-talian",
+        "price": "RM60.00",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Spreadsheets (Excel)": [
+      {
+        "portal": "elatih",
+        "title": "The Beginner's Guide To Excel",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/the-beginner-s-guide-to-excel",
+        "price": "Free",
+        "duration": "45 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Excel Pivot Tables",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/excel-pivot-tables",
+        "price": "Free",
+        "duration": "3 Hours",
+        "level": "Beginner"
+      }
+    ],
+    "Data visualisation": [
+      {
+        "portal": "elatih",
+        "title": "Navigating through Microsoft Power BI",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/navigating-through-microsoft-power-bi",
+        "price": "Free",
+        "duration": "3 Hours 18 Min",
+        "level": "Intermediate"
+      },
+      {
+        "portal": "elatih",
+        "title": "Create Human Resources Analytical Dashboard in Microsoft POWER BI",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/create-human-resources-analytical-dashboard-in-microsoft-power-bi",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Statistics": [
+      {
+        "portal": "elatih",
+        "title": "Basic Statistics For Practical Time Series Analysis",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/basic-statistics-for-practical-time-series-analysis",
+        "price": "Free",
+        "duration": "1 Hour 19 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "The Importance of Statistical Data Analysis",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/the-importance-of-statistical-data-analysis",
+        "price": "Free",
+        "duration": "1 Hour 19 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Using AI tools": [
+      {
+        "portal": "elatih",
+        "title": "[ChatGPT Course] Improving Workplace Productivity with ChatGPT",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-improving-workplace-productivity-with-chatgpt",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Crafting Prompts for ChatGPT (Prompt Engineering)",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/crafting-prompts-for-chatgpt-prompt-engineering",
+        "price": "Free",
+        "duration": "50 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Web development": [
+      {
+        "portal": "elatih",
+        "title": "Building A Website From Scratch With HTML And CSS",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/building-a-website-from-scratch-with-html-and-css",
+        "price": "Free",
+        "duration": "1 Hour",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Intensive HTML & CSS Training",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/intensive-html-css-training",
+        "price": "Free",
+        "duration": "56 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Networking basics": [
+      {
+        "portal": "tvet",
+        "title": "Sijil Teknologi Komputer Rangkaian",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=45673",
+        "institution": "ADTEC JTM KAMPUS TANGKAK (ILP TANGKAK)",
+        "level": "Sijil Kemahiran Malaysia / Sijil Tahap 3 / Sijil Setaraf"
+      }
+    ],
+    "Network security": [
+      {
+        "portal": "tvet",
+        "title": "Diploma Teknologi Keselamatan SIber (DKM Tahap 4) #",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=50984",
+        "institution": "ADTEC JTM KAMPUS BATU PAHAT (ADTEC BATU PAHAT)",
+        "level": "Diploma Kemahiran Malaysia / Diploma Tahap 4 / Diploma Setaraf"
+      },
+      {
+        "portal": "tvet",
+        "title": "Diploma in Cyber Security Technology",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=911",
+        "institution": "GERMAN-MALAYSIAN INSTITUTE (GMI)",
+        "level": "Diploma Kemahiran Malaysia / Diploma Tahap 4 / Diploma Setaraf"
+      }
+    ],
+    "Electrical wiring": [
+      {
+        "portal": "tvet",
+        "title": "KERJA PENDAWAIAN ELEKTRIK RESIDENSI",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=43639",
+        "institution": "ADTEC JTM KAMPUS NIBONG TEBAL (ILP NIBONG TEBAL)",
+        "level": "Sijil Kemahiran Malaysia / Sijil Tahap 2 / Sijil Setaraf"
+      },
+      {
+        "portal": "tvet",
+        "title": "KURSUS ASAS PENDAWAIAN ELEKTRIK 1 FASA",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=45085",
+        "institution": "ADTEC JTM KAMPUS LABUAN (ILP LABUAN)",
+        "level": "Kursus Pendek / Micro Credential / Modular / Setaraf"
+      }
+    ],
+    "Solar PV basics": [
+      {
+        "portal": "tvet",
+        "title": "Pemasang Solar Photovolta Grid",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=34394",
+        "institution": "GIATMARA Seremban",
+        "level": "Kursus Pendek / Micro Credential / Modular / Setaraf"
+      }
+    ],
+    "Graphic design": [
+      {
+        "portal": "elatih",
+        "title": "Create Beautiful Graphic Designs Like a Pro Using Free Online Graphic Design Apps",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/create-beautiful-graphic-designs-like-a-pro-using-free-online-graphic-design-apps",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Communication": [
+      {
+        "portal": "elatih",
+        "title": "Communication at Workplace",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/communication-at-workplace",
+        "price": "Free",
+        "duration": "57 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Effective Communication",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/effective-communication",
+        "price": "Free",
+        "duration": "1 Hour 30 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Teamwork": [
+      {
+        "portal": "elatih",
+        "title": "Building High Performing Teams",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/building-high-performing-teams",
+        "price": "Free",
+        "duration": "40 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Problem solving": [
+      {
+        "portal": "elatih",
+        "title": "Problem Solving - An Essential 21st Century Skill",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/problem-solving-an-essential-21st-century-skill",
+        "price": "Free",
+        "duration": "1 Hour 19 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Problem Solving through Creative Thinking",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/problem-solving-through-creative-thinking",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Customer service": [
+      {
+        "portal": "elatih",
+        "title": "Customer Service Basics",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/customer-service-basics",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "UX research and prototyping": [
+      {
+        "portal": "elatih",
+        "title": "Understanding UX And Website Usability",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/understanding-ux-and-website-usability",
+        "price": "Free",
+        "duration": "1 Hour 8 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "User Testing and UX Audit",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/user-testing-and-ux-audit",
+        "price": "Free",
+        "duration": "1 Hour",
+        "level": "Beginner"
+      }
+    ],
+    "Content writing": [
+      {
+        "portal": "elatih",
+        "title": "Copywriting: Write Copy That Sells!",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/copywriting-write-copy-that-sells",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "English for Business Writing",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/english-for-business-writing",
+        "price": "Free",
+        "duration": "1 Hour 53 Min",
+        "level": "Beginner"
+      }
+    ],
+    "SEO and web analytics": [
+      {
+        "portal": "elatih",
+        "title": "Seo Strategies",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/seo-strategies",
+        "price": "Free",
+        "duration": "4 Hours 8 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "On Page SEO",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/on-page-seo",
+        "price": "Free",
+        "duration": "4 Hours 13 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Energy auditing": [
+      {
+        "portal": "tvet",
+        "title": "AUDIT TENAGA AWAL",
+        "url": "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=48887",
+        "institution": "UMPSA Advanced TVET Centre",
+        "level": "Diploma Kemahiran Malaysia / Diploma Tahap 4 / Diploma Setaraf"
+      }
+    ],
+    "Project coordination": [
+      {
+        "portal": "elatih",
+        "title": "Basics of Project Management",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/basics-of-project-management",
+        "price": "Free",
+        "duration": "2 Hours 12 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Project Management - The Fundamental",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/project-management-the-fundamental",
+        "price": "Free",
+        "duration": "2 Hours 40 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Business process analysis": [
+      {
+        "portal": "elatih",
+        "title": "Business Process Improvement Techniques",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/business-process-improvement-techniques",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Financial reporting": [
+      {
+        "portal": "elatih",
+        "title": "[Financial Statement Course] Analyzing the Components of Company Financial Statements",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/financial-statement-course-analyzing-the-components-of-company-financial-statements",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Financial analysis": [
+      {
+        "portal": "elatih",
+        "title": "Financial Statement Analysis and Organization's Decision Making",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/financial-statement-analysis-and-organization-s-decision-making",
+        "price": "Free",
+        "duration": "1 Hour 32 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Analysis of Financial Statement of Companies",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/analysis-of-financial-statement-of-companies",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Budgeting and costing": [
+      {
+        "portal": "elatih",
+        "title": "Budgeting",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/budgeting",
+        "price": "Free",
+        "duration": "30 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Budgeting for Better Finances",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/budgeting-for-better-finances",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Auditing and internal control": [
+      {
+        "portal": "elatih",
+        "title": "Auditing",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/auditing",
+        "price": "Free",
+        "duration": "32 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Bookkeeping and reconciliation": [
+      {
+        "portal": "elatih",
+        "title": "Fundamentals of Bookkeeping",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/fundamentals-of-bookkeeping",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Importance of Bookkeeping In Business",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/importance-of-bookkeeping-in-business",
+        "price": "Free",
+        "duration": "1 Hour 22 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Tax planning": [
+      {
+        "portal": "elatih",
+        "title": "Individual Tax Submission and Planning in Malaysia",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/individual-tax-submission-and-planning-in-malaysia",
+        "price": "RM69.00",
+        "duration": "2 Hours 12 Min",
+        "level": "Intermediate"
+      },
+      {
+        "portal": "elatih",
+        "title": "Reduce Your Tax Burden with Effective Personal Tax Relief Strategies",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/reduce-your-tax-burden-with-effective-personal-tax-relief-strategies",
+        "price": "Free",
+        "duration": "1 Hour 15 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Payroll": [
+      {
+        "portal": "elatih",
+        "title": "Effective Payroll Administration in Malaysia",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/effective-payroll-administration-in-malaysia",
+        "price": "RM199.00",
+        "duration": "2 Hours 18 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Time management": [
+      {
+        "portal": "elatih",
+        "title": "Time Management",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/time-management",
+        "price": "Free",
+        "duration": "2 Hours 50 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Time Management for Better Productivity",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/time-management-for-better-productivity",
+        "price": "Free",
+        "duration": "1 Hour 7 Min",
+        "level": "Beginner"
+      }
+    ],
+    "Tax compliance": [
+      {
+        "portal": "elatih",
+        "title": "Understanding Corporate Tax in Malaysia",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/understanding-corporate-tax-in-malaysia",
+        "price": "RM115.00",
+        "duration": "1 Hour 40 Min",
+        "level": "Beginner"
+      },
+      {
+        "portal": "elatih",
+        "title": "Personal Income Tax in Malaysia",
+        "url": "https://elatih.hrdcorp.gov.my/courses-details/personal-income-tax-in-malaysia",
+        "price": "RM99.00",
+        "duration": "1 Hour 27 Min",
+        "level": "Beginner"
+      }
+    ]
+  }
+}
