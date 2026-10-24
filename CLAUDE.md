@@ -49,6 +49,7 @@ python3 pipeline/import_ilo.py data/ilo/wp140_index.html data/ilo/ilo_2025_score
 
 ## Occupation-skill dataset (24 Oct 2026; branch `claude/skill-dataset`, not on `main`; details `docs/skill-dataset.md`)
 - `python pipeline/build_skill_dataset.py` (`--check`, `--sample N`, `--only CODE`) turns the eMASCO statements of all 1,814 occupations into `data/skills/` (canonical skill catalogue with stable `sk_` IDs, occupation records with quoted evidence, index, review list, report). Rule-based normaliser `pipeline/skill_text.py`; curated true synonyms `data/skills/synonyms.json` (draft); lookups in `server/skillDataset.js`. Incremental by input hash, idempotent, writes only after validation. It does not touch `data/exposure.json`, `data/store/`, `scoring.js` or the matching formula.
+- Integration (24 Oct, same branch): `pipeline/map_app_skills.py` -> `data/skills/app_skill_map.json` + `role_evidence.json`; `server/skillEvidence.js` and `/api/skills/*` routes; role card and Explore card show the official page evidence. Scores, exposure data and weights are unchanged. See `docs/skill-dataset.md` "Integration with matching".
 - **There is no Search API or DR API in this repo.** Do not assume one. A search-based source is a new source and needs the user's approval and the provider details.
 
 ## Layout

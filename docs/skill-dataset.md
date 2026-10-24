@@ -67,6 +67,67 @@ To refresh the source itself, re-run the existing crawl (`python pipeline/crawl_
 
 Quality and product test results: `docs/skill-dataset-qa-report.md`.
 
+## Integration with matching (24 Oct 2026, branch `claude/skill-dataset`)
+
+The scoring formula, the 0.6 and 1.0 scenario factors, the AI-exposure data and the weights are **unchanged** (`src/lib/scoring.js` is byte-identical to `main`). The dataset is used for **evidence, explanation and the official-skills gap**, not to change a score.
+
+```
+data/skills/*.json  --map_app_skills.py-->  app_skill_map.json + role_evidence.json
+        |                                              |
+server/skillDataset.js (full lookups)        server/skillEvidence.js (loads, checks the build fingerprint)
+        |                                              |
+/api/skills/occupation/:code   /api/skills/gap    /api/data -> skillEvidence (20 scored roles)
+/api/skills/app-map            /api/emasco/match -> officialSkills per card
+                                                       |
+                                    src/lib/skillEvidence.js -> role card, Explore card
+```
+
+### How the 38 app skills map to the catalogue (`data/skills/app_skill_map.json`)
+
+| Tier | Meaning | Count | App skills |
+|---|---|---|---|
+| exact | same canonical key (or alias key) | 13 | Data visualisation, Statistics, Electrical wiring, Graphic design, Communication, Teamwork, Problem solving, Customer service, Project coordination, Attention to detail, Financial reporting, Financial analysis, Time management |
+| synonym (curated, a Claude draft until a teammate verifies it) | listed in `app_skill_synonyms.json` | 1 | Spreadsheets (Excel) = Microsoft Excel, Spreadsheet software, Spreadsheet tools |
+| related only | the catalogue skill's wording contains an app keyword; **not the same skill, never counted as a match** | 22 | for example Python programming (11 related, such as "Python scripting"), SQL and databases (101), Payroll, Tax planning |
+| unresolved | nothing in the catalogue | 2 | Using AI tools, Version control (Git) |
+
+Related and exact are kept apart on purpose. "Communication" is exact for the key `communication`, but eMASCO usually writes "Verbal and written communication skills", which is **related**.
+
+### What the role card shows (per role skill, from `role_evidence.json`)
+
+| Support | Meaning |
+|---|---|
+| exact / synonym | the eMASCO page lists this skill (or the same skill under another name) |
+| related | the page lists a related skill; the quote is shown; it is not the same skill |
+| not_listed | the page lists skills for this role but none match. Not proof the role does not need it |
+| no_official_data | the occupation has no usable skill list: absence says nothing either way |
+
+Over the 20 scored roles (122 role-skill rows): related 82, not listed 31, exact 8, synonym 1, no official data 0.
+The card also lists **other skills the eMASCO page lists for the role** that none of the role's skills cover (up to 12, marked "needs review" when the extraction was unsure), with a hint "related to your skill X (not counted)" when the student has a related app skill. Explore cards say when the official page lists only a few skills for a role.
+
+### Routes (read only)
+
+- `GET /api/skills/app-map`: the coverage and the 38 mappings.
+- `GET /api/skills/occupation/:code[?all=1]`: skills with quoted evidence (validated only by default). 400 bad code, 404 unknown code, 503 dataset missing. An occupation with no usable list returns its status and reason with an empty list.
+- `POST /api/skills/gap` `{ code, skills: [names] }`: matched, missing (with `relatedYouHave` hints), uncertain, coverage. An occupation with no usable list returns `coverage: null` and a note that this is not a finding that no skills are needed.
+
+### Regenerate
+
+```
+python pipeline/build_skill_dataset.py     # the dataset (after a new eMASCO crawl)
+python pipeline/map_app_skills.py          # the 38-skill mapping and role evidence (after the dataset or the synonym table changes)
+python pipeline/map_app_skills.py --check  # fails if the saved mapping is older than the dataset
+```
+If `role_evidence.json` or `app_skill_map.json` is older than the dataset, `/api/data` sends `skillEvidence: null` and logs a warning instead of showing evidence from a different build.
+
+### Limits
+
+- Evidence is explanation only; the student's fit still uses the team's skill list per role. Related skills are not equivalents and are never counted.
+- `related` is a keyword test: it can be loose (for example Communication has 308 related catalogue skills). The role card shows only skills listed on that occupation's own page.
+- 31 role-skill rows are "not listed": the team's draft role skills include things the official page does not mention (for example Statistics for Data Analyst). That is a review item for the team, not a deletion.
+- The synonym table has one entry. Unresolved: Using AI tools and Version control (Git) are not in the eMASCO text.
+- No Search API or DR API is used (none exists in the project).
+
 ## Known limits
 
 - One source per occupation, so every relation has the same evidence strength. Nothing here shows how common or how important a skill is.

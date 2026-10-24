@@ -1,0 +1,7 @@
+{
+  "status": "draft",
+  "note": "Curated by Claude on 24 Oct 2026 from the real catalogue; awaiting teammate verification. Only names for the SAME skill as the app skill are listed. Anything broader or narrower (for example 'Python scripting' for 'Python programming', or 'tax advisory and tax planning' for 'Tax planning') is related, not a synonym, and stays out of this table.",
+  "skills": [
+    { "label": "Spreadsheets (Excel)", "synonyms": ["Microsoft Excel", "MS Excel", "Spreadsheet software", "Spreadsheet tools"], "reason": "Excel is the spreadsheet software; the three names point to the same everyday skill" }
+  ]
+}

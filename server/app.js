@@ -23,6 +23,7 @@ import { runFullCheck } from './adminFull.js'
 import { createSourceMonitor } from './sources/monitor.js'
 import { describeSources, pingSources } from './sources/registry.js'
 import { readSignals, refreshSignals } from './sources/signals.js'
+import { createSkillEvidence } from './skillEvidence.js'
 
 const EMASCO_SKILL_LIMIT = 50
 const EMASCO_DEFAULT_TOP = 10
@@ -106,6 +107,10 @@ export function createApp({
   }
   const observedMeta = (file) => (file ? { source: file.source, url: file.url, release: file.release, fetchedAt: file.fetchedAt, builtAt: file.builtAt, cutoff: file.cutoff, minTasks: file.minTasks, quality: file.quality, limits: file.limits } : null)
 
+  // Preprocessed occupation-skill dataset (data/skills): evidence for the 20 scored roles goes out with /api/data,
+  // the full dataset is loaded only when one of the /api/skills routes needs it.
+  const skillStore = createSkillEvidence(path.join(dataDir, 'skills'))
+
   app.get('/api/data', async (request, response) => {
     try {
       const [roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks] = await Promise.all([
@@ -120,9 +125,10 @@ export function createApp({
         readEmerging(emergingPath),
         readCourseChecks(courseChecksPath),
       ])
+      const skillEvidence = await skillStore.roleEvidence().catch(() => null)
       const observed = await getObserved().catch(() => null)
       const observedRoles = Object.fromEntries(roles.filter((role) => observed?.roles?.[role.code]).map((role) => [role.code, observed.roles[role.code]]))
-      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks, observed: observed ? { ...observedMeta(observed), roles: observedRoles } : null })
+      response.json({ roles, skills, sdg, samples, trends, research, fields, references, emerging, courseChecks, skillEvidence, observed: observed ? { ...observedMeta(observed), roles: observedRoles } : null })
     } catch (error) {
       console.error('[data] load failed:', error.message)
       response.status(500).json({ error: 'Could not load data.' })
@@ -531,11 +537,14 @@ export function createApp({
       }
       const store = await getExposure().catch(() => null)
       const observed = await getObserved().catch(() => null)
+      const skillData = await skillStore.dataset().catch(() => null)
+      const summaries = skillData ? Object.fromEntries((result.roles ?? []).map((card) => [card.code, skillData.occupation(card.code)])) : null
       const roles = (result.roles ?? []).map((card) => {
         const row = store?.roles?.[card.code]
         return {
           ...card,
           observed: observed?.roles?.[card.code] ?? null,
+          officialSkills: summaries?.[card.code] ?? null,
           exposure: row
             ? {
                 status: row.status,
@@ -568,6 +577,60 @@ export function createApp({
     } finally {
       clearTimeout(timer)
     }
+  })
+
+  // ---- Skill dataset routes (read only). Missing or insufficient data is reported as such, never as "no skills required".
+  const CODE = /^\d{4}-\d{2}$/
+  const SKILL_INPUT_LIMIT = 100
+
+  async function skillDataset(response) {
+    try {
+      return await skillStore.dataset()
+    } catch (error) {
+      console.error('[skills] dataset not available:', error.message)
+      response.status(503).json({ error: 'skill-dataset-missing' })
+      return null
+    }
+  }
+
+  app.get('/api/skills/app-map', async (request, response) => {
+    const evidence = await skillStore.roleEvidence().catch(() => null)
+    if (!evidence) return response.status(503).json({ error: 'skill-evidence-missing' })
+    return response.json({ meta: evidence.meta, coverage: evidence.coverage, skills: evidence.appMap })
+  })
+
+  app.get('/api/skills/occupation/:code', async (request, response) => {
+    if (!CODE.test(request.params.code)) return response.status(400).json({ error: 'bad-occupation-code' })
+    const data = await skillDataset(response)
+    if (!data) return
+    const summary = data.occupation(request.params.code)
+    if (!summary) return response.status(404).json({ error: 'unknown-occupation' })
+    const all = request.query.all === '1'
+    const list = data.skillsForOccupation(request.params.code, { validatedOnly: !all })
+    return response.json({ ...summary, validatedOnly: !all, skills: list.map((item) => ({
+      skillId: item.skillId, skill: item.skillName, sections: item.sections, status: item.status, evidenceStrength: item.evidenceStrength,
+      independentSources: item.independentSources, evidence: item.evidence,
+    })) })
+  })
+
+  const parseSmallJson = (request, response, next) =>
+    express.json({ limit: '20kb' })(request, response, (error) =>
+      error ? response.status(error.type === 'entity.too.large' ? 413 : 400).json({ error: error.type === 'entity.too.large' ? 'too-large' : 'bad-json' }) : next())
+
+  app.post('/api/skills/gap', parseSmallJson, async (request, response) => {
+    const { code, skills: have } = request.body ?? {}
+    if (typeof code !== 'string' || !CODE.test(code)) return response.status(400).json({ error: 'bad-occupation-code' })
+    if (!Array.isArray(have) || have.length > SKILL_INPUT_LIMIT || have.some((item) => typeof item !== 'string' || item.length > 200)) {
+      return response.status(400).json({ error: 'skills must be a list of at most 100 short strings' })
+    }
+    const data = await skillDataset(response)
+    if (!data) return
+    const summary = data.occupation(code)
+    if (!summary) return response.status(404).json({ error: 'unknown-occupation' })
+    if (summary.status === 'insufficient' || summary.status === 'failed') {
+      return response.json({ code, status: summary.status, reason: summary.reason, matched: [], missing: [], uncertain: [], coverage: null, note: 'No usable skill list: this is not a finding that no skills are needed.' })
+    }
+    return response.json({ ...data.compare(code, have), sourceUrl: summary.source.url, retrievedAt: summary.source.retrievedAt })
   })
 
   app.use(express.static(distDirectory))

@@ -73,6 +73,13 @@ export function createSkillDataset({ catalogueFile, occupationFile, indexFile, r
     return record.skills.filter((relation) => !validatedOnly || relation.status === 'validated')
   }
 
+  // Status of an occupation's skill profile: ok, sparse, insufficient (no usable list) or failed. null = not in the dataset.
+  function occupation(code) {
+    const record = occupations[code]
+    if (!record) return null
+    return { code, title: record.title, status: record.status, reason: record.reason ?? null, skillCount: record.skills.length, source: record.source }
+  }
+
   function occupationsForSkill(input) {
     const id = resolveSkill(input)
     if (!id) return []
@@ -122,7 +129,7 @@ export function createSkillDataset({ catalogueFile, occupationFile, indexFile, r
       .map((record) => ({ code: record.code, title: record.title, status: record.status, reason: record.reason }))
 
   return {
-    meta: catalogueFile.meta, skill: (input) => skills.get(resolveSkill(input)) ?? null, resolveSkill, skillsForOccupation,
+    meta: catalogueFile.meta, occupation, skill: (input) => skills.get(resolveSkill(input)) ?? null, resolveSkill, skillsForOccupation,
     occupationsForSkill, compare, explain, coverageGaps, review: () => reviewFile, size: { skills: skills.size, occupations: Object.keys(occupations).length },
   }
 }

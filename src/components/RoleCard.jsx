@@ -1,5 +1,6 @@
 import SdgTag from './SdgTag.jsx';
 import { roleReference } from '../lib/referenceView.js';
+import { evidenceHeadline, evidenceSourceLine, otherOfficialSkills, skillSupportRows } from '../lib/skillEvidence.js';
 import {
   ILO_NO_MATCH,
   RANGE_NOTE,
@@ -36,6 +37,8 @@ export default function RoleCard({
   role,
   observed,
   observedMeta,
+  skillEvidence,
+  skillEvidenceMeta,
   score,
   range,
   rank,
@@ -59,6 +62,9 @@ export default function RoleCard({
   const wanted = learnCount(role, profile.learn || []);
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
   const fitRows = expanded ? fitSkillRows(role, profile, similar) : [];
+  const supportRows = expanded && skillEvidence ? skillSupportRows(skillEvidence, role.skills) : [];
+  const supportByLabel = Object.fromEntries(supportRows.map((row) => [row.label, row]));
+  const otherOfficial = expanded && skillEvidence ? otherOfficialSkills(skillEvidence, profile) : [];
   const ilo = iloView(role);
   const oecd = oecdView(role);
   const shares = exposureShares(role);
@@ -221,13 +227,49 @@ export default function RoleCard({
                     {row.label} <span className="text-slate-600">· {fitRowText(row)}</span>
                   </span>
                   <span className="tabular-nums">+{row.credit}</span>
+                  {supportByLabel[row.label]?.text && (
+                    <span className="basis-full text-xs text-slate-600">
+                      eMASCO page: {supportByLabel[row.label].text}
+                      {supportByLabel[row.label].evidence[0] && (
+                        <> “{supportByLabel[row.label].evidence[0].quote}”</>
+                      )}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
             <p className="m-0 text-xs text-slate-600">
               Skill list: eMASCO {role.code} (MOHR). Levels are what you chose; skills with no level count as Strong.
             </p>
+            {skillEvidence && (
+              <p className="m-0 text-xs text-slate-600">
+                {evidenceHeadline(skillEvidence)} {evidenceSourceLine(skillEvidence, skillEvidenceMeta)} The evidence below is for explanation only; it does not change the score.
+              </p>
+            )}
           </section>
+          {otherOfficial.length > 0 && (
+            <section className="mt-3 flex flex-col gap-1.5 rounded-lg border border-slate-200 p-3 text-[13px] text-slate-700">
+              <h3 className="m-0 text-sm font-bold text-[#0F172A]">Other skills the eMASCO page lists for this role (not in the score)</h3>
+              <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                {otherOfficial.map((item) => (
+                  <li key={item.skillId}>
+                    {item.skillName}
+                    {item.needsReview && <span className="ml-1 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-bold text-amber-900">needs review</span>}
+                    {item.relatedYouHave.length > 0 && (
+                      <span className="text-xs text-teal-800"> · related to your skill {item.relatedYouHave.join(', ')} (not counted)</span>
+                    )}
+                    <span className="block text-xs text-slate-600">“{item.quote}”</span>
+                  </li>
+                ))}
+              </ul>
+              {skillEvidence.otherOfficialCount > otherOfficial.length && (
+                <p className="m-0 text-xs text-slate-600">{skillEvidence.otherOfficialCount - otherOfficial.length} more on the official page.</p>
+              )}
+              <a className="text-xs font-bold text-[#0F766E] underline" href={skillEvidence.source.url} target="_blank" rel="noopener noreferrer">
+                Open the eMASCO page ({skillEvidence.source.retrievedAt})
+              </a>
+            </section>
+          )}
           <div className="mt-3 rounded-lg bg-slate-50 px-3 py-2.5 text-[13px] text-slate-700 tabular-nums">
             {breakdown.formula}
           </div>

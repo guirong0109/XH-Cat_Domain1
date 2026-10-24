@@ -62,6 +62,7 @@ describe('api', () => {
       emerging: null,
       courseChecks: null,
       observed: null,
+      skillEvidence: null,
     })
   })
 
