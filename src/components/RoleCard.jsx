@@ -9,6 +9,7 @@ import {
   iloView,
   labelOrigin,
   levelName,
+  oecdView,
   roleSources,
   scoreBreakdown,
   skillChipText,
@@ -55,6 +56,7 @@ export default function RoleCard({
   const breakdown = expanded ? scoreBreakdown(role, score, scenario, trends) : null;
   const fitRows = expanded ? fitSkillRows(role, profile, similar) : [];
   const ilo = iloView(role);
+  const oecd = oecdView(role);
   const shares = exposureShares(role);
   const panelId = `why-${role.id}`;
   const first = rank === 1;
@@ -101,6 +103,9 @@ export default function RoleCard({
             )}
             {ilo && (
               <span className="rounded-md bg-indigo-100 px-2 py-0.5 text-xs font-bold text-indigo-800">{ilo.badge}</span>
+            )}
+            {oecd && (
+              <span className="rounded-md bg-teal-100 px-2 py-0.5 text-xs font-bold text-teal-900">{oecd.badge}</span>
             )}
           </div>
           <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Skills for this role">
@@ -249,8 +254,35 @@ export default function RoleCard({
                 <p className="m-0">{ILO_NO_MATCH}</p>
               )}
             </section>
+            {oecd && (
+              <section className="flex flex-col gap-1.5 rounded-lg border border-teal-200 bg-teal-50/40 p-3 text-[13px] text-slate-700">
+                <h3 className="m-0 text-sm font-bold text-[#0F172A]">OECD AI capability gap (not in the score)</h3>
+                <p className="m-0 tabular-nums">{oecd.scoreText}</p>
+                <p className="m-0">{oecd.groupText}</p>
+                <p className="m-0 text-xs text-slate-600">{oecd.scaleText}</p>
+                <ul className="m-0 grid list-none grid-cols-[minmax(0,7.5rem)_1fr_2rem] items-center gap-x-2 gap-y-1 p-0 text-xs" aria-label="Gap per capability">
+                  {oecd.domains.map((domain) => (
+                    <li key={domain.name} className="contents">
+                      <span>{domain.name}</span>
+                      {domain.aiMatches ? (
+                        <span className="col-span-2 text-slate-600">AI already matches</span>
+                      ) : (
+                        <>
+                          <span className="h-2 rounded bg-teal-100" aria-hidden="true">
+                            <span className="block h-2 rounded bg-teal-700" style={{ width: `${(domain.gap / oecd.maxGap) * 100}%` }} />
+                          </span>
+                          <span className="tabular-nums">{domain.gap.toFixed(1)}</span>
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <p className="m-0">{oecd.mappingNote}</p>
+                <p className="m-0 text-xs text-slate-600">{oecd.sourceText}</p>
+              </section>
+            )}
           </div>
-          <p className="m-0 mt-2 text-[13px] text-slate-600">Two views can disagree. Both are estimates. You decide.</p>
+          <p className="m-0 mt-2 text-[13px] text-slate-600">The views can disagree. All are estimates. You decide.</p>
         </div>
       )}
     </article>

@@ -9,6 +9,7 @@
   },
   "groups": {
     "g03": {
+      "hours": 8,
       "label": "Attention to detail",
       "portal": "elatih",
       "sdgs": [4],
@@ -16,6 +17,7 @@
       "keywords": ["attention to detail"]
     },
     "g04a": {
+      "hours": 30,
       "label": "Financial reporting",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -23,6 +25,7 @@
       "keywords": ["financial reporting", "financial statement", "financial statements", "balance sheet", "income statement", "cash flow statement", "profit and loss", "management accounts"]
     },
     "g04b": {
+      "hours": 25,
       "label": "Financial analysis",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -30,6 +33,7 @@
       "keywords": ["financial analysis", "ratio analysis", "financial ratios", "cost analysis"]
     },
     "g04c": {
+      "hours": 25,
       "label": "Budgeting and costing",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -37,6 +41,7 @@
       "keywords": ["budgeting", "budget preparation", "financial forecasting", "financial modelling", "financial modeling", "cost accounting", "costing", "variance analysis", "cost control"]
     },
     "g04d": {
+      "hours": 30,
       "label": "Auditing and internal control",
       "portal": "elatih",
       "sdgs": [4, 16],
@@ -45,6 +50,7 @@
       "notKeywords": ["energy audit", "energy auditor", "energy auditing"]
     },
     "g04e": {
+      "hours": 20,
       "label": "Accounting software (ERP)",
       "portal": "elatih",
       "sdgs": [4, 9],
@@ -52,6 +58,7 @@
       "keywords": ["accounting software", "sql account", "autocount", "ubs accounting", "quickbooks", "xero", "myob", "sap fico", "erp", "erp system"]
     },
     "g04f": {
+      "hours": 25,
       "label": "Bookkeeping and reconciliation",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -59,6 +66,7 @@
       "keywords": ["bookkeeping", "book-keeping", "bank reconciliation", "bank reconciliations", "account reconciliation", "general ledger", "journal entries", "month-end closing", "month end closing", "accounts payable", "accounts receivable", "full set of accounts"]
     },
     "g04g": {
+      "hours": 20,
       "label": "Tax planning",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -66,6 +74,7 @@
       "keywords": ["tax planning", "tax advisory", "tax incentives", "tax exemption", "tax exemptions", "tax relief", "tax reliefs"]
     },
     "g05": {
+      "hours": 20,
       "label": "Fraud detection",
       "portal": "elatih",
       "sdgs": [4, 16],
@@ -73,6 +82,7 @@
       "keywords": ["forensic accounting", "forensic audit", "fraud detection", "fraud investigation", "fraud risk"]
     },
     "g06": {
+      "hours": 15,
       "label": "Payroll",
       "portal": "elatih",
       "sdgs": [4, 8],
@@ -80,6 +90,7 @@
       "keywords": ["payroll", "epf", "kwsp", "socso", "perkeso", "statutory contributions"]
     },
     "g07": {
+      "hours": 30,
       "label": "Accounting and audit standards",
       "portal": "elatih",
       "sdgs": [4, 16],
@@ -87,6 +98,7 @@
       "keywords": ["mfrs", "ifrs", "mpers", "accounting standards", "accounting principles", "international standards on auditing", "gaap", "coso"]
     },
     "g09": {
+      "hours": 8,
       "label": "Time management",
       "portal": "elatih",
       "sdgs": [4],
@@ -94,6 +106,7 @@
       "keywords": ["time management"]
     },
     "g10": {
+      "hours": 25,
       "label": "Tax compliance",
       "portal": "elatih",
       "sdgs": [4, 16],

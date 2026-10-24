@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from build_data import build, check_similar, compute_importance, paths_for  # noqa: E402
+from build_data import build, check_similar, compute_importance, oecd_for_role, paths_for  # noqa: E402
 
 CODE = "2524-02"
 
@@ -307,7 +307,8 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(role["labelSource"], "runpod")
         self.assertEqual(role["tasks"][0], {"text": "Clean data.", "label": "automatable"})
         self.assertEqual(role["skills"][0],
-                         {"label": "SQL and databases", "type": "specific", "moderate": 0.8, "fast": 1.0})
+                         {"label": "SQL and databases", "type": "specific", "moderate": 0.8, "fast": 1.0,
+                          "exposure": "ai_assisted"})
         self.assertEqual(role["skills"][1]["fast"], 0.4)
 
     def test_only_codes_in_role_skills_are_built(self):
@@ -498,6 +499,24 @@ class CheckSimilarTests(unittest.TestCase):
     def test_check_similar_rejects_self_pair(self):
         with self.assertRaisesRegex(ValueError, "Statistics"):
             check_similar({"Statistics": ["Statistics"]}, {"Statistics"})
+
+
+class OecdForRoleTests(unittest.TestCase):
+    FILE = {"groups": {"15": {"code": "15", "name": "Computer and Mathematical", "overall": 3.1, "gaps": {"Language": 0.5}}},
+            "average": {"Language": 0.4}, "source": "S", "url": "U", "fetchedAt": "2026-10-24"}
+
+    def test_returns_group_values(self):
+        result = oecd_for_role("A", {"A": {"socGroup": "15", "reason": "r"}}, self.FILE)
+        self.assertEqual(result["overall"], 3.1)
+        self.assertEqual(result["groupName"], "Computer and Mathematical")
+
+    def test_unmapped_role_or_missing_file_gives_none(self):
+        self.assertIsNone(oecd_for_role("B", {}, self.FILE))
+        self.assertIsNone(oecd_for_role("A", {"A": {"socGroup": "15"}}, None))
+
+    def test_unknown_group_is_an_error(self):
+        with self.assertRaises(ValueError):
+            oecd_for_role("A", {"A": {"socGroup": "99", "reason": "r"}}, self.FILE)
 
 
 if __name__ == "__main__":

@@ -428,7 +428,7 @@
   },
   {
     "label": "Attention to detail",
-    "hours": null,
+    "hours": 8,
     "portal": "elatih",
     "sdgs": [
       4
@@ -462,7 +462,7 @@
   },
   {
     "label": "Financial reporting",
-    "hours": null,
+    "hours": 30,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -500,7 +500,7 @@
   },
   {
     "label": "Financial analysis",
-    "hours": null,
+    "hours": 25,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -542,7 +542,7 @@
   },
   {
     "label": "Budgeting and costing",
-    "hours": null,
+    "hours": 25,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -573,7 +573,7 @@
   },
   {
     "label": "Auditing and internal control",
-    "hours": null,
+    "hours": 30,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -624,7 +624,7 @@
   },
   {
     "label": "Accounting software (ERP)",
-    "hours": null,
+    "hours": 20,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -668,7 +668,7 @@
   },
   {
     "label": "Bookkeeping and reconciliation",
-    "hours": null,
+    "hours": 25,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -706,7 +706,7 @@
   },
   {
     "label": "Tax planning",
-    "hours": null,
+    "hours": 20,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -735,7 +735,7 @@
   },
   {
     "label": "Fraud detection",
-    "hours": null,
+    "hours": 20,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -762,7 +762,7 @@
   },
   {
     "label": "Payroll",
-    "hours": null,
+    "hours": 15,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -790,7 +790,7 @@
   },
   {
     "label": "Accounting and audit standards",
-    "hours": null,
+    "hours": 30,
     "portal": "elatih",
     "sdgs": [
       4,
@@ -828,7 +828,7 @@
   },
   {
     "label": "Time management",
-    "hours": null,
+    "hours": 8,
     "portal": "elatih",
     "sdgs": [
       4
@@ -858,7 +858,7 @@
   },
   {
     "label": "Tax compliance",
-    "hours": null,
+    "hours": 25,
     "portal": "elatih",
     "sdgs": [
       4,

@@ -10,6 +10,7 @@ import {
   growthBarWidth,
   ILO_NO_MATCH,
   iloView,
+  oecdView,
   jobMarketEmptyText,
   jobMarketRows,
   RANGE_NOTE,
@@ -328,5 +329,41 @@ describe('whyReason', () => {
     expect(whyReason('field')).toBe('Linked to your major or sector');
     expect(whyReason('target')).toBe('In a sector you want');
     expect(whyReason(null)).toBe(null);
+  });
+});
+
+describe('oecdView', () => {
+  const oecd = {
+    socGroup: '15',
+    groupName: 'Computer and Mathematical',
+    overall: 3.1,
+    gaps: { Language: 0.5, 'Problem solving': 1.3, Vision: 0, Manipulation: 0 },
+    average: { Language: 0.4, 'Problem solving': 1.1, Vision: 0.2, Manipulation: 0.7 },
+    source: 'OECD (2026), Table 6.3',
+    url: 'https://example.org/oecd',
+    fetchedAt: '2026-10-24',
+  };
+
+  it('returns null without oecd', () => {
+    expect(oecdView({ id: 'x' })).toBeNull();
+  });
+
+  it('builds badge, group text and a draft-mapping note', () => {
+    const view = oecdView({ oecd });
+    expect(view.badge).toBe('OECD 2026: gap 3.1');
+    expect(view.groupText).toContain('Computer and Mathematical');
+    expect(view.mappingNote).toContain('team draft');
+  });
+
+  it('sorts domains by gap and marks only a zero gap as AI already matching', () => {
+    const view = oecdView({ oecd });
+    expect(view.domains.map((domain) => domain.name)).toEqual(['Problem solving', 'Language', 'Manipulation', 'Vision']);
+    expect(view.domains.filter((domain) => domain.aiMatches).map((domain) => domain.name)).toEqual(['Manipulation', 'Vision']);
+    expect(view.maxGap).toBe(1.3);
+  });
+
+  it('adds the OECD link to the role sources', () => {
+    const sources = roleSources({ code: 'x', group: 'professionals', oecd }, null);
+    expect(sources.some((source) => source.url === 'https://example.org/oecd')).toBe(true);
   });
 });

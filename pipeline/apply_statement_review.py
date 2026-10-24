@@ -101,7 +101,7 @@ def apply_review(rows, drafts, existing_labels, role_meta):
 
     new_skills = []
     for group, draft in drafts.items():
-        entry = {"label": draft["label"], "hours": None}
+        entry = {"label": draft["label"], "hours": draft.get("hours")}
         for field in DRAFT_FIELDS:
             entry[field] = draft[field]
         if draft.get("notKeywords"):

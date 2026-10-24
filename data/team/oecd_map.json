@@ -1,0 +1,83 @@
+{
+  "_note": "DRAFT by Claude, not an official table and not yet reviewed by the team: each role is placed in the US SOC major group (OECD Table 6.3) that its everyday work is closest to. The OECD value is the average of that whole group, not of the role.",
+  "2524-02": {
+    "socGroup": "15",
+    "reason": "Analyses data: Computer and Mathematical"
+  },
+  "3512-05": {
+    "socGroup": "15",
+    "reason": "Database support: Computer and Mathematical"
+  },
+  "2543-07": {
+    "socGroup": "15",
+    "reason": "Business intelligence reporting: Computer and Mathematical"
+  },
+  "3513-01": {
+    "socGroup": "15",
+    "reason": "Network support: Computer and Mathematical"
+  },
+  "2423-09": {
+    "socGroup": "25",
+    "reason": "Teaching and training: Educational Instruction and Library"
+  },
+  "2531-04": {
+    "socGroup": "15",
+    "reason": "Information security: Computer and Mathematical"
+  },
+  "3131-07": {
+    "socGroup": "17",
+    "reason": "Electrical technician work: Architecture and Engineering"
+  },
+  "2513-01": {
+    "socGroup": "15",
+    "reason": "Web development: Computer and Mathematical"
+  },
+  "2543-03": {
+    "socGroup": "15",
+    "reason": "Digital interface design: Computer and Mathematical"
+  },
+  "2541-09": {
+    "socGroup": "27",
+    "reason": "Writing and content: Arts, Design, Entertainment, Sports, and Media"
+  },
+  "3313-04": {
+    "socGroup": "17",
+    "reason": "Engineering technician work: Architecture and Engineering"
+  },
+  "2141-13": {
+    "socGroup": "17",
+    "reason": "Engineering: Architecture and Engineering"
+  },
+  "2269-01": {
+    "socGroup": "15",
+    "reason": "Health data analysis: Computer and Mathematical"
+  },
+  "3514-01": {
+    "socGroup": "15",
+    "reason": "Web support: Computer and Mathematical"
+  },
+  "2511-08": {
+    "socGroup": "13",
+    "reason": "Business process change: Business and Financial Operations"
+  },
+  "2411-01": {
+    "socGroup": "13",
+    "reason": "Accounting: Business and Financial Operations"
+  },
+  "2411-02": {
+    "socGroup": "13",
+    "reason": "Tax advice: Business and Financial Operations"
+  },
+  "2411-05": {
+    "socGroup": "13",
+    "reason": "Auditing: Business and Financial Operations"
+  },
+  "3313-02": {
+    "socGroup": "13",
+    "reason": "Audit support: Business and Financial Operations"
+  },
+  "3313-03": {
+    "socGroup": "43",
+    "reason": "Bookkeeping and accounting clerk work: Office and Administrative Support"
+  }
+}

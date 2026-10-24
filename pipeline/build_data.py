@@ -39,6 +39,8 @@ def paths_for(data_directory):
         "isco_map": join("team", "isco_map.json"),
         "fields": join("team", "fields.json"),
         "ilo": join("ilo", "ilo_2025_scores.json"),
+        "oecd": join("oecd", "oecd_2026_group_gaps.json"),
+        "oecd_map": join("team", "oecd_map.json"),
         "exposure": join("runpod", "exposure.json"),
         "skill_task_links": join("runpod", "skill_task_links.json"),
         "roles_out": join("roles.json"),
@@ -115,7 +117,7 @@ def choose_exposure(code, runpod_exposure, manual_labels):
     return entry, label_source
 
 
-def build_role(code, raw, team, exposure_entry, label_source, links, known_labels, known_goals, ilo=None):
+def build_role(code, raw, team, exposure_entry, label_source, links, known_labels, known_goals, ilo=None, oecd=None):
     for goal in team["sdgs"]:
         if str(goal) not in known_goals:
             raise ValueError(f"Role {code} uses unknown SDG {goal}")
@@ -124,7 +126,9 @@ def build_role(code, raw, team, exposure_entry, label_source, links, known_label
         if skill["label"] not in known_labels:
             raise ValueError(f"Role {code} uses unknown skill label {skill['label']!r}")
         moderate, fast = compute_importance(skill["type"], links.get(skill["label"]))
-        skills.append({"label": skill["label"], "type": skill["type"], "moderate": moderate, "fast": fast})
+        # exposure = label of the role task this skill is linked to (None until the RunPod links exist)
+        skills.append({"label": skill["label"], "type": skill["type"], "moderate": moderate, "fast": fast,
+                       "exposure": links.get(skill["label"])})
     role = {
         "id": team["id"],
         "code": code,
@@ -143,6 +147,8 @@ def build_role(code, raw, team, exposure_entry, label_source, links, known_label
     }
     if ilo is not None:
         role["ilo"] = ilo
+    if oecd is not None:
+        role["oecd"] = oecd
     return role
 
 
@@ -158,6 +164,19 @@ def ilo_for_role(code, isco_map, ilo_file):
     return {"isco": isco, "iscoTitle": occupation["title"], "mean": occupation["mean"],
             "sd": occupation["sd"], "category": occupation["category"],
             "source": ilo_file["source"], "url": ilo_file["url"], "fetchedAt": ilo_file["fetchedAt"]}
+
+
+def oecd_for_role(code, oecd_map, oecd_file):
+    """The role's OECD AI Capability Gap dict (its SOC group's averages), or None when unmapped."""
+    if oecd_file is None or code not in oecd_map:
+        return None
+    group = oecd_file["groups"].get(oecd_map[code]["socGroup"])
+    if group is None:
+        raise ValueError(f"Role {code}: oecd_map.json uses SOC group {oecd_map[code]['socGroup']!r}, "
+                         "which is not in oecd/oecd_2026_group_gaps.json")
+    return {"socGroup": group["code"], "groupName": group["name"], "overall": group["overall"],
+            "gaps": group["gaps"], "average": oecd_file["average"], "reason": oecd_map[code]["reason"],
+            "source": oecd_file["source"], "url": oecd_file["url"], "fetchedAt": oecd_file["fetchedAt"]}
 
 
 def check_skill_sdgs(skill_labels, known_goals):
@@ -334,6 +353,11 @@ def build(paths):
         print("Warning: ilo/ilo_2025_scores.json not found; roles get no ILO second opinion",
               file=sys.stderr)
 
+    oecd_map = without_notes(read_json(paths["oecd_map"], required=False))
+    oecd_file = read_json(paths["oecd"], required=False)
+    if oecd_file is None:
+        print("Warning: oecd/oecd_2026_group_gaps.json not found; roles get no OECD signal", file=sys.stderr)
+
     for code in raw_by_code:
         if code not in role_skills:
             print(f"Warning: {code} is in roles_raw.json but not role_skills.json; skipped", file=sys.stderr)
@@ -347,7 +371,8 @@ def build(paths):
                "fetchedAt": raw_by_code[code].get("scrapedAt") or snapshot["fetchedAt"]}
         roles.append(build_role(code, raw, team, entry, label_source,
                                 all_links.get(code, {}), known_labels, sdg,
-                                ilo_for_role(code, isco_map, ilo_file)))
+                                ilo_for_role(code, isco_map, ilo_file),
+                                oecd_for_role(code, oecd_map, oecd_file)))
 
     groups = list(dict.fromkeys(role["interest"] for role in roles))
     known_groups = set(groups)

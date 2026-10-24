@@ -21,6 +21,7 @@ CHAT_MODEL = "Qwen/Qwen2.5-7B-Instruct"
 EMBEDDING_MODEL = "BAAI/bge-m3"
 
 ROLES_PATH = "data/emasco/roles_raw.json"
+OCCUPATIONS_PATH = "data/emasco/occupations.json"
 SKILL_LABELS_PATH = "data/team/skill_labels.json"
 ROLE_SKILLS_PATH = "data/team/role_skills.json"
 OUTPUT_DIRECTORY = "data/runpod"
@@ -220,10 +221,23 @@ def build_skill_task_links(role_skills, exposure, embed):
     return links
 
 
+def extra_roles(occupations, known_codes):
+    """Roles of the full eMASCO file that are not in known_codes and have tasks (for --all-roles)."""
+    extras = []
+    for role in occupations["roles"] + occupations.get("tasksOnly", []):
+        tasks = [text for text in role.get("tasks", []) if isinstance(text, str) and text.strip()]
+        if role["code"] not in known_codes and tasks:
+            extras.append({"code": role["code"], "title": role["title"], "tasks": tasks})
+    return extras
+
+
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--links-only", action="store_true",
                         help="only rebuild skill_task_links.json (needs exposure.json and role_skills.json)")
+    parser.add_argument("--all-roles", action="store_true",
+                        help="also label the tasks of every other eMASCO role (data/emasco/occupations.json); "
+                             "skips the skill-suggestion and similar-pair steps")
     parser.add_argument("--hourly-rate", type=float, default=DEFAULT_HOURLY_RATE,
                         help="Pod price in USD per hour, for the cost estimate")
     return parser.parse_args(argv)
@@ -273,10 +287,16 @@ def main(argv=None):
     label_task = make_label_task(generate_label, oom_errors=(torch.cuda.OutOfMemoryError,))
     exposure = read_json(exposure_path, "") if os.path.exists(exposure_path) else {}
     try:
-        label_roles(roles, exposure, label_task, lambda data: write_json(exposure_path, data))
+        to_label = roles + extra_roles(read_json(OCCUPATIONS_PATH, "Run pipeline/build_all_roles.py first."),
+                                       {role["code"] for role in roles}) if args.all_roles else roles
+        label_roles(to_label, exposure, label_task, lambda data: write_json(exposure_path, data))
     except AbortRun as error:
         raise SystemExit(f"Aborted: {error}. Finished roles are saved in {exposure_path}; "
                          "fix the cause and run again to resume.")
+
+    if args.all_roles:
+        print("Done labelling all roles. Remember to stop and delete the Pod.")
+        return 0
 
     picker_labels = [entry["label"] for entry in skill_labels]
     picker_vectors = embed(picker_labels)

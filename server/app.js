@@ -415,6 +415,15 @@ export function createApp({
     return emascoData
   }
 
+  // Central store AI exposure (data/store/ai_exposure.json), keyed by MASCO code. Missing file = no exposure info.
+  let exposureStore
+  async function getExposure() {
+    if (exposureStore === undefined) {
+      exposureStore = await readOptionalJson(path.join(dataDir, 'store', 'ai_exposure.json'))
+    }
+    return exposureStore
+  }
+
   app.get('/api/emasco/skills', async (request, response) => {
     let data
     try {
@@ -464,8 +473,26 @@ export function createApp({
         })
         result = await Promise.race([work, timeout])
       }
+      const store = await getExposure().catch(() => null)
+      const roles = (result.roles ?? []).map((card) => {
+        const row = store?.roles?.[card.code]
+        return {
+          ...card,
+          exposure: row
+            ? {
+                status: row.status,
+                labelSource: row.labelSource,
+                automatablePct: row.automatablePct,
+                assistedPct: row.assistedPct,
+                humanPct: row.humanPct,
+                date: store.builtAt ?? null
+              }
+            : null
+        }
+      })
       response.json({
         ...result,
+        roles,
         maxLevel,
         source: {
           occupations: data.occupations.source,

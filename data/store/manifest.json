@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "datasets": [
+    {
+      "kind": "roles",
+      "path": "roles.json",
+      "producer": "pipeline/build_data.py",
+      "source": "eMASCO snapshot + team files",
+      "present": true,
+      "count": 20,
+      "date": null
+    },
+    {
+      "kind": "skills",
+      "path": "skills.json",
+      "producer": "pipeline/build_data.py",
+      "source": "team files + similar-skill review",
+      "present": true,
+      "count": 38,
+      "date": null
+    },
+    {
+      "kind": "sdg",
+      "path": "sdg.json",
+      "producer": "pipeline/build_data.py",
+      "source": "UN SDG list (team)",
+      "present": true,
+      "count": 7,
+      "date": null
+    },
+    {
+      "kind": "samples",
+      "path": "samples.json",
+      "producer": "pipeline/build_data.py",
+      "source": "synthetic sample students",
+      "present": true,
+      "count": 4,
+      "date": null
+    },
+    {
+      "kind": "fields",
+      "path": "fields.json",
+      "producer": "pipeline/build_data.py",
+      "source": "team draft",
+      "present": true,
+      "count": 3,
+      "date": null
+    },
+    {
+      "kind": "occupations",
+      "path": "emasco/occupations.json",
+      "producer": "pipeline/build_all_roles.py",
+      "source": "eMASCO crawl",
+      "present": true,
+      "count": 1766,
+      "date": "2026-10-23"
+    },
+    {
+      "kind": "trends",
+      "path": "trends.json",
+      "producer": "server/trends.js (OpenDOSM refresh)",
+      "source": "OpenDOSM",
+      "present": true,
+      "count": 3,
+      "date": null
+    },
+    {
+      "kind": "research",
+      "path": "research.json",
+      "producer": "server/research.js (OpenAlex refresh)",
+      "source": "OpenAlex",
+      "present": false,
+      "count": null,
+      "date": null
+    },
+    {
+      "kind": "emerging",
+      "path": "emerging.json",
+      "producer": "server/emerging.js (feed refresh)",
+      "source": "OpenAlex + news feeds",
+      "present": true,
+      "count": 40,
+      "date": "2026-10-23T09:15:16.394Z"
+    },
+    {
+      "kind": "references",
+      "path": "references.json",
+      "producer": "server/references.js (reference check)",
+      "source": "eMASCO pages + portal links",
+      "present": true,
+      "count": 20,
+      "date": "2026-10-23T09:30:26.547Z"
+    },
+    {
+      "kind": "ilo",
+      "path": "ilo/ilo_2025_scores.json",
+      "producer": "pipeline/import_ilo.py",
+      "source": "ILO WP140 Table A1",
+      "present": true,
+      "count": 6,
+      "date": "2026-10-21"
+    },
+    {
+      "kind": "exposure_runpod",
+      "path": "runpod/exposure.json",
+      "producer": "pipeline/runpod_label.py (RunPod)",
+      "source": "AI task labels",
+      "present": false,
+      "count": null,
+      "date": null
+    },
+    {
+      "kind": "skill_task_links",
+      "path": "runpod/skill_task_links.json",
+      "producer": "pipeline/runpod_label.py (RunPod)",
+      "source": "AI skill-task links",
+      "present": false,
+      "count": null,
+      "date": null
+    }
+  ],
+  "builtAt": "2026-10-24",
+  "exposure": {
+    "roles": 1812,
+    "labelled": 20,
+    "notLabelled": 1792,
+    "bySource": {
+      "manual": 20
+    }
+  }
+}

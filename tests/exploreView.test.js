@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   MAX_PICKS,
+  SDG_NOT_TAGGED,
+  exposureView,
   barWidth,
   errorText,
   gradesText,
@@ -150,5 +152,33 @@ describe('server calls', () => {
     expect(await matchRoles({}, reply(413, {}))).toEqual({ ok: false, error: 'too-long' });
     expect(await matchRoles({}, async () => ({ status: 500, json: async () => { throw new Error('bad json'); } }))).toEqual({ ok: false, error: 'failed' });
     expect(await matchRoles({}, async () => { throw new Error('offline'); })).toEqual({ ok: false, error: 'failed' });
+  });
+});
+
+describe('exposureView', () => {
+  const base = { status: 'labelled', labelSource: 'manual', automatablePct: 0, assistedPct: 67, humanPct: 33, date: '2026-10-24' };
+  it('shows a Sample badge and shares for a manual label, zero included', () => {
+    const view = exposureView(base);
+    expect(view.labelled).toBe(true);
+    expect(view.badge).toBe('Sample');
+    expect(view.text).toContain('Automatable 0%');
+    expect(view.source).toContain('Does not change any score');
+  });
+  it('shows AI estimate for other label sources', () => {
+    expect(exposureView({ ...base, labelSource: 'ai' }).badge).toBe('AI estimate');
+  });
+  it('works without a date', () => {
+    expect(exposureView({ ...base, date: null }).source).not.toContain('store built');
+  });
+  it('keeps "not scored" for not_labelled, missing, or incomplete data', () => {
+    for (const input of [{ status: 'not_labelled', automatablePct: null }, null, undefined, { ...base, humanPct: null }]) {
+      const view = exposureView(input);
+      expect(view.labelled).toBe(false);
+      expect(view.badge).toBe('AI risk: not scored');
+      expect(view.note).toMatch(/pending/);
+    }
+  });
+  it('has an honest SDG line', () => {
+    expect(SDG_NOT_TAGGED).toBe('SDG not tagged yet for this role');
   });
 });

@@ -196,6 +196,34 @@ export function iloView(role) {
   };
 }
 
+export const OECD_SCALE_TEXT =
+  'OECD AI Capability Gap: how far current AI is from what the work demands. 0 means AI already matches the demand; a bigger number means a bigger gap, so more room for people. Lower overall = more exposed to AI.';
+
+// OECD second signal: nine capability domains for the role's SOC group. Shown next to the score, never used in it.
+export function oecdView(role) {
+  const oecd = role.oecd;
+  if (!oecd) return null;
+  const domains = Object.entries(oecd.gaps)
+    .map(([name, gap]) => ({
+      name,
+      gap,
+      average: oecd.average?.[name] ?? null,
+      aiMatches: gap === 0,
+    }))
+    .sort((a, b) => b.gap - a.gap || a.name.localeCompare(b.name));
+  const fetched = oecd.fetchedAt ? ` Fetched ${formatDate(oecd.fetchedAt)}.` : '';
+  return {
+    badge: `OECD 2026: gap ${oecd.overall.toFixed(1)}`,
+    scoreText: `Overall AI Capability Gap ${oecd.overall.toFixed(1)} (group average)`,
+    groupText: `US SOC group ${oecd.socGroup} · ${oecd.groupName}`,
+    mappingNote: "We placed this role in that group ourselves (team draft). The value is the whole group's average, not this role's.",
+    scaleText: OECD_SCALE_TEXT,
+    domains,
+    maxGap: Math.max(...domains.map((domain) => domain.gap), 1),
+    sourceText: `Source: ${oecd.source}. US occupations (O*NET), not Malaysia-specific.${fetched}`,
+  };
+}
+
 export const ILO_WP140_URL = 'https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html';
 
 // The "Sources:" links on a role card: eMASCO page, OpenDOSM trend, ILO index.
@@ -215,6 +243,7 @@ export function roleSources(role, trends) {
     });
   }
   if (role.ilo) sources.push({ label: 'ILO 2025 AI exposure (WP140)', url: ILO_WP140_URL });
+  if (role.oecd?.url) sources.push({ label: 'OECD AI Capability Gap (AI Papers No. 59)', url: role.oecd.url });
   return sources;
 }
 

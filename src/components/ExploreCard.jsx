@@ -1,4 +1,4 @@
-import { barWidth, gradesText, levelLabel, missingSkills, similarityText, whyLines } from '../lib/exploreView.js';
+import { SDG_NOT_TAGGED, barWidth, exposureView, gradesText, levelLabel, missingSkills, similarityText, whyLines } from '../lib/exploreView.js';
 
 const MISSING_SHOWN = 12;
 
@@ -7,6 +7,7 @@ export default function ExploreCard({ card }) {
   const why = whyLines(card);
   const missing = missingSkills(card);
   const grades = gradesText(card);
+  const exposure = exposureView(card.exposure);
   return (
     <li className="flex list-none flex-col gap-2 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -83,8 +84,29 @@ export default function ExploreCard({ card }) {
         </details>
       )}
 
+      <div className="flex flex-col gap-1 text-xs text-slate-700">
+        {exposure.labelled ? (
+          <>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-semibold">AI exposure</span>
+              <span className="rounded-full border border-orange-300 bg-orange-50 px-2.5 py-0.5 font-semibold text-[#C2410C]">
+                {exposure.badge}
+              </span>
+            </div>
+            <div>{exposure.text}</div>
+            <div className="text-slate-600">{exposure.source}</div>
+          </>
+        ) : (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-slate-100 px-2.5 py-0.5">{exposure.badge}</span>
+            <span className="text-slate-600">{exposure.note}</span>
+          </div>
+        )}
+        <div>
+          <span className="font-semibold">SDG:</span> {SDG_NOT_TAGGED}
+        </div>
+      </div>
       <div className="flex flex-wrap items-center gap-3">
-        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700">AI risk: not scored</span>
         <a
           href={card.url}
           target="_blank"

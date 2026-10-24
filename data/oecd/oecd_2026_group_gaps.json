@@ -1,0 +1,383 @@
+{
+  "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+  "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+  "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Credit the OECD and say if changes were made.",
+  "fetchedAt": "2026-10-24",
+  "note": "Gap = distance between what an occupation demands and what current AI can do. Lower = closer to AI = more exposed. Values are averages for US SOC major groups (O*NET), not Malaysia-specific and not per occupation.",
+  "domains": [
+    "Language",
+    "Social interaction",
+    "Problem solving",
+    "Creativity",
+    "Metacognition",
+    "Knowledge, learning and memory",
+    "Vision",
+    "Manipulation",
+    "Robotic intelligence"
+  ],
+  "average": {
+    "Language": 0.4,
+    "Social interaction": 1.1,
+    "Problem solving": 1.1,
+    "Creativity": 0.1,
+    "Metacognition": 1.1,
+    "Knowledge, learning and memory": 0.5,
+    "Vision": 0.2,
+    "Manipulation": 0.7,
+    "Robotic intelligence": 0.6
+  },
+  "groups": {
+    "11": {
+      "code": "11",
+      "name": "Management",
+      "gaps": {
+        "Language": 0.8,
+        "Social interaction": 1.8,
+        "Problem solving": 2,
+        "Creativity": 0,
+        "Metacognition": 2,
+        "Knowledge, learning and memory": 0.9,
+        "Vision": 0,
+        "Manipulation": 0.1,
+        "Robotic intelligence": 0
+      },
+      "overall": 5.5
+    },
+    "13": {
+      "code": "13",
+      "name": "Business and Financial Operations",
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "overall": 3.7
+    },
+    "15": {
+      "code": "15",
+      "name": "Computer and Mathematical",
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "overall": 3.1
+    },
+    "17": {
+      "code": "17",
+      "name": "Architecture and Engineering",
+      "gaps": {
+        "Language": 0.3,
+        "Social interaction": 0.8,
+        "Problem solving": 1.2,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.6,
+        "Vision": 0.1,
+        "Manipulation": 0.4,
+        "Robotic intelligence": 0.2
+      },
+      "overall": 3.4
+    },
+    "19": {
+      "code": "19",
+      "name": "Life, Physical, and Social Science",
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.2,
+        "Problem solving": 1.6,
+        "Creativity": 0.1,
+        "Metacognition": 1.7,
+        "Knowledge, learning and memory": 1.1,
+        "Vision": 0.1,
+        "Manipulation": 0.4,
+        "Robotic intelligence": 0.3
+      },
+      "overall": 4.8
+    },
+    "21": {
+      "code": "21",
+      "name": "Community and Social Service",
+      "gaps": {
+        "Language": 1.1,
+        "Social interaction": 2.3,
+        "Problem solving": 2.2,
+        "Creativity": 0.1,
+        "Metacognition": 1.9,
+        "Knowledge, learning and memory": 1,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "overall": 6.4
+    },
+    "23": {
+      "code": "23",
+      "name": "Legal",
+      "gaps": {
+        "Language": 1.2,
+        "Social interaction": 1.8,
+        "Problem solving": 1.9,
+        "Creativity": 0.1,
+        "Metacognition": 2,
+        "Knowledge, learning and memory": 1.3,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "overall": 5.8
+    },
+    "25": {
+      "code": "25",
+      "name": "Educational Instruction and Library",
+      "gaps": {
+        "Language": 1.2,
+        "Social interaction": 2,
+        "Problem solving": 1.9,
+        "Creativity": 0.3,
+        "Metacognition": 1.9,
+        "Knowledge, learning and memory": 1.3,
+        "Vision": 0,
+        "Manipulation": 0.1,
+        "Robotic intelligence": 0.2
+      },
+      "overall": 5.8
+    },
+    "27": {
+      "code": "27",
+      "name": "Arts, Design, Entertainment, Sports, and Media",
+      "gaps": {
+        "Language": 0.6,
+        "Social interaction": 1.5,
+        "Problem solving": 1.4,
+        "Creativity": 0.6,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.4,
+        "Vision": 0.5,
+        "Manipulation": 0.5,
+        "Robotic intelligence": 0.3
+      },
+      "overall": 4.1
+    },
+    "29": {
+      "code": "29",
+      "name": "Healthcare Practitioners and Technical",
+      "gaps": {
+        "Language": 0.6,
+        "Social interaction": 1.6,
+        "Problem solving": 1.5,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.9,
+        "Vision": 0.5,
+        "Manipulation": 1.3,
+        "Robotic intelligence": 0.9
+      },
+      "overall": 5.6
+    },
+    "31": {
+      "code": "31",
+      "name": "Healthcare Support",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 1.2,
+        "Problem solving": 0.6,
+        "Creativity": 0,
+        "Metacognition": 0.4,
+        "Knowledge, learning and memory": 0.2,
+        "Vision": 0.2,
+        "Manipulation": 1.6,
+        "Robotic intelligence": 1.3
+      },
+      "overall": 2.8
+    },
+    "33": {
+      "code": "33",
+      "name": "Protective Service",
+      "gaps": {
+        "Language": 0.4,
+        "Social interaction": 1.6,
+        "Problem solving": 1.7,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.7,
+        "Vision": 0.8,
+        "Manipulation": 0.8,
+        "Robotic intelligence": 1.4
+      },
+      "overall": 5.2
+    },
+    "35": {
+      "code": "35",
+      "name": "Food Preparation and Serving Related",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 1,
+        "Problem solving": 0.7,
+        "Creativity": 0,
+        "Metacognition": 0.4,
+        "Knowledge, learning and memory": 0.2,
+        "Vision": 0.2,
+        "Manipulation": 1.3,
+        "Robotic intelligence": 1.1
+      },
+      "overall": 2.4
+    },
+    "37": {
+      "code": "37",
+      "name": "Building and Grounds Cleaning and Maintenance",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.4,
+        "Problem solving": 0.6,
+        "Creativity": 0,
+        "Metacognition": 0.5,
+        "Knowledge, learning and memory": 0.3,
+        "Vision": 0.5,
+        "Manipulation": 1.4,
+        "Robotic intelligence": 1.3
+      },
+      "overall": 2.7
+    },
+    "39": {
+      "code": "39",
+      "name": "Personal Care and Service",
+      "gaps": {
+        "Language": 0.2,
+        "Social interaction": 1.5,
+        "Problem solving": 1.1,
+        "Creativity": 0,
+        "Metacognition": 0.7,
+        "Knowledge, learning and memory": 0.3,
+        "Vision": 0.3,
+        "Manipulation": 1.1,
+        "Robotic intelligence": 1.1
+      },
+      "overall": 3
+    },
+    "41": {
+      "code": "41",
+      "name": "Sales and Related",
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 1.5,
+        "Problem solving": 1,
+        "Creativity": 0,
+        "Metacognition": 0.8,
+        "Knowledge, learning and memory": 0.3,
+        "Vision": 0,
+        "Manipulation": 0.2,
+        "Robotic intelligence": 0.2
+      },
+      "overall": 2.6
+    },
+    "43": {
+      "code": "43",
+      "name": "Office and Administrative Support",
+      "gaps": {
+        "Language": 0.1,
+        "Social interaction": 0.5,
+        "Problem solving": 0.4,
+        "Creativity": 0,
+        "Metacognition": 0.3,
+        "Knowledge, learning and memory": 0,
+        "Vision": 0,
+        "Manipulation": 0.1,
+        "Robotic intelligence": 0.1
+      },
+      "overall": 0.8
+    },
+    "45": {
+      "code": "45",
+      "name": "Farming, Fishing, and Forestry",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.3,
+        "Problem solving": 0.5,
+        "Creativity": 0,
+        "Metacognition": 0.4,
+        "Knowledge, learning and memory": 0.3,
+        "Vision": 0.6,
+        "Manipulation": 1.2,
+        "Robotic intelligence": 1.3
+      },
+      "overall": 2.7
+    },
+    "47": {
+      "code": "47",
+      "name": "Construction and Extraction",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.2,
+        "Problem solving": 0.3,
+        "Creativity": 0,
+        "Metacognition": 0.4,
+        "Knowledge, learning and memory": 0.2,
+        "Vision": 0.5,
+        "Manipulation": 1.6,
+        "Robotic intelligence": 1.5
+      },
+      "overall": 3.1
+    },
+    "49": {
+      "code": "49",
+      "name": "Installation, Maintenance, and Repair",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.2,
+        "Problem solving": 0.7,
+        "Creativity": 0,
+        "Metacognition": 0.7,
+        "Knowledge, learning and memory": 0.3,
+        "Vision": 0.4,
+        "Manipulation": 1.8,
+        "Robotic intelligence": 1.3
+      },
+      "overall": 3.5
+    },
+    "51": {
+      "code": "51",
+      "name": "Production",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.1,
+        "Problem solving": 0.2,
+        "Creativity": 0,
+        "Metacognition": 0.2,
+        "Knowledge, learning and memory": 0.1,
+        "Vision": 0.3,
+        "Manipulation": 1.4,
+        "Robotic intelligence": 0.5
+      },
+      "overall": 1.8
+    },
+    "53": {
+      "code": "53",
+      "name": "Transportation and Material Moving",
+      "gaps": {
+        "Language": 0,
+        "Social interaction": 0.6,
+        "Problem solving": 0.6,
+        "Creativity": 0,
+        "Metacognition": 0.5,
+        "Knowledge, learning and memory": 0.2,
+        "Vision": 0.4,
+        "Manipulation": 0.8,
+        "Robotic intelligence": 1.1
+      },
+      "overall": 2.8
+    }
+  }
+}

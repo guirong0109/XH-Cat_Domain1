@@ -52,37 +52,43 @@
         "label": "SQL and databases",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Python programming",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Data visualisation",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Statistics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Using AI tools",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -99,6 +105,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Analyses data: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -145,25 +182,29 @@
         "label": "SQL and databases",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Spreadsheets (Excel)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Customer service",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -180,6 +221,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Database support: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -239,31 +311,36 @@
         "label": "SQL and databases",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Data visualisation",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Statistics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Spreadsheets (Excel)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -280,6 +357,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Business intelligence reporting: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -326,25 +434,29 @@
         "label": "Networking basics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Network security",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Customer service",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -361,6 +473,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Network support: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -407,25 +550,29 @@
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Using AI tools",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Graphic design",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -442,6 +589,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "25",
+      "groupName": "Educational Instruction and Library",
+      "overall": 5.8,
+      "gaps": {
+        "Language": 1.2,
+        "Social interaction": 2,
+        "Problem solving": 1.9,
+        "Creativity": 0.3,
+        "Metacognition": 1.9,
+        "Knowledge, learning and memory": 1.3,
+        "Vision": 0,
+        "Manipulation": 0.1,
+        "Robotic intelligence": 0.2
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Teaching and training: Educational Instruction and Library",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -497,25 +675,29 @@
         "label": "Network security",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Networking basics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Python programming",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -532,6 +714,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Information security: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -587,25 +800,29 @@
         "label": "Solar PV basics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Electrical wiring",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -622,6 +839,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "17",
+      "groupName": "Architecture and Engineering",
+      "overall": 3.4,
+      "gaps": {
+        "Language": 0.3,
+        "Social interaction": 0.8,
+        "Problem solving": 1.2,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.6,
+        "Vision": 0.1,
+        "Manipulation": 0.4,
+        "Robotic intelligence": 0.2
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Electrical technician work: Architecture and Engineering",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -680,31 +928,36 @@
         "label": "Web development",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Graphic design",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Using AI tools",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Python programming",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -721,6 +974,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Web development: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -775,37 +1059,43 @@
         "label": "UX research and prototyping",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Web development",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Graphic design",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -822,6 +1112,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Digital interface design: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -876,25 +1197,29 @@
         "label": "Content writing",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "SEO and web analytics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Graphic design",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -911,6 +1236,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "27",
+      "groupName": "Arts, Design, Entertainment, Sports, and Media",
+      "overall": 4.1,
+      "gaps": {
+        "Language": 0.6,
+        "Social interaction": 1.5,
+        "Problem solving": 1.4,
+        "Creativity": 0.6,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.4,
+        "Vision": 0.5,
+        "Manipulation": 0.5,
+        "Robotic intelligence": 0.3
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Writing and content: Arts, Design, Entertainment, Sports, and Media",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -958,31 +1314,36 @@
         "label": "Energy auditing",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Electrical wiring",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Spreadsheets (Excel)",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -999,6 +1360,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "17",
+      "groupName": "Architecture and Engineering",
+      "overall": 3.4,
+      "gaps": {
+        "Language": 0.3,
+        "Social interaction": 0.8,
+        "Problem solving": 1.2,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.6,
+        "Vision": 0.1,
+        "Manipulation": 0.4,
+        "Robotic intelligence": 0.2
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Engineering technician work: Architecture and Engineering",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1058,31 +1450,36 @@
         "label": "Renewable energy system design",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Solar PV basics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Project coordination",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -1099,6 +1496,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "17",
+      "groupName": "Architecture and Engineering",
+      "overall": 3.4,
+      "gaps": {
+        "Language": 0.3,
+        "Social interaction": 0.8,
+        "Problem solving": 1.2,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.6,
+        "Vision": 0.1,
+        "Manipulation": 0.4,
+        "Robotic intelligence": 0.2
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Engineering: Architecture and Engineering",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1141,31 +1569,36 @@
         "label": "Healthcare data and records",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Statistics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Spreadsheets (Excel)",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -1182,6 +1615,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Health data analysis: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1236,37 +1700,43 @@
         "label": "Web development",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "SQL and databases",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Version control (Git)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "SEO and web analytics",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -1283,6 +1753,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "15",
+      "groupName": "Computer and Mathematical",
+      "overall": 3.1,
+      "gaps": {
+        "Language": 0.5,
+        "Social interaction": 0.8,
+        "Problem solving": 1.3,
+        "Creativity": 0.1,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Web support: Computer and Mathematical",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1338,31 +1839,36 @@
         "label": "Business process analysis",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Project coordination",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Data visualisation",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       }
     ],
     "source": {
@@ -1379,6 +1885,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "13",
+      "groupName": "Business and Financial Operations",
+      "overall": 3.7,
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Business process change: Business and Financial Operations",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1438,67 +1975,78 @@
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Attention to detail",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Accounting software (ERP)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Financial analysis",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Budgeting and costing",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Financial reporting",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Fraud detection",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Auditing and internal control",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Payroll",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting and audit standards",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -1515,6 +2063,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "13",
+      "groupName": "Business and Financial Operations",
+      "overall": 3.7,
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Accounting: Business and Financial Operations",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1566,49 +2145,57 @@
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Time management",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Attention to detail",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Financial analysis",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Tax compliance",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Tax planning",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Financial reporting",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -1625,6 +2212,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "13",
+      "groupName": "Business and Financial Operations",
+      "overall": 3.7,
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Tax advice: Business and Financial Operations",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1688,61 +2306,71 @@
         "label": "Attention to detail",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Time management",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Financial analysis",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Fraud detection",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Auditing and internal control",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Financial reporting",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting and audit standards",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting software (ERP)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -1759,6 +2387,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "13",
+      "groupName": "Business and Financial Operations",
+      "overall": 3.7,
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Auditing: Business and Financial Operations",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1806,73 +2465,85 @@
         "label": "Teamwork",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Attention to detail",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Time management",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Financial analysis",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Bookkeeping and reconciliation",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Auditing and internal control",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Payroll",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting and audit standards",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Tax compliance",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting software (ERP)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -1889,6 +2560,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "13",
+      "groupName": "Business and Financial Operations",
+      "overall": 3.7,
+      "gaps": {
+        "Language": 0.7,
+        "Social interaction": 1.4,
+        "Problem solving": 1.4,
+        "Creativity": 0,
+        "Metacognition": 1.5,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0,
+        "Manipulation": 0,
+        "Robotic intelligence": 0
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Audit support: Business and Financial Operations",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   },
   {
@@ -1948,55 +2650,64 @@
         "label": "Attention to detail",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Communication",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Problem solving",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Time management",
         "type": "basic",
         "moderate": 0.6,
-        "fast": 0.6
+        "fast": 0.6,
+        "exposure": null
       },
       {
         "label": "Financial reporting",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Bookkeeping and reconciliation",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting and audit standards",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Auditing and internal control",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       },
       {
         "label": "Accounting software (ERP)",
         "type": "specific",
         "moderate": 0.8,
-        "fast": 0.8
+        "fast": 0.8,
+        "exposure": null
       }
     ],
     "source": {
@@ -2013,6 +2724,37 @@
       "source": "ILO Working Paper 140 (2025), Generative AI and Jobs: A Refined Global Index of Occupational Exposure, Table A1",
       "url": "https://webapps.ilo.org/static/english/intserv/working-papers/wp140/index.html",
       "fetchedAt": "2026-10-21"
+    },
+    "oecd": {
+      "socGroup": "43",
+      "groupName": "Office and Administrative Support",
+      "overall": 0.8,
+      "gaps": {
+        "Language": 0.1,
+        "Social interaction": 0.5,
+        "Problem solving": 0.4,
+        "Creativity": 0,
+        "Metacognition": 0.3,
+        "Knowledge, learning and memory": 0,
+        "Vision": 0,
+        "Manipulation": 0.1,
+        "Robotic intelligence": 0.1
+      },
+      "average": {
+        "Language": 0.4,
+        "Social interaction": 1.1,
+        "Problem solving": 1.1,
+        "Creativity": 0.1,
+        "Metacognition": 1.1,
+        "Knowledge, learning and memory": 0.5,
+        "Vision": 0.2,
+        "Manipulation": 0.7,
+        "Robotic intelligence": 0.6
+      },
+      "reason": "Bookkeeping and accounting clerk work: Office and Administrative Support",
+      "source": "OECD (2026), The OECD AI Exposure Measure: Mapping the OECD AI Capability Indicators to Occupations, OECD Artificial Intelligence Papers No. 59, Table 6.3, p. 29 (published 26 May 2026, revised July 2026), CC BY 4.0",
+      "url": "https://www.oecd.org/en/publications/the-oecd-ai-exposure-measure_f3da0f0a-en.html",
+      "fetchedAt": "2026-10-24"
     }
   }
 ]

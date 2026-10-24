@@ -110,3 +110,23 @@ const ERROR_TEXT = {
 export function errorText(code) {
   return ERROR_TEXT[code] ?? 'Could not get roles. Try again.';
 }
+
+// AI exposure line for an explored role, from the central store. Labelled roles show the shares; others stay "not scored".
+export function exposureView(exposure) {
+  const labelled =
+    exposure?.status === 'labelled' &&
+    [exposure.automatablePct, exposure.assistedPct, exposure.humanPct].every((value) => Number.isFinite(value));
+  if (!labelled) {
+    return { labelled: false, badge: 'AI risk: not scored', note: 'Labels pending for this role.' };
+  }
+  const sample = exposure.labelSource === 'manual';
+  const date = exposure.date ? `, store built ${formatDate(exposure.date)}` : '';
+  return {
+    labelled: true,
+    badge: sample ? 'Sample' : 'AI estimate',
+    text: `Automatable ${exposure.automatablePct}% · AI-assisted ${exposure.assistedPct}% · Human-led ${exposure.humanPct}%`,
+    source: `${sample ? 'Placeholder label, not yet reviewed by the team' : 'AI-made estimate'}${date}. Does not change any score.`,
+  };
+}
+
+export const SDG_NOT_TAGGED = 'SDG not tagged yet for this role';

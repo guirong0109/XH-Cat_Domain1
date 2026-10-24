@@ -7,6 +7,7 @@ import unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from runpod_label import (  # noqa: E402
+    extra_roles,
     LABELS,
     AbortRun,
     aggregate,
@@ -172,6 +173,18 @@ class LabelRolesTests(unittest.TestCase):
         seen = []
         label_roles(self.roles, existing, lambda text: seen.append(text) or "human_led", lambda data: None, log=quiet)
         self.assertEqual(seen, ["c", "d", "e", "f"])
+
+
+class ExtraRolesTests(unittest.TestCase):
+    def test_skips_known_codes_and_roles_without_tasks(self):
+        occupations = {
+            "roles": [{"code": "A", "title": "a", "tasks": ["x."]}, {"code": "B", "title": "b", "tasks": ["y.", " "]},
+                      {"code": "C", "title": "c", "tasks": []}],
+            "tasksOnly": [{"code": "D", "title": "d", "tasks": ["z."]}],
+        }
+        extras = extra_roles(occupations, {"A"})
+        self.assertEqual([role["code"] for role in extras], ["B", "D"])
+        self.assertEqual(extras[0]["tasks"], ["y."])
 
 
 if __name__ == "__main__":
