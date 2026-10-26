@@ -1,6 +1,6 @@
 {
   "checkedAt": "2026-10-23T18:21:49.018Z",
-  "lastRunAt": "2026-10-23T18:40:07.300Z",
+  "lastRunAt": "2026-10-26T07:37:43.712Z",
   "counts": {
     "ok": 7,
     "changed": 0,
@@ -12,342 +12,342 @@
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/kursus-mysql-php-dan-html-memanipulasi-pangkalan-data-atas-talian": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/the-beginner-s-guide-to-excel": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/excel-pivot-tables": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/navigating-through-microsoft-power-bi": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/create-human-resources-analytical-dashboard-in-microsoft-power-bi": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/basic-statistics-for-practical-time-series-analysis": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/the-importance-of-statistical-data-analysis": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-improving-workplace-productivity-with-chatgpt": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/crafting-prompts-for-chatgpt-prompt-engineering": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/building-a-website-from-scratch-with-html-and-css": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/intensive-html-css-training": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=45673": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=50984": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=911": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=43639": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=45085": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=34394": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/create-beautiful-graphic-designs-like-a-pro-using-free-online-graphic-design-apps": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/communication-at-workplace": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/effective-communication": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/building-high-performing-teams": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/problem-solving-an-essential-21st-century-skill": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/problem-solving-through-creative-thinking": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/customer-service-basics": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/understanding-ux-and-website-usability": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/user-testing-and-ux-audit": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/copywriting-write-copy-that-sells": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/english-for-business-writing": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/seo-strategies": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/on-page-seo": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://www.tvet.gov.my/awam-kursus/kursus?id_kursus=48887": {
       "status": "ok",
       "changed": [],
-      "checkedAt": "2026-10-23T18:40:07.300Z"
+      "checkedAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/basics-of-project-management": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/project-management-the-fundamental": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/business-process-improvement-techniques": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/financial-statement-course-analyzing-the-components-of-company-financial-statements": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/financial-statement-analysis-and-organization-s-decision-making": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/analysis-of-financial-statement-of-companies": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/budgeting": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/budgeting-for-better-finances": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/auditing": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/fundamentals-of-bookkeeping": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/importance-of-bookkeeping-in-business": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/individual-tax-submission-and-planning-in-malaysia": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/reduce-your-tax-burden-with-effective-personal-tax-relief-strategies": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/effective-payroll-administration-in-malaysia": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/time-management": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/time-management-for-better-productivity": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/understanding-corporate-tax-in-malaysia": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/personal-income-tax-in-malaysia": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/ai-fluency-explore-generative-ai": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/machine-learning-fundamentals": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/introduction-to-machine-learning": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/chatgpt-course-uncover-the-magic-of-chatgpt-for-data-processing": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/ai-course-the-next-frontier-of-artificial-intelligence": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/artificial-intelligence-course-ai-to-enhanced-customer-engagement-via-chatbot": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/mastering-inquiry-with-chatgpt-enhance-your-research-skills-using-ai": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     },
     "https://elatih.hrdcorp.gov.my/courses-details/intelligent-automation-course-the-power-of-intelligent-automation-in-the-workplace": {
       "status": "ok",
       "changed": [],
       "checkedAt": "2026-10-23T18:21:49.018Z",
-      "unreadableAt": "2026-10-23T18:40:07.300Z"
+      "unreadableAt": "2026-10-26T07:37:43.712Z"
     }
   }
 }
