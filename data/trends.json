@@ -2,7 +2,7 @@
   "source": {
     "dataset": "wages_occupation",
     "url": "https://api.data.gov.my/opendosm?id=wages_occupation",
-    "fetchedAt": "2026-10-26T07:30:02.364Z",
+    "fetchedAt": "2026-11-02T08:58:42.972Z",
     "latestYear": 2025,
     "baseYear": 2020
   },
@@ -47,6 +47,6 @@
   "youth": {
     "rate": 10.2,
     "month": "2026-06",
-    "fetchedAt": "2026-10-26T07:30:02.364Z"
+    "fetchedAt": "2026-11-02T08:58:42.972Z"
   }
 }
